@@ -1,3 +1,28 @@
+$round-height: 20px;
+.slider__container{
+  margin: 100px;
+}
+.slider__line{
+  width: 100%;
+  height: 10px;
+  background: khaki;
+  border-radius: 5px;
+}
+.slider__line_second-color{
+  background: rgb(245, 200, 208);
+}
+.slider__round{
+  position: relative;
+  top: -$round-height/4;
+  width: 20px;
+  height: $round-height;
+  background: rgb(82, 74, 9);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.slider__round_second-color{
+  background:rebeccapurple;
+}
 .input{
   margin: 30px;
   color: red;
@@ -5,6 +30,9 @@
 .add-input{
   transform: rotate(90deg);
 }
-.change-color{
-  color: green;
+.orientation-button{
+  margin: 20px;
+}
+.color-button{
+  margin: 20px;
 }
