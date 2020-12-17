@@ -8,6 +8,12 @@ $round-height: 20px;
   background: khaki;
   border-radius: 5px;
 }
+.slider__progress-line{
+  width: 0;
+  height: 10px;
+  background: rgb(240, 111, 6);
+  border-radius: 5px;
+}
 .slider__line_second-color{
   background: rgb(245, 200, 208);
 }
@@ -23,9 +29,11 @@ $round-height: 20px;
 .slider__round_second-color{
   background:rebeccapurple;
 }
-.input{
-  margin: 30px;
-  color: red;
+
+.slider__labels{
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
 }
 .add-input{
   transform: rotate(90deg);
