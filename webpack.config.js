@@ -1,6 +1,5 @@
 const path = require('path')
 const HTMLWebpackPlugin=require('html-webpack-plugin')
-const CopyWebpackPlugin =require('copy-webpack-plugin')
 const MiniCssExtractPlugin=require('mini-css-extract-plugin')
 const webpack = require('webpack');
 // const { SourceMapDevToolPlugin } = require("webpack");
@@ -35,6 +34,9 @@ module.exports = {
       jQuery: 'jquery',
       'window.jQuery':'jquery'
     }),
+    new MiniCssExtractPlugin({
+      filename: 'style.css',
+   }),
   ],
   module: {
     rules: [
@@ -43,29 +45,16 @@ module.exports = {
         use: 'ts-loader'
       },
       {
-        test:/\.css$/,
-        use:[{
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            hmr:true,
-            reloadAll:true
-          
-          }
-        },
-        'css-loader']
+        test:/\.(s*)css$/,
+        use:[
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ]
       },
       {
         test: /\.(png|jpg|svg|gif)$/,
         use: ['file-loader']
-      },
-      {
-        test:/\.sass|scss$/,
-        use:[{
-          loader: MiniCssExtractPlugin.loader,
-        },
-          'css-loader',
-          'sass-loader'
-        ],
       },
       {
         test: /\.pug$/,
