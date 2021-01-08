@@ -1,1 +1,5 @@
-console.log('hello')
+import './view/view'
+import './model/model'
+import './presenter/presenter'
+import './jquery-wrapper/jquery-wrapper'
+import './preview/preview'
