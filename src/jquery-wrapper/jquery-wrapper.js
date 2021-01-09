@@ -9,7 +9,6 @@ import { Presenter } from './../presenter/presenter'
       finalLabel: 100
     }, options);
     const view = new View()
-    console.log(view)
     // const app = new Presenter(new Model(), new View())
   }
 })(jQuery)

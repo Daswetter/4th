@@ -1,5 +1,29 @@
+$handle-height: 20px;
+
 .range-slider__line{
-  width: 100%;
+  width: 90%;
   height: 10px;
-  background: purple;
+  margin: 50px;
+  border-radius: 5px;
+  background: rgb(238, 198, 238);
+}
+.range-slider__progress-line{
+  width: 0;
+  height: 10px;
+  background: rgb(255, 137, 40);
+  border-radius: 5px;
+}
+.range-slider__handle{
+  position: relative;
+  top: -$handle-height/4;
+  width: 20px;
+  height: $handle-height;
+  background: darkmagenta;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.range-slider__labels{
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
 }
