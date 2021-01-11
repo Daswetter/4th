@@ -22,6 +22,9 @@ $handle-height: 20px;
   border-radius: 50%;
   cursor: pointer;
 }
+.range-slider__handle_test {
+  background: lawngreen;
+}
 .range-slider__labels{
   display: flex;
   justify-content: space-between;
