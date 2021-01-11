@@ -14,7 +14,7 @@ export class View {
     this.labels = this.createElement('div', 'range-slider__labels')
     this.initialLabel = this.createElement('div', 'range-slider__initialLabel')
     this.finalLabel = this.createElement('div', 'range-slider__finalLabel')
-    this.input = this.createElement('input')
+    this.input = this.createElement('div')
 
     this.initialLabel.innerText = '0'
     this.finalLabel.innerText = '100'
@@ -34,11 +34,13 @@ export class View {
     return element;
   }
   
-  testViewMethod(): void{
+  testViewMethod(param: Function): void{
     let that = this
+    console.log(param);
+    
     this.handle.addEventListener('click', function (event) {
       that.handle.classList.add('range-slider__handle_test')
-      console.log('click');
+      that.input.innerText = String(param(10))
       
     })
   }
