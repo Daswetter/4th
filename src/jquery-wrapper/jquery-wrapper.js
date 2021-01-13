@@ -9,6 +9,6 @@ import { Presenter } from './../presenter/presenter'
       finalLabel: 100
     }, options);
     // const view = new View()
-    const app = new Presenter(new View(), new Model())
+    const app = new Presenter(new View(), new Model(), options)
   }
 })(jQuery)

@@ -5,75 +5,82 @@ export class View {
   private labels: HTMLElement
   private initialLabel: HTMLElement
   private finalLabel: HTMLElement 
-  private input: HTMLElement
+  private progressLine: HTMLElement
 
   constructor() {
-    this.initElement = this.getElement('.js-slider')
+    this.initElement = this.getElement('.js-slider2')
     this.line = this.createElement('div', 'range-slider__line')
     this.handle = this.createElement('div', 'range-slider__handle')
     this.labels = this.createElement('div', 'range-slider__labels')
     this.initialLabel = this.createElement('div', 'range-slider__initialLabel')
     this.finalLabel = this.createElement('div', 'range-slider__finalLabel')
-    this.input = this.createElement('div')
+    this.progressLine = this.createElement('div', 'range-slider__progress-line')
 
     this.initialLabel.innerText = '0'
     this.finalLabel.innerText = '100'
 
     this.initElement.append(this.line)
-    this.line.append(this.handle, this.labels)
-    this.labels.append(this.initialLabel, this.finalLabel)
-    this.labels.after(this.input)
+    this.line.append (this.labels)
+    this.line.prepend (this.progressLine)
+    this.progressLine.prepend (this.handle)
+    this.labels.append (this.initialLabel, this.finalLabel)
   }
   getElement(selector: string): HTMLElement{
     const element = document.querySelector(selector) as HTMLElement
     return element
   }
+
   createElement(tag: string, className?: string): HTMLElement {
     const element = document.createElement(tag);
     if (className) element.classList.add(className);
     return element;
   }
   
-  testViewMethod(param: Function): void{
+  displayMovingHandle(value: Function): void{
     let that = this
-    console.log(param);
-    
-    this.handle.addEventListener('click', function (event) {
-      that.handle.classList.add('range-slider__handle_test')
-      that.input.innerText = String(param(10))
+    this.handle.onmousedown = function (event) : void {
+      const handleWidth = that.handle.getBoundingClientRect().width
+      const handleLeft = that.handle.getBoundingClientRect().left
+      const lineWidth = that.line.getBoundingClientRect().width
+      const lineLeft = that.line.getBoundingClientRect().left
+       
+      const handleRelativePosition = (handleLeft + handleWidth / 2 - lineLeft) / lineWidth
+
+      const shiftX = event.clientX - that.handle.getBoundingClientRect().left
+
+      that.handle.style.position = 'absolute'
+      that.handle.style.zIndex = '100'
+      document.body.append(that.handle)
+
+      function moveAt(pageX: number): void {
+        let leftStop = pageX - that.line.getBoundingClientRect().left;
+        let rightStop = - pageX + that.line.getBoundingClientRect().right;
+        
+
+        leftStop < 0 ? leftStop = 0 : 
+        rightStop < 0 ? rightStop = 0 :
+        that.handle.style.left = pageX - shiftX + 'px';
+        that.handle.style.top = that.line.getBoundingClientRect().top - that.line.getBoundingClientRect().height / 2 + 'px'
+
+        that.displayProgressLine()
+      }
+
+      moveAt(event.pageX);
       
-    })
+      document.onmousemove = function (event) {
+        moveAt(event.pageX);
+      };
+      document.onmouseup = function (event) {
+        document.removeEventListener('mousemove', function (event) {
+          moveAt(event.pageX);
+        });
+      };
+      
+      
+    }
   }
 
-
-  // this.handle.onmousedown = function(event) {
-  //   let shiftX = event.clientX - this.handle.getBoundingClientRect().left
-  //   this.handle.style.position = 'absolute';
-  //   this.handle.style.zIndex = '100';
-  //   document.body.append(this.handle)
-
-  //   function moveAt(pageX) {
-  //     console.log('moveAT')
-  //     let leftStop = pageX - this.line.getBoundingClientRect().left;
-  //     let rightStop = - pageX + this.line.getBoundingClientRect().right;
-      
-
-  //     leftStop < 0 ? leftStop = 0 : 
-  //     rightStop < 0 ? rightStop = 0 :
-  //     this.handle.style.left = pageX - shiftX + 'px';
-  //     this.handle.style.top = line.getBoundingClientRect().top - line.getBoundingClientRect().height / 2 + 'px'
-  //   }
-      
-
-
-  //   moveAt(event.pageX);
-  //   document.addEventListener('mousemove', onMouseMove);
-  //   document.addEventListener('mouseup', onMouseUp);
-  //   function onMouseMove(event) {
-  //     moveAt(event.pageX);
-  //   }
-  //   function onMouseUp(event) {
-  //     document.removeEventListener('mousemove', onMouseMove);
-  //   }
-  // }
+  displayProgressLine(): void {
+    this.progressLine.style.width = (this.handle.getBoundingClientRect().left - this.line.getBoundingClientRect().left + this.handle.getBoundingClientRect().width / 2) + 'px'
+  }
 }

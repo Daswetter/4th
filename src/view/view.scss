@@ -21,6 +21,7 @@ $handle-height: 20px;
   background: darkmagenta;
   border-radius: 50%;
   cursor: pointer;
+  opacity: 0.3
 }
 .range-slider__handle_test {
   background: lawngreen;
@@ -29,4 +30,7 @@ $handle-height: 20px;
   display: flex;
   justify-content: space-between;
   margin: 10px 0;
+}
+.range-slider__progress-line {
+  background: lime;
 }
