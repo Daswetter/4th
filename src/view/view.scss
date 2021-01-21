@@ -13,15 +13,14 @@ $handle-height: 20px;
   background: rgb(255, 137, 40);
   border-radius: 5px;
 }
-.range-slider__handle{
+.range-slider__thumb{
   position: relative;
   top: -$handle-height/4;
   width: 20px;
   height: $handle-height;
-  background: darkmagenta;
+  background: indigo;
   border-radius: 50%;
   cursor: pointer;
-  opacity: 0.3
 }
 .range-slider__handle_test {
   background: lawngreen;
@@ -33,4 +32,15 @@ $handle-height: 20px;
 }
 .range-slider__progress-line {
   background: lime;
+}
+
+.test{
+  width: 100px;
+  height: 100px;
+  background: lime;
+}
+.testConstr{
+  width: 50px;
+  height: 50px;
+  background: yellow;
 }
