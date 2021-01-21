@@ -1,13 +1,15 @@
 
 export class Model{
   private onStatusChanged!: Function;
-  // constructor(){
-  //   this.onStatusChanged = this.bindStatusChanged
-  // }
-  setValue(): number {
-    const res = 3
-    this.onStatusChanged(res)
-    return res
+  constructor(){
+    
+  }
+  setValue(part: number): void {
+    const min = 100
+    const max = 500
+    const currentValue = (max - min) * part 
+    this.onStatusChanged(currentValue)
+    // return currentValue
   }
   bindStatusChanged(callback: Function): void {
     this.onStatusChanged = callback;

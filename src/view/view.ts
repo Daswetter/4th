@@ -2,13 +2,17 @@ export class View {
   private initElement: HTMLElement;
   private line: HTMLElement;
   private thumb: HTMLElement;
+  private form: HTMLElement;
 
   constructor() {
     this.initElement = this.getElement('.js-slider1')
     this.line = this.createElement('div', 'range-slider__line')
     this.thumb = this.createElement('div', 'range-slider__thumb')
+    this.form = this.createElement('div')
+
     this.initElement.append(this.line)
     this.line.prepend(this.thumb)
+    this.line.after(this.form)
     
 
     // this.initElement.append(this.progressLine)
@@ -28,17 +32,21 @@ export class View {
     return element;
   }
 
-  testForObserver(res:number): void{
-    console.log(res);
+  displayCurrentValue(res:number): void{
+    this.form.innerText = res + ''
+    
   }
   
-  testForNum(res: Function): void{
-    let that = this
-    this.line.addEventListener('click', function(event) {
-      const testElement = that.createElement('div', 'test-element')
-      that.line.after(testElement)
-      testElement.innerText = res() + ''
-    })
+  thumbMoving(sendPartToModel: Function): void{
+    const that = this
+    this.line.onclick = function(event) {
+      that.thumb.style.left = event.pageX - that.line.getBoundingClientRect().left - that.thumb.getBoundingClientRect().width / 2 + 'px' 
+
+      const part = (event.pageX - that.line.getBoundingClientRect().left) / that.line.getBoundingClientRect().width
+      sendPartToModel(part)
+      // console.log(value);
+      
+    }
   }
   // displayMovingHandle(value: Function): void{
   //   let that = this

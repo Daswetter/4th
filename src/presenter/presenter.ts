@@ -4,20 +4,15 @@ export class Presenter{
   constructor(private View: View, private Model: Model, private options: object) {
     this.options = options
     this.Model.bindStatusChanged(this.update)
-    this.View.testForNum(this.bindSetValue)
-    // this.mainView.displayMovingHandle(this.handleValue)
-    
+    this.View.thumbMoving(this.bindSetValue)    
   }
   
   update = (res: number): void => {
-    this.View.testForObserver(res)
+    this.View.displayCurrentValue(res)
   }
-  bindSetValue = () : void => {   
-    this.Model.setValue()
+  bindSetValue = (n: number) : void => {   
+    this.Model.setValue(n)
   }
-  // handleValue = () : number => {
-  //   return this.Model.setValue()
-  // }
   get getOptions() : object{
     return this.options
   }
