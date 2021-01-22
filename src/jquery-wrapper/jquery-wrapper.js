@@ -10,7 +10,7 @@ import { Presenter } from './../presenter/presenter'
     }, options);
     // const view = new View()
     
-    const app = new Presenter(new View(), new Model(), options)
+    const app = new Presenter(new View(), new Model(options))
     
   }
 })(jQuery)
