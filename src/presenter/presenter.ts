@@ -3,7 +3,8 @@ import { View } from './../view/view'
 export class Presenter{
   constructor(private View: View, private Model: Model) {
     this.Model.bindStatusChanged(this.update)
-    this.View.thumbMoving(this.bindSetValue) 
+    this.View.moveThumbByClicking(this.bindSetValue) 
+    this.View.moveThumbByDragAndDrop()
 
   }
   
