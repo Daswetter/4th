@@ -1,11 +1,13 @@
 import { Model } from './../model/model'
 import { View } from './../view/view'
+
+
 export class Presenter{
   constructor(private View: View, private Model: Model) {
     this.Model.bindStatusChanged(this.update)
     this.View.moveThumbByClicking(this.bindSetValue) 
-    this.View.moveThumbByDragAndDrop()
-
+    // this.View.moveThumbByDragAndDrop()
+  
   }
   
   update = (res: number): void => {

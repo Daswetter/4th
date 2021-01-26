@@ -1,102 +1,87 @@
-export class View {
-  private initElement: HTMLElement;
-  private line: HTMLElement;
-  private thumb: HTMLElement;
-  private form: HTMLElement;
+class View { 
+  public line: Line
+  public thumb: Thumb
 
-  constructor() {
-    this.initElement = this.getElement('.js-slider1')
-    this.line = this.createElement('div', 'range-slider__line')
-    this.thumb = this.createElement('div', 'range-slider__thumb')
-    this.form = this.createElement('div')
+  constructor(public initElement: HTMLElement) {
+    this.initElement = initElement
+    this.line = new Line(this.initElement)
+    this.thumb = new Thumb(this.line)  
+    // this.initElement.append(this.line)
+    // this.line.append(this.thumb)
+  }
 
-    this.initElement.append(this.line)
-    this.line.prepend(this.thumb)
-    this.line.after(this.form)
+  moveThumbByDragAndDrop(): void{
+    this.thumb.onmousedown = (event: MouseEvent) : void => {
+      event.preventDefault()
+      document.addEventListener('mousemove', this.onMouseMove);
+      document.addEventListener('mouseup', this.onMouseUp);
+    }
+  }
+
+  onMouseMove(event: MouseEvent): void {
+    const shiftX = event.clientX - this.thumb.getBoundingClientRect().left
+    let leftStop = event.pageX - shiftX - this.line.getBoundingClientRect().left + this.thumb.offsetWidth / 2
     
-  }
-  getElement(selector: string): HTMLElement{
-    const element = document.querySelector(selector) as HTMLElement
-    return element
+    const rightStop = this.line.offsetWidth - this.thumb.offsetWidth + this.thumb.offsetWidth 
+
+    if (leftStop < 0) {
+      leftStop = 0
+    }
+    if (leftStop > rightStop) {
+      leftStop = rightStop
+    }
+    this.thumb.style.left = leftStop - this.thumb.offsetWidth / 2 + 'px'
   }
 
-  createElement(tag: string, className?: string): HTMLElement {
-    const element = document.createElement(tag);
-    if (className) element.classList.add(className);
-    return element;
+  onMouseUp(): void {
+    document.removeEventListener('mouseup', this.onMouseUp)
+    document.removeEventListener('mousemove', this.onMouseMove)
   }
-
+  
   displayCurrentValue(res:number): void{
-    this.form.innerText = res + ''
-    
+    // this.form.innerText = res + ''
   }
   
   moveThumbByClicking(sendPartToModel: Function): void{
-    const that = this
-    this.line.onclick = function(event) {
-      that.thumb.style.left = event.pageX - that.line.getBoundingClientRect().left - that.thumb.getBoundingClientRect().width / 2 + 'px' 
+    this.line.onclick = (event: MouseEvent) => {
+      this.thumb.style.left = event.pageX - this.line.getBoundingClientRect().left - this.thumb.offsetWidth / 2 + 'px' 
 
-      const part = (event.pageX - that.line.getBoundingClientRect().left) / that.line.getBoundingClientRect().width
+      const part = (event.pageX - this.line.getBoundingClientRect().left) / this.line.offsetWidth
       sendPartToModel(part)      
     }
   }
-  moveThumbByDragAndDrop(): void{
-    const that = this
-    this.thumb.onmousedown = function (event) : void {
-      event.preventDefault()
+}
+// -----------------
 
-      const shiftX = event.clientX - that.thumb.getBoundingClientRect().left
-
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-
-      function onMouseMove(event: MouseEvent): void {
-        let leftStop = event.pageX - shiftX - that.line.getBoundingClientRect().left + that.thumb.offsetWidth / 2
-        
-        const rightStop = that.line.offsetWidth - that.thumb.offsetWidth + that.thumb.offsetWidth 
-
-        if (leftStop < 0) {
-          leftStop = 0
-        }
-        if (leftStop > rightStop) {
-          leftStop = rightStop
-        }
-        that.thumb.style.left = leftStop - that.thumb.offsetWidth / 2 + 'px'
-      }
-
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp)
-        document.removeEventListener('mousemove', onMouseMove)
-      }
-            
-    }
+class Line{
+  public line: HTMLElement 
+  constructor(public initElement: HTMLElement) {
+    this.line = document.createElement('div')
+    this.line.classList.add('range-slider__line')
   }
-
-  // displayProgressLine(): void {
-  //   this.progressLine.style.width = (this.handle.getBoundingClientRect().left - this.line.getBoundingClientRect().left + this.handle.getBoundingClientRect().width / 2) + 'px'
-  // }
+  get width(): number {
+    return this.line.offsetWidth
+  }
+  get leftSide(): number {
+    return this.line.getBoundingClientRect().left
+  }
 }
 
-// export class InitElement extends mainView{
-//   public initElement: HTMLElement
-//   constructor() {
-//     super()
-//     this.initElement = this.getElement('.js-slider2')
-//   }
-// }
-// const newInitElement = new InitElement()
-// export class Line extends mainView{
-//   public line: HTMLElement
-//   constructor() {
-//     super()
-//     this.line = this.createElement('div', 'range-slider__line')
-//   }
-// }
+class Thumb{
+  public thumb: HTMLElement
+  constructor(public line: Line) {
+    this.thumb = document.createElement('div')
+    this.thumb.classList.add('range-slider__thumb')
+  }
+  get width(): number {
+    return this.thumb.offsetWidth
+  }
+  get leftSide(): number {
+    return this.thumb.getBoundingClientRect().left
+  }
+  leftStyle(): string {
+    return this.thumb.style.left
+  }
+}
 
-// export class Thumb extends mainView{
-//   public thumb: HTMLElement
-//   constructor() {
-//     super()
-//     this.thumb = this.createElement('div', 'range-slider__thumb')
-//   }
-// }
+export { View, Line, Thumb }
