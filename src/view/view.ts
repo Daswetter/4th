@@ -10,6 +10,8 @@ class View {
   }
 
   displayCurrentValue(res:number): void{
+    console.log(res)
+    
     // this.form.innerText = res + ''
   }
   
