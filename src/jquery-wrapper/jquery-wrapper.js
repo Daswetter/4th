@@ -5,8 +5,9 @@ import { Presenter } from './../presenter/presenter'
 (function($){
   $.fn.customRangeSlider = function(options){
     options = $.extend({},{
-      initialLabel: 0,
-      finalLabel: 100
+      min: 0,
+      max: 100,
+      initial: 50,
     }, options);
     // const view = new View()
     const app = new Presenter(new View(this[0]), new Model(options))
