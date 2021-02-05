@@ -1,47 +1,37 @@
-$handle-height: 20px;
+$thumb-height: 20px;
+$line-height: 10px;
+$line-border-radius: 10px;
 
 .range-slider__line{
+  position: relative;
   width: 90%;
-  height: 10px;
+  height: $line-height;
   margin: 50px;
-  border-radius: 5px;
+  border-radius: $line-border-radius;
   background: rgb(238, 198, 238);
   cursor: pointer;
 }
-.range-slider__progress-line{
-  width: 0;
-  height: 10px;
-  background: rgb(255, 137, 40);
-  border-radius: 5px;
-}
 .range-slider__thumb{
-  position: relative;
-  top: -$handle-height/4;
+  position: absolute;
+  top: -$thumb-height/4;
   width: 20px;
-  height: $handle-height;
+  height: $thumb-height;
   background: indigo;
   border-radius: 50%;
   cursor: pointer;
+  z-index: 2;
 }
-.range-slider__handle_test {
-  background: lawngreen;
+.range-slider__progress{
+  position: absolute;
+  top: 0;
+  height: $line-height;
+  background: rgb(153, 60, 153);
+  border-radius: $line-border-radius;
+  z-index: 1;
 }
+
 .range-slider__labels{
   display: flex;
   justify-content: space-between;
   margin: 10px 0;
-}
-.range-slider__progress-line {
-  background: lime;
-}
-
-.test{
-  width: 100px;
-  height: 100px;
-  background: lime;
-}
-.testConstr{
-  width: 50px;
-  height: 50px;
-  background: yellow;
 }

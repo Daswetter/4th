@@ -1,6 +1,7 @@
 class Line{
   public line: HTMLElement 
-  private onLineChanged!: Function;
+  private onWidthChanged!: Function;
+  private onLeftSideChanged!: Function
   private onLineClicked!: Function;
 
   constructor(public initElement: HTMLElement) {
@@ -9,34 +10,41 @@ class Line{
     this.initElement.append(this.line)
 
     this.line.onclick = this.moveThumbByClicking
+
+    // this.line.countWidth()
+    // this.line.countLeftSide()
   }
 
-  width(): void {
+  countWidth(): void {
     const width = this.line.offsetWidth
+    this.onWidthChanged(width)
+  }
+  countLeftSide(): void {
     const leftSide = this.line.getBoundingClientRect().left
-
-    this.onLineChanged( leftSide, width )
+    this.onLeftSideChanged( leftSide )
   }
 
   append(element: HTMLElement): void {
     this.line.append(element)
   }
 
+  after(element: HTMLElement): void {
+    this.line.after(element)
+  }
+
   moveThumbByClicking = (event: MouseEvent) : void => {
     const distFromBeginToClick = event.pageX - this.line.getBoundingClientRect().left
-    // this.onLineClicked(distFromBeginToClick)
-    // this.thumb.style.left = event.pageX - this.line.getBoundingClientRect().left - this.thumb.offsetWidth / 2 + 'px' 
     const part = (event.pageX - this.line.getBoundingClientRect().left) / this.line.offsetWidth
-    // sendPartToModel(part)
     this.onLineClicked(distFromBeginToClick, part)
   }
-  // getPart(): number {
-  //   const part = (event.pageX - this.line.getBoundingClientRect().left) / this.line.offsetWidth
-  //   return part
-  // }
 
-  bindLineChanged(callback: Function): void {
-    this.onLineChanged = callback;
+
+
+  bindWidthChanged(callback: Function): void {
+    this.onWidthChanged = callback;
+  }
+  bindLeftSideChanged(callback: Function): void {
+    this.onLeftSideChanged = callback;
   }
   bindLineClicked(callback: Function): void {
     this.onLineClicked = callback;

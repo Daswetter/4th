@@ -33,8 +33,10 @@ class Thumb{
     document.addEventListener('mouseup', this.boundOnMouseUp)
   }
   
-  setLineParams(lineWidth: number, lineLeftSide: number): void{
+  setLineWidth(lineWidth: number): void{
     this.lineWidth = lineWidth
+  }
+  setLineLeftSide(lineLeftSide: number): void{
     this.lineLeftSide = lineLeftSide
   }
 
@@ -43,8 +45,8 @@ class Thumb{
   } 
 
   onMouseMove = (event: MouseEvent) : void => {
-    let leftStop = event.pageX - this._shiftXValue - this.lineWidth  + this.thumb.offsetWidth / 2
-    const rightStop = this.lineLeftSide - this.thumb.offsetWidth + this.thumb.offsetWidth 
+    let leftStop = event.pageX - this._shiftXValue - this.lineLeftSide  + this.thumb.offsetWidth / 2
+    const rightStop = this.lineWidth - this.thumb.offsetWidth + this.thumb.offsetWidth 
     
     if (leftStop < 0) {
       leftStop = 0
@@ -53,18 +55,19 @@ class Thumb{
     }
     
     this.thumb.style.left = leftStop - this.thumb.offsetWidth / 2 + 'px'
-
-    // this.onThumbChanged(event.pageX)
+    this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
   }
   changeThumbPos = (dist: number): void => {
     this.thumb.style.left = dist - this.thumb.offsetWidth / 2 + 'px'
+    this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
+    
   }
   onMouseUp = () : void => {
     document.removeEventListener('mousemove', this.boundOnMouseMove)
     document.removeEventListener('mouseup', this.boundOnMouseUp)
   }
 
-  bindThumbChanged(callback: Function): void {
+  bindThumbChangedPos(callback: Function): void {
     this.onThumbChanged = callback;
   }
 }
