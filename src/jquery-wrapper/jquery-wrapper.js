@@ -15,7 +15,6 @@ import { Presenter } from './../presenter/presenter'
       scale: true,
       progressBar: true,
     }, options);
-    // const view = new View()
     const app = new Presenter(new View(this[0]), new Model(options))
     
   }

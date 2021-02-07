@@ -2,7 +2,7 @@ import { Line } from './line'
 
 class Thumb{
   public thumb: HTMLElement
-  public _shiftXValue = 0;
+  public shiftXValue = 0;
   private boundOnMouseMove: (event: MouseEvent) => void
   private boundOnMouseUp: () => void
   private onThumbChanged!: Function;
@@ -32,7 +32,12 @@ class Thumb{
     document.addEventListener('mousemove', this.boundOnMouseMove)
     document.addEventListener('mouseup', this.boundOnMouseUp)
   }
-  
+
+  setInitialPos(part: number): void{
+    this.thumb.style.left =  this.lineWidth * part - this.thumb.offsetWidth / 2 + 'px'
+    this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
+  }
+
   setLineWidth(lineWidth: number): void{
     this.lineWidth = lineWidth
   }
@@ -41,11 +46,11 @@ class Thumb{
   }
 
   setShiftX(value: number): void{
-    this._shiftXValue = value
+    this.shiftXValue = value
   } 
 
   onMouseMove = (event: MouseEvent) : void => {
-    let leftStop = event.pageX - this._shiftXValue - this.lineLeftSide  + this.thumb.offsetWidth / 2
+    let leftStop = event.pageX - this.shiftXValue - this.lineLeftSide  + this.thumb.offsetWidth / 2
     const rightStop = this.lineWidth - this.thumb.offsetWidth + this.thumb.offsetWidth 
     
     if (leftStop < 0) {
@@ -57,11 +62,12 @@ class Thumb{
     this.thumb.style.left = leftStop - this.thumb.offsetWidth / 2 + 'px'
     this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
   }
+
   changeThumbPos = (dist: number): void => {
     this.thumb.style.left = dist - this.thumb.offsetWidth / 2 + 'px'
     this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
-    
   }
+
   onMouseUp = () : void => {
     document.removeEventListener('mousemove', this.boundOnMouseMove)
     document.removeEventListener('mouseup', this.boundOnMouseUp)

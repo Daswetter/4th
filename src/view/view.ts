@@ -1,11 +1,13 @@
 import { Line } from './line'
 import { Thumb } from './thumb'
 import { Progress } from './progress'
+import { Scale } from './scale'
 
 class View { 
   public line: Line
   public thumb: Thumb
   public progress: Progress
+  public scale: Scale
   private onPartChanged!: Function
   private options!: object
 
@@ -15,6 +17,7 @@ class View {
     this.line = new Line(this.initElement)
     this.thumb = new Thumb(this.line) 
     this.progress = new Progress(this.line) 
+    this.scale = new Scale(this.line) 
 
     this.line.bindWidthChanged(this.lineWidthWasChanged)
     this.line.bindLeftSideChanged(this.lineLeftSideWasChanged)
@@ -23,9 +26,11 @@ class View {
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
 
     this.bindSetLineParams()
+
   }
-  setInitialPos(part: number): void {
-    console.log(part);
+  setInitialPos(part: Function): void {
+    console.log(3);
+    this.thumb.setInitialPos(part())
   }
   setOptions(options: object): void {
     this.options = options

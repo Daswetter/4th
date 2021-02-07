@@ -9,6 +9,7 @@ interface IOptions {
   scale: boolean,
   progressBar: boolean,
 }
+
 class Model{
   private onStatusChanged!: Function;
   private onInitialValue!: Function
@@ -26,18 +27,21 @@ class Model{
     const step = this.options.stepSize
 
     const currentValue = Math.round((max - min) / step * part) * step + min
-    // const currentValue = Math.round((max - min) * part + min)
     this.onStatusChanged(currentValue)
+    
   }
-  countInitialPart = (): void => {
+  countInitialPart = (): number => {
     const min = this.options.min
     const max = this.options.max
     const initial = this.options.initial
 
     const initialPart = initial / ( max - min )
-    this.onInitialValue(initialPart)
+    return initialPart
   }
+
   
+
+
   bindStatusChanged(callback: Function): void {
     this.onStatusChanged = callback;
   }

@@ -4,10 +4,11 @@ import { View } from './../view/view'
 class Presenter{
   constructor(private View: View, private Model: Model) {
     this.Model.getOptions
-    this.Model.bindStatusChanged(this.update)
-    this.Model.bindInitialValue(this.sendInitialValue)
+    this.Model.countInitialPart()
+    this.Model.bindStatusChanged(this.updateTest)
+    // this.Model.bindInitialValue(this.sendInitialValue)
 
-
+    this.View.setInitialPos(this.Model.countInitialPart)
     this.View.bindSendPartToModel(this.bindSetCurrentValue)
     
     // this.Thumb.moveThumbByClicking(this.bindSetCurrentValue) 
@@ -15,16 +16,18 @@ class Presenter{
     
   
   }
-  sendInitialValue = (part: number): void => {
-    this.View.setInitialPos(part)
-  }
-  update = (res: number): void => {
+  // sendInitialValue = (part: number): void => {
+  //   this.View.setInitialPos(part)
+  // }
+  updateTest = (res: number): void => {
     this.View.displayCurrentValue(res)
   }
 
   bindSetCurrentValue = (n: number) : void => {   
     this.Model.setCurrentValue(n)
   }
+
+
 }
 
 export { Presenter }
