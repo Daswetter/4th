@@ -1,12 +1,13 @@
 $thumb-height: 20px;
 $line-height: 10px;
 $line-border-radius: 10px;
-
+.range-slider__wrapper{
+  margin: 10px 50px
+}
 .range-slider__line{
   position: relative;
-  width: 90%;
+  margin: 0 20px;
   height: $line-height;
-  margin: 10px 50px;
   border-radius: $line-border-radius;
   background: rgb(238, 198, 238);
   cursor: pointer;
@@ -29,9 +30,13 @@ $line-border-radius: 10px;
   border-radius: $line-border-radius;
   z-index: 1;
 }
-
-.range-slider__labels{
+.range-slider__scale{
+  margin: 10px 0;
   display: flex;
   justify-content: space-between;
-  margin: 10px 0;
+}
+.range-slider__scale-number{
+  font-family: Roboto, sans-serif;
+  padding: 5px;
+  cursor: pointer;
 }

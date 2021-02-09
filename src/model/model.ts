@@ -1,14 +1,4 @@
-interface IOptions {
-  min: number,
-  max: number,
-  initial: number, 
-  stepSize: number,
-  orientation: string,
-  thumbType: string,
-  underThumbElement: boolean,
-  scale: boolean,
-  progressBar: boolean,
-}
+import './../interface/IOptions'
 
 class Model{
   private onStatusChanged!: Function;
@@ -35,7 +25,7 @@ class Model{
     const max = this.options.max
     const initial = this.options.initial
 
-    const initialPart = initial / ( max - min )
+    const initialPart = (initial - min) / Math.abs( max - min )
     return initialPart
   }
 

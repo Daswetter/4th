@@ -73,6 +73,23 @@ class Thumb{
     document.removeEventListener('mouseup', this.boundOnMouseUp)
   }
 
+  setScalePos = (value: number): void => {
+    if (value === 1){
+      this.thumb.style.left = - this.thumb.offsetWidth / 2 + 'px'
+    } else if (value === 2) {
+      this.thumb.style.left = this.lineWidth / 4 - this.thumb.offsetWidth / 2 + 'px'
+    }  else if (value === 3) {
+      this.thumb.style.left = this.lineWidth / 2 - this.thumb.offsetWidth / 2 + 'px'
+    }  else if (value === 4) {
+      this.thumb.style.left = this.lineWidth / 4 * 3 - this.thumb.offsetWidth / 2 +  'px'
+    }  else if (value === 5) {
+      this.thumb.style.left = this.lineWidth - this.thumb.offsetWidth / 2 + 'px'
+    } 
+  }
+
+
+
+
   bindThumbChangedPos(callback: Function): void {
     this.onThumbChanged = callback;
   }

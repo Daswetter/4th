@@ -1,39 +1,51 @@
+import { Wrapper } from './wrapper'
 import { Line } from './line'
 import { Thumb } from './thumb'
 import { Progress } from './progress'
 import { Scale } from './scale'
+import './../interface/IOptions'
+
 
 class View { 
+  public wrapper: Wrapper
   public line: Line
   public thumb: Thumb
-  public progress: Progress
+  public progress!: Progress
   public scale: Scale
   private onPartChanged!: Function
-  private options!: object
+  private options!: IOptions
 
   constructor(public initElement: HTMLElement) {
     this.initElement = initElement
 
-    this.line = new Line(this.initElement)
+    this.wrapper = new Wrapper(this.initElement)
+    this.line = new Line(this.wrapper)
     this.thumb = new Thumb(this.line) 
-    this.progress = new Progress(this.line) 
+    // if (this.options.progressBar === true){
+      this.progress = new Progress(this.line) 
+    // }  
     this.scale = new Scale(this.line) 
 
+    
     this.line.bindWidthChanged(this.lineWidthWasChanged)
     this.line.bindLeftSideChanged(this.lineLeftSideWasChanged)
     this.line.bindLineClicked(this.lineWasClicked)
 
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
 
+    this.scale.bindScaleWasClicked(this.scaleWasClicked)
+
     this.bindSetLineParams()
+    
 
   }
+
   setInitialPos(part: Function): void {
-    console.log(3);
     this.thumb.setInitialPos(part())
   }
-  setOptions(options: object): void {
+  setOptions(options: IOptions): void {
     this.options = options
+    this.scale.setOptions( options )
   }
   thumbPosWasChanged = (thumbLeftProp: string): void => {
     this.progress.changeWidth(thumbLeftProp)
@@ -47,10 +59,12 @@ class View {
   }
   lineWidthWasChanged = (lineWidth: number) : void => {
     this.thumb.setLineWidth(lineWidth)
+    this.scale.setLineWidth(lineWidth)
   }
 
   lineLeftSideWasChanged = (lineLeftSide: number): void => {
     this.thumb.setLineLeftSide( lineLeftSide)
+    this.scale.setLineLeftSide( lineLeftSide)
   }
   bindSetLineParams = () : void => {
     this.line.countWidth()
@@ -60,6 +74,10 @@ class View {
     console.log(res);
   }
 
+
+  scaleWasClicked = (value: number): void => {
+    this.thumb.setScalePos(value)
+  }
   bindSendPartToModel(callback: Function): void {
     this.onPartChanged = callback;
   }

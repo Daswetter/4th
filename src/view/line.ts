@@ -1,10 +1,11 @@
+import { Wrapper } from './wrapper'
 class Line{
   public line: HTMLElement 
   private onWidthChanged!: Function;
   private onLeftSideChanged!: Function
   private onLineClicked!: Function;
 
-  constructor(public initElement: HTMLElement) {
+  constructor(public initElement: Wrapper) {
     this.line = document.createElement('div')
     this.line.classList.add('range-slider__line')
     this.initElement.append(this.line)
@@ -20,7 +21,7 @@ class Line{
     this.onWidthChanged(width)
   }
   countLeftSide(): void {
-    const leftSide = this.line.getBoundingClientRect().left
+    const leftSide = this.line.getBoundingClientRect().left    
     this.onLeftSideChanged( leftSide )
   }
 
