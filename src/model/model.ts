@@ -1,5 +1,4 @@
 import './../interface/IOptions'
-
 class Model{
   private onStatusChanged!: Function;
   private onInitialValue!: Function
@@ -28,7 +27,12 @@ class Model{
     const initialPart = (initial - min) / Math.abs( max - min )
     return initialPart
   }
-
+  countNothing(part: number) {
+    return part * 2
+  }
+  bla() {
+    return "bla";
+  }
   
 
 

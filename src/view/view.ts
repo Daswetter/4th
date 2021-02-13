@@ -7,26 +7,17 @@ import './../interface/IOptions'
 
 
 class View { 
-  public wrapper: Wrapper
-  public line: Line
-  public thumb: Thumb
-  public progress!: Progress
-  public scale: Scale
+  public wrapper: Wrapper = new Wrapper(this.initElement)
+  public line: Line = new Line(this.wrapper)
+  public thumb: Thumb = new Thumb(this.line) 
+  public progress: Progress = new Progress(this.line) 
+  public scale: Scale = new Scale(this.line)
   private onPartChanged!: Function
   private options!: IOptions
 
   constructor(public initElement: HTMLElement) {
     this.initElement = initElement
 
-    this.wrapper = new Wrapper(this.initElement)
-    this.line = new Line(this.wrapper)
-    this.thumb = new Thumb(this.line) 
-    // if (this.options.progressBar === true){
-      this.progress = new Progress(this.line) 
-    // }  
-    this.scale = new Scale(this.line) 
-
-    
     this.line.bindWidthChanged(this.lineWidthWasChanged)
     this.line.bindLeftSideChanged(this.lineLeftSideWasChanged)
     this.line.bindLineClicked(this.lineWasClicked)
