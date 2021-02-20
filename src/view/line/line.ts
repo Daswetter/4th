@@ -11,18 +11,14 @@ class Line{
     this.initElement.append(this.line)
 
     this.line.onclick = this.moveThumbByClicking
-
-    // this.line.countWidth()
-    // this.line.countLeftSide()
   }
 
-  countWidth(): void {
-    const width = this.line.offsetWidth
-    this.onWidthChanged(width)
+  width(): number {
+    return this.line.offsetWidth
+    
   }
-  countLeftSide(): void {
-    const leftSide = this.line.getBoundingClientRect().left    
-    this.onLeftSideChanged( leftSide )
+  left(): number {
+    return this.line.getBoundingClientRect().left    
   }
 
   append(element: HTMLElement): void {
@@ -43,14 +39,6 @@ class Line{
     this.onLineClicked(distFromBeginToClick, part)
   }
 
-
-
-  bindWidthChanged(callback: Function): void {
-    this.onWidthChanged = callback;
-  }
-  bindLeftSideChanged(callback: Function): void {
-    this.onLeftSideChanged = callback;
-  }
   bindLineClicked(callback: Function): void {
     this.onLineClicked = callback;
   }

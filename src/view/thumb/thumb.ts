@@ -8,14 +8,12 @@ class Thumb{
   private onThumbChanged!: Function;
   private lineWidth!: number
   private lineLeftSide!: number
-  // private lineWidth: number
-  // private lineLeftSide: number
 
   constructor(public line: Line) {
     this.thumb = document.createElement('div')
     this.thumb.classList.add('range-slider__thumb')
     this.line.append(this.thumb)
-
+ 
     this.boundOnMouseUp = this.onMouseUp.bind(this)
     this.boundOnMouseMove = this.onMouseMove.bind(this)
     
@@ -33,18 +31,14 @@ class Thumb{
     document.addEventListener('mouseup', this.boundOnMouseUp)
   }
 
-  setInitialPos(part: number): void{
-    this.thumb.style.left =  this.lineWidth * part - this.thumb.offsetWidth / 2 + 'px'
+  setInitialPos(part: number, lineWidth: number): void{
+    this.thumb.style.left =  lineWidth * part - this.thumb.offsetWidth / 2 + 'px'
     this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
   }
 
-  setLineWidth(lineWidth: number): void{
-    this.lineWidth = lineWidth
-  }
   setLineLeftSide(lineLeftSide: number): void{
     this.lineLeftSide = lineLeftSide
   }
-
   setShiftX(value: number): void{
     this.shiftXValue = value
   } 

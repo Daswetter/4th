@@ -11,7 +11,6 @@ class Scale{
   
   public lineWidth!: number
   public lineLeftSide!: number
-  public options!: IOptions
   private onScaleWasClicked!: Function;
 
   constructor(public line: Line) {
@@ -19,9 +18,6 @@ class Scale{
     this.scale.classList.add('range-slider__scale')
     this.line.after(this.scale)
 
-  }
-  setOptions = (options: IOptions): void => {
-    this.options = options
   }
   setScaleValues = (scaleElements: Array<number>): void => {
     this.createScaleElement(this.minScale, scaleElements[0], 1)

@@ -36,12 +36,12 @@
 //   })
 // })
 
-// describe('setCurrentValue', () => {
+// describe('countCurrentValue', () => {
 //   beforeEach(() => {
 //     const _ = new Model(options)
 //   })
 //   // test('should return current value', () => {
-//   //   expect(_.setCurrentValue(0.4)).toBeCalled()
+//   //   expect(_.countCurrentValue(0.4)).toBeCalled()
 //   // })
 // })
 
@@ -50,7 +50,7 @@
 //   //   const _ = new Model(options)
 //   // })
 //   // test('should return callback', () => {
-//   //   expect(_.bindStatusChanged(() => 'string')).not.toBeFalsy()
+//   //   expect(_.bindCurrentChanged(() => 'string')).not.toBeFalsy()
 //   // })
 //   // ------------------------------------
 //   // test('should return callback', () => {

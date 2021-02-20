@@ -20,8 +20,8 @@
 //     return {
 //       countInitialPart: jest.fn(),
 //       getOptions: jest.fn(),
-//       setCurrentValue: jest.fn(),
-//       bindStatusChanged: jest.fn(),
+//       countCurrentValue: jest.fn(),
+//       bindCurrentChanged: jest.fn(),
 //       bindInitialValue: jest.fn(),
 //     };
 //   });
@@ -34,7 +34,7 @@
 //   test('called the class constructor', () => {
 //     const init: HTMLElement = document.createElement('div') as HTMLElement
 //     const presenter = new Presenter(new View(init), new Model(options));
-//     expect(presenter.bindSetCurrentValue(0.1)).toBeTruthy();
+//     expect(presenter.sendPartTo(0.1)).toBeTruthy();
 //   });
 //   // it('The presenter should be able to call new()', () => {
 //   //   const init: HTMLElement = document.createElement('div') as HTMLElement
@@ -44,6 +44,6 @@
 //   // test('called the class constructor', () => {
 //   //   const init: HTMLElement = document.createElement('div') as HTMLElement
 //   //   const presenter = new Presenter(new View(init), new Model(options));
-//   //   expect(presenter.bindSetCurrentValue(0.1)).toBeTruthy();
+//   //   expect(presenter.sendPartTo(0.1)).toBeTruthy();
 //   // });
 // })
