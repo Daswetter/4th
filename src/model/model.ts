@@ -1,8 +1,11 @@
 import './../interface/IOptions'
-class Model{
+import { IModel } from './../interface/IModel'
+
+class Model implements IModel{
   private onStatusChanged!: Function;
   private onInitialValue!: Function
-
+  private onScaleElements!: Function
+  
   constructor(private options: IOptions){
     this.options = options
   }
@@ -27,20 +30,24 @@ class Model{
     const initialPart = (initial - min) / Math.abs( max - min )
     return initialPart
   }
-  countNothing(part: number) {
-    return part * 2
+  countScaleElements = (): void => {
+    const scaleElements = []
+    scaleElements.push(this.options.min)
+    scaleElements.push((this.options.max - this.options.min) / 4 + this.options.min)
+    scaleElements.push((this.options.max - this.options.min) / 2 + this.options.min)
+    scaleElements.push((this.options.max - this.options.min) / 4 * 3 + this.options.min)
+    scaleElements.push(this.options.max)
+    this.onScaleElements(scaleElements)
   }
-  bla() {
-    return "bla";
-  }
-  
-
 
   bindStatusChanged(callback: Function): void {
     this.onStatusChanged = callback;
   }
   bindInitialValue(callback: Function): void {
     this.onInitialValue = callback;
+  }
+  bindScaleElements(callback: Function): void {
+    this.onScaleElements = callback;
   }
 }
 

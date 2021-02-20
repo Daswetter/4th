@@ -36,7 +36,10 @@ $line-border-radius: 10px;
   justify-content: space-between;
 }
 .range-slider__scale-number{
+  min-width: 30px;
+  max-width: 45px;
   font-family: Roboto, sans-serif;
-  padding: 5px;
   cursor: pointer;
+  // background: paleturquoise;
+  text-align: center;
 }

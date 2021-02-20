@@ -1,56 +1,61 @@
-import { Model } from './model'
+// import { Model } from './model'
 
-// const Model = require("./model");
+// const options = {
+//   min: 0,
+//   max: 100,
+//   initial: 50,
+//   stepSize: 1,
+//   orientation: 'horizontal',
+//   thumbType: 'single',
+//   underThumbElement: true,
+//   scale: true,
+//   progressBar: true,
+// }
+// const _ = new Model(options)
 
 
-// jest.mock('./model', () => {
-//   return {
-//     Model: jest.fn().mockImplementation(() => {
-//       return {setCurrentValue: () => {}};
-//     }),
-//   };
-// });
+// describe('get options', () => {
+//   beforeEach(() => {
+//     const _ = new Model(options)
+//   })
+//   test('should return options', () => {
+//     expect(_.getOptions).toEqual(options)
+//   })
+// })
 
-describe('model bla', () => {
-  test('bls should return string bla', () => {
-    const options = {
-      min: 0,
-      max: 100,
-      initial: 50,
-      stepSize: 1,
-      orientation: 'horizontal',
-      thumbType: 'single',
-      underThumbElement: true,
-      scale: true,
-      progressBar: true,
-    }
-    const _ = new Model(options)
-    expect(_.bla()).toEqual('bla')
-  })
-})
 
-describe('model countNothing', () => {
-  const options = {
-    min: 0,
-    max: 100,
-    initial: 50,
-    stepSize: 1,
-    orientation: 'horizontal',
-    thumbType: 'single',
-    underThumbElement: true,
-    scale: true,
-    progressBar: true,
-  }
-  let _ = new Model(options)
-  beforeEach(() => {
-    const _ = new Model(options)
-  })
-  test('bls should return twice bigger', () => {
-    expect(_.countNothing(0.2)).toEqual(0.4)
-    expect(_.countNothing(2)).toEqual(4)
-    expect(_.countNothing(-1)).toEqual(-2)
-  })
-  test('bls should not return undefined', () => {
-    expect(_.countNothing(0.2)).not.toEqual(0.5)
-  })
-})
+// describe('Initial part', () => {
+//   beforeEach(() => {
+//     const _ = new Model(options)
+//   })
+//   test('should be called', () => {
+//     expect(_.countInitialPart()).not.toBeFalsy()
+//   })
+//   test('should return right part', () => {
+//     expect(_.countInitialPart()).toBe(0.5)
+//   })
+// })
+
+// describe('setCurrentValue', () => {
+//   beforeEach(() => {
+//     const _ = new Model(options)
+//   })
+//   // test('should return current value', () => {
+//   //   expect(_.setCurrentValue(0.4)).toBeCalled()
+//   // })
+// })
+
+// describe('Binding', () => {
+//   // beforeEach(() => {
+//   //   const _ = new Model(options)
+//   // })
+//   // test('should return callback', () => {
+//   //   expect(_.bindStatusChanged(() => 'string')).not.toBeFalsy()
+//   // })
+//   // ------------------------------------
+//   // test('should return callback', () => {
+//   //   const mock = jest.fn()
+//   //   expect(_.bindInitialValue(mock)).toBeCalled()
+//   // })
+// })
+

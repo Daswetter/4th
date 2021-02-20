@@ -22,53 +22,32 @@ class Scale{
   }
   setOptions = (options: IOptions): void => {
     this.options = options
-    this.setScaleValues()
-    console.log('this.maxScale', this.maxScale);
   }
-  setScaleValues = (): void => {
-    this.setScaleNumber(this.minScale, this.options.min, 1)
-    this.setScaleNumber(this.quarterScale, (this.options.max - this.options.min) / 4 + this.options.min, 2)
-    this.setScaleNumber(this.middleScale, (this.options.max - this.options.min) / 2 + this.options.min, 3)
-    this.setScaleNumber(this.threeQuarterScale, (this.options.max - this.options.min) / 4 * 3 + this.options.min, 4)
-    this.setScaleNumber(this.maxScale, this.options.max, 5)
+  setScaleValues = (scaleElements: Array<number>): void => {
+    this.createScaleElement(this.minScale, scaleElements[0])
+    this.createScaleElement(this.quarterScale, scaleElements[1])
+    this.createScaleElement(this.middleScale, scaleElements[2])
+    this.createScaleElement(this.threeQuarterScale, scaleElements[3])
+    this.createScaleElement(this.maxScale, scaleElements[4])
     
   }
   
   setLineLeftSide( lineLeftSide: number ): void {
     this.lineLeftSide = lineLeftSide
-    this.setScaleLeftSide()
   }
   setLineWidth(lineWidth: number): void{
-    this.lineWidth = lineWidth  
-    this.setScaleWidth()  
+    this.lineWidth = lineWidth 
   }
-  setScaleLeftSide = () :void => {
-    // this.scale.style.left = this.lineLeftSide + 'px'
-  }
-  setScaleWidth = (): void => {
-    this.scale.style.width = this.lineWidth + 20 + 'px'
-  }
-  setScaleNumber = (element: HTMLElement, scaleValue: number, flag: number): void => {
+  createScaleElement = (element: HTMLElement, scaleValue: number): void => {
     element = document.createElement('div')
     this.scale.append(element)
     element.classList.add('range-slider__scale-number')
     element.innerText = scaleValue + ''
-
-    if (flag === 1){
-      element.onclick = this.onMinScaleWasClicked
-    } else if (flag === 2) {
-      element.onclick = this.onQuarterScaleWasClicked
-    } else if (flag === 3) {
-      element.onclick = this.onMiddleScaleWasClicked
-    } else if (flag === 4) {
-      element.onclick = this.onThreeQuarterScaleWasClicked
-    } else if (flag === 5) {
-      element.onclick = this.onMaxScaleWasClicked
-    }    
+    
   } 
-
-  setEventListener = ():void => {
-    this.middleScale.onclick = this.onMiddleScaleWasClicked
+  setMinScale = (min: number): void => {
+    this.createScaleElement(this.minScale, min)
+    this.minScale.onclick = this.onMinScaleWasClicked
   }
 
   onMinScaleWasClicked = (event: MouseEvent): void => {

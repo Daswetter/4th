@@ -1,6 +1,6 @@
 $(".js-slider1").customRangeSlider({
-  min: -120,
-  max: 120,
+  min: -9,
+  max: 20,
   initial: 0,
   stepSize: 1,
 })

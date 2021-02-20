@@ -4,20 +4,26 @@ import { Thumb } from './thumb'
 import { Progress } from './progress'
 import { Scale } from './scale'
 import './../interface/IOptions'
+import './../interface/IView'
+import { IView } from './../interface/IView'
 
-
-class View { 
-  public wrapper: Wrapper = new Wrapper(this.initElement)
-  public line: Line = new Line(this.wrapper)
-  public thumb: Thumb = new Thumb(this.line) 
-  public progress: Progress = new Progress(this.line) 
-  public scale: Scale = new Scale(this.line)
+class View implements IView { 
+  public wrapper!: Wrapper
+  public line!: Line
+  public thumb!: Thumb 
+  public progress!: Progress 
+  public scale!: Scale 
   private onPartChanged!: Function
   private options!: IOptions
 
   constructor(public initElement: HTMLElement) {
     this.initElement = initElement
-
+    this.wrapper = new Wrapper(this.initElement)
+    this.line = new Line(this.wrapper)
+    this.thumb = new Thumb(this.line) 
+    this.progress = new Progress(this.line) 
+    this.scale = new Scale(this.line)
+    
     this.line.bindWidthChanged(this.lineWidthWasChanged)
     this.line.bindLeftSideChanged(this.lineLeftSideWasChanged)
     this.line.bindLineClicked(this.lineWasClicked)
@@ -26,11 +32,15 @@ class View {
 
     this.scale.bindScaleWasClicked(this.scaleWasClicked)
 
+
     this.bindSetLineParams()
     
-
+    
+    
   }
-
+  setScaleElements(elements: Array<number>): void {
+    this.scale.setScaleValues(elements)
+  }
   setInitialPos(part: Function): void {
     this.thumb.setInitialPos(part())
   }
