@@ -3,16 +3,19 @@ import { Line } from './line/line'
 import { Thumb } from './thumb/thumb'
 import { Progress } from './progress/progress'
 import { Scale } from './scale/scale'
+import { Satellite } from './satellite/satellite'
+
 import './../interface/IOptions'
 import './../interface/IView'
 import { IView } from './../interface/IView'
 
 class View implements IView { 
-  public wrapper!: Wrapper
-  public line!: Line
-  public thumb!: Thumb 
-  public progress!: Progress 
-  public scale!: Scale 
+  public wrapper: Wrapper
+  public line: Line
+  public thumb: Thumb 
+  public progress: Progress 
+  public scale: Scale 
+  public satellite: Satellite
   private onPartChanged!: Function
   private options!: IOptions
 
@@ -23,6 +26,7 @@ class View implements IView {
     this.thumb = new Thumb(this.line) 
     this.progress = new Progress(this.line) 
     this.scale = new Scale(this.line)
+    this.satellite = new Satellite(this.line)
     
     this.line.bindWidthChanged(this.lineWidthWasChanged)
     this.line.bindLeftSideChanged(this.lineLeftSideWasChanged)
@@ -31,12 +35,11 @@ class View implements IView {
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
 
     this.scale.bindScaleWasClicked(this.scaleWasClicked)
-    this.scale.bindScaleWasClicked
+    // this.scale.bindScaleWasClicked
 
     this.bindSetLineParams()
     
-    
-    
+    this.satellite.setThumbWidth(this.thumb.thumbWidth())
   }
   setScaleElements(elements: Array<number>): void {
     this.scale.setScaleValues(elements)
@@ -50,9 +53,11 @@ class View implements IView {
   }
   thumbPosWasChanged = (thumbLeftProp: string): void => {
     this.progress.changeWidth(thumbLeftProp)
+    this.satellite.setPos(thumbLeftProp)
   }
   displayCurrentValue(res: number): void{
     console.log('displayCurrentValue', res)
+    this.satellite.setValue(res)
   }
   lineWasClicked = (dist: number, part: number): void => {
     this.thumb.changeThumbPos(dist)
@@ -75,7 +80,9 @@ class View implements IView {
     console.log(res);
   }
 
-
+  // bindThumbParam =(width: number): void => {
+  //   this.thumb.thumbWidth()
+  // }
   scaleWasClicked = (value: number): void => {
     this.thumb.setScalePos(value)
   }

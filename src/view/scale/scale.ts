@@ -46,11 +46,7 @@ class Scale{
     element.dataset.id = flag + ''
     this.setScaleListener(element)
   } 
-  // setMinScale = (min: number): void => {
-  //   this.minScale.onclick = this.onMinScaleWasClicked
-  // }
   setScaleListener = (element: HTMLElement): void => {
-    console.log('element', element.getAttribute('data-id'));
     if (element.getAttribute('data-id') === '1'){
       element.onclick = this.onMinScaleWasClicked
     } else if (element.getAttribute('data-id') === '2'){

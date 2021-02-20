@@ -33,6 +33,10 @@ class Line{
     this.line.after(element)
   }
 
+  prepend(element: HTMLElement): void {
+    this.line.prepend(element)
+  }
+
   moveThumbByClicking = (event: MouseEvent) : void => {
     const distFromBeginToClick = event.pageX - this.line.getBoundingClientRect().left
     const part = (event.pageX - this.line.getBoundingClientRect().left) / this.line.offsetWidth

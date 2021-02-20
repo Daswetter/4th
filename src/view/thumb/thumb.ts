@@ -93,6 +93,9 @@ class Thumb{
     
   }
 
+  thumbWidth = (): number => {
+    return this.thumb.offsetWidth
+  }
 
 
 
