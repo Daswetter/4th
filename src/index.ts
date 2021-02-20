@@ -1,6 +1,6 @@
 import './view/view'
-import './view/thumb'
-import './view/line'
+import './view/thumb/thumb'
+import './view/line/line'
 import './view/view.scss'
 
 

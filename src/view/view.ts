@@ -1,8 +1,8 @@
-import { Wrapper } from './wrapper'
-import { Line } from './line'
-import { Thumb } from './thumb'
-import { Progress } from './progress'
-import { Scale } from './scale'
+import { Wrapper } from './wrapper/wrapper'
+import { Line } from './line/line'
+import { Thumb } from './thumb/thumb'
+import { Progress } from './progress/progress'
+import { Scale } from './scale/scale'
 import './../interface/IOptions'
 import './../interface/IView'
 import { IView } from './../interface/IView'
@@ -31,7 +31,7 @@ class View implements IView {
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
 
     this.scale.bindScaleWasClicked(this.scaleWasClicked)
-
+    this.scale.bindScaleWasClicked
 
     this.bindSetLineParams()
     

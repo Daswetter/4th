@@ -1,4 +1,4 @@
-import { Line } from './line'
+import { Line } from '../line/line'
 
 class Thumb{
   public thumb: HTMLElement
@@ -76,15 +76,21 @@ class Thumb{
   setScalePos = (value: number): void => {
     if (value === 1){
       this.thumb.style.left = - this.thumb.offsetWidth / 2 + 'px'
+      this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
     } else if (value === 2) {
       this.thumb.style.left = this.lineWidth / 4 - this.thumb.offsetWidth / 2 + 'px'
+      this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
     }  else if (value === 3) {
       this.thumb.style.left = this.lineWidth / 2 - this.thumb.offsetWidth / 2 + 'px'
+      this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
     }  else if (value === 4) {
       this.thumb.style.left = this.lineWidth / 4 * 3 - this.thumb.offsetWidth / 2 +  'px'
+      this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
     }  else if (value === 5) {
       this.thumb.style.left = this.lineWidth - this.thumb.offsetWidth / 2 + 'px'
+      this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
     } 
+    
   }
 
 

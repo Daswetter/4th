@@ -9,7 +9,7 @@ import './../interface/IOptions'
 class Presenter{
   constructor(private View: IView, private Model: IModel) {
     
-    this.Model.countInitialPart()
+    
     this.Model.bindScaleElements(this.bindSetScaleElements)
     this.Model.countScaleElements()
 
@@ -22,7 +22,7 @@ class Presenter{
     
     this.sendOptionsToView(this.Model.getOptions)
 
-
+    this.Model.countInitialPart()
   }
 
   updateTest = (res: number): void => {

@@ -1,4 +1,4 @@
-import { Wrapper } from './wrapper'
+import { Wrapper } from '../wrapper/wrapper'
 class Line{
   public line: HTMLElement 
   private onWidthChanged!: Function;
