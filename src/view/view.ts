@@ -13,7 +13,7 @@ class View implements IView {
   public wrapper: Wrapper
   public line: Line
   public thumb: Thumb 
-  public progress?: Progress 
+  public progress: Progress 
   public scale: Scale 
   public satellite: Satellite
   private onPartChanged!: Function
@@ -23,41 +23,35 @@ class View implements IView {
     this.wrapper = new Wrapper(this.initElement)
     this.line = new Line(this.wrapper)
     this.thumb = new Thumb(this.line) 
+    this.progress = new Progress(this.line)
     this.scale = new Scale(this.line)
     this.satellite = new Satellite(this.line)
     
-    // this.line.bindWidthChanged(this.lineWidthWasChanged)
-    // this.line.bindLeftSideChanged(this.lineLeftSideWasChanged)
     this.line.bindLineClicked(this.lineWasClicked)
 
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
 
     this.scale.bindScaleWasClicked(this.scaleWasClicked)
-    // this.scale.bindScaleWasClicked
-
-    this.bindSetLineParams()
     
-    this.satellite.setThumbWidth(this.thumb.thumbWidth())
+    this.satellite.setThumbWidth(this.thumb.width())
+  }
 
-    
-  }
-  isProgressExist = (isExist: boolean): void => {
-    if (isExist) {
-      this.progress = new Progress(this.line) 
-    }
-  }
+
   setScaleElements(elements: Array<number>): void {
     this.scale.setScaleValues(elements)
   }
+
   setInitialPos(part: Function): void {
     this.thumb.setInitialPos(part(), this.line.width())
+    this.progress.setInitialPos(part(), this.line.width())
+    this.satellite.setInitialPos(part(), this.line.width(), this.thumb.width())
   }
-  thumbPosWasChanged = (thumbLeftProp: string): void => {
+
+  thumbPosWasChanged = (thumbLeftProp: string, part: number): void => {
     if (this.progress){
       this.progress.changeWidth(thumbLeftProp)
     }  
     this.satellite.setPos(thumbLeftProp)
-    // this.onPartChanged(part)
   }
   displayCurrentValue(res: number): void{
     console.log('displayCurrentValue', res)
@@ -67,26 +61,10 @@ class View implements IView {
     this.thumb.changeThumbPos(dist)
     this.onPartChanged(part)
   }
-  // lineWidthWasChanged = (lineWidth: number) : void => {
-  //   this.thumb.setLineWidth(lineWidth)
-  //   this.scale.setLineWidth(lineWidth)
-  // }
-
-  // lineLeftSideWasChanged = (lineLeftSide: number): void => {
-  //   this.thumb.setLineLeftSide( lineLeftSide)
-  //   this.scale.setLineLeftSide( lineLeftSide)
-  // }
-  bindSetLineParams = () : void => {
-    this.line.width()
-    this.line.left()
-  }
   thumbWasUpdated = (res: number): void => {
     console.log(res);
   }
 
-  // bindThumbParam =(width: number): void => {
-  //   this.thumb.thumbWidth()
-  // }
   scaleWasClicked = (value: number): void => {
     this.thumb.setScalePos(value)
   }

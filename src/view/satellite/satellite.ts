@@ -9,7 +9,9 @@ class Satellite {
     this.satellite.classList.add('range-slider__satellite')
     this.line.prepend(this.satellite)
   }
-
+  setInitialPos = (part: number, lineWidth: number, thumbhWidth: number): void => {
+    this.satellite.style.left =  lineWidth * part - thumbhWidth / 2 + 'px'
+  }
   setPos = (pos: string): void => {
     this.satellite.style.left = parseInt(pos, 10) - this.thumbWidth / 2 + 'px'
   }
