@@ -20,7 +20,7 @@ class Line{
   left(): number {
     return this.line.getBoundingClientRect().left    
   }
-
+  // TODO: get rid of there methods
   append(element: HTMLElement): void {
     this.line.append(element)
   }

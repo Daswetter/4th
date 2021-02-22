@@ -9,7 +9,9 @@ class Model implements IModel{
   constructor(private options: IOptions){
     this.options = options
   }
-
+  getOptions = (): IOptions => {
+    return this.options
+  }
   countCurrentValue(part: number): void {
     const min = this.options.min
     const max = this.options.max
@@ -33,11 +35,13 @@ class Model implements IModel{
   }
   countScaleElements = (): Array<number> => {
     const scaleElements = []
-    scaleElements.push(this.options.min)
-    scaleElements.push((this.options.max - this.options.min) / 4 + this.options.min)
-    scaleElements.push((this.options.max - this.options.min) / 2 + this.options.min)
-    scaleElements.push((this.options.max - this.options.min) / 4 * 3 + this.options.min)
-    scaleElements.push(this.options.max)
+    scaleElements.push(
+      this.options.min,
+      (this.options.max - this.options.min) / 4 + this.options.min,
+      (this.options.max - this.options.min) / 2 + this.options.min,
+      (this.options.max - this.options.min) / 4 * 3 + this.options.min,
+      this.options.max
+    )
     return scaleElements
   }
 

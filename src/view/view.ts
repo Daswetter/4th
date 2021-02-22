@@ -27,47 +27,47 @@ class View implements IView {
     this.scale = new Scale(this.line)
     this.satellite = new Satellite(this.line)
     
+    this.sendLineParamsToThumb()
     this.line.bindLineClicked(this.lineWasClicked)
 
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
 
     this.scale.bindScaleWasClicked(this.scaleWasClicked)
     
-    this.satellite.setThumbWidth(this.thumb.width())
   }
-
+  sendLineParamsToThumb = (): void => {
+    this.thumb.setLineLeftSide(this.line.left())
+    this.thumb.setLineWidth(this.line.width())
+  }
 
   setScaleElements(elements: Array<number>): void {
     this.scale.setScaleValues(elements)
   }
 
-  setInitialPos(part: Function): void {
+  setInitialPos(part: Function, options: Function): void {
     this.thumb.setInitialPos(part(), this.line.width())
     this.progress.setInitialPos(part(), this.line.width())
-    this.satellite.setInitialPos(part(), this.line.width(), this.thumb.width())
+    this.satellite.setInitialPos(part(), this.line.width(), options().initial)
   }
 
   thumbPosWasChanged = (thumbLeftProp: string, part: number): void => {
-    if (this.progress){
-      this.progress.changeWidth(thumbLeftProp)
-    }  
+    this.progress.changeWidth(thumbLeftProp)
     this.satellite.setPos(thumbLeftProp)
-  }
-  displayCurrentValue(res: number): void{
-    console.log('displayCurrentValue', res)
-    this.satellite.setValue(res)
-  }
-  lineWasClicked = (dist: number, part: number): void => {
-    this.thumb.changeThumbPos(dist)
     this.onPartChanged(part)
   }
-  thumbWasUpdated = (res: number): void => {
-    console.log(res);
+  currentWasSentFromModel(res: number): void{
+    console.log('current', res)
+    this.satellite.setValue(res)
+  }
+  lineWasClicked = (dist: number): void => {
+    this.thumb.changeThumbPosBecauseOfLineClick(dist)
   }
 
   scaleWasClicked = (value: number): void => {
     this.thumb.setScalePos(value)
   }
+
+  
   bindSendPartToModel(callback: Function): void {
     this.onPartChanged = callback;
   }

@@ -6,6 +6,9 @@ interface IModel {
   countScaleElements(): Array<number>
   bindCurrentChanged(callback: Function): void
   bindInitialValue(callback: Function): void
+
+  getOptions(): IOptions
+
 }
 
 export { IModel }

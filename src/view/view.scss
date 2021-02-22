@@ -47,9 +47,10 @@ $line-border-radius: 10px;
   position: absolute;
   top: -30px;
   height: 20px;
-  width: 20px;
+  min-width: 20px;
   background: palegoldenrod;
   font-family: Roboto, sans-serif;
   border-radius: 5px;
   text-align: center;
+  padding: 0 3px;
 }

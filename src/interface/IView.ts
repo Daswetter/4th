@@ -1,14 +1,11 @@
 import './IOptions'
 
 interface IView {
-  setInitialPos(part: Function): void
+  setInitialPos(part: Function, options: Function): void
   thumbPosWasChanged(thumbLeftProp: string, part: number): void
-  displayCurrentValue(res: number): void
+  currentWasSentFromModel(res: number): void
   lineWasClicked (dist: number, part: number): void
 
-  // lineLeftSideWasChanged(lineLeftSide: number): void
-  // bindSetLineParams() : void
-  thumbWasUpdated(res: number): void
 
   setScaleElements(elements: Array<number>): void
   scaleWasClicked(value: number): void

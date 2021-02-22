@@ -34,12 +34,13 @@ class Thumb{
 
   setInitialPos(part: number, lineWidth: number): void{
     this.thumb.style.left =  lineWidth * part - this.thumb.offsetWidth / 2 + 'px'
-    // this.onInitialValue(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
-    // this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px')
   }
 
   setLineLeftSide(lineLeftSide: number): void{
     this.lineLeftSide = lineLeftSide
+  }
+  setLineWidth(lineWidth: number): void{
+    this.lineWidth = lineWidth
   }
   setShiftX(value: number): void{
     this.shiftXValue = value
@@ -56,12 +57,16 @@ class Thumb{
     }
     
     this.thumb.style.left = leftStop - this.thumb.offsetWidth / 2 + 'px'
-    this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px',1)
+
+    const part = (this.thumb.getBoundingClientRect().left - this.lineLeftSide + this.thumb.offsetWidth / 2) / this.lineWidth
+    
+    this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px', part)
   }
 
-  changeThumbPos = (dist: number): void => {
+  changeThumbPosBecauseOfLineClick = (dist: number): void => {
     this.thumb.style.left = dist - this.thumb.offsetWidth / 2 + 'px'
-    this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px',1)
+    const part = (this.thumb.getBoundingClientRect().left - this.lineLeftSide + this.thumb.offsetWidth / 2) / this.lineWidth
+    this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px', part)
   }
 
   onMouseUp = () : void => {
@@ -98,9 +103,6 @@ class Thumb{
   bindThumbChangedPos(callback: Function): void {
     this.onThumbChanged = callback;
   }
-  // bindInitialWasSet(callback: Function): void {
-  //   this.onInitialValue = callback;
-  // }
 }
 
 export { Thumb }
