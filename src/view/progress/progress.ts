@@ -12,9 +12,7 @@ class Progress{
     // this.progress.setDefaultStyle()
   }
   setInitialPos = (part: number, lineWidth: number): void => {
-    
     this.progress.style.width =  lineWidth * part + 'px'
-    console.log('this.progress.offsetWidth', this.progress.offsetWidth);
   }
 
   changeWidth = (thumbLeftProp: string): void => {

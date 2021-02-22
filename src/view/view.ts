@@ -18,6 +18,8 @@ class View implements IView {
   public satellite: Satellite
   private onPartChanged!: Function
 
+  private options!: IOptions
+
   constructor(public initElement: HTMLElement) {
     this.initElement = initElement
     this.wrapper = new Wrapper(this.initElement)
@@ -26,7 +28,7 @@ class View implements IView {
     this.progress = new Progress(this.line)
     this.scale = new Scale(this.line)
     this.satellite = new Satellite(this.line)
-    
+  
     this.sendLineParamsToThumb()
     this.line.bindLineClicked(this.lineWasClicked)
 
@@ -34,6 +36,9 @@ class View implements IView {
 
     this.scale.bindScaleWasClicked(this.scaleWasClicked)
     
+  }
+  setOptions = (options: IOptions): void => {
+    this.options = options
   }
   sendLineParamsToThumb = (): void => {
     this.thumb.setLineLeftSide(this.line.left())

@@ -11,6 +11,7 @@ class Presenter{
     this.View.setScaleElements(this.Model.countScaleElements())
     this.View.setInitialPos(this.Model.countInitialPart, this.Model.getOptions)
     this.View.bindSendPartToModel(this.sendPartTo)
+    this.View.setOptions(this.Model.getOptions())
     
     this.Model.bindCurrentChanged(this.sendResultTo)
   }

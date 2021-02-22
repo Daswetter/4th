@@ -8,6 +8,7 @@ class Model implements IModel{
   
   constructor(private options: IOptions){
     this.options = options
+    this.convertStepSizeToDecimal(203)
   }
   getOptions = (): IOptions => {
     return this.options
@@ -15,13 +16,16 @@ class Model implements IModel{
   countCurrentValue(part: number): void {
     const min = this.options.min
     const max = this.options.max
-    const step = this.options.stepSize
+    const stepSize = this.options.stepSize
 
-    const currentValue = Math.round((max - min) / step * part) * step + min
+    const currentValue = Math.round((max - min) / stepSize * part) * stepSize + min
+    
+    // this.onCurrentChanged(this.roundToDecimal(currentValue, this.convertStepSizeToDecimal(stepSize)))
     this.onCurrentChanged(currentValue)
     
   }
   countInitialPart = (): number => {
+    // TODO: независимость значения от макс и мин
     const min = this.options.min
     const max = this.options.max
     const initial = this.options.initial
@@ -35,14 +39,34 @@ class Model implements IModel{
   }
   countScaleElements = (): Array<number> => {
     const scaleElements = []
-    scaleElements.push(
-      this.options.min,
-      (this.options.max - this.options.min) / 4 + this.options.min,
-      (this.options.max - this.options.min) / 2 + this.options.min,
-      (this.options.max - this.options.min) / 4 * 3 + this.options.min,
-      this.options.max
-    )
-    return scaleElements
+    const stepSize = this.options.stepSize
+    const min = this.options.min
+    const max = this.options.max 
+    const quarter = (max - min) / 4 + min
+    const half = (max - min) / 2 + min
+    const threeQuarter = (max - min) / 4 * 3 + min 
+
+    scaleElements.push( quarter, half, threeQuarter)
+    const roundScaleElements: Array<number> = scaleElements.map( x => this.roundToDecimal(x, this.convertStepSizeToDecimal(stepSize)))
+
+    roundScaleElements.push(max)
+    roundScaleElements.unshift(min)
+
+    return roundScaleElements
+  }
+  convertStepSizeToDecimal = (stepSize: number) : number => {
+    const digits = stepSize.toString().split('')
+    let decimal: number
+    if ( stepSize > 0 && stepSize < 1){
+      decimal =   digits.length - 2
+      return decimal
+    } else {
+      decimal = - (digits.length - 1)
+      return decimal
+    }
+  }
+  roundToDecimal = (value: number, decimal = 0): number => {
+    return (Math.round( value * Math.pow(10, decimal) ) / Math.pow(10, decimal))
   }
 
   bindCurrentChanged(callback: Function): void {

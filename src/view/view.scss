@@ -30,6 +30,18 @@ $line-border-radius: 10px;
   border-radius: $line-border-radius;
   z-index: 1;
 }
+
+.js-slider3 {
+  .range-slider__line{
+    background: paleturquoise;
+  }
+  .range-slider__thumb{
+    background: darkblue;
+  }
+  .range-slider__progress{
+    background: darkcyan;
+  }
+} 
 .range-slider__scale{
   margin: 10px 0;
   display: flex;
