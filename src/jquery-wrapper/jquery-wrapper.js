@@ -12,10 +12,10 @@ import { Presenter } from './../presenter/presenter'
       stepSize: 1,
       orientation: 'horizontal',
       thumbType: 'single',
-      underThumbElement: true,
+      satellite: true,
       scale: true,
-      progressBar: true,
+      progress: true,
     }, options);
-    new Presenter(new View(initE), new Model(options))
+    new Presenter(new View(initE, options), new Model(options))
   }
 })(jQuery)

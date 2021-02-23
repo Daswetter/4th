@@ -1,18 +1,27 @@
 import { Wrapper } from '../wrapper/wrapper'
 class Line{
-  public line: HTMLElement 
+  public line!: HTMLElement 
   private onWidthChanged!: Function;
   private onLeftSideChanged!: Function
   private onLineClicked!: Function;
 
   constructor(public initElement: Wrapper) {
+    this.createLine()
+    this.appendLine(this.initElement)
+    
+    this.setClickListener()
+  }
+  createLine = () : void => {
     this.line = document.createElement('div')
     this.line.classList.add('range-slider__line')
-    this.initElement.append(this.line)
-
-    this.line.onclick = this.moveThumbByClicking
   }
 
+  appendLine = (initElement: Wrapper) : void => {
+    initElement.append(this.line)
+  }
+  setClickListener = (): void => {
+    this.line.onclick = this.moveThumbByClicking
+  }
   width(): number {
     return this.line.offsetWidth
     

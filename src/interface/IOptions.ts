@@ -5,7 +5,7 @@ interface IOptions {
   stepSize: number,
   orientation: string,
   thumbType: string,
-  underThumbElement: boolean,
+  satellite: boolean,
   scale: boolean,
-  progressBar: boolean,
+  progress: boolean,
 }

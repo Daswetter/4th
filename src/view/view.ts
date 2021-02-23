@@ -10,59 +10,76 @@ import './../interface/IView'
 import { IView } from './../interface/IView'
 
 class View implements IView { 
-  public wrapper: Wrapper
-  public line: Line
-  public thumb: Thumb 
-  public progress: Progress 
-  public scale: Scale 
-  public satellite: Satellite
+  public wrapper!: Wrapper
+  public line!: Line
+  public thumb!: Thumb 
+  public progress!: Progress 
+  public scale!: Scale 
+  public satellite!: Satellite
   private onPartChanged!: Function
 
   private options!: IOptions
 
-  constructor(public initElement: HTMLElement) {
-    this.initElement = initElement
-    this.wrapper = new Wrapper(this.initElement)
-    this.line = new Line(this.wrapper)
-    this.thumb = new Thumb(this.line) 
-    this.progress = new Progress(this.line)
-    this.scale = new Scale(this.line)
-    this.satellite = new Satellite(this.line)
-  
+  constructor(public initElement: HTMLElement, options: IOptions) {
+    this.options = options
+    this.initView(initElement)
+    
     this.sendLineParamsToThumb()
     this.line.bindLineClicked(this.lineWasClicked)
 
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
 
-    this.scale.bindScaleWasClicked(this.scaleWasClicked)
+    this.options.scale ? this.scale.bindScaleWasClicked(this.scaleWasClicked) : ''
     
   }
-  setOptions = (options: IOptions): void => {
-    this.options = options
+
+  initView = (initElement: HTMLElement): void => {
+    this.initElement = initElement
+    this.wrapper = new Wrapper(this.initElement)
+    this.line = new Line(this.wrapper)
+    this.initThumb(this.options.orientation)
+    
+
+    this.initSatellite(this.options.satellite)
+    this.initScale(this.options.scale)
+    this.initProgress(this.options.progress)
   }
+  initThumb = (orientation: string) : void => {
+    this.thumb = new Thumb(this.line, orientation) 
+  }
+  initSatellite = (isSatellite: boolean): void => {
+    isSatellite ? this.satellite = new Satellite(this.line) : ''
+  }
+  initScale = (isScale: boolean): void => {
+    isScale ? this.scale = new Scale(this.line) : ''
+  }
+  initProgress = (isProgress: boolean): void => {
+    isProgress ? this.progress = new Progress(this.line) : ''
+  }
+
   sendLineParamsToThumb = (): void => {
     this.thumb.setLineLeftSide(this.line.left())
     this.thumb.setLineWidth(this.line.width())
   }
 
   setScaleElements(elements: Array<number>): void {
-    this.scale.setScaleValues(elements)
+    this.options.scale ? this.scale.setScaleValues(elements) : ''
   }
 
   setInitialPos(part: Function, options: Function): void {
     this.thumb.setInitialPos(part(), this.line.width())
-    this.progress.setInitialPos(part(), this.line.width())
-    this.satellite.setInitialPos(part(), this.line.width(), options().initial)
+    this.options.progress ? this.progress.setInitialPos(part(), this.line.width()) : ''
+    this.options.satellite ? this.satellite.setInitialPos(part(), this.line.width(), options().initial): ''
   }
 
   thumbPosWasChanged = (thumbLeftProp: string, part: number): void => {
-    this.progress.changeWidth(thumbLeftProp)
-    this.satellite.setPos(thumbLeftProp)
+    this.options.progress ? this.progress.changeWidth(thumbLeftProp) : ''
+    this.options.satellite ? this.satellite.setPos(thumbLeftProp) : ''
     this.onPartChanged(part)
   }
   currentWasSentFromModel(res: number): void{
     console.log('current', res)
-    this.satellite.setValue(res)
+    this.options.satellite ? this.satellite.setValue(res): ''
   }
   lineWasClicked = (dist: number): void => {
     this.thumb.changeThumbPosBecauseOfLineClick(dist)

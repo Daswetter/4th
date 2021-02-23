@@ -10,9 +10,9 @@
 //   stepSize: 1,
 //   orientation: 'horizontal',
 //   thumbType: 'single',
-//   underThumbElement: true,
+//   satellite: true,
 //   scale: true,
-//   progressBar: true,
+//   progress: true,
 // }
 
 // const mockModel  = jest.mock('./../model/model', () => {

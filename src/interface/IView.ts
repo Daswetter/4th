@@ -10,7 +10,7 @@ interface IView {
   setScaleElements(elements: Array<number>): void
   scaleWasClicked(value: number): void
   bindSendPartToModel(callback: Function): void
-  setOptions(options: IOptions): void
+  // setOptions(options: IOptions): void
 }
 
 export { IView }

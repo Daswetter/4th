@@ -9,8 +9,11 @@ class Thumb{
   // private onInitialValue!: Function;
   private lineWidth!: number
   private lineLeftSide!: number
+  private orientation: string
 
-  constructor(public line: Line) {
+  constructor(public line: Line, orientation: string) {
+    this.orientation = orientation
+
     this.thumb = document.createElement('div')
     this.thumb.classList.add('range-slider__thumb')
     this.line.append(this.thumb)
