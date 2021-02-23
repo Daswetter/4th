@@ -6,17 +6,18 @@ $(".js-slider1").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
+  orientation: 'vertical'
 })
 
-// $(".js-slider2").customRangeSlider({
-//   min: -18.8,
-//   max: 0.9,
-//   initial: 0.1,
-//   stepSize: 0.2,
-//   progress: false,
-//   satellite: true,
-//   scale: true,
-// })
+$(".js-slider2").customRangeSlider({
+  min: -18.8,
+  max: 0.9,
+  initial: 0.1,
+  stepSize: 0.2,
+  progress: false,
+  satellite: true,
+  scale: true,
+})
 
 // $(".js-slider3").customRangeSlider({
 //   min: -100,

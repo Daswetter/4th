@@ -1,11 +1,13 @@
 import { Wrapper } from '../wrapper/wrapper'
 class Line{
   public line!: HTMLElement 
+  public orientation: string
   private onWidthChanged!: Function;
   private onLeftSideChanged!: Function
   private onLineClicked!: Function;
 
-  constructor(public initElement: Wrapper) {
+  constructor(public initElement: Wrapper, orientation: string) {
+    this.orientation = orientation
     this.createLine()
     this.appendLine(this.initElement)
     
@@ -24,10 +26,13 @@ class Line{
   }
   width(): number {
     return this.line.offsetWidth
-    
   }
+
   left(): number {
     return this.line.getBoundingClientRect().left    
+  }
+  bottom(): number {
+    return this.line.getBoundingClientRect().bottom
   }
   // TODO: get rid of there methods
   append(element: HTMLElement): void {
@@ -43,9 +48,14 @@ class Line{
   }
 
   moveThumbByClicking = (event: MouseEvent) : void => {
-    const distFromBeginToClick = event.pageX - this.line.getBoundingClientRect().left
-    const part = (event.pageX - this.line.getBoundingClientRect().left) / this.line.offsetWidth
-    this.onLineClicked(distFromBeginToClick, part)
+    let distFromBeginToClick: number
+    if (this.orientation === 'vertical'){
+      distFromBeginToClick = - event.pageY + this.line.getBoundingClientRect().bottom
+    } else {
+      distFromBeginToClick = event.pageX - this.line.getBoundingClientRect().left
+    }
+    
+    this.onLineClicked(distFromBeginToClick)
   }
 
   bindLineClicked(callback: Function): void {

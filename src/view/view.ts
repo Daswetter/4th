@@ -35,14 +35,20 @@ class View implements IView {
 
   initView = (initElement: HTMLElement): void => {
     this.initElement = initElement
-    this.wrapper = new Wrapper(this.initElement)
-    this.line = new Line(this.wrapper)
+    this.initWrapper(this.options.orientation)
+    this.initLine(this.options.orientation)
     this.initThumb(this.options.orientation)
     
 
     this.initSatellite(this.options.satellite)
     this.initScale(this.options.scale)
     this.initProgress(this.options.progress)
+  }
+  initWrapper = (orientation: string): void => {
+    this.wrapper = new Wrapper(this.initElement, orientation)
+  }
+  initLine = (orientation: string) : void => {
+    this.line = new Line(this.wrapper, orientation)
   }
   initThumb = (orientation: string) : void => {
     this.thumb = new Thumb(this.line, orientation) 
@@ -60,6 +66,7 @@ class View implements IView {
   sendLineParamsToThumb = (): void => {
     this.thumb.setLineLeftSide(this.line.left())
     this.thumb.setLineWidth(this.line.width())
+    this.thumb.setLineBottom(this.line.bottom())
   }
 
   setScaleElements(elements: Array<number>): void {
