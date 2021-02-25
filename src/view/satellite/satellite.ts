@@ -2,8 +2,10 @@ import { Line } from '../line/line'
 
 class Satellite {
   satellite: HTMLElement
+  orientation: string
 
-  constructor(public line: Line) {
+  constructor(public line: Line, orientation: string) {
+    this.orientation = orientation
     this.satellite = document.createElement('div')
     this.satellite.classList.add('range-slider__satellite')
     this.line.prepend(this.satellite)
@@ -20,6 +22,9 @@ class Satellite {
 
   setValue = (value: number): void => {
     this.satellite.innerText = value + ''
+    if (this.orientation === 'vertical'){
+      this.satellite.style.transform = 'rotate(90deg)'
+    }
   }
 
 }

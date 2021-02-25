@@ -11,9 +11,11 @@ class Scale{
   
   public lineWidth!: number
   public lineLeftSide!: number
+  public orientation: string
   private onScaleWasClicked!: Function;
 
-  constructor(public line: Line) {
+  constructor(public line: Line, orientation: string) {
+    this.orientation = orientation
     this.scale = document.createElement('div')
     this.scale.classList.add('range-slider__scale')
     this.line.after(this.scale)
@@ -40,6 +42,9 @@ class Scale{
     element.classList.add('range-slider__scale-number')
     element.innerText = scaleValue + ''
     element.dataset.id = flag + ''
+    if (this.orientation === 'vertical') {
+      element.style.transform = 'rotate(90deg)'
+    }
     this.setScaleListener(element)
   } 
   setScaleListener = (element: HTMLElement): void => {

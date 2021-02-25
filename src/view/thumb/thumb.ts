@@ -58,15 +58,18 @@ class Thumb{
 
   onMouseMove = (event: MouseEvent) : void => {
     let leftStop: number
+    let part: number
+
     if (this.orientation === 'horizontal'){
       leftStop = event.pageX - this.shiftX - this.lineLeftSide  + this.thumb.offsetWidth / 2
-      // console.log('leftStop', leftStop);
+      part = (this.thumb.getBoundingClientRect().left - this.lineLeftSide + this.thumb.offsetWidth / 2) / this.lineWidth
+    
     } else {
       leftStop = this.lineBottom - event.pageY - this.shiftY + this.thumb.offsetWidth / 2
+      part = (this.lineBottom - this.thumb.getBoundingClientRect().bottom + this.thumb.offsetWidth / 2) / this.lineWidth
     }
     const rightStop = this.lineWidth
-    console.log('leftStop', leftStop);
-    
+
     if (leftStop < 0) {
       leftStop = 0
     } else if (leftStop > rightStop) {
@@ -75,7 +78,7 @@ class Thumb{
     
     this.thumb.style.left = leftStop - this.thumb.offsetWidth / 2 + 'px'
 
-    const part = (this.thumb.getBoundingClientRect().left - this.lineLeftSide + this.thumb.offsetWidth / 2) / this.lineWidth
+    
     
     this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px', part)
   }

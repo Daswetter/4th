@@ -40,7 +40,7 @@ class View implements IView {
     this.initThumb(this.options.orientation)
     
 
-    this.initSatellite(this.options.satellite)
+    this.initSatellite(this.options.satellite, this.options.orientation)
     this.initScale(this.options.scale)
     this.initProgress(this.options.progress)
   }
@@ -53,11 +53,11 @@ class View implements IView {
   initThumb = (orientation: string) : void => {
     this.thumb = new Thumb(this.line, orientation) 
   }
-  initSatellite = (isSatellite: boolean): void => {
-    isSatellite ? this.satellite = new Satellite(this.line) : ''
+  initSatellite = (isSatellite: boolean, orientation: string): void => {
+    isSatellite ? this.satellite = new Satellite(this.line, orientation) : ''
   }
   initScale = (isScale: boolean): void => {
-    isScale ? this.scale = new Scale(this.line) : ''
+    isScale ? this.scale = new Scale(this.line, this.options.orientation) : ''
   }
   initProgress = (isProgress: boolean): void => {
     isProgress ? this.progress = new Progress(this.line) : ''
