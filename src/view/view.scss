@@ -26,6 +26,16 @@ $line-border-radius: 10px;
   cursor: pointer;
   z-index: 2;
 }
+.range-slider__thumbExtra {
+  position: absolute;
+  top: -$thumb-height/4;
+  width: 20px;
+  height: $thumb-height;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+  background: rgb(23, 19, 218);
+} 
 .range-slider__progress{
   position: absolute;
   top: 0;

@@ -28,6 +28,7 @@ class View implements IView {
     this.line.bindLineClicked(this.lineWasClicked)
 
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
+    this.thumb.bindExtraThumbChangedPos(this.extraThumbPosWasChanged)
 
     this.options.scale ? this.scale.bindScaleWasClicked(this.scaleWasClicked) : ''
     
@@ -37,12 +38,12 @@ class View implements IView {
     this.initElement = initElement
     this.initWrapper(this.options.orientation)
     this.initLine(this.options.orientation)
-    this.initThumb(this.options.orientation)
+    this.initThumb(this.options.orientation, this.options.thumbType)
     
 
     this.initSatellite(this.options.satellite, this.options.orientation)
     this.initScale(this.options.scale)
-    this.initProgress(this.options.progress)
+    this.initProgress(this.options.progress, this.options.thumbType)
   }
   initWrapper = (orientation: string): void => {
     this.wrapper = new Wrapper(this.initElement, orientation)
@@ -50,8 +51,8 @@ class View implements IView {
   initLine = (orientation: string) : void => {
     this.line = new Line(this.wrapper, orientation)
   }
-  initThumb = (orientation: string) : void => {
-    this.thumb = new Thumb(this.line, orientation) 
+  initThumb = (orientation: string, thumbType: string) : void => {
+    this.thumb = new Thumb(this.line, orientation, thumbType) 
   }
   initSatellite = (isSatellite: boolean, orientation: string): void => {
     isSatellite ? this.satellite = new Satellite(this.line, orientation) : ''
@@ -59,8 +60,8 @@ class View implements IView {
   initScale = (isScale: boolean): void => {
     isScale ? this.scale = new Scale(this.line, this.options.orientation) : ''
   }
-  initProgress = (isProgress: boolean): void => {
-    isProgress ? this.progress = new Progress(this.line) : ''
+  initProgress = (isProgress: boolean, thumbType: string): void => {
+    isProgress ? this.progress = new Progress(this.line, thumbType) : ''
   }
 
   sendLineParamsToThumb = (): void => {
@@ -82,7 +83,14 @@ class View implements IView {
   thumbPosWasChanged = (thumbLeftProp: string, part: number): void => {
     this.options.progress ? this.progress.changeWidth(thumbLeftProp) : ''
     this.options.satellite ? this.satellite.setPos(thumbLeftProp) : ''
+
+    this.progress.setThumbProp(thumbLeftProp)
+
     this.onPartChanged(part)
+  }
+  extraThumbPosWasChanged = (thumbRightProp: string, part: number): void => {
+    this.progress.setExtraThumbProp(thumbRightProp)
+    
   }
   currentWasSentFromModel(res: number): void{
     console.log('current', res)

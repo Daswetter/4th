@@ -6,7 +6,8 @@ $(".js-slider1").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
-  orientation: 'vertical'
+  orientation: 'vertical',
+  thumbType: 'double',
 })
 
 $(".js-slider2").customRangeSlider({
@@ -14,27 +15,32 @@ $(".js-slider2").customRangeSlider({
   max: 0.9,
   initial: 0.1,
   stepSize: 0.2,
-  progress: false,
+  progress: true,
   satellite: true,
   scale: true,
+  thumbType: 'single',
+  orientation: 'horizontal',
 })
 
-// $(".js-slider3").customRangeSlider({
-//   min: -100,
-//   max: -50,
-//   initial: -80,
-//   stepSize: 10,
-//   progress: true,
-//   satellite: true,
-//   scale: true,
-// })
+$(".js-slider3").customRangeSlider({
+  min: -108.8,
+  max: 0.9,
+  initial: 0.01,
+  stepSize: 0.2,
+  progress: true,
+  satellite: true,
+  scale: true,
+  thumbType: 'double',
+  orientation: 'horizontal',
+})
 
-// $(".js-slider4").customRangeSlider({
-//   min: -9,
-//   max: 9,
-//   initial: -1,
-//   stepSize: 3,
-//   progress: false,
-//   satellite: true,
-//   scale: false,
-// })
+$(".js-slider4").customRangeSlider({
+  min: -9,
+  max: 9,
+  initial: -1,
+  stepSize: 3,
+  progress: true,
+  satellite: true,
+  scale: false,
+  orientation: 'vertical',
+})

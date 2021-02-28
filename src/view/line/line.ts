@@ -50,11 +50,11 @@ class Line{
   moveThumbByClicking = (event: MouseEvent) : void => {
     let distFromBeginToClick: number
     if (this.orientation === 'vertical'){
-      distFromBeginToClick = - event.pageY + this.line.getBoundingClientRect().bottom
+      distFromBeginToClick = - event.clientY + this.line.getBoundingClientRect().bottom
+      
     } else {
-      distFromBeginToClick = event.pageX - this.line.getBoundingClientRect().left
+      distFromBeginToClick = event.clientX - this.line.getBoundingClientRect().left
     }
-    
     this.onLineClicked(distFromBeginToClick)
   }
 
