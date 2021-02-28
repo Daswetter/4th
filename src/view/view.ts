@@ -6,8 +6,8 @@ import { Scale } from './scale/scale'
 import { Satellite } from './satellite/satellite'
 
 import './../interface/IOptions'
-import './../interface/IView'
-import { IView } from './../interface/IView'
+import './IView'
+import { IView } from './IView'
 
 class View implements IView { 
   public wrapper!: Wrapper

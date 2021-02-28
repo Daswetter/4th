@@ -1,4 +1,4 @@
-import './IOptions'
+import '../interface/IOptions'
 
 interface IView {
   setInitialPos(part: Function, options: Function): void

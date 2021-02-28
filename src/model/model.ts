@@ -1,14 +1,12 @@
 import './../interface/IOptions'
-import { IModel } from './../interface/IModel'
+import { IModel } from './IModel'
 
 class Model implements IModel{
-  private onCurrentChanged!: Function;
-  private onInitialValue!: Function
-  private onScaleElements!: Function
+  public onCurrentChanged!: (arg0: number) => void
   
   constructor(private options: IOptions){
     this.options = options
-    this.convertStepSizeToDecimal(203)
+    
   }
   getOptions = (): IOptions => {
     return this.options
@@ -33,7 +31,6 @@ class Model implements IModel{
     if (initial > max || initial < min){
       throw new Error('Initial value is bigger than max value or smaller than min value')
     }
-
     const initialPart = (initial - min) / Math.abs( max - min )
     return initialPart
   }
@@ -54,26 +51,25 @@ class Model implements IModel{
 
     return roundScaleElements
   }
+
   convertStepSizeToDecimal = (stepSize: number) : number => {
     const digits = stepSize.toString().split('')
     let decimal: number
     if ( stepSize > 0 && stepSize < 1){
       decimal =   digits.length - 2
       return decimal
-    } else {
+    } else { 
       decimal = - (digits.length - 1)
       return decimal
     }
   }
+
   roundToDecimal = (value: number, decimal = 0): number => {
     return (Math.round( value * Math.pow(10, decimal) ) / Math.pow(10, decimal))
   }
 
-  bindCurrentChanged(callback: Function): void {
+  bindCurrentChanged(callback: (arg0: number) => void): void {
     this.onCurrentChanged = callback;
-  }
-  bindInitialValue(callback: Function): void {
-    this.onInitialValue = callback;
   }
 }
 

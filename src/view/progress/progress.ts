@@ -27,8 +27,6 @@ class Progress{
     this.setProgress()
   } 
   setProgress = (): void => {
-    // console.log('this.thumbLeft', this.thumbLeft);
-    // console.log('this.extraThumbRight ', this.extraThumbRight );
     if (this.thumbType === 'single'){
       this.progress.style.width = this.thumbLeft
     } else if (this.thumbType === 'double') {

@@ -102,8 +102,6 @@ class Thumb{
     element.style.left = leftStop - element.offsetWidth / 2 + 'px'
 
     if (element.className === 'range-slider__thumb'){
-      console.log('onThumbChanged', this.onThumbChanged);
-      
       this.onThumbChanged(element.offsetLeft + element.offsetWidth / 2 + 'px', part)
     } else if (element.className === 'range-slider__thumbExtra'){
       this.onExtraThumbChanged(this.lineWidth - element.offsetLeft- element.offsetWidth / 2 + 'px', part)
