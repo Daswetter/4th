@@ -81,10 +81,10 @@ class View implements IView {
   }
 
   thumbPosWasChanged = (thumbLeftProp: string, part: number): void => {
-    this.options.progress ? this.progress.changeWidth(thumbLeftProp) : ''
+    this.options.progress ? this.progress.setThumbProp(thumbLeftProp) : ''
     this.options.satellite ? this.satellite.setPos(thumbLeftProp) : ''
 
-    this.progress.setThumbProp(thumbLeftProp)
+    
 
     this.onPartChanged(part)
   }

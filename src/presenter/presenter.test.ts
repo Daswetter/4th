@@ -1,49 +1,61 @@
-// import { Presenter } from './presenter'
-// import { View } from './../view/view'
-// import { Model } from './../model/model'
-// import { IModel } from '../interface/IModel';
+import { Presenter } from './presenter'
+import { IModel } from '../model/IModel';
 
-// const options = {
-//   min: 0,
-//   max: 100,
-//   initial: 50,
-//   stepSize: 1,
-//   orientation: 'horizontal',
-//   thumbType: 'single',
-//   satellite: true,
-//   scale: true,
-//   progress: true,
-// }
+describe('Presenter', () => {
+  let _: Presenter
+  let options: IOptions
+  beforeEach(() => {
+    options = {
+      min: -1800,
+      max: 200,
+      initial: 0,
+      stepSize: 100,
+      progress: true,
+      satellite: true,
+      scale: true,
+      orientation: 'vertical',
+      thumbType: 'double',
+    }
 
-// const mockModel  = jest.mock('./../model/model', () => {
-//   return jest.fn().mockImplementation(() => {
-//     return {
-//       countInitialPart: jest.fn(),
-//       getOptions: jest.fn(),
-//       countCurrentValue: jest.fn(),
-//       bindCurrentChanged: jest.fn(),
-//       bindInitialValue: jest.fn(),
-//     };
-//   });
-// })
+    const mockView = {
+      initView: jest.fn(),
+      initWrapper: jest.fn(),
+      initLine: jest.fn(),
+      initThumb: jest.fn(),
+      initSatellite: jest.fn(),
+      initScale: jest.fn(),
+      initProgress: jest.fn(),
+      sendLineParamsToThumb: jest.fn(),
+      setScaleElements: jest.fn(),
+      setInitialPos: jest.fn(),
+      thumbPosWasChanged: jest.fn(),
+      extraThumbPosWasChanged: jest.fn(),
+      currentWasSentFromModel: jest.fn(),
+      lineWasClicked: jest.fn(),
+      scaleWasClicked: jest.fn(),
+      bindSendPartToModel: jest.fn(),
+    }
+    
+    const mockModel = {
+      countCurrentValue: jest.fn(),
+      countInitialPart: jest.fn(),
+      countScaleElements: jest.fn(),
+      bindCurrentChanged: jest.fn(),
+    
+      getOptions: jest.fn(),
+    }
+    _ = new Presenter(mockView, mockModel)
+  })
 
+  describe('sendResultTo', () => {
+    test('should return undefined', () => {
+      expect( _.sendResultTo(0.1)).toBeUndefined;
+    });
+  })
 
-
-
-// describe('testing presenter', () => {
-//   test('called the class constructor', () => {
-//     const init: HTMLElement = document.createElement('div') as HTMLElement
-//     const presenter = new Presenter(new View(init), new Model(options));
-//     expect(presenter.sendPartTo(0.1)).toBeTruthy();
-//   });
-//   // it('The presenter should be able to call new()', () => {
-//   //   const init: HTMLElement = document.createElement('div') as HTMLElement
-//   //   const presenter = new Presenter(new View(init), mockModel);
-//   //   expect(presenter).toBeTruthy();
-//   // });
-//   // test('called the class constructor', () => {
-//   //   const init: HTMLElement = document.createElement('div') as HTMLElement
-//   //   const presenter = new Presenter(new View(init), new Model(options));
-//   //   expect(presenter.sendPartTo(0.1)).toBeTruthy();
-//   // });
-// })
+  describe('sendPartTo', () => {
+    test('should return undefined', () => {
+      expect(_.sendPartTo(0.1)).toBeUndefined
+    })
+  })
+})

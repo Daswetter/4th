@@ -1,4 +1,5 @@
-class Wrapper {
+import { IWrapper } from './IWrapper'
+class Wrapper implements IWrapper{
   public wrapper: HTMLElement
   public orientation: string
 

@@ -35,9 +35,6 @@ class Progress{
     }
      
   }
-  changeWidth = (thumbLeftProp: string): void => {
-    // this.progress.style.width = thumbLeftProp
-  }
 }
 
 export { Progress }

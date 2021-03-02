@@ -1,12 +1,11 @@
 import { Wrapper } from '../wrapper/wrapper'
+import { IWrapper } from '../wrapper/IWrapper'
 class Line{
   public line!: HTMLElement 
   public orientation: string
-  private onWidthChanged!: Function;
-  private onLeftSideChanged!: Function
-  private onLineClicked!: Function;
+  private onLineClicked!: (arg0:number) => void;
 
-  constructor(public initElement: Wrapper, orientation: string) {
+  constructor(public initElement: IWrapper, orientation: string) {
     this.orientation = orientation
     this.createLine()
     this.appendLine(this.initElement)
@@ -18,7 +17,7 @@ class Line{
     this.line.classList.add('range-slider__line')
   }
 
-  appendLine = (initElement: Wrapper) : void => {
+  appendLine = (initElement: IWrapper) : void => {
     initElement.append(this.line)
   }
   setClickListener = (): void => {
@@ -46,7 +45,7 @@ class Line{
   prepend(element: HTMLElement): void {
     this.line.prepend(element)
   }
-
+// TODO -------
   moveThumbByClicking = (event: MouseEvent) : void => {
     let distFromBeginToClick: number
     if (this.orientation === 'vertical'){
@@ -58,7 +57,7 @@ class Line{
     this.onLineClicked(distFromBeginToClick)
   }
 
-  bindLineClicked(callback: Function): void {
+  bindLineClicked(callback: (arg0:number) => void): void {
     this.onLineClicked = callback;
   }
 }
