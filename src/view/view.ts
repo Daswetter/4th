@@ -16,7 +16,7 @@ class View implements IView {
   public progress!: Progress 
   public scale!: Scale 
   public satellite!: Satellite
-  private onPartChanged!: Function
+  private onPartChanged!: (arg0: number) => void
 
   private options!: IOptions
 
@@ -74,21 +74,19 @@ class View implements IView {
     this.options.scale ? this.scale.setScaleValues(elements) : ''
   }
 
-  setInitialPos(part: Function, options: Function): void {
+  setInitialPos(part: () => number, options: IOptions): void {
     this.thumb.setInitialPos(part(), this.line.width())
     this.options.progress ? this.progress.setInitialPos(part(), this.line.width()) : ''
-    this.options.satellite ? this.satellite.setInitialPos(part(), this.line.width(), options().initial): ''
+    this.options.satellite ? this.satellite.setInitialPos(part(), this.line.width(), options.initial): ''
   }
 
   thumbPosWasChanged = (thumbLeftProp: string, part: number): void => {
     this.options.progress ? this.progress.setThumbProp(thumbLeftProp) : ''
     this.options.satellite ? this.satellite.setPos(thumbLeftProp) : ''
 
-    
-
     this.onPartChanged(part)
   }
-  extraThumbPosWasChanged = (thumbRightProp: string, part: number): void => {
+  extraThumbPosWasChanged = (thumbRightProp: string): void => {
     this.progress.setExtraThumbProp(thumbRightProp)
     
   }
@@ -105,7 +103,7 @@ class View implements IView {
   }
 
   
-  bindSendPartToModel(callback: Function): void {
+  bindSendPartToModel(callback: (arg0: number) => void): void {
     this.onPartChanged = callback;
   }
 }

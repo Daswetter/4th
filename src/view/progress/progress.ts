@@ -10,11 +10,13 @@ class Progress{
     this.thumbType = thumbType
     this.createProgress()
   }
+
   createProgress = (): void => {
     this.progress = document.createElement('div')
     this.progress.classList.add('range-slider__progress')
     this.line.append(this.progress)
   }
+  
   setInitialPos = (part: number, lineWidth: number): void => {
     this.progress.style.width =  lineWidth * part + 'px'
   }

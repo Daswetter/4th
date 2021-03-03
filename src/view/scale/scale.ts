@@ -2,7 +2,7 @@ import { Line } from '../line/line'
 import '../../interface/IOptions'
 
 class Scale{
-  public scale: HTMLElement 
+  public scale!: HTMLElement 
   public minScale!: HTMLElement
   public quarterScale!: HTMLElement
   public middleScale!: HTMLElement
@@ -12,22 +12,24 @@ class Scale{
   public lineWidth!: number
   public lineLeftSide!: number
   public orientation: string
-  private onScaleWasClicked!: Function;
+  private onScaleWasClicked!: (arg0: number) => void;
 
   constructor(public line: Line, orientation: string) {
     this.orientation = orientation
+    this.init()
+  }
+  
+  init = (): void => {
     this.scale = document.createElement('div')
     this.scale.classList.add('range-slider__scale')
     this.line.after(this.scale)
-
   }
-  setScaleValues = (scaleElements: Array<number>): void => {
-    this.createScaleElement(this.minScale, scaleElements[0], 1)
-    this.createScaleElement(this.quarterScale, scaleElements[1], 2)
-    this.createScaleElement(this.middleScale, scaleElements[2], 3)
-    this.createScaleElement(this.threeQuarterScale, scaleElements[3], 4)
-    this.createScaleElement(this.maxScale, scaleElements[4], 5)
-    
+
+  setScaleValues = (scaleValues: Array<number>): void => {
+    const scaleHTMLElements = [this.minScale, this.quarterScale, this.middleScale, this.threeQuarterScale, this.maxScale];
+    [0, 1, 2, 3, 4].forEach( (x: number): void => {
+      this.createScaleElement(scaleHTMLElements[x], scaleValues[x], x / 4)
+    })
   }
   
   setLineLeftSide( lineLeftSide: number ): void {
@@ -48,35 +50,12 @@ class Scale{
     this.setScaleListener(element)
   } 
   setScaleListener = (element: HTMLElement): void => {
-    if (element.getAttribute('data-id') === '1'){
-      element.onclick = this.onMinScaleWasClicked
-    } else if (element.getAttribute('data-id') === '2'){
-      element.onclick = this.onQuarterScaleWasClicked
-    } else if (element.getAttribute('data-id') === '3'){
-      element.onclick = this.onMiddleScaleWasClicked
-    } else if (element.getAttribute('data-id') === '4'){
-      element.onclick = this.onThreeQuarterScaleWasClicked
-    } else if (element.getAttribute('data-id') === '5'){
-      element.onclick = this.onMaxScaleWasClicked
-    }
-  }
-  onMinScaleWasClicked = (event: MouseEvent): void => {
-    this.onScaleWasClicked(1)
-  }
-  onQuarterScaleWasClicked = (event: MouseEvent): void => {
-    this.onScaleWasClicked(2)
-  }
-  onMiddleScaleWasClicked = (event: MouseEvent): void => {
-    this.onScaleWasClicked(3)
-  }
-  onThreeQuarterScaleWasClicked = (event: MouseEvent): void => {
-    this.onScaleWasClicked(4)
-  } 
-  onMaxScaleWasClicked = (event: MouseEvent): void => {
-    this.onScaleWasClicked(5)
+    const dataAttribute = +(element.getAttribute('data-id') as string)
+    element.onclick = this.onScaleWasClicked.bind(null, dataAttribute)
   }
 
-  bindScaleWasClicked = (callback: Function): void => {
+
+  bindScaleWasClicked = (callback: (arg0: number) => void): void => {
     this.onScaleWasClicked = callback;
   }
 }

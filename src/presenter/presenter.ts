@@ -1,7 +1,6 @@
-import { Model } from './../model/model'
+
 import { IModel } from '../model/IModel'
 
-import { View } from './../view/view'
 import { IView } from '../view/IView'
 import './../interface/IOptions'
 
