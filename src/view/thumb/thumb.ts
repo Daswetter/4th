@@ -23,58 +23,71 @@ class Thumb{
     this.orientation = orientation
     this.thumbType = thumbType
     this.initThumb()
+
+    if (thumbType === 'double'){
+      this.initExtraThumb()
+    }
   }
 
   initThumb = (): void =>  {
     this.createElement()
-    this.boundEvent()
+    this.bindEvent()
     this.setOnMouseDown()
   } 
 
+  initExtraThumb = (): void => {
+    this.createExtraElement()
+    this.bindExtraEvent()
+    this.setOnMouseDownExtra()
+  }
   createElement = (): void => {
     this.thumb = document.createElement('div')
     this.thumb.classList.add(`range-slider__thumb`)
     this.line.append(this.thumb)
-    
-    if (this.thumbType === 'double'){
-      this.thumbExtra = document.createElement('div')
-      this.thumbExtra.classList.add(`range-slider__thumbExtra`)
-      this.line.append(this.thumbExtra)
-    }
   }
 
-  boundEvent = (): void => {
-    this.boundOnMouseUp = this.onMouseUp.bind(this, 'thumb')
+  createExtraElement = (): void => {    
+    this.thumbExtra = document.createElement('div')
+    this.thumbExtra.classList.add(`range-slider__thumbExtra`)
+    this.line.append(this.thumbExtra)
+  }
+  bindEvent = (): void => {
+    this.boundOnMouseUp = this.onMouseUp.bind(this)
     this.boundOnMouseMove = this.onMouseMove.bind(this, this.thumb)
+  }
 
-    if (this.thumbType === 'double') {
-      this.boundOnMouseUpExtra = this.onMouseUp.bind(this, 'thumbExtra')
-      this.boundOnMouseMoveExtra = this.onMouseMove.bind(this, this.thumbExtra)
-    }
+  bindExtraEvent = (): void => {
+    this.boundOnMouseUpExtra = this.onMouseUpExtra.bind(this)
+    this.boundOnMouseMoveExtra = this.onMouseMoveExtra.bind(this, this.thumbExtra)
   }
 
   setOnMouseDown = (): void => {
     this.thumb.onmousedown = this.onMouseDown.bind(null, this.thumb)
-    if (this.thumbType === 'double'){
-      this.thumbExtra.onmousedown = this.onMouseDown.bind(null, this.thumbExtra)
-    }
   }
 
-  onMouseDown = (element: HTMLElement, event: MouseEvent) : void => {
+  setOnMouseDownExtra = (): void => {
+    this.thumbExtra.onmousedown = this.onMouseDownExtra.bind(null, this.thumbExtra)
+  }
+  countShiftValues = (element: HTMLElement, event: MouseEvent): void => {
     const shiftX = event.clientX - element.getBoundingClientRect().left 
     const shiftY = element.getBoundingClientRect().bottom - event.clientY
     
     this.setShift(shiftX, shiftY)
     event.preventDefault()
-    if (element.className === 'range-slider__thumb'){
-      document.addEventListener('mousemove', this.boundOnMouseMove)
-      document.addEventListener('mouseup', this.boundOnMouseUp)
-    } else {
-      document.addEventListener('mousemove', this.boundOnMouseMoveExtra)
-      document.addEventListener('mouseup', this.boundOnMouseUpExtra)
-    }
   }
 
+  onMouseDown = (element: HTMLElement, event: MouseEvent) : void => {
+    this.countShiftValues(element, event)
+
+    document.addEventListener('mousemove', this.boundOnMouseMove)
+    document.addEventListener('mouseup', this.boundOnMouseUp)
+  }
+
+  onMouseDownExtra = (element: HTMLElement, event: MouseEvent) : void => {
+    this.countShiftValues(element, event)
+    document.addEventListener('mousemove', this.boundOnMouseMoveExtra)
+    document.addEventListener('mouseup', this.boundOnMouseUpExtra)
+  }
 
   setInitialPos(part: number, lineWidth: number): void{
     this.thumb.style.left =  lineWidth * part - this.thumb.offsetWidth / 2 + 'px'
@@ -93,18 +106,26 @@ class Thumb{
     this.shiftX = shiftX
     this.shiftY = shiftY
   } 
+  countLeftStopForHorizontal = (element: HTMLElement, event: MouseEvent): number => {
+    return event.pageX - this.shiftX - this.lineLeftSide  + element.offsetWidth / 2
+  }
+  countPartForHorizontal = (element: HTMLElement): number => {
+    return (element.getBoundingClientRect().left - this.lineLeftSide + element.offsetWidth / 2) / this.lineWidth
+  }
+  countLeftStopForVertical = (element: HTMLElement, event: MouseEvent): number => {
+    return this.lineBottom - event.pageY - this.shiftY + element.offsetWidth / 2
+  }
+  countPartForVertical = (element: HTMLElement): number => {
+    return (this.lineBottom - element.getBoundingClientRect().bottom + element.offsetWidth / 2) / this.lineWidth
+  }
 
-  onMouseMove = ( element: HTMLElement, event: MouseEvent) : void => {
+  setThumbPos = (element: HTMLElement, event: MouseEvent): void => {
     let leftStop: number
-    let part: number
 
     if (this.orientation === 'horizontal'){
-      leftStop = event.pageX - this.shiftX - this.lineLeftSide  + element.offsetWidth / 2
-      part = (element.getBoundingClientRect().left - this.lineLeftSide + element.offsetWidth / 2) / this.lineWidth
-    
+      leftStop = this.countLeftStopForHorizontal(element, event)
     } else {
-      leftStop = this.lineBottom - event.pageY - this.shiftY + element.offsetWidth / 2
-      part = (this.lineBottom - element.getBoundingClientRect().bottom + element.offsetWidth / 2) / this.lineWidth
+      leftStop = this.countLeftStopForVertical(element, event)
     }
     const rightStop = this.lineWidth
 
@@ -115,14 +136,27 @@ class Thumb{
     }
     
     element.style.left = leftStop - element.offsetWidth / 2 + 'px'
-
-    if (element.className === 'range-slider__thumb'){
-      this.onThumbChanged(element.offsetLeft + element.offsetWidth / 2 + 'px', part)
-    } else if (element.className === 'range-slider__thumbExtra'){
-      this.onExtraThumbChanged(this.lineWidth - element.offsetLeft- element.offsetWidth / 2 + 'px', part)
-    }
   }
 
+  countPart = (element: HTMLElement): number => {
+    let part: number
+    if (this.orientation === 'horizontal'){
+      part = this.countPartForHorizontal(element)
+    } else {
+      part = this.countPartForVertical(element)
+    }
+    return part
+  }
+
+  onMouseMove = ( element: HTMLElement, event: MouseEvent) : void => {
+    this.setThumbPos(element, event)
+    this.onThumbChanged(element.offsetLeft + element.offsetWidth / 2 + 'px', this.countPart(element))
+  }
+
+  onMouseMoveExtra = ( element: HTMLElement, event: MouseEvent) : void => {
+    this.setThumbPos(element, event)
+    this.onExtraThumbChanged(element.offsetLeft - element.offsetWidth / 2 + 'px', this.countPart(element))
+  }
   
   changeThumbPosBecauseOfLineClick = (dist: number): void => {
 
@@ -132,15 +166,14 @@ class Thumb{
     // this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px', part)
   }
 
-  onMouseUp = (element: string) : void => {
-    if (element === 'thumb'){
-      document.removeEventListener('mousemove', this.boundOnMouseMove)
-      document.removeEventListener('mouseup', this.boundOnMouseUp)
-    }
-    if (element === 'thumbExtra'){
-      document.removeEventListener('mousemove', this.boundOnMouseMoveExtra)
-      document.removeEventListener('mouseup', this.boundOnMouseUpExtra)
-    }
+  onMouseUp = () : void => {
+    document.removeEventListener('mousemove', this.boundOnMouseMove)
+    document.removeEventListener('mouseup', this.boundOnMouseUp)
+  }
+
+  onMouseUpExtra = (): void => {
+    document.removeEventListener('mousemove', this.boundOnMouseMoveExtra)
+    document.removeEventListener('mouseup', this.boundOnMouseUpExtra)
   }
 
   setScalePos = (lineWidthPart: number): void => {

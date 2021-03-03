@@ -3,15 +3,15 @@ import { Line } from '../line/line'
 class Progress{
   public progress!: HTMLElement 
   private thumbType: string
-  private extraThumbRight = '0px'
+  private extraThumbLeft = '0px'
   private thumbLeft = '0px'
 
   constructor(public line: Line, thumbType: string) {
     this.thumbType = thumbType
-    this.createProgress()
+    this.init()
   }
 
-  createProgress = (): void => {
+  init = (): void => {
     this.progress = document.createElement('div')
     this.progress.classList.add('range-slider__progress')
     this.line.append(this.progress)
@@ -22,21 +22,28 @@ class Progress{
   }
   setThumbProp = (thumbLeft: string) :void => {
     this.thumbLeft = thumbLeft
-    this.setProgress()
+    this.setProgress(this.lineWidth)
   } 
-  setExtraThumbProp = (extraThumbRight: string) :void => {
-    this.extraThumbRight = extraThumbRight
-    this.setProgress()
+  setExtraThumbProp = (extraThumbLeft: string, lineWidth: number) :void => {
+    this.extraThumbLeft = extraThumbLeft
+    this.lineWidth = lineWidth
+    this.setProgress(lineWidth)
   } 
-  setProgress = (): void => {
+  setProgressForSingle = (): void => {
+    this.progress.style.width = this.thumbLeft
+  }
+  setProgress = (lineWidth: number): void => {
+    
+    
     if (this.thumbType === 'single'){
       this.progress.style.width = this.thumbLeft
     } else if (this.thumbType === 'double') {
       this.progress.style.left = this.thumbLeft
-      this.progress.style.right = this.extraThumbRight
+      // ! add thumb width
+      this.progress.style.right = lineWidth - parseInt(this.extraThumbLeft) - 20 + 'px'
     }
-     
   }
+  
 }
 
 export { Progress }

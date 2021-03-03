@@ -80,14 +80,14 @@ class View implements IView {
     this.options.satellite ? this.satellite.setInitialPos(part(), this.line.width(), options.initial): ''
   }
 
-  thumbPosWasChanged = (thumbLeftProp: string, part: number): void => {
+  thumbPosWasChanged = (thumbLeftProp: string, part: number ): void => {
     this.options.progress ? this.progress.setThumbProp(thumbLeftProp) : ''
     this.options.satellite ? this.satellite.setPos(thumbLeftProp) : ''
 
     this.onPartChanged(part)
   }
-  extraThumbPosWasChanged = (thumbRightProp: string): void => {
-    this.progress.setExtraThumbProp(thumbRightProp)
+  extraThumbPosWasChanged = (thumbLeftProp: string, part: number): void => {
+    this.progress.setExtraThumbProp(thumbLeftProp, this.line.width())
     
   }
   currentWasSentFromModel(res: number): void{
