@@ -20,27 +20,25 @@ class Progress{
   setInitialPos = (part: number, lineWidth: number): void => {
     this.progress.style.width =  lineWidth * part + 'px'
   }
-  setThumbProp = (thumbLeft: string) :void => {
+  setThumbProp = (thumbLeft: string, lineWidth: number, thumbWidth: number) :void => {
     this.thumbLeft = thumbLeft
-    this.setProgress(this.lineWidth)
+    this.setProgress(lineWidth, thumbWidth)
   } 
-  setExtraThumbProp = (extraThumbLeft: string, lineWidth: number) :void => {
+  setExtraThumbProp = (extraThumbLeft: string, lineWidth: number, thumbWidth: number) :void => {
     this.extraThumbLeft = extraThumbLeft
-    this.lineWidth = lineWidth
-    this.setProgress(lineWidth)
+    this.setProgress(lineWidth, thumbWidth)
   } 
   setProgressForSingle = (): void => {
     this.progress.style.width = this.thumbLeft
   }
-  setProgress = (lineWidth: number): void => {
-    
+  setProgress = (lineWidth: number, thumbWidth: number): void => {
     
     if (this.thumbType === 'single'){
       this.progress.style.width = this.thumbLeft
     } else if (this.thumbType === 'double') {
       this.progress.style.left = this.thumbLeft
       // ! add thumb width
-      this.progress.style.right = lineWidth - parseInt(this.extraThumbLeft) - 20 + 'px'
+      this.progress.style.right = lineWidth - parseInt(this.extraThumbLeft) - thumbWidth + 'px'
     }
   }
   

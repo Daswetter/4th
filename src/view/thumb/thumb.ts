@@ -22,8 +22,10 @@ class Thumb{
   constructor(public line: Line, orientation: string, thumbType: string) {
     this.orientation = orientation
     this.thumbType = thumbType
+    
+    
     this.initThumb()
-
+    
     if (thumbType === 'double'){
       this.initExtraThumb()
     }
@@ -107,13 +109,17 @@ class Thumb{
     this.shiftY = shiftY
   } 
   countLeftStopForHorizontal = (element: HTMLElement, event: MouseEvent): number => {
-    return event.pageX - this.shiftX - this.lineLeftSide  + element.offsetWidth / 2
+    const leftStop = event.pageX - this.shiftX - this.lineLeftSide  + element.offsetWidth / 2
+    return leftStop
   }
   countPartForHorizontal = (element: HTMLElement): number => {
     return (element.getBoundingClientRect().left - this.lineLeftSide + element.offsetWidth / 2) / this.lineWidth
   }
   countLeftStopForVertical = (element: HTMLElement, event: MouseEvent): number => {
-    return this.lineBottom - event.pageY - this.shiftY + element.offsetWidth / 2
+    console.log('bottom', this.lineBottom);
+    
+    const leftStop = this.lineBottom - event.pageY - this.shiftY + element.offsetWidth / 2
+    return leftStop
   }
   countPartForVertical = (element: HTMLElement): number => {
     return (this.lineBottom - element.getBoundingClientRect().bottom + element.offsetWidth / 2) / this.lineWidth
@@ -178,7 +184,7 @@ class Thumb{
 
   setScalePos = (lineWidthPart: number): void => {
     this.thumb.style.left = this.lineWidth * lineWidthPart - this.thumb.offsetWidth / 2 + 'px'
-    this.onThumbChanged(this.thumb.offsetLeft + 'px', lineWidthPart)
+    this.onThumbChanged(this.thumb.offsetLeft + this.thumb.offsetWidth / 2 + 'px', lineWidthPart)
   }
 
   width = (): number => {

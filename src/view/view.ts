@@ -30,7 +30,7 @@ class View implements IView {
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
     this.thumb.bindExtraThumbChangedPos(this.extraThumbPosWasChanged)
 
-    this.options.scale ? this.scale.bindScaleWasClicked(this.scaleWasClicked) : ''
+    
     
   }
 
@@ -59,6 +59,7 @@ class View implements IView {
   }
   initScale = (isScale: boolean): void => {
     isScale ? this.scale = new Scale(this.line, this.options.orientation) : ''
+    this.options.scale ? this.scale.bindScaleWasClicked(this.scaleWasClicked) : ''
   }
   initProgress = (isProgress: boolean, thumbType: string): void => {
     isProgress ? this.progress = new Progress(this.line, thumbType) : ''
@@ -81,13 +82,13 @@ class View implements IView {
   }
 
   thumbPosWasChanged = (thumbLeftProp: string, part: number ): void => {
-    this.options.progress ? this.progress.setThumbProp(thumbLeftProp) : ''
+    this.options.progress ? this.progress.setThumbProp(thumbLeftProp, this.line.width(), this.thumb.width()) : ''
     this.options.satellite ? this.satellite.setPos(thumbLeftProp) : ''
 
     this.onPartChanged(part)
   }
   extraThumbPosWasChanged = (thumbLeftProp: string, part: number): void => {
-    this.progress.setExtraThumbProp(thumbLeftProp, this.line.width())
+    this.progress.setExtraThumbProp(thumbLeftProp, this.line.width(), this.thumb.width())
     
   }
   currentWasSentFromModel(res: number): void{

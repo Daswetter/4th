@@ -10,7 +10,10 @@ class Line{
     this.createLine()
     this.appendLine(this.initElement)
     
+    
     this.setClickListener()
+    
+    
   }
   createLine = () : void => {
     this.line = document.createElement('div')
@@ -50,6 +53,7 @@ class Line{
     let distFromBeginToClick: number
     if (this.orientation === 'vertical'){
       distFromBeginToClick = - event.clientY + this.line.getBoundingClientRect().bottom
+      
       
     } else {
       distFromBeginToClick = event.clientX - this.line.getBoundingClientRect().left

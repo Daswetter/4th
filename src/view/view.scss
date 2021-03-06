@@ -10,7 +10,7 @@ $line-border-radius: 10px;
 
 .range-slider__line{
   position: relative;
-  margin: 0 20px;
+  // margin: 0 20px;
   height: $line-height;
   border-radius: $line-border-radius;
   background: rgb(238, 198, 238);
@@ -60,6 +60,7 @@ $line-border-radius: 10px;
   margin: 10px 0;
   display: flex;
   justify-content: space-between;
+  background: red;
 }
 .range-slider__scale-number{
   min-width: 30px;
@@ -68,6 +69,7 @@ $line-border-radius: 10px;
   font-family: Roboto, sans-serif;
   cursor: pointer;
   text-align: center;
+  background: blue;
 }
 
 .range-slider__satellite{

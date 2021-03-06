@@ -8,6 +8,7 @@ class Wrapper implements IWrapper{
     this.orientation = orientation
     this.init()
     this.setOrientation(this.orientation)
+    
   }
   init = (): void => {
     this.wrapper = document.createElement('div')
