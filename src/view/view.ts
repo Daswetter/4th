@@ -24,14 +24,6 @@ class View implements IView {
     this.options = options
     this.initView(initElement)
     
-    this.sendLineParamsToThumb()
-    this.line.bindLineClicked(this.lineWasClicked)
-
-    this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
-    this.thumb.bindExtraThumbChangedPos(this.extraThumbPosWasChanged)
-
-    
-    
   }
 
   initView = (initElement: HTMLElement): void => {
@@ -50,9 +42,15 @@ class View implements IView {
   }
   initLine = (orientation: string) : void => {
     this.line = new Line(this.wrapper, orientation)
+    this.line.bindLineClicked(this.lineWasClicked)
+    
   }
   initThumb = (orientation: string, thumbType: string) : void => {
     this.thumb = new Thumb(this.line, orientation, thumbType) 
+    this.sendLineParamsToThumb()
+    this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
+    this.thumb.bindExtraThumbChangedPos(this.extraThumbPosWasChanged)
+    
   }
   initSatellite = (isSatellite: boolean, orientation: string): void => {
     isSatellite ? this.satellite = new Satellite(this.line, orientation) : ''

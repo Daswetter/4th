@@ -41,8 +41,8 @@ class Scale{
   createScaleElement = (element: HTMLElement, scaleValue: number, flag: number): void => {
     element = document.createElement('div')
     this.scale.append(element)
-    element.classList.add('range-slider__scale-number')
-    element.innerText = scaleValue + ''
+    // element.classList.add('range-slider__scale-number')
+    // element.innerText = scaleValue + ''
     element.dataset.id = flag + ''
     if (this.orientation === 'vertical') {
       element.style.transform = 'rotate(90deg)'

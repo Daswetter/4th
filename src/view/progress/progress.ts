@@ -32,13 +32,16 @@ class Progress{
     this.progress.style.width = this.thumbLeft
   }
   setProgress = (lineWidth: number, thumbWidth: number): void => {
-    
     if (this.thumbType === 'single'){
       this.progress.style.width = this.thumbLeft
     } else if (this.thumbType === 'double') {
-      this.progress.style.left = this.thumbLeft
-      // ! add thumb width
-      this.progress.style.right = lineWidth - parseInt(this.extraThumbLeft) - thumbWidth + 'px'
+      if (parseInt(this.thumbLeft) < parseInt(this.extraThumbLeft)){
+        this.progress.style.left = this.thumbLeft
+        this.progress.style.right = lineWidth - parseInt(this.extraThumbLeft) - thumbWidth + 'px'
+      } else {
+        this.progress.style.left = parseInt(this.extraThumbLeft) + thumbWidth + 'px'
+        this.progress.style.right = lineWidth - parseInt(this.thumbLeft) + 'px'
+      }
     }
   }
   
