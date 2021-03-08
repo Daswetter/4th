@@ -8,7 +8,7 @@ describe('Presenter', () => {
     options = {
       min: -1800,
       max: 200,
-      initial: 0,
+      initial: [0, 100],
       stepSize: 100,
       progress: true,
       satellite: true,
@@ -28,6 +28,7 @@ describe('Presenter', () => {
       sendLineParamsToThumb: jest.fn(),
       setScaleElements: jest.fn(),
       setInitialPos: jest.fn(),
+      setExtraInitialPos: jest.fn(),
       thumbPosWasChanged: jest.fn(),
       extraThumbPosWasChanged: jest.fn(),
       currentWasSentFromModel: jest.fn(),
@@ -43,7 +44,12 @@ describe('Presenter', () => {
       setCurrentValue: jest.fn(),
       countCurrentValue: jest.fn(),
       setCurrentValueForExtra: jest.fn(),
+
       countInitialPart: jest.fn(),
+      setInitialPart: jest.fn(),
+      setInitialPartForExtra: jest.fn(),
+
+      countExtraInitialPart: jest.fn(),
       countScaleElements: jest.fn(),
       bindCurrentChanged: jest.fn(),
       bindExtraCurrentChanged: jest.fn(),

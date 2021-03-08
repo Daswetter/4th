@@ -8,13 +8,20 @@ import './../interface/IOptions'
 class Presenter{
   constructor(private View: IView, private Model: IModel) {
     this.View.setScaleElements(this.Model.countScaleElements())
-    // this.View.setInitialPos(this.Model.countInitialPart)
+    
 
     this.View.bindSendPartToModel(this.sendPartTo)
     this.View.bindSendExtraPartToModel(this.sendExtraPartTo)
 
+    
+
     this.Model.bindCurrentChanged(this.sendResultTo)
     this.Model.bindExtraCurrentChanged(this.sendExtraResultTo)
+
+    this.View.setInitialPos(this.Model.setInitialPart)
+    if (this.Model.getOptions().thumbType === 'double'){
+      this.View.setExtraInitialPos(this.Model.setInitialPartForExtra)
+    }
   }
 
   sendResultTo = (res: number): void => {

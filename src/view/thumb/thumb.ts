@@ -10,8 +10,8 @@ class Thumb{
   private boundOnMouseUp!: () => void
   private boundOnMouseUpExtra!: () => void
 
-  private onThumbChanged!: (thumbLeftProp: string, part: number) => void;
-  private onExtraThumbChanged!: (thumbLeftProp: string, part: number) => void
+  private onThumbChanged!: (thumbCenterProp: string, part: number) => void;
+  private onExtraThumbChanged!: (thumbCenterProp: string, part: number) => void
   
   private lineWidth!: number
   private lineLeftSide!: number
@@ -93,9 +93,11 @@ class Thumb{
 
   setInitialPos(part: number, lineWidth: number): void{
     this.thumb.style.left =  lineWidth * part - this.thumb.offsetWidth / 2 + 'px'
+    this.onThumbChanged(this.thumb.offsetLeft + this.thumb.offsetWidth / 2 + 'px', this.countPart(this.thumb))
   }
   setExtraInitialPos(part: number, lineWidth: number): void{
-    this.thumb.style.left =  lineWidth * part - this.thumb.offsetWidth / 2 + 'px'
+    this.thumbExtra.style.left =  lineWidth * part - this.thumbExtra.offsetWidth / 2 + 'px'
+    this.onExtraThumbChanged(this.thumbExtra.offsetLeft - this.thumbExtra.offsetWidth / 2 + 'px', this.countPart(this.thumbExtra))
   }
   setLineLeftSide(lineLeftSide: number): void{
     this.lineLeftSide = lineLeftSide
@@ -193,10 +195,10 @@ class Thumb{
 
 
 
-  bindThumbChangedPos(callback: (thumbLeftProp: string, part: number) => void ): void {
+  bindThumbChangedPos(callback: (thumbCenterProp: string, part: number) => void ): void {
     this.onThumbChanged = callback;
   }
-  bindExtraThumbChangedPos(callback: (thumbLeftProp: string, part: number) => void ): void {
+  bindExtraThumbChangedPos(callback: (thumbCenterProp: string, part: number) => void ): void {
     this.onExtraThumbChanged = callback;
   }
 }

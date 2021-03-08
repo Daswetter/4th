@@ -17,9 +17,6 @@ class Progress{
     this.line.append(this.progress)
   }
   
-  setInitialPos = (part: number, lineWidth: number): void => {
-    this.progress.style.width =  lineWidth * part + 'px'
-  }
   setThumbProp = (thumbLeft: string, lineWidth: number, thumbWidth: number) :void => {
     this.thumbLeft = thumbLeft
     this.setProgress(lineWidth, thumbWidth)

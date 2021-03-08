@@ -2,7 +2,8 @@ import '../interface/IOptions'
 
 interface IView {
   setInitialPos(part: () => number): void
-  thumbPosWasChanged(thumbLeftProp: string, part: number): void
+  setExtraInitialPos(part: () => number): void
+  thumbPosWasChanged(thumbCenterProp: string, part: number): void
   currentWasSentFromModel(res: number): void
   extraCurrentWasSentFromModel(res: number): void
   lineWasClicked (dist: number, part: number): void

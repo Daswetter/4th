@@ -7,7 +7,7 @@ describe('Model', () => {
     options = {
       min: -1800,
       max: 200,
-      initial: 0,
+      initial: [0],
       stepSize: 100,
       progress: true,
       satellite: true,
@@ -28,14 +28,11 @@ describe('Model', () => {
   })
 
   describe('Initial part', () => {
-    test('should be called', () => {
-      expect(_.countInitialPart()).not.toBeFalsy()
-    })
     test('should return right part', () => {
       options = {
         min: 0,
         max: 200,
-        initial: 100,
+        initial: [100],
         stepSize: 100,
         progress: true,
         satellite: true,
@@ -44,7 +41,7 @@ describe('Model', () => {
         thumbType: 'double',
       }
       _ = new Model(options)
-      expect(_.countInitialPart()).toBe(0.5)
+      expect(_.countInitialPart(options.initial[0])).toBe(0.5)
     })
   })
 
@@ -84,7 +81,7 @@ describe('Model', () => {
       const options = {
         min: 0,
         max: 100, 
-        initial: 0,
+        initial: [0, 1],
         stepSize: 1,
         progress: true,
         satellite: true,
@@ -115,7 +112,7 @@ describe('Model', () => {
       const options = {
         min: 0,
         max: 100, 
-        initial: 0,
+        initial: [0],
         stepSize: 0.01,
         progress: true,
         satellite: true,
@@ -130,7 +127,7 @@ describe('Model', () => {
       const options = {
         min: 0,
         max: 100, 
-        initial: 0,
+        initial: [0],
         stepSize: 1000,
         progress: true,
         satellite: true,
@@ -145,7 +142,7 @@ describe('Model', () => {
       const options = {
         min: 0,
         max: 100, 
-        initial: 0,
+        initial: [0],
         stepSize: 5,
         progress: true,
         satellite: true,

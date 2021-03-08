@@ -8,7 +8,7 @@ import { Presenter } from './../presenter/presenter'
     options = $.extend({},{
       min: 0,
       max: 100,
-      initial: 50,
+      initial: [(this.min - this.max) / 2],
       stepSize: 1,
       orientation: 'horizontal',
       thumbType: 'single',

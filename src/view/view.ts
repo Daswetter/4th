@@ -75,25 +75,23 @@ class View implements IView {
   }
 
   setInitialPos(part: () => number): void {
-    if (this.options.thumbType === 'single'){
-      this.thumb.setInitialPos(part(), this.line.width())
-      this.options.progress ? this.progress.setInitialPos(part(), this.line.width()) : ''
-      this.options.satellite ? this.satellite.setInitialPos(part(), this.line.width(), this.options.initial): ''
-    } else if (this.options.thumbType === 'double') {
-      this.thumb.setInitialPos(part(), this.line.width())
-      this.thumb.setExtraInitialPos(part(), this.line.width())
-    }
+    this.thumb.setInitialPos(part(), this.line.width())
+    
+  }
+  
+  setExtraInitialPos(part: () => number): void {
+    this.thumb.setExtraInitialPos(part(), this.line.width())
   }
 
-  thumbPosWasChanged = (thumbLeftProp: string, part: number ): void => {
-    this.options.progress ? this.progress.setThumbProp(thumbLeftProp, this.line.width(), this.thumb.width()) : ''
-    this.options.satellite ? this.satellite.setPos(thumbLeftProp) : ''
-
+  thumbPosWasChanged = (thumbCenterProp: string, part: number ): void => {
+    this.options.progress ? this.progress.setThumbProp(thumbCenterProp, this.line.width(), this.thumb.width()) : ''
+    this.options.satellite ? this.satellite.setPos(thumbCenterProp) : ''
+    
     this.onPartChanged(part)
   }
-  extraThumbPosWasChanged = (thumbLeftProp: string, part: number): void => {
-    this.progress.setExtraThumbProp(thumbLeftProp, this.line.width(), this.thumb.width())
-    this.options.satellite ? this.satellite.setExtraPos(thumbLeftProp) : ''
+  extraThumbPosWasChanged = (thumbCenterProp: string, part: number): void => {
+    this.progress.setExtraThumbProp(thumbCenterProp, this.line.width(), this.thumb.width())
+    this.options.satellite ? this.satellite.setExtraPos(thumbCenterProp) : ''
 
     this.onExtraPartChanged(part)
     

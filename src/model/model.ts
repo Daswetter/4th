@@ -29,17 +29,24 @@ class Model implements IModel{
     this.onExtraCurrentChanged(currentValue)
   }
 
-  countInitialPart = (): number => {
-    // TODO: независимость значения от макс и мин
+  countInitialPart = (initial: number): number => {
     const min = this.options.min
     const max = this.options.max
-    const initial = this.options.initial
-    
+
     if (initial > max || initial < min){
       throw new Error('Initial value is bigger than max value or smaller than min value')
     }
     const initialPart = (initial - min) / Math.abs( max - min )
+    
     return initialPart
+  }
+
+  setInitialPart = (): number => {
+    return this.countInitialPart(this.options.initial[0])
+  }
+
+  setInitialPartForExtra = (): number => {
+    return this.countInitialPart(this.options.initial[1])
   }
 
   countScaleElements = (): Array<number> => {
