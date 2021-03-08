@@ -34,7 +34,7 @@ class View implements IView {
     this.initThumb(this.options.orientation, this.options.thumbType)
     
 
-    this.initSatellite(this.options.satellite, this.options.orientation)
+    this.initSatellite(this.options.satellite, this.options.orientation, this.options.thumbType)
     this.initScale(this.options.scale)
     this.initProgress(this.options.progress, this.options.thumbType)
   }
@@ -53,8 +53,8 @@ class View implements IView {
     this.thumb.bindExtraThumbChangedPos(this.extraThumbPosWasChanged)
     
   }
-  initSatellite = (isSatellite: boolean, orientation: string): void => {
-    isSatellite ? this.satellite = new Satellite(this.line, orientation) : ''
+  initSatellite = (isSatellite: boolean, orientation: string, thumbType: string): void => {
+    isSatellite ? this.satellite = new Satellite(this.line, orientation, thumbType) : ''
   }
   initScale = (isScale: boolean): void => {
     isScale ? this.scale = new Scale(this.line, this.options.orientation) : ''
@@ -78,7 +78,7 @@ class View implements IView {
     this.thumb.setInitialPos(part(), this.line.width())
     
   }
-  
+
   setExtraInitialPos(part: () => number): void {
     this.thumb.setExtraInitialPos(part(), this.line.width())
   }
@@ -99,10 +99,11 @@ class View implements IView {
   currentWasSentFromModel(res: number): void{
     console.log('current', res)
     this.options.satellite ? this.satellite.setValue(res): ''
+    
   }
   extraCurrentWasSentFromModel(res: number): void{
     console.log('extra current', res)
-    this.options.satellite ? this.satellite.setValue(res): ''
+    this.options.satellite ? this.satellite.setExtraValue(res): ''
   }
 
   lineWasClicked = (dist: number): void => {
