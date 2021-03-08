@@ -13,7 +13,7 @@ $(".js-slider1").customRangeSlider({
 $(".js-slider2").customRangeSlider({
   min: -18.8,
   max: 0.9,
-  initial: 0.1,
+  initial: 0,
   stepSize: 0.2,
   progress: true,
   satellite: true,
@@ -37,7 +37,7 @@ $(".js-slider3").customRangeSlider({
 $(".js-slider4").customRangeSlider({
   min: -9,
   max: 9,
-  initial: -1,
+  initial: 0,
   stepSize: 3,
   progress: true,
   satellite: true,

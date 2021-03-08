@@ -94,7 +94,9 @@ class Thumb{
   setInitialPos(part: number, lineWidth: number): void{
     this.thumb.style.left =  lineWidth * part - this.thumb.offsetWidth / 2 + 'px'
   }
-
+  setExtraInitialPos(part: number, lineWidth: number): void{
+    this.thumb.style.left =  lineWidth * part - this.thumb.offsetWidth / 2 + 'px'
+  }
   setLineLeftSide(lineLeftSide: number): void{
     this.lineLeftSide = lineLeftSide
   }
@@ -116,8 +118,6 @@ class Thumb{
     return (element.getBoundingClientRect().left - this.lineLeftSide + element.offsetWidth / 2) / this.lineWidth
   }
   countLeftStopForVertical = (element: HTMLElement, event: MouseEvent): number => {
-    console.log('bottom', this.lineBottom);
-    
     const leftStop = this.lineBottom - event.pageY - this.shiftY + element.offsetWidth / 2
     return leftStop
   }

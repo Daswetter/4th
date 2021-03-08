@@ -17,6 +17,7 @@ class View implements IView {
   public scale!: Scale 
   public satellite!: Satellite
   private onPartChanged!: (arg0: number) => void
+  private onExtraPartChanged!: (arg0: number) => void
 
   private options!: IOptions
 
@@ -73,10 +74,15 @@ class View implements IView {
     this.options.scale ? this.scale.setScaleValues(elements) : ''
   }
 
-  setInitialPos(part: () => number, options: IOptions): void {
-    this.thumb.setInitialPos(part(), this.line.width())
-    this.options.progress ? this.progress.setInitialPos(part(), this.line.width()) : ''
-    this.options.satellite ? this.satellite.setInitialPos(part(), this.line.width(), options.initial): ''
+  setInitialPos(part: () => number): void {
+    if (this.options.thumbType === 'single'){
+      this.thumb.setInitialPos(part(), this.line.width())
+      this.options.progress ? this.progress.setInitialPos(part(), this.line.width()) : ''
+      this.options.satellite ? this.satellite.setInitialPos(part(), this.line.width(), this.options.initial): ''
+    } else if (this.options.thumbType === 'double') {
+      this.thumb.setInitialPos(part(), this.line.width())
+      this.thumb.setExtraInitialPos(part(), this.line.width())
+    }
   }
 
   thumbPosWasChanged = (thumbLeftProp: string, part: number ): void => {
@@ -87,12 +93,20 @@ class View implements IView {
   }
   extraThumbPosWasChanged = (thumbLeftProp: string, part: number): void => {
     this.progress.setExtraThumbProp(thumbLeftProp, this.line.width(), this.thumb.width())
+    this.options.satellite ? this.satellite.setExtraPos(thumbLeftProp) : ''
+
+    this.onExtraPartChanged(part)
     
   }
   currentWasSentFromModel(res: number): void{
     console.log('current', res)
     this.options.satellite ? this.satellite.setValue(res): ''
   }
+  extraCurrentWasSentFromModel(res: number): void{
+    console.log('extra current', res)
+    this.options.satellite ? this.satellite.setValue(res): ''
+  }
+
   lineWasClicked = (dist: number): void => {
     this.thumb.changeThumbPosBecauseOfLineClick(dist)
   }
@@ -104,6 +118,9 @@ class View implements IView {
   
   bindSendPartToModel(callback: (arg0: number) => void): void {
     this.onPartChanged = callback;
+  }
+  bindSendExtraPartToModel(callback: (arg0: number) => void): void {
+    this.onExtraPartChanged = callback;
   }
 }
 

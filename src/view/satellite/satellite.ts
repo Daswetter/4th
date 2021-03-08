@@ -19,6 +19,9 @@ class Satellite {
   setPos = (pos: string): void => {
     this.satellite.style.left = parseInt(pos, 10) - this.satellite.offsetWidth / 2 + 'px'
   }
+  setExtraPos = (pos: string): void => {
+    this.satellite.style.left = parseInt(pos, 10) - this.satellite.offsetWidth / 2 + 'px'
+  }
 
   setValue = (value: number): void => {
     this.satellite.innerText = value + ''

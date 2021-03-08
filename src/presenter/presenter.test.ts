@@ -31,16 +31,22 @@ describe('Presenter', () => {
       thumbPosWasChanged: jest.fn(),
       extraThumbPosWasChanged: jest.fn(),
       currentWasSentFromModel: jest.fn(),
+      extraCurrentWasSentFromModel: jest.fn(),
       lineWasClicked: jest.fn(),
       scaleWasClicked: jest.fn(),
+
       bindSendPartToModel: jest.fn(),
+      bindSendExtraPartToModel: jest.fn(),
     }
     
     const mockModel = {
+      setCurrentValue: jest.fn(),
       countCurrentValue: jest.fn(),
+      setCurrentValueForExtra: jest.fn(),
       countInitialPart: jest.fn(),
       countScaleElements: jest.fn(),
       bindCurrentChanged: jest.fn(),
+      bindExtraCurrentChanged: jest.fn(),
     
       getOptions: jest.fn(),
     }

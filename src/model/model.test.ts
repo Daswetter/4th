@@ -66,13 +66,13 @@ describe('Model', () => {
     })
   })
 
-  describe('countCurrentValue', () => {
+  describe('setCurrentValue', () => {
     beforeEach(() => {
       const callback = jest.fn()
       _.bindCurrentChanged(callback)
     })
     test('should return undefined', () => {
-      expect(_.countCurrentValue(0.1)).toBeUndefined
+      expect(_.setCurrentValue(0.1)).toBeUndefined
     })
     test('should call onCurrentChanged', () => {
       expect(_.onCurrentChanged).toBeCalled
