@@ -1,17 +1,18 @@
 class Line{
-  public line!: HTMLElement 
-  public orientation: string
+  public line!: HTMLElement
   private onLineClicked!: (arg0:number) => void;
 
   constructor(orientation: string) {
-    this.orientation = orientation
-    this.createLine()
+    this.init()
     
-    this.setClickListener()
-    
+    if (orientation === 'vertical'){
+      this.setClickListenerForVertical()
+    } else if (orientation === 'horizontal'){
+      this.setClickListenerForHorizontal()
+    }
     
   }
-  createLine = () : void => {
+  init = () : void => {
     this.line = document.createElement('div')
     this.line.classList.add('range-slider__line')
   }
@@ -19,9 +20,13 @@ class Line{
     return this.line
   }
 
-  setClickListener = (): void => {
-    this.line.onclick = this.moveThumbByClicking
+  setClickListenerForVertical = (): void => {
+    this.line.onclick = this.moveThumbByClickingForVertical
   }
+  setClickListenerForHorizontal = (): void => {
+    this.line.onclick = this.moveThumbByClickingForHorizontal
+  }
+  
   width(): number {
     return this.line.offsetWidth
   }
@@ -33,14 +38,13 @@ class Line{
     return this.line.getBoundingClientRect().bottom
   }
 
-  moveThumbByClicking = (event: MouseEvent) : void => {
-    let distFromBeginToClick: number
-    if (this.orientation === 'vertical'){
-      distFromBeginToClick = - event.clientY + this.line.getBoundingClientRect().bottom
-      
-    } else {
-      distFromBeginToClick = event.clientX - this.line.getBoundingClientRect().left
-    }
+  moveThumbByClickingForVertical = (event: MouseEvent) : void => {
+    const distFromBeginToClick = - event.clientY + this.line.getBoundingClientRect().bottom
+    this.onLineClicked(distFromBeginToClick)
+  }
+
+  moveThumbByClickingForHorizontal = (event: MouseEvent) : void => {
+    const distFromBeginToClick = event.clientX - this.line.getBoundingClientRect().left
     this.onLineClicked(distFromBeginToClick)
   }
 

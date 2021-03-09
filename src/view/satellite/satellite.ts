@@ -1,23 +1,26 @@
 class Satellite {
   satellite!: HTMLElement
   satelliteExtra!: HTMLElement
-  orientation: string
 
   constructor(orientation: string, thumbType: string) {
-    this.orientation = orientation
-    this.init()
+    this.satellite = this.init(this.satellite)
+
     if (thumbType === 'double'){
-      this.initExtra()
+      this.satelliteExtra = this.init(this.satelliteExtra)
+      if (orientation === 'vertical'){
+        this.satelliteExtra.style.transform = 'rotate(90deg)'
+      }
+    }
+    
+    if (orientation === 'vertical'){
+      this.satellite.style.transform = 'rotate(90deg)'
     }
   }
 
-  init = (): void => {
-    this.satellite = document.createElement('div')
-    this.satellite.classList.add('range-slider__satellite')
-  }
-  initExtra = (): void => {
-    this.satelliteExtra = document.createElement('div')
-    this.satelliteExtra.classList.add('range-slider__satellite')
+  init = (element: HTMLElement): HTMLElement => {
+    element = document.createElement('div')
+    element.classList.add('range-slider__satellite')
+    return element
   }
 
   returnSatelliteAsHTMLElement = (): HTMLElement => {
@@ -28,25 +31,27 @@ class Satellite {
     return this.satelliteExtra
   }
 
+  definePosition = (element: HTMLElement, position: string): void => {
+    element.style.left = position
+  }
+
   setPos = (pos: string): void => {
-    this.satellite.style.left = parseInt(pos, 10) + 'px'
+    this.definePosition(this.satellite, pos)
   }
   setExtraPos = (pos: string): void => {
-    this.satelliteExtra.style.left = parseInt(pos, 10) + 'px'
+    this.definePosition(this.satelliteExtra, pos)
+  }
+
+  defineValue = (element: HTMLElement, value: number): void => {
+    element.innerText = value + ''
   }
 
   setValue = (value: number): void => {
-    this.satellite.innerText = value + ''
-    if (this.orientation === 'vertical'){
-      this.satellite.style.transform = 'rotate(90deg)'
-    }
+    this.defineValue(this.satellite, value)
   }
 
   setExtraValue = (value: number): void => {
-    this.satelliteExtra.innerText = value + ''
-    if (this.orientation === 'vertical'){
-      this.satelliteExtra.style.transform = 'rotate(90deg)'
-    }
+    this.defineValue(this.satelliteExtra, value)
   }
 
 }

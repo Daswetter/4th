@@ -24,7 +24,6 @@ class View implements IView {
   constructor(public initElement: HTMLElement, options: IOptions) {
     this.options = options
     this.initView(initElement)
-    
   }
 
   initView = (initElement: HTMLElement): void => {
@@ -59,6 +58,7 @@ class View implements IView {
     this.thumb.bindExtraThumbChangedPos(this.extraThumbPosWasChanged)
     
   }
+
   initSatellite = (isSatellite: boolean, orientation: string, thumbType: string): void => {
     isSatellite ? this.satellite = new Satellite(orientation, thumbType) : ''
     this.line.returnAsHTML().append(this.satellite.returnSatelliteAsHTMLElement())
@@ -88,22 +88,23 @@ class View implements IView {
   }
 
   setInitialPos(part: () => number): void {
-    this.thumb.setInitialPos(part(), this.line.width())
+    this.thumb.setInitialPos(part(), this.line.width(), this.options.orientation)
     
   }
 
   setExtraInitialPos(part: () => number): void {
-    this.thumb.setExtraInitialPos(part(), this.line.width())
+    this.thumb.setExtraInitialPos(part(), this.line.width(), this.options.orientation)
   }
 
   thumbPosWasChanged = (thumbCenterProp: string, part: number ): void => {
-    this.options.progress ? this.progress.setThumbProp(thumbCenterProp, this.line.width(), this.thumb.width()) : ''
+    this.options.progress ? this.progress.setThumbProp(thumbCenterProp, this.line.width()) : ''
     this.options.satellite ? this.satellite.setPos(thumbCenterProp) : ''
     
     this.onPartChanged(part)
   }
   extraThumbPosWasChanged = (thumbCenterProp: string, part: number): void => {
-    this.progress.setExtraThumbProp(thumbCenterProp, this.line.width(), this.thumb.width())
+
+    this.progress.setExtraThumbProp(thumbCenterProp, this.line.width())
     this.options.satellite ? this.satellite.setExtraPos(thumbCenterProp) : ''
 
     this.onExtraPartChanged(part)

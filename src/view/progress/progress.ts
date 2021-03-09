@@ -6,36 +6,38 @@ class Progress{
 
   constructor(thumbType: string) {
     this.thumbType = thumbType
-    this.init()
+    this.progress = this.init(this.progress)
   }
 
-  init = (): void => {
-    this.progress = document.createElement('div')
-    this.progress.classList.add('range-slider__progress')
+  init = (element: HTMLElement): HTMLElement => {
+    element = document.createElement('div')
+    element.classList.add('range-slider__progress')
+    return element
   }
   returnAsHTMLElement = (): HTMLElement => {
     return this.progress
   }
-  setThumbProp = (thumbLeft: string, lineWidth: number, thumbWidth: number) :void => {
+  setThumbProp = (thumbLeft: string, lineWidth: number) :void => {
     this.thumbLeft = thumbLeft
-    this.setProgress(lineWidth, thumbWidth)
+    this.setProgress(lineWidth)
   } 
-  setExtraThumbProp = (extraThumbLeft: string, lineWidth: number, thumbWidth: number) :void => {
+  setExtraThumbProp = (extraThumbLeft: string, lineWidth: number) :void => {
     this.extraThumbLeft = extraThumbLeft
-    this.setProgress(lineWidth, thumbWidth)
+    this.setProgress(lineWidth)
   } 
   setProgressForSingle = (): void => {
     this.progress.style.width = this.thumbLeft
   }
-  setProgress = (lineWidth: number, thumbWidth: number): void => {
+  setProgress = (lineWidth: number): void => {
     if (this.thumbType === 'single'){
       this.progress.style.width = this.thumbLeft
     } else if (this.thumbType === 'double') {
       if (parseInt(this.thumbLeft) < parseInt(this.extraThumbLeft)){
         this.progress.style.left = this.thumbLeft
-        this.progress.style.right = lineWidth - parseInt(this.extraThumbLeft) - thumbWidth + 'px'
+        this.progress.style.right = lineWidth - parseInt(this.extraThumbLeft) + 'px'
+        
       } else {
-        this.progress.style.left = parseInt(this.extraThumbLeft) + thumbWidth + 'px'
+        this.progress.style.left = parseInt(this.extraThumbLeft) + 'px'
         this.progress.style.right = lineWidth - parseInt(this.thumbLeft) + 'px'
       }
     }
