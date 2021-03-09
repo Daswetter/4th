@@ -1,5 +1,3 @@
-import { Line } from '../line/line'
-
 class Progress{
   public progress!: HTMLElement 
   private thumbType: string

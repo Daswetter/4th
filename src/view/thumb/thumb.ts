@@ -1,5 +1,3 @@
-import { Line } from '../line/line'
-
 class Thumb{
   public thumb!: HTMLElement
   public thumbExtra!: HTMLElement

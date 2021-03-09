@@ -1,5 +1,3 @@
-import { Line } from '../line/line'
-
 class Satellite {
   satellite!: HTMLElement
   satelliteExtra!: HTMLElement

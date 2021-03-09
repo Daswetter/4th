@@ -1,5 +1,3 @@
-import { Wrapper } from '../wrapper/wrapper'
-import { IWrapper } from '../wrapper/IWrapper'
 class Line{
   public line!: HTMLElement 
   public orientation: string

@@ -1,6 +1,3 @@
-import { Line } from '../line/line'
-import '../../interface/IOptions'
-
 class Scale{
   public scale!: HTMLElement 
   public minScale!: HTMLElement
