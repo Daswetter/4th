@@ -40,28 +40,41 @@ class View implements IView {
   }
   initWrapper = (orientation: string): void => {
     this.wrapper = new Wrapper(this.initElement, orientation)
+    this.initElement.append(this.wrapper.returnAsHTML())
   }
   initLine = (orientation: string) : void => {
-    this.line = new Line(this.wrapper, orientation)
+    this.line = new Line(orientation)
+    this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
     this.line.bindLineClicked(this.lineWasClicked)
     
   }
   initThumb = (orientation: string, thumbType: string) : void => {
-    this.thumb = new Thumb(this.line, orientation, thumbType) 
+    this.thumb = new Thumb(orientation, thumbType) 
+    this.line.returnAsHTML().append(this.thumb.returnThumbAsHTML())
+    if (thumbType === 'double'){
+      this.line.returnAsHTML().append(this.thumb.returnThumbExtraAsHTML())
+    }
     this.sendLineParamsToThumb()
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
     this.thumb.bindExtraThumbChangedPos(this.extraThumbPosWasChanged)
     
   }
   initSatellite = (isSatellite: boolean, orientation: string, thumbType: string): void => {
-    isSatellite ? this.satellite = new Satellite(this.line, orientation, thumbType) : ''
+    isSatellite ? this.satellite = new Satellite(orientation, thumbType) : ''
+    this.line.returnAsHTML().append(this.satellite.returnSatelliteAsHTMLElement())
+    if (thumbType === 'double'){
+      this.line.returnAsHTML().append(this.satellite.returnSatelliteExtraAsHTMLElement())
+    }
+    
   }
   initScale = (isScale: boolean): void => {
-    isScale ? this.scale = new Scale(this.line, this.options.orientation) : ''
+    isScale ? this.scale = new Scale(this.options.orientation) : ''
+    // this.line.after(this.scale.returnAsHTMLElement())
     this.options.scale ? this.scale.bindScaleWasClicked(this.scaleWasClicked) : ''
   }
   initProgress = (isProgress: boolean, thumbType: string): void => {
-    isProgress ? this.progress = new Progress(this.line, thumbType) : ''
+    isProgress ? this.progress = new Progress(thumbType) : ''
+    this.line.returnAsHTML().append(this.progress.returnAsHTMLElement())
   }
 
   sendLineParamsToThumb = (): void => {

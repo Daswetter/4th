@@ -14,7 +14,7 @@ class Scale{
   public orientation: string
   private onScaleWasClicked!: (arg0: number) => void;
 
-  constructor(public line: Line, orientation: string) {
+  constructor(orientation: string) {
     this.orientation = orientation
     this.init()
   }
@@ -22,9 +22,10 @@ class Scale{
   init = (): void => {
     this.scale = document.createElement('div')
     this.scale.classList.add('range-slider__scale')
-    this.line.after(this.scale)
   }
-
+  returnAsHTMLElement = (): HTMLElement => {
+    return this.scale
+  }
   setScaleValues = (scaleValues: Array<number>): void => {
     const scaleHTMLElements = [this.minScale, this.quarterScale, this.middleScale, this.threeQuarterScale, this.maxScale];
     [0, 1, 2, 3, 4].forEach( (x: number): void => {

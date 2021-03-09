@@ -6,7 +6,7 @@ class Progress{
   private extraThumbLeft = '0px'
   private thumbLeft = '0px'
 
-  constructor(public line: Line, thumbType: string) {
+  constructor(thumbType: string) {
     this.thumbType = thumbType
     this.init()
   }
@@ -14,9 +14,10 @@ class Progress{
   init = (): void => {
     this.progress = document.createElement('div')
     this.progress.classList.add('range-slider__progress')
-    this.line.append(this.progress)
   }
-  
+  returnAsHTMLElement = (): HTMLElement => {
+    return this.progress
+  }
   setThumbProp = (thumbLeft: string, lineWidth: number, thumbWidth: number) :void => {
     this.thumbLeft = thumbLeft
     this.setProgress(lineWidth, thumbWidth)

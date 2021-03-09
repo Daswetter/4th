@@ -5,11 +5,9 @@ class Line{
   public orientation: string
   private onLineClicked!: (arg0:number) => void;
 
-  constructor(public initElement: IWrapper, orientation: string) {
+  constructor(orientation: string) {
     this.orientation = orientation
     this.createLine()
-    this.appendLine(this.initElement)
-    
     
     this.setClickListener()
     
@@ -19,10 +17,10 @@ class Line{
     this.line = document.createElement('div')
     this.line.classList.add('range-slider__line')
   }
-
-  appendLine = (initElement: IWrapper) : void => {
-    initElement.append(this.line)
+  returnAsHTML = (): HTMLElement => {
+    return this.line
   }
+
   setClickListener = (): void => {
     this.line.onclick = this.moveThumbByClicking
   }
@@ -36,24 +34,11 @@ class Line{
   bottom(): number {
     return this.line.getBoundingClientRect().bottom
   }
-  // TODO: get rid of there methods
-  append(element: HTMLElement): void {
-    this.line.append(element)
-  }
 
-  after(element: HTMLElement): void {
-    this.line.after(element)
-  }
-
-  prepend(element: HTMLElement): void {
-    this.line.prepend(element)
-  }
-// TODO -------
   moveThumbByClicking = (event: MouseEvent) : void => {
     let distFromBeginToClick: number
     if (this.orientation === 'vertical'){
       distFromBeginToClick = - event.clientY + this.line.getBoundingClientRect().bottom
-      
       
     } else {
       distFromBeginToClick = event.clientX - this.line.getBoundingClientRect().left

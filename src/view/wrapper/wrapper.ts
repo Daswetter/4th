@@ -15,8 +15,8 @@ class Wrapper implements IWrapper{
     this.wrapper.classList.add('range-slider__wrapper')
     this.initElement.append(this.wrapper)
   }
-  append(element: HTMLElement): void {
-    this.wrapper.append(element)
+  returnAsHTML = (): HTMLElement => {
+    return this.wrapper
   }
   setOrientation = (orientation: string): void => {
     if (orientation === 'vertical'){

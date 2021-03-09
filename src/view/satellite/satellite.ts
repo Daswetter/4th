@@ -5,7 +5,7 @@ class Satellite {
   satelliteExtra!: HTMLElement
   orientation: string
 
-  constructor(public line: Line, orientation: string, thumbType: string) {
+  constructor(orientation: string, thumbType: string) {
     this.orientation = orientation
     this.init()
     if (thumbType === 'double'){
@@ -16,12 +16,18 @@ class Satellite {
   init = (): void => {
     this.satellite = document.createElement('div')
     this.satellite.classList.add('range-slider__satellite')
-    this.line.prepend(this.satellite)
   }
   initExtra = (): void => {
     this.satelliteExtra = document.createElement('div')
     this.satelliteExtra.classList.add('range-slider__satellite')
-    this.line.prepend(this.satelliteExtra)
+  }
+
+  returnSatelliteAsHTMLElement = (): HTMLElement => {
+    return this.satellite
+  }
+
+  returnSatelliteExtraAsHTMLElement = (): HTMLElement => {
+    return this.satelliteExtra
   }
 
   setPos = (pos: string): void => {

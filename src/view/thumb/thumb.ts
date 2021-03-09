@@ -19,7 +19,7 @@ class Thumb{
   private orientation: string
   private thumbType: string
 
-  constructor(public line: Line, orientation: string, thumbType: string) {
+  constructor(orientation: string, thumbType: string) {
     this.orientation = orientation
     this.thumbType = thumbType
     
@@ -30,7 +30,12 @@ class Thumb{
       this.initExtraThumb()
     }
   }
-
+  returnThumbAsHTML = (): HTMLElement =>  {
+    return this.thumb
+  }
+  returnThumbExtraAsHTML = (): HTMLElement =>  {
+    return this.thumbExtra
+  }
   initThumb = (): void =>  {
     this.createElement()
     this.bindEvent()
@@ -45,13 +50,11 @@ class Thumb{
   createElement = (): void => {
     this.thumb = document.createElement('div')
     this.thumb.classList.add(`range-slider__thumb`)
-    this.line.append(this.thumb)
   }
 
   createExtraElement = (): void => {    
     this.thumbExtra = document.createElement('div')
     this.thumbExtra.classList.add(`range-slider__thumbExtra`)
-    this.line.append(this.thumbExtra)
   }
   bindEvent = (): void => {
     this.boundOnMouseUp = this.onMouseUp.bind(this)
