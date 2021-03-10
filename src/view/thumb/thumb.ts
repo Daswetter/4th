@@ -96,6 +96,8 @@ class Thumb{
       return leftStop
     } else {
       const leftStop = this.lineBottom - event.pageY - this.shiftY + element.offsetWidth / 2
+      
+      
       return leftStop
     }
   }
@@ -136,12 +138,21 @@ class Thumb{
   }
 
   
-  changeThumbPosBecauseOfLineClick = (dist: number): void => {
-
-    // this.thumb.style.left = dist - this.thumb.offsetWidth / 2 + 'px'
-    // const part = dist / this.lineWidth
-    
-    // this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px', part)
+  changeThumbPosBecauseOfLineClick = (dist: number, thumbType: string): void => {
+    const part = dist / this.lineWidth
+    if (thumbType === 'double'){
+      
+      if (Math.abs(dist - this.thumb.offsetLeft) > Math.abs(dist - this.thumbExtra.offsetLeft)){
+        this.thumbExtra.style.left = dist - this.thumbExtra.offsetWidth / 2 + 'px'
+        this.onExtraThumbChanged(parseInt(this.thumbExtra.style.left, 10) + this.thumbExtra.offsetWidth / 2 + 'px', part)
+      } else {
+        this.thumb.style.left = dist - this.thumb.offsetWidth / 2 + 'px'
+        this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px', part)
+      }
+    } else {
+      this.thumb.style.left = dist - this.thumb.offsetWidth / 2 + 'px'
+      this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px', part)
+    }
   }
 
   onMouseUp = () : void => {

@@ -97,31 +97,31 @@ class View implements IView {
   }
 
   thumbPosWasChanged = (thumbCenterProp: string, part: number ): void => {
-    this.options.progress ? this.progress.setThumbProp(thumbCenterProp, this.line.width()) : ''
+    this.options.progress ? this.progress.setThumbProp(thumbCenterProp, this.line.width(), this.options.thumbType) : ''
     this.options.satellite ? this.satellite.setPos(thumbCenterProp) : ''
     
     this.onPartChanged(part)
   }
   extraThumbPosWasChanged = (thumbCenterProp: string, part: number): void => {
 
-    this.progress.setExtraThumbProp(thumbCenterProp, this.line.width())
+    this.progress.setExtraThumbProp(thumbCenterProp, this.line.width(), this.options.thumbType)
     this.options.satellite ? this.satellite.setExtraPos(thumbCenterProp) : ''
 
     this.onExtraPartChanged(part)
     
   }
   currentWasSentFromModel(res: number): void{
-    console.log('current', res)
+    // console.log('current', res)
     this.options.satellite ? this.satellite.setValue(res): ''
     
   }
   extraCurrentWasSentFromModel(res: number): void{
-    console.log('extra current', res)
+    // console.log('extra current', res)
     this.options.satellite ? this.satellite.setExtraValue(res): ''
   }
 
   lineWasClicked = (dist: number): void => {
-    this.thumb.changeThumbPosBecauseOfLineClick(dist)
+    this.thumb.changeThumbPosBecauseOfLineClick(dist, this.options.thumbType)
   }
 
   scaleWasClicked = (value: number): void => {

@@ -26,7 +26,7 @@ class Line{
   setClickListenerForHorizontal = (): void => {
     this.line.onclick = this.moveThumbByClickingForHorizontal
   }
-  
+
   width(): number {
     return this.line.offsetWidth
   }
@@ -35,6 +35,8 @@ class Line{
     return this.line.getBoundingClientRect().left    
   }
   bottom(): number {
+    console.log('bottom', this.line.getBoundingClientRect().bottom);
+    
     return this.line.getBoundingClientRect().bottom
   }
 
