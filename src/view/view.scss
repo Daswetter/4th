@@ -57,19 +57,19 @@ $line-border-radius: 10px;
   }
 } 
 .range-slider__scale{
-  // margin: 10px 0;
-  // display: flex;
-  // justify-content: space-between;
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
 }
-// .range-slider__scale-number{
-//   min-width: 30px;
-//   max-width: 30px;
-//   // padding: 10px 0;
-//   font-family: Roboto, sans-serif;
-//   cursor: pointer;
-//   text-align: center;
-//   background: blue;
-// }
+.range-slider__scale-number{
+  min-width: 30px;
+  max-width: 30px;
+  // padding: 10px 0;
+  font-family: Roboto, sans-serif;
+  cursor: pointer;
+  text-align: center;
+  background: blue;
+}
 
 .range-slider__satellite{
   position: absolute;

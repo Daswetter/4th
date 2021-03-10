@@ -35,9 +35,8 @@ class Line{
     return this.line.getBoundingClientRect().left    
   }
   bottom(): number {
-    console.log('bottom', this.line.getBoundingClientRect().bottom);
-    
-    return this.line.getBoundingClientRect().bottom
+    const bottom = this.line.getBoundingClientRect().bottom + document.documentElement.scrollTop
+    return bottom
   }
 
   moveThumbByClickingForVertical = (event: MouseEvent) : void => {

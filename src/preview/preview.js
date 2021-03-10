@@ -18,7 +18,7 @@ $(".js-slider2").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
-  thumbType: 'single',
+  thumbType: 'double',
   orientation: 'horizontal',
 })
 
@@ -30,7 +30,7 @@ $(".js-slider3").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
-  thumbType: 'double',
+  thumbType: 'single',
   orientation: 'horizontal',
 })
 
@@ -43,4 +43,29 @@ $(".js-slider4").customRangeSlider({
   satellite: true,
   scale: false,
   orientation: 'vertical',
+  thumbType: 'double'
+})
+
+$(".js-slider5").customRangeSlider({
+  min: -9,
+  max: 9,
+  initial: [5],
+  stepSize: 3,
+  progress: true,
+  satellite: true,
+  scale: false,
+  orientation: 'horizontal',
+  thumbType: 'double'
+})
+
+$(".js-slider6").customRangeSlider({
+  min: -9,
+  max: 9,
+  initial: [5],
+  stepSize: 3,
+  progress: false,
+  satellite: true,
+  scale: true,
+  orientation: 'vertical',
+  thumbType: 'double'
 })

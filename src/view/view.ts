@@ -32,10 +32,9 @@ class View implements IView {
     this.initLine(this.options.orientation)
     this.initThumb(this.options.orientation, this.options.thumbType)
     
-
-    this.initSatellite(this.options.satellite, this.options.orientation, this.options.thumbType)
-    this.initScale(this.options.scale)
-    this.initProgress(this.options.progress, this.options.thumbType)
+    this.options.satellite ? this.initSatellite(this.options.orientation, this.options.thumbType): ''
+    this.options.scale ? this.initScale(): ''
+    this.options.progress ? this.initProgress(this.options.thumbType) : ''
   }
   initWrapper = (orientation: string): void => {
     this.wrapper = new Wrapper(this.initElement, orientation)
@@ -59,21 +58,21 @@ class View implements IView {
     
   }
 
-  initSatellite = (isSatellite: boolean, orientation: string, thumbType: string): void => {
-    isSatellite ? this.satellite = new Satellite(orientation, thumbType) : ''
+  initSatellite = (orientation: string, thumbType: string): void => {
+    this.satellite = new Satellite(orientation, thumbType)
     this.line.returnAsHTML().append(this.satellite.returnSatelliteAsHTMLElement())
     if (thumbType === 'double'){
       this.line.returnAsHTML().append(this.satellite.returnSatelliteExtraAsHTMLElement())
     }
     
   }
-  initScale = (isScale: boolean): void => {
-    isScale ? this.scale = new Scale(this.options.orientation) : ''
-    // this.line.after(this.scale.returnAsHTMLElement())
-    this.options.scale ? this.scale.bindScaleWasClicked(this.scaleWasClicked) : ''
+  initScale = (): void => {
+    this.scale = new Scale(this.options.orientation)
+    // this.line.returnAsHTML().after(this.scale.returnAsHTMLElement())
+    this.scale.bindScaleWasClicked(this.scaleWasClicked)
   }
-  initProgress = (isProgress: boolean, thumbType: string): void => {
-    isProgress ? this.progress = new Progress(thumbType) : ''
+  initProgress = (thumbType: string): void => {
+    this.progress = new Progress(thumbType)
     this.line.returnAsHTML().append(this.progress.returnAsHTMLElement())
   }
 
@@ -89,7 +88,6 @@ class View implements IView {
 
   setInitialPos(part: () => number): void {
     this.thumb.setInitialPos(part(), this.line.width(), this.options.orientation)
-    
   }
 
   setExtraInitialPos(part: () => number): void {
@@ -104,19 +102,19 @@ class View implements IView {
   }
   extraThumbPosWasChanged = (thumbCenterProp: string, part: number): void => {
 
-    this.progress.setExtraThumbProp(thumbCenterProp, this.line.width(), this.options.thumbType)
+    this.options.progress ? this.progress.setExtraThumbProp(thumbCenterProp, this.line.width(), this.options.thumbType) : ''
     this.options.satellite ? this.satellite.setExtraPos(thumbCenterProp) : ''
 
     this.onExtraPartChanged(part)
     
   }
   currentWasSentFromModel(res: number): void{
-    // console.log('current', res)
+    console.log('current', res)
     this.options.satellite ? this.satellite.setValue(res): ''
     
   }
   extraCurrentWasSentFromModel(res: number): void{
-    // console.log('extra current', res)
+    console.log('extra current', res)
     this.options.satellite ? this.satellite.setExtraValue(res): ''
   }
 
