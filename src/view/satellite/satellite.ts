@@ -2,25 +2,18 @@ class Satellite {
   satellite!: HTMLElement
   satelliteExtra!: HTMLElement
 
-  constructor(orientation: string, thumbType: string) {
+  constructor() {
     this.satellite = this.init(this.satellite)
-
-    if (thumbType === 'double'){
-      this.satelliteExtra = this.init(this.satelliteExtra)
-      if (orientation === 'vertical'){
-        this.satelliteExtra.style.transform = 'rotate(90deg)'
-      }
-    }
-    
-    if (orientation === 'vertical'){
-      this.satellite.style.transform = 'rotate(90deg)'
-    }
   }
 
   init = (element: HTMLElement): HTMLElement => {
     element = document.createElement('div')
     element.classList.add('range-slider__satellite')
     return element
+  }
+
+  initSatelliteExtra = (): void => {
+    this.satelliteExtra = this.init(this.satelliteExtra)
   }
 
   returnSatelliteAsHTMLElement = (): HTMLElement => {
@@ -31,6 +24,17 @@ class Satellite {
     return this.satelliteExtra
   }
 
+  rotateElement = (element: HTMLElement): void => {
+    element.style.transform = 'rotate(90deg)'
+  }
+
+  rotateSatellite = (): void => {
+    this.rotateElement(this.satellite)
+  }
+  rotateSatelliteExtra = (): void => {
+    this.rotateElement(this.satelliteExtra)
+  }
+  
   definePosition = (element: HTMLElement, position: string): void => {
     element.style.left = position
   }
@@ -51,6 +55,7 @@ class Satellite {
   }
 
   setExtraValue = (value: number): void => {
+    
     this.defineValue(this.satelliteExtra, value)
   }
 

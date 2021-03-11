@@ -1,6 +1,7 @@
 class Thumb{
   public thumb!: HTMLElement
   public thumbExtra!: HTMLElement
+  public orientation: string
   private boundOnMouseMove!: (event: MouseEvent) => void
   private boundOnMouseUp!: () => void
 
@@ -11,14 +12,9 @@ class Thumb{
   private lineLeftSide!: number
   private lineBottom!: number
 
-  constructor(orientation: string, thumbType: string) {
-
+  constructor(orientation: string) {
+    this.orientation = orientation
     this.thumb = this.init(this.thumb, orientation)
-    
-    if (thumbType === 'double'){
-      this.thumbExtra = this.init(this.thumbExtra, orientation)
-      this.thumbExtra.classList.add(`range-slider__thumbExtra`)
-    }
   }
 
   returnThumbAsHTML = (): HTMLElement =>  {
@@ -34,6 +30,9 @@ class Thumb{
     return element
   } 
 
+  initThumbExtra = (): void => {
+    this.thumbExtra = this.init(this.thumbExtra, this.orientation)
+  }
   createElement = (element: HTMLElement): HTMLElement => {
     element = document.createElement('div')
     element.classList.add(`range-slider__thumb`)

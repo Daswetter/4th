@@ -35,13 +35,17 @@ class View implements IView {
     
     this.options.satellite ? this.initSatellite(this.options.orientation, this.options.thumbType): ''
     this.options.scale ? this.initScale(scaleElements): ''
-    this.options.progress ? this.initProgress(this.options.thumbType) : ''
+    this.options.progress ? this.initProgress() : ''
     
   }
   initWrapper = (orientation: string): void => {
-    this.wrapper = new Wrapper(this.initElement, orientation)
+    this.wrapper = new Wrapper(this.initElement)
     this.initElement.append(this.wrapper.returnAsHTML())
+    if (orientation === 'vertical'){
+      this.wrapper.setOrientation()
+    }
   }
+
   initLine = (orientation: string) : void => {
     this.line = new Line()
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
@@ -56,9 +60,10 @@ class View implements IView {
   }
 
   initThumb = (orientation: string, thumbType: string) : void => {
-    this.thumb = new Thumb(orientation, thumbType) 
+    this.thumb = new Thumb(orientation) 
     this.line.returnAsHTML().append(this.thumb.returnThumbAsHTML())
     if (thumbType === 'double'){
+      this.thumb.initThumbExtra()
       this.line.returnAsHTML().append(this.thumb.returnThumbExtraAsHTML())
     }
     this.sendLineParamsToThumb()
@@ -68,24 +73,33 @@ class View implements IView {
   }
 
   initSatellite = (orientation: string, thumbType: string): void => {
-    this.satellite = new Satellite(orientation, thumbType)
+    this.satellite = new Satellite()
     this.line.returnAsHTML().append(this.satellite.returnSatelliteAsHTMLElement())
     if (thumbType === 'double'){
+      this.satellite.initSatelliteExtra()
       this.line.returnAsHTML().append(this.satellite.returnSatelliteExtraAsHTMLElement())
+      
+      if (orientation === 'vertical'){
+        this.satellite.rotateSatelliteExtra()
+      }
+    }
+    if (orientation === 'vertical'){
+      this.satellite.rotateSatellite()
     }
     
   }
   initScale = (scaleElements: number[]): void => {
     this.scale = new Scale()
     this.line.returnAsHTML().after(this.scale.returnAsHTMLElement())
-    this.scale.setScaleValues(scaleElements)
     this.scale.bindScaleWasClicked(this.changeThumbPosition)
+    this.scale.setScaleValues(scaleElements)
+    
     if (this.options.orientation === 'vertical') {
       this.scale.rotateScaleElement()
     }
   }
-  initProgress = (thumbType: string): void => {
-    this.progress = new Progress(thumbType)
+  initProgress = (): void => {
+    this.progress = new Progress()
     this.line.returnAsHTML().append(this.progress.returnAsHTMLElement())
   }
 
@@ -95,10 +109,6 @@ class View implements IView {
     this.thumb.setLineBottom(this.line.bottom())
   }
 
-  // setScaleElements(elements: Array<number>): void {
-  //   this.options.scale ? ) : ''
-  // }
-
   setInitialPos(part: () => number): void {
     this.thumb.setInitialPos(part(), this.line.width(), this.options.orientation)
   }
@@ -107,15 +117,15 @@ class View implements IView {
     this.thumb.setExtraInitialPos(part(), this.line.width(), this.options.orientation)
   }
 
-  thumbPosWasChanged = (thumbCenterProp: string, part: number ): void => {
-    this.options.progress ? this.progress.setThumbProp(thumbCenterProp, this.line.width(), this.options.thumbType) : ''
-    this.options.satellite ? this.satellite.setPos(thumbCenterProp) : ''
+  thumbPosWasChanged = (thumbPos: string, part: number ): void => {
+    this.options.progress ? this.progress.setThumbPos(thumbPos, this.line.width()) : ''
+    this.options.satellite ? this.satellite.setPos(thumbPos) : ''
     
     this.onPartChanged(part)
   }
   extraThumbPosWasChanged = (thumbCenterProp: string, part: number): void => {
 
-    this.options.progress ? this.progress.setExtraThumbProp(thumbCenterProp, this.line.width(), this.options.thumbType) : ''
+    this.options.progress ? this.progress.setExtraThumbProp(thumbCenterProp, this.line.width()) : ''
     this.options.satellite ? this.satellite.setExtraPos(thumbCenterProp) : ''
 
     this.onExtraPartChanged(part)

@@ -1,13 +1,10 @@
 import { IWrapper } from './IWrapper'
 class Wrapper implements IWrapper{
   public wrapper!: HTMLElement
-  public orientation: string
 
-  constructor(public initElement: HTMLElement, orientation: string){
+  constructor(public initElement: HTMLElement){
     this.initElement = initElement
-    this.orientation = orientation
     this.init()
-    this.setOrientation(this.orientation)
     
   }
   init = (): void => {
@@ -18,10 +15,8 @@ class Wrapper implements IWrapper{
   returnAsHTML = (): HTMLElement => {
     return this.wrapper
   }
-  setOrientation = (orientation: string): void => {
-    if (orientation === 'vertical'){
-      this.wrapper.style.transform = 'rotate(-90deg)'
-    }
+  setOrientation = (): void => {
+    this.wrapper.style.transform = 'rotate(-90deg)'
   }
 }
 

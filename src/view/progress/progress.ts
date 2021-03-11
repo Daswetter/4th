@@ -1,9 +1,9 @@
 class Progress{
   public progress!: HTMLElement 
-  private extraThumbLeft = '0px'
-  private thumbLeft = '0px'
+  private extraThumbPos = '0px'
+  private thumbPos = '0px'
 
-  constructor(thumbType: string) {
+  constructor() {
     this.progress = this.init(this.progress)
   }
 
@@ -15,32 +15,26 @@ class Progress{
   returnAsHTMLElement = (): HTMLElement => {
     return this.progress
   }
-  setThumbProp = (thumbLeft: string, lineWidth: number, thumbType: string) :void => {
-    this.thumbLeft = thumbLeft
-    this.setProgress(lineWidth, thumbType)
+  setThumbPos = (thumbPos: string, lineWidth: number) :void => {
+    this.thumbPos = thumbPos
+    this.setProgress(lineWidth)
   } 
-  setExtraThumbProp = (extraThumbLeft: string, lineWidth: number, thumbType: string) :void => {
-    this.extraThumbLeft = extraThumbLeft
-    this.setProgress(lineWidth, thumbType)
+  setExtraThumbProp = (extraThumbPos: string, lineWidth: number) :void => {
+    this.extraThumbPos = extraThumbPos
+    this.setProgress(lineWidth)
   } 
-  setProgressForSingle = (): void => {
-    this.progress.style.width = this.thumbLeft
-  }
-  setProgress = (lineWidth: number, thumbType: string): void => {
-    if (thumbType === 'single'){
-      this.progress.style.width = this.thumbLeft
-    } else if (thumbType === 'double') {
-      if (parseInt(this.thumbLeft) < parseInt(this.extraThumbLeft)){
-        this.progress.style.left = this.thumbLeft
-        this.progress.style.right = lineWidth - parseInt(this.extraThumbLeft) + 'px'
-        
-      } else {
-        this.progress.style.left = parseInt(this.extraThumbLeft) + 'px'
-        this.progress.style.right = lineWidth - parseInt(this.thumbLeft) + 'px'
-      }
+
+  setProgress = (lineWidth: number): void => {
+    if (parseInt(this.thumbPos) < parseInt(this.extraThumbPos)){
+      this.progress.style.left = this.thumbPos
+      this.progress.style.right = lineWidth - parseInt(this.extraThumbPos) + 'px'
+      
+    } else {
+      this.progress.style.left = parseInt(this.extraThumbPos) + 'px'
+      this.progress.style.right = lineWidth - parseInt(this.thumbPos) + 'px'
     }
   }
-  
 }
+
 
 export { Progress }
