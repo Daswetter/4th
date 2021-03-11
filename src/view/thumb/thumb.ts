@@ -40,6 +40,9 @@ class Thumb{
     return element
   }
 
+  width = (): number => {
+    return this.thumb.offsetWidth
+  }
 
   setOnMouseDown = (element: HTMLElement, orientation: string): void => {
     element.onmousedown = this.onMouseDown.bind(null, element, orientation)
@@ -131,20 +134,23 @@ class Thumb{
   }
 
   
-  changeThumbPosBecauseOfLineClick = (dist: number, thumbType: string): void => {
-    const part = dist / this.lineWidth
-    if (thumbType === 'double'){
+  changeThumbPosition = (part: number): void => {
+    this.thumb.style.left = part * this.lineWidth - this.thumb.offsetWidth / 2 + 'px'
+    this.onThumbChanged(this.thumb.offsetLeft + this.thumb.offsetWidth / 2 + 'px', part)
+  }
+
+  
+  changeThumbsPositions = (part: number): void => {
+    const eventPosition = part * this.lineWidth
+    const distFromThumbToEvent = eventPosition - this.thumb.offsetLeft
+    const distFromThumbExtraToEvent = eventPosition - this.thumbExtra.offsetLeft
+
+    if (Math.abs(distFromThumbToEvent) > Math.abs(distFromThumbExtraToEvent)){
       
-      if (Math.abs(dist - this.thumb.offsetLeft) > Math.abs(dist - this.thumbExtra.offsetLeft)){
-        this.thumbExtra.style.left = dist - this.thumbExtra.offsetWidth / 2 + 'px'
-        this.onExtraThumbChanged(parseInt(this.thumbExtra.style.left, 10) + this.thumbExtra.offsetWidth / 2 + 'px', part)
-      } else {
-        this.thumb.style.left = dist - this.thumb.offsetWidth / 2 + 'px'
-        this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px', part)
-      }
+      this.thumbExtra.style.left = eventPosition - this.thumbExtra.offsetWidth / 2 + 'px'
+      this.onExtraThumbChanged(this.thumbExtra.offsetLeft + this.thumbExtra.offsetWidth / 2 + 'px', part)
     } else {
-      this.thumb.style.left = dist - this.thumb.offsetWidth / 2 + 'px'
-      this.onThumbChanged(parseInt(this.thumb.style.left, 10) + this.thumb.offsetWidth / 2 + 'px', part)
+      this.changeThumbPosition(part)
     }
   }
 
@@ -152,17 +158,6 @@ class Thumb{
     document.removeEventListener('mousemove', this.boundOnMouseMove)
     document.removeEventListener('mouseup', this.boundOnMouseUp)
   }
-
-
-  setScalePos = (lineWidthPart: number): void => {
-    this.thumb.style.left = this.lineWidth * lineWidthPart - this.thumb.offsetWidth / 2 + 'px'
-    this.onThumbChanged(this.thumb.offsetLeft + this.thumb.offsetWidth / 2 + 'px', lineWidthPart)
-  }
-
-  width = (): number => {
-    return this.thumb.offsetWidth
-  }
-
 
 
   bindThumbChangedPos(callback: (thumbCenterProp: string, part: number) => void ): void {

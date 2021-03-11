@@ -16,6 +16,7 @@ class View implements IView {
   public progress!: Progress 
   public scale!: Scale 
   public satellite!: Satellite
+  
   private onPartChanged!: (arg0: number) => void
   private onExtraPartChanged!: (arg0: number) => void
 
@@ -23,29 +24,37 @@ class View implements IView {
 
   constructor(public initElement: HTMLElement, options: IOptions) {
     this.options = options
-    this.initView(initElement)
+    this.initElement = initElement
   }
 
-  initView = (initElement: HTMLElement): void => {
-    this.initElement = initElement
+  initView = (scaleElements: number[]): void => {
+    
     this.initWrapper(this.options.orientation)
     this.initLine(this.options.orientation)
     this.initThumb(this.options.orientation, this.options.thumbType)
     
     this.options.satellite ? this.initSatellite(this.options.orientation, this.options.thumbType): ''
-    this.options.scale ? this.initScale(): ''
+    this.options.scale ? this.initScale(scaleElements): ''
     this.options.progress ? this.initProgress(this.options.thumbType) : ''
+    
   }
   initWrapper = (orientation: string): void => {
     this.wrapper = new Wrapper(this.initElement, orientation)
     this.initElement.append(this.wrapper.returnAsHTML())
   }
   initLine = (orientation: string) : void => {
-    this.line = new Line(orientation)
+    this.line = new Line()
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
-    this.line.bindLineClicked(this.lineWasClicked)
+
+    if (orientation === 'vertical'){
+      this.line.setClickListenerForVertical()
+    } else if (orientation === 'horizontal'){
+      this.line.setClickListenerForHorizontal()
+    }
+    this.line.bindLineClicked(this.changeThumbPosition)
     
   }
+
   initThumb = (orientation: string, thumbType: string) : void => {
     this.thumb = new Thumb(orientation, thumbType) 
     this.line.returnAsHTML().append(this.thumb.returnThumbAsHTML())
@@ -66,10 +75,14 @@ class View implements IView {
     }
     
   }
-  initScale = (): void => {
-    this.scale = new Scale(this.options.orientation)
-    // this.line.returnAsHTML().after(this.scale.returnAsHTMLElement())
-    this.scale.bindScaleWasClicked(this.scaleWasClicked)
+  initScale = (scaleElements: number[]): void => {
+    this.scale = new Scale()
+    this.line.returnAsHTML().after(this.scale.returnAsHTMLElement())
+    this.scale.setScaleValues(scaleElements)
+    this.scale.bindScaleWasClicked(this.changeThumbPosition)
+    if (this.options.orientation === 'vertical') {
+      this.scale.rotateScaleElement()
+    }
   }
   initProgress = (thumbType: string): void => {
     this.progress = new Progress(thumbType)
@@ -82,9 +95,9 @@ class View implements IView {
     this.thumb.setLineBottom(this.line.bottom())
   }
 
-  setScaleElements(elements: Array<number>): void {
-    this.options.scale ? this.scale.setScaleValues(elements) : ''
-  }
+  // setScaleElements(elements: Array<number>): void {
+  //   this.options.scale ? ) : ''
+  // }
 
   setInitialPos(part: () => number): void {
     this.thumb.setInitialPos(part(), this.line.width(), this.options.orientation)
@@ -118,13 +131,14 @@ class View implements IView {
     this.options.satellite ? this.satellite.setExtraValue(res): ''
   }
 
-  lineWasClicked = (dist: number): void => {
-    this.thumb.changeThumbPosBecauseOfLineClick(dist, this.options.thumbType)
+  changeThumbPosition = (part: number): void => {
+    if (this.options.thumbType === 'double'){
+      this.thumb.changeThumbsPositions(part)
+    } else if (this.options.thumbType === 'single'){
+      this.thumb.changeThumbPosition(part)
+    }
   }
 
-  scaleWasClicked = (value: number): void => {
-    this.thumb.setScalePos(value)
-  }
 
   
   bindSendPartToModel(callback: (arg0: number) => void): void {

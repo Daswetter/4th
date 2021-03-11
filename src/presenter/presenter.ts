@@ -7,7 +7,8 @@ import './../interface/IOptions'
 
 class Presenter{
   constructor(private View: IView, private Model: IModel) {
-    this.View.setScaleElements(this.Model.countScaleElements())
+    this.View.initView(this.Model.countScaleElements())
+    
     
 
     this.View.bindSendPartToModel(this.sendPartTo)

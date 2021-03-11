@@ -1,3 +1,5 @@
+import $ from 'jquery'
+
 $(".js-slider1").customRangeSlider({
   min: -1800,
   max: 200,
