@@ -44,6 +44,8 @@ class View implements IView {
     if (orientation === 'vertical'){
       this.wrapper.setOrientation()
     }
+    window.onresize = this.wrapper.countWidth
+    this.wrapper.bindWrapperWidthWasChanged(this.wrapperWasResized)
   }
 
   initLine = (orientation: string) : void => {
@@ -60,11 +62,19 @@ class View implements IView {
   }
 
   initThumb = (orientation: string, thumbType: string) : void => {
-    this.thumb = new Thumb(orientation) 
+    this.thumb = new Thumb() 
     this.line.returnAsHTML().append(this.thumb.returnThumbAsHTML())
+    this.thumb.setEventListenerHorizontalForThumb(this.line.left(), this.line.width())
     if (thumbType === 'double'){
       this.thumb.initThumbExtra()
       this.line.returnAsHTML().append(this.thumb.returnThumbExtraAsHTML())
+      this.thumb.setEventListenerHorizontalForThumbExtra(this.line.left(), this.line.width())
+    }
+    if (orientation === 'vertical'){
+      this.thumb.setEventListenerVerticalForThumb(this.line.bottom(), this.line.width())
+      if (thumbType === 'double'){
+        this.thumb.setEventListenerVerticalForThumbExtra(this.line.bottom(), this.line.width())
+      }
     }
     this.sendLineParamsToThumb()
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
@@ -98,15 +108,16 @@ class View implements IView {
       this.scale.rotateScaleElement()
     }
   }
+
   initProgress = (): void => {
     this.progress = new Progress()
     this.line.returnAsHTML().append(this.progress.returnAsHTMLElement())
   }
 
   sendLineParamsToThumb = (): void => {
-    this.thumb.setLineLeftSide(this.line.left())
-    this.thumb.setLineWidth(this.line.width())
-    this.thumb.setLineBottom(this.line.bottom())
+    // this.thumb.setLineLeftSide(this.line.left())
+    // this.thumb.setLineWidth(this.line.width())
+    // this.thumb.setLineBottom(this.line.bottom())
   }
 
   setInitialPos(part: () => number): void {
@@ -143,12 +154,17 @@ class View implements IView {
 
   changeThumbPosition = (part: number): void => {
     if (this.options.thumbType === 'double'){
-      this.thumb.changeThumbsPositions(part)
+      this.thumb.changeThumbsPositions(part, this.line.width())
     } else if (this.options.thumbType === 'single'){
-      this.thumb.changeThumbPosition(part)
+      this.thumb.changeThumbPosition(part, this.line.width())
     }
   }
-
+  wrapperWasResized = (): void => {
+    console.log('wrapper resized');
+    this.line.left()
+    this.line.width()
+    this.sendLineParamsToThumb()
+  }
 
   
   bindSendPartToModel(callback: (arg0: number) => void): void {

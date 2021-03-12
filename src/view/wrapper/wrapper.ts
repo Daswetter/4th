@@ -1,6 +1,7 @@
 import { IWrapper } from './IWrapper'
 class Wrapper implements IWrapper{
   public wrapper!: HTMLElement
+  onWrapperWidthWasChanged!:() => void
 
   constructor(public initElement: HTMLElement){
     this.initElement = initElement
@@ -17,6 +18,14 @@ class Wrapper implements IWrapper{
   }
   setOrientation = (): void => {
     this.wrapper.style.transform = 'rotate(-90deg)'
+  }
+  countWidth = (): void => {
+    const width = this.wrapper.getBoundingClientRect().width
+    this.onWrapperWidthWasChanged()
+  }
+
+  bindWrapperWidthWasChanged = (callback: () => void): void => {
+    this.onWrapperWidthWasChanged = callback;
   }
 }
 

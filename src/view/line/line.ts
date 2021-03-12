@@ -26,7 +26,8 @@ class Line{
   }
 
   left(): number {
-    return this.line.getBoundingClientRect().left    
+    const left = this.line.getBoundingClientRect().left
+    return left
   }
   bottom(): number {
     const bottom = this.line.getBoundingClientRect().bottom + document.documentElement.scrollTop
@@ -34,7 +35,7 @@ class Line{
   }
  
   countPart = (dist: number): number => {
-    return dist / this.line.offsetWidth
+    return dist / this.width()
   }
   
   moveThumbByClickingForVertical = (event: MouseEvent) : void => {
@@ -44,7 +45,7 @@ class Line{
   }
 
   moveThumbByClickingForHorizontal = (event: MouseEvent) : void => {
-    const distFromBeginToClick = event.clientX - this.line.getBoundingClientRect().left
+    const distFromBeginToClick = event.clientX - this.left()
     const part = this.countPart(distFromBeginToClick)
     this.onLineClicked(part)
   }

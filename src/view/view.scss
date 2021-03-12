@@ -3,9 +3,15 @@ $line-height: 10px;
 $line-border-radius: 10px;
 
 .range-slider__wrapper{
-  // transform: rotate(-90deg);
-  width: 300px;
-  margin: 200px 200px;
+  width: 60%;
+  margin: 200px auto;
+}
+
+.js-slider2 {
+  .range-slider__wrapper{
+    width: 200px;
+    margin: 200px auto;
+  }
 }
 
 .range-slider__line{
@@ -25,6 +31,7 @@ $line-border-radius: 10px;
   border-radius: 50%;
   cursor: pointer;
   z-index: 2;
+  // opacity: 0.3;
 }
 .range-slider__thumbExtra {
   position: absolute;
