@@ -16,6 +16,9 @@ class View implements IView {
   public progress!: Progress 
   public scale!: Scale 
   public satellite!: Satellite
+
+  private part!: number
+  private partExtra!: number
   
   private onPartChanged!: (arg0: number) => void
   private onExtraPartChanged!: (arg0: number) => void
@@ -29,71 +32,74 @@ class View implements IView {
 
   initView = (scaleElements: number[]): void => {
     
-    this.initWrapper(this.options.orientation)
-    this.initLine(this.options.orientation)
-    this.initThumb(this.options.orientation, this.options.thumbType)
+    this.initWrapper()
+    this.initLine()
+    this.initThumb()
     
-    this.options.satellite ? this.initSatellite(this.options.orientation, this.options.thumbType): ''
+    this.options.satellite ? this.initSatellite(): ''
     this.options.scale ? this.initScale(scaleElements): ''
     this.options.progress ? this.initProgress() : ''
     
   }
-  initWrapper = (orientation: string): void => {
+  initWrapper = (): void => {
     this.wrapper = new Wrapper(this.initElement)
     this.initElement.append(this.wrapper.returnAsHTML())
-    if (orientation === 'vertical'){
+    if (this.options.orientation === 'vertical'){
       this.wrapper.setOrientation()
     }
-    window.onresize = this.wrapper.countWidth
-    this.wrapper.bindWrapperWidthWasChanged(this.wrapperWasResized)
-  }
-
-  initLine = (orientation: string) : void => {
-    this.line = new Line()
-    this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
-
-    if (orientation === 'vertical'){
-      this.line.setClickListenerForVertical()
-    } else if (orientation === 'horizontal'){
-      this.line.setClickListenerForHorizontal()
-    }
-    this.line.bindLineClicked(this.changeThumbPosition)
+    
     
   }
 
-  initThumb = (orientation: string, thumbType: string) : void => {
+  initLine = () : void => {
+    this.line = new Line()
+    this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
+
+    if (this.options.orientation === 'vertical'){
+      this.line.setClickListenerForVertical()
+    } else if (this.options.orientation === 'horizontal'){
+      this.line.setClickListenerForHorizontal()
+    }
+    this.line.bindLineClicked(this.changeThumbPosition)
+
+    window.onresize = this.windowWasResized
+  }
+
+  initThumb = () : void => {
     this.thumb = new Thumb() 
     this.line.returnAsHTML().append(this.thumb.returnThumbAsHTML())
     this.thumb.setEventListenerHorizontalForThumb(this.line.left(), this.line.width())
-    if (thumbType === 'double'){
+
+    if (this.options.thumbType === 'double'){
       this.thumb.initThumbExtra()
       this.line.returnAsHTML().append(this.thumb.returnThumbExtraAsHTML())
       this.thumb.setEventListenerHorizontalForThumbExtra(this.line.left(), this.line.width())
     }
-    if (orientation === 'vertical'){
+
+    if (this.options.orientation === 'vertical'){
       this.thumb.setEventListenerVerticalForThumb(this.line.bottom(), this.line.width())
-      if (thumbType === 'double'){
+      if (this.options.thumbType === 'double'){
         this.thumb.setEventListenerVerticalForThumbExtra(this.line.bottom(), this.line.width())
       }
     }
-    this.sendLineParamsToThumb()
     this.thumb.bindThumbChangedPos(this.thumbPosWasChanged)
     this.thumb.bindExtraThumbChangedPos(this.extraThumbPosWasChanged)
     
   }
 
-  initSatellite = (orientation: string, thumbType: string): void => {
+  initSatellite = (): void => {
     this.satellite = new Satellite()
     this.line.returnAsHTML().append(this.satellite.returnSatelliteAsHTMLElement())
-    if (thumbType === 'double'){
+    
+    if (this.options.thumbType === 'double'){
       this.satellite.initSatelliteExtra()
       this.line.returnAsHTML().append(this.satellite.returnSatelliteExtraAsHTMLElement())
       
-      if (orientation === 'vertical'){
+      if (this.options.orientation === 'vertical'){
         this.satellite.rotateSatelliteExtra()
       }
     }
-    if (orientation === 'vertical'){
+    if (this.options.orientation === 'vertical'){
       this.satellite.rotateSatellite()
     }
     
@@ -114,24 +120,21 @@ class View implements IView {
     this.line.returnAsHTML().append(this.progress.returnAsHTMLElement())
   }
 
-  sendLineParamsToThumb = (): void => {
-    // this.thumb.setLineLeftSide(this.line.left())
-    // this.thumb.setLineWidth(this.line.width())
-    // this.thumb.setLineBottom(this.line.bottom())
-  }
+
 
   setInitialPos(part: () => number): void {
-    this.thumb.setInitialPos(part(), this.line.width(), this.options.orientation)
+    this.thumb.setInitialPos(part(), this.line.width())
   }
 
   setExtraInitialPos(part: () => number): void {
-    this.thumb.setExtraInitialPos(part(), this.line.width(), this.options.orientation)
+    this.thumb.setExtraInitialPos(part(), this.line.width())
   }
 
   thumbPosWasChanged = (thumbPos: string, part: number ): void => {
     this.options.progress ? this.progress.setThumbPos(thumbPos, this.line.width()) : ''
     this.options.satellite ? this.satellite.setPos(thumbPos) : ''
     
+    this.part = part
     this.onPartChanged(part)
   }
   extraThumbPosWasChanged = (thumbCenterProp: string, part: number): void => {
@@ -139,8 +142,8 @@ class View implements IView {
     this.options.progress ? this.progress.setExtraThumbProp(thumbCenterProp, this.line.width()) : ''
     this.options.satellite ? this.satellite.setExtraPos(thumbCenterProp) : ''
 
+    this.partExtra = part
     this.onExtraPartChanged(part)
-    
   }
   currentWasSentFromModel(res: number): void{
     console.log('current', res)
@@ -159,11 +162,23 @@ class View implements IView {
       this.thumb.changeThumbPosition(part, this.line.width())
     }
   }
-  wrapperWasResized = (): void => {
-    console.log('wrapper resized');
-    this.line.left()
-    this.line.width()
-    this.sendLineParamsToThumb()
+
+  windowWasResized = (event: Event): void => {
+
+    this.thumb.setEventListenerHorizontalForThumb(this.line.left(), this.line.width())
+
+    if (this.options.thumbType === 'double'){
+      this.thumb.setEventListenerHorizontalForThumbExtra(this.line.left(), this.line.width())
+    }
+
+    if (this.options.orientation === 'vertical'){
+      this.thumb.setEventListenerVerticalForThumb(this.line.bottom(), this.line.width())
+      if (this.options.thumbType === 'double'){
+        this.thumb.setEventListenerVerticalForThumbExtra(this.line.bottom(), this.line.width())
+      }
+    }
+
+    this.changeThumbPosition(this.part)
   }
 
   

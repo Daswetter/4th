@@ -1,6 +1,7 @@
 class Line{
   public line!: HTMLElement
   private onLineClicked!: (arg0:number) => void;
+  private onLineWidthWasChanged!: (arg0:number) => void;
 
   constructor() {
     this.init()
@@ -49,6 +50,15 @@ class Line{
     const part = this.countPart(distFromBeginToClick)
     this.onLineClicked(part)
   }
+
+  // windowWasResized = (): void => {
+  //   const part = this.countPart()
+  //   this.onLineWidthWasChanged(part)
+  // }
+
+  // bindWrapperWidthWasChanged = (callback: (part: number) => void): void => {
+  //   this.onLineWidthWasChanged = callback;
+  // }
 
   bindLineClicked(callback: (arg0:number) => void): void {
     this.onLineClicked = callback;

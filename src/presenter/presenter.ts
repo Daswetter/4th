@@ -8,10 +8,6 @@ import './../interface/IOptions'
 class Presenter{
   constructor(private View: IView, private Model: IModel) {
 
-    
-    
-    
-
     this.View.bindSendPartToModel(this.sendPartTo)
     this.View.bindSendExtraPartToModel(this.sendExtraPartTo)
 

@@ -28,6 +28,7 @@ class Thumb{
 
   setEventListenerForHorizontal = (element: HTMLElement, lineLeft: number, lineWidth: number): void =>  {
     element.onmousedown = this.onMouseDownForHorizontal.bind(null, element, lineLeft, lineWidth)
+    
   } 
 
   setEventListenerForVertical = (element: HTMLElement, lineBottom: number, lineWidth: number): void =>  {
@@ -37,12 +38,10 @@ class Thumb{
 
   initThumb = (): void => {
     this.thumb = this.init(this.thumb)
-    // this.setEventListenerForVertical(this.thumb)
   }
 
   initThumbExtra = (): void => {
     this.thumbExtra = this.init(this.thumbExtra)
-    // this.setEventListenerForVertical(this.thumbExtra)
     this.thumbExtra.classList.add('range-slider__thumbExtra')
   }
 
@@ -80,21 +79,21 @@ class Thumb{
     this.onMouseDown(element, event, this.onMouseMoveForVertical, shiftY, lineBottom, lineWidth)
   }
   
-  countInitialPos = (element: HTMLElement, part: number, lineWidth: number, orientation: string): void => {
-    element.style.left =  lineWidth * part - element.offsetWidth / 2 + 'px'
-    // if (element === this.thumb){
-    //   this.onThumbChanged(element.offsetLeft + element.offsetWidth / 2 + 'px', this.countPart(element, orientation))
-    // } else if (element === this.thumbExtra){
-    //   this.onExtraThumbChanged(this.thumbExtra.offsetLeft + this.thumbExtra.offsetWidth / 2 + 'px', this.countPart(this.thumbExtra, orientation))
-    // }
+  countInitialPos = (element: HTMLElement, part: number, lineWidth: number): void => {
+  //   element.style.left =  lineWidth * part - element.offsetWidth / 2 + 'px'
+  //   if (element === this.thumb){
+  //     this.onThumbChanged(element.offsetLeft + element.offsetWidth / 2 + 'px', this.countPart(element, orientation))
+  //   } else if (element === this.thumbExtra){
+  //     this.onExtraThumbChanged(this.thumbExtra.offsetLeft + this.thumbExtra.offsetWidth / 2 + 'px', this.countPart(this.thumbExtra, orientation))
+  //   }
   }
 
-  setInitialPos(part: number, lineWidth: number, orientation: string): void{
-    this.countInitialPos(this.thumb, part, lineWidth, orientation)
+  setInitialPos(part: number, lineWidth: number): void{
+    this.countInitialPos(this.thumb, part, lineWidth)
   }
 
-  setExtraInitialPos(part: number, lineWidth: number, orientation: string): void{
-    this.countInitialPos(this.thumbExtra, part, lineWidth, orientation)
+  setExtraInitialPos(part: number, lineWidth: number): void{
+    this.countInitialPos(this.thumbExtra, part, lineWidth)
   }
 
   countPartForHorizontal = (element: HTMLElement, lineLeft: number, lineWidth: number): number => {
@@ -107,7 +106,7 @@ class Thumb{
 
   onMouseMove = ( element: HTMLElement, leftStop: number, countPart:(element: HTMLElement, lineParam: number, lineWidth: number) => number, lineParam: number, lineWidth: number): void => {
     const rightStop = lineWidth
-
+    
     if (leftStop < 0) {
       leftStop = 0
     } else if (leftStop > rightStop) {
@@ -159,6 +158,7 @@ class Thumb{
     document.removeEventListener('mousemove', this.boundOnMouseMove)
     document.removeEventListener('mouseup', this.boundOnMouseUp)
   }
+
 
 
   bindThumbChangedPos(callback: (thumbCenterProp: string, part: number) => void ): void {
