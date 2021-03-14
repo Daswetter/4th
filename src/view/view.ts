@@ -4,6 +4,7 @@ import { Thumb } from './thumb/thumb'
 import { Progress } from './progress/progress'
 import { Scale } from './scale/scale'
 import { Satellite } from './satellite/satellite'
+import { Input } from './input/input'
 
 import './../interface/IOptions'
 import './IView'
@@ -16,6 +17,7 @@ class View implements IView {
   public progress!: Progress 
   public scale!: Scale 
   public satellite!: Satellite
+  public input!: Input
 
   private part!: number
   private partExtra!: number
@@ -60,9 +62,9 @@ class View implements IView {
     } else if (this.options.orientation === 'horizontal'){
       this.line.setClickListenerForHorizontal()
     }
-    this.line.bindLineClicked(this.changeThumbPosition)
+    this.line.bindLineClicked(this.changeThumbsPosition)
 
-    window.onresize = this.windowWasResized
+    
   }
 
   initThumb = () : void => {
@@ -107,7 +109,7 @@ class View implements IView {
   initScale = (scaleElements: number[]): void => {
     this.scale = new Scale()
     this.line.returnAsHTML().after(this.scale.returnAsHTMLElement())
-    this.scale.bindScaleWasClicked(this.changeThumbPosition)
+    this.scale.bindScaleWasClicked(this.changeThumbsPosition)
     this.scale.setScaleValues(scaleElements)
     
     if (this.options.orientation === 'vertical') {
@@ -120,21 +122,31 @@ class View implements IView {
     this.line.returnAsHTML().append(this.progress.returnAsHTMLElement())
   }
 
+  initInput = (): void => {
+    this.input = new Input()
+    this.line.returnAsHTML().after(this.input.returnAsHTMLElement())
+  }
+
 
 
   setInitialPos(part: () => number): void {
-    this.thumb.setInitialPos(part(), this.line.width())
+    this.thumb.setInitialPosForHorizontal(part(), this.line.width())
+    if (this.options.orientation === 'vertical'){
+      this.thumb.setInitialPosForVertical(part(), this.line.width())
+    }
   }
 
   setExtraInitialPos(part: () => number): void {
-    this.thumb.setExtraInitialPos(part(), this.line.width())
+    this.thumb.setExtraInitialPosForHorizontal(part(), this.line.width())
+    if (this.options.orientation === 'vertical'){
+      this.thumb.setExtraInitialPosForVertical(part(), this.line.width())
+    }
   }
 
   thumbPosWasChanged = (thumbPos: string, part: number ): void => {
     this.options.progress ? this.progress.setThumbPos(thumbPos, this.line.width()) : ''
     this.options.satellite ? this.satellite.setPos(thumbPos) : ''
     
-    this.part = part
     this.onPartChanged(part)
   }
   extraThumbPosWasChanged = (thumbCenterProp: string, part: number): void => {
@@ -142,20 +154,22 @@ class View implements IView {
     this.options.progress ? this.progress.setExtraThumbProp(thumbCenterProp, this.line.width()) : ''
     this.options.satellite ? this.satellite.setExtraPos(thumbCenterProp) : ''
 
-    this.partExtra = part
+    
     this.onExtraPartChanged(part)
   }
-  currentWasSentFromModel(res: number): void{
+  currentWasSentFromModel(res: number, part: number): void{
+    this.part = part
     console.log('current', res)
     this.options.satellite ? this.satellite.setValue(res): ''
     
   }
-  extraCurrentWasSentFromModel(res: number): void{
+  extraCurrentWasSentFromModel(res: number, part: number): void{
+    this.partExtra = part
     console.log('extra current', res)
     this.options.satellite ? this.satellite.setExtraValue(res): ''
   }
 
-  changeThumbPosition = (part: number): void => {
+  changeThumbsPosition = (part: number): void => {
     if (this.options.thumbType === 'double'){
       this.thumb.changeThumbsPositions(part, this.line.width())
     } else if (this.options.thumbType === 'single'){
@@ -178,9 +192,15 @@ class View implements IView {
       }
     }
 
-    this.changeThumbPosition(this.part)
-  }
+    console.log('this.part', this.part);
+    
+    this.thumb.changeThumbPosition(this.part, this.line.width())
 
+    if (this.options.thumbType === 'double'){
+      this.thumb.changeThumbExtraPosition(this.partExtra, this.line.width())
+  
+    }
+  }
   
   bindSendPartToModel(callback: (arg0: number) => void): void {
     this.onPartChanged = callback;

@@ -9,8 +9,8 @@ interface IModel {
   setInitialPart(): number
   setInitialPartForExtra(): number
   countScaleElements(): Array<number>
-  bindCurrentChanged(callback: (arg0: number) => void): void
-  bindExtraCurrentChanged(callback: (arg0: number) => void): void
+  bindCurrentChanged(callback: (arg0: number, arg1: number) => void): void
+  bindExtraCurrentChanged(callback: (arg0: number, arg1: number) => void): void
   getOptions(): IOptions
 
 }

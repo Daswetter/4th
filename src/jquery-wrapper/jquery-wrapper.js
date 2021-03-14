@@ -15,6 +15,7 @@ import { Presenter } from './../presenter/presenter'
       satellite: true,
       scale: true,
       progress: true,
+      input: true
     }, options);
     new Presenter(new View(initE, options), new Model(options))
   }

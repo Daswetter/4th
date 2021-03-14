@@ -2,8 +2,8 @@ import './../interface/IOptions'
 import { IModel } from './IModel'
 
 class Model implements IModel{
-  public onCurrentChanged!: (arg0: number) => void
-  public onExtraCurrentChanged!: (arg0: number) => void
+  public onCurrentChanged!: (arg0: number, arg1: number) => void
+  public onExtraCurrentChanged!: (arg0: number, arg1: number) => void
   
   constructor(private options: IOptions){
     this.options = options
@@ -22,11 +22,11 @@ class Model implements IModel{
   }
   setCurrentValue(part: number): void {
     const currentValue = this.countCurrentValue(part)
-    this.onCurrentChanged(currentValue)
+    this.onCurrentChanged(currentValue, part)
   }
   setCurrentValueForExtra(part: number): void {
     const currentValue = this.countCurrentValue(part)
-    this.onExtraCurrentChanged(currentValue)
+    this.onExtraCurrentChanged(currentValue, part)
   }
 
   countInitialPart = (initial: number): number => {
@@ -83,10 +83,10 @@ class Model implements IModel{
     return (Math.round( value * Math.pow(10, decimal) ) / Math.pow(10, decimal))
   }
 
-  bindCurrentChanged(callback: (arg0: number) => void): void {
+  bindCurrentChanged(callback: (arg0: number, arg1: number) => void): void {
     this.onCurrentChanged = callback;
   }
-  bindExtraCurrentChanged(callback: (arg0: number) => void): void {
+  bindExtraCurrentChanged(callback: (arg0: number, arg1: number) => void): void {
     this.onExtraCurrentChanged = callback;
   }
 }

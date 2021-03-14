@@ -23,11 +23,11 @@ class Presenter{
     this.View.setInitialPos(this.Model.setInitialPart)
   }
 
-  sendResultTo = (res: number): void => {
-    this.View.currentWasSentFromModel(res)
+  sendResultTo = (res: number, part: number): void => {
+    this.View.currentWasSentFromModel(res, part)
   }
-  sendExtraResultTo = (res: number): void => {
-    this.View.extraCurrentWasSentFromModel(res)
+  sendExtraResultTo = (res: number, part: number): void => {
+    this.View.extraCurrentWasSentFromModel(res, part)
   }
 
   sendPartTo = (n: number) : void => {   
