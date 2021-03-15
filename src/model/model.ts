@@ -33,7 +33,7 @@ class Model implements IModel{
     const min = this.options.min
     const max = this.options.max
     // const stepSize = this.options.stepSize
-
+    
     let part = (currentValue - min) / (max - min)
     if (currentValue > max){
       part = 1

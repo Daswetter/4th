@@ -22,11 +22,11 @@ class View implements IView {
   private part!: number
   private partExtra!: number
   
-  private onPartChanged!: (arg0: number) => void
-  private onExtraPartChanged!: (arg0: number) => void
+  private partChanged!: (arg0: number) => void
+  private extraPartChanged!: (arg0: number) => void
 
-  private onValueChanged!: (arg0: number) => void
-  private onExtraValueChanged!: (arg0: number) => void
+  private valueChanged!: (arg0: number) => void
+  private extraValueChanged!: (arg0: number) => void
 
   private options!: IOptions
 
@@ -42,10 +42,10 @@ class View implements IView {
     this.initThumb()
     
     this.options.satellite ? this.initSatellite(): ''
-    this.options.scale ? this.initScale(scaleElements): ''
+    
     this.options.progress ? this.initProgress() : ''
     this.options.input ? this.initInput() : ''
-    
+    this.options.scale ? this.initScale(scaleElements): ''
   }
   initWrapper = (): void => {
     this.wrapper = new Wrapper(this.initElement)
@@ -64,7 +64,12 @@ class View implements IView {
     } else if (this.options.orientation === 'horizontal'){
       this.line.setClickListenerForHorizontal()
     }
-    this.line.bindLineClicked(this.changeThumbsPosition)
+
+    this.line.bindLineClicked(this.partChanged)
+    if (this.options.thumbType === 'double'){
+      this.line.bindLineClicked(this.changePositionForTheNearest)
+    }
+    
 
     
   }
@@ -86,8 +91,8 @@ class View implements IView {
         this.thumb.setEventListenerVerticalForThumbExtra(this.line.bottom(), this.line.width())
       }
     }
-    this.thumb.bindThumbChangedPos(this.sendPartToModel)
-    this.thumb.bindExtraThumbChangedPos(this.sendExtraPartToModel)
+    this.thumb.bindThumbChangedPos(this.partChanged)
+    this.thumb.bindExtraThumbChangedPos(this.extraPartChanged)
     
   }
 
@@ -111,12 +116,16 @@ class View implements IView {
   initScale = (scaleElements: number[]): void => {
     this.scale = new Scale()
     this.line.returnAsHTML().after(this.scale.returnAsHTMLElement())
-    this.scale.bindScaleWasClicked(this.changeThumbsPosition)
+    this.scale.bindScaleWasClicked(this.partChanged)
+    if (this.options.thumbType === 'double'){
+      this.scale.bindScaleWasClicked(this.changePositionForTheNearest)
+    }
     this.scale.setScaleValues(scaleElements)
     
     if (this.options.orientation === 'vertical') {
       this.scale.rotateScaleElement()
     }
+    
   }
 
   initProgress = (): void => {
@@ -127,7 +136,10 @@ class View implements IView {
   initInput = (): void => {
     this.input = new Input()
     this.line.returnAsHTML().after(this.input.returnAsHTMLElement())
-    this.input.bindValueWasChanged(this.inputWasChanged)
+    this.input.bindValueWasChanged(this.valueChanged)
+    if (this.options.thumbType === 'double'){
+      this.input.bindValueWasChanged(this.changePositionForTheNearest)
+    }
   }
 
 
@@ -146,51 +158,33 @@ class View implements IView {
     }
   }
 
-  sendPartToModel = (part: number ): void => {
-    this.onPartChanged(part)
-  }
-
-  sendExtraPartToModel = (part: number): void => {
-    this.onExtraPartChanged(part)
-  }
   currentWasSentFromModel(res: number, part: number): void{
     console.log('current', res)
-    this.changeThumbPosition(part)
-    this.options.satellite ? this.satellite.setValue(res): ''
+    this.thumb.changeThumbPosition(part, this.line.width())
     this.options.progress ? this.progress.setThumbPos(part, this.line.width()) : ''
-    this.options.satellite ? this.satellite.setPos(part, this.line.width()) : ''
+    this.options.satellite ? this.satellite.setPos(part, res, this.line.width()) : ''
+    this.options.input ? this.input.displayCurrentValue(res) : ''
+
     
   }
   extraCurrentWasSentFromModel(res: number, part: number): void{
     console.log('extra current', res)
-    this.changeThumbExtraPosition(part)
-    this.options.satellite ? this.satellite.setExtraValue(res): ''
-    this.options.progress ? this.progress.setExtraThumbProp(part, this.line.width()) : ''
-    this.options.satellite ? this.satellite.setExtraPos(part, this.line.width()) : ''
-
-  }
-
-  changeThumbsPosition = (part: number): void => {
-    
-    // if (this.options.thumbType === 'double'){
-    //   this.thumb.changeThumbsPositions(part, this.line.width())
-    // } else if (this.options.thumbType === 'single'){
-    //   this.thumb.changeThumbPosition(part, this.line.width())
-    // }
-    this.onPartChanged(part)
-  }
-
-  changeThumbPosition = (part: number): void => {
-    this.thumb.changeThumbPosition(part, this.line.width())
-  }
-
-  changeThumbExtraPosition = (part: number): void => {
     this.thumb.changeThumbExtraPosition(part, this.line.width())
+    this.options.progress ? this.progress.setExtraThumbProp(part, this.line.width()) : ''
+    this.options.satellite ? this.satellite.setExtraPos(part, res, this.line.width()) : ''
+
   }
 
-  inputWasChanged = (current: number): void => {
-    this.onValueChanged(current)
+  changePositionForTheNearest = (value: number): void => {
+
+    if (Math.abs(this.thumb.currentPart(this.line.width()) - value) > Math.abs(this.thumb.currentExtraPart(this.line.width()) - value)){
+      this.extraPartChanged(value)
+    } else {
+      this.partChanged(value)
+    }
   }
+
+
 
   // windowWasResized = (event: Event): void => {
 
@@ -217,18 +211,20 @@ class View implements IView {
   //   }
   // }
   
+
+
   bindSendPartToModel(callback: (arg0: number) => void): void {
-    this.onPartChanged = callback;
+    this.partChanged = callback;
   }
   bindSendExtraPartToModel(callback: (arg0: number) => void): void {
-    this.onExtraPartChanged = callback;
+    this.extraPartChanged = callback;
   }
 
   bindSendValueToModel(callback: (arg0: number) => void): void {
-    this.onValueChanged = callback;
+    this.valueChanged = callback;
   }
   bindSendExtraValueToModel(callback: (arg0: number) => void): void {
-    this.onExtraValueChanged = callback;
+    this.extraValueChanged = callback;
   }
 }
 

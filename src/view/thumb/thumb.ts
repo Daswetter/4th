@@ -122,15 +122,11 @@ class Thumb{
     
     if (leftStop < 0) {
       leftStop = 0
-      console.log('here');
-      
       element.style.left = - element.offsetWidth / 2 + 'px'
     } else if (leftStop > rightStop) {
       leftStop = rightStop
       element.style.left = lineWidth + 'px'
     }
-    console.log('leftStop', leftStop)
-    
     // element.style.left = leftStop - element.offsetWidth / 2 + 'px'
     // const elementPosition = element.offsetLeft + element.offsetWidth / 2 + 'px'
     
@@ -181,8 +177,14 @@ class Thumb{
     document.removeEventListener('mousemove', this.boundOnMouseMove)
     document.removeEventListener('mouseup', this.boundOnMouseUp)
   }
-
-
+  currentPart = (lineWidth: number): number => {
+    const part = (this.thumb.offsetLeft + this.thumb.offsetWidth / 2 ) / lineWidth
+    return part
+  }
+  currentExtraPart = (lineWidth: number): number => {
+    const part = (this.thumbExtra.offsetLeft + this.thumbExtra.offsetWidth / 2 ) / lineWidth
+    return part
+  }
 
   bindThumbChangedPos(callback: (part: number) => void ): void {
     this.onThumbChanged = callback;

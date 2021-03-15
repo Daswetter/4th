@@ -7,7 +7,7 @@ interface IView {
   // thumbPosWasChanged(part: number): void
   currentWasSentFromModel(res: number, part: number): void
   extraCurrentWasSentFromModel(res: number, part: number): void
-  changeThumbsPosition (dist: number, part: number): void
+  // changeThumbsPosition (dist: number, part: number): void
 
   // scaleElements: number[]
   // setScaleElements(elements: Array<number>): void

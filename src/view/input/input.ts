@@ -28,6 +28,10 @@ class Input{
     this.onValueWasChanged(value)
   }
 
+  displayCurrentValue = (res: number): void => {
+    this.input.value = res + ''
+  }
+
   bindValueWasChanged(callback: (arg0:number) => void): void {
     this.onValueWasChanged = callback;
   }
