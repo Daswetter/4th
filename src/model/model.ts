@@ -24,8 +24,31 @@ class Model implements IModel{
     const currentValue = this.countCurrentValue(part)
     this.onCurrentChanged(currentValue, part)
   }
+  
   setCurrentValueForExtra(part: number): void {
     const currentValue = this.countCurrentValue(part)
+    this.onExtraCurrentChanged(currentValue, part)
+  }
+  countCurrentPart(currentValue: number): number {
+    const min = this.options.min
+    const max = this.options.max
+    // const stepSize = this.options.stepSize
+
+    let part = (currentValue - min) / (max - min)
+    if (currentValue > max){
+      part = 1
+    } else if (currentValue < min){
+      part = 0
+    }
+    return part
+  }
+  setCurrentPart(currentValue: number): void {
+    const part = this.countCurrentPart(currentValue)
+    this.onCurrentChanged(currentValue, part)
+  }
+  
+  setCurrentPartForExtra(currentValue: number): void {
+    const part = this.countCurrentPart(currentValue)
     this.onExtraCurrentChanged(currentValue, part)
   }
 

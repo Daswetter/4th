@@ -14,6 +14,7 @@ describe('Model', () => {
       scale: true,
       orientation: 'vertical',
       thumbType: 'double',
+      input: true
     }
     _ = new Model(options)
   })
@@ -39,6 +40,7 @@ describe('Model', () => {
         scale: true,
         orientation: 'vertical',
         thumbType: 'double',
+        input: true
       }
       _ = new Model(options)
       expect(_.countInitialPart(options.initial[0])).toBe(0.5)
@@ -88,6 +90,7 @@ describe('Model', () => {
         scale: true,
         orientation: 'vertical',
         thumbType: 'double',
+        input: true
       }
       _ = new Model(options)
       const result = [0, 25, 50, 75, 100]
@@ -119,6 +122,7 @@ describe('Model', () => {
         scale: true,
         orientation: 'vertical',
         thumbType: 'double',
+        input: true
       }
       _ = new Model(options)
       expect(_.convertStepSizeToDecimal(0.01)).toBe(2)
@@ -134,6 +138,7 @@ describe('Model', () => {
         scale: true,
         orientation: 'vertical',
         thumbType: 'double',
+        input: true
       }
       _ = new Model(options)
       expect(_.convertStepSizeToDecimal(1000)).toBe(-3)
@@ -149,6 +154,7 @@ describe('Model', () => {
         scale: true,
         orientation: 'vertical',
         thumbType: 'double',
+        input: true
       }
       _ = new Model(options)
       expect(_.convertStepSizeToDecimal(5)).toBeCloseTo(0)

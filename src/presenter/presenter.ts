@@ -10,6 +10,8 @@ class Presenter{
 
     this.View.bindSendPartToModel(this.sendPartTo)
     this.View.bindSendExtraPartToModel(this.sendExtraPartTo)
+    this.View.bindSendValueToModel(this.sendValueTo)
+    this.View.bindSendExtraValueToModel(this.sendExtraValueTo)
 
     
 
@@ -35,6 +37,13 @@ class Presenter{
   }
   sendExtraPartTo = (n: number) : void => {   
     this.Model.setCurrentValueForExtra(n)
+  }
+
+  sendValueTo = (n: number) : void => { 
+    this.Model.setCurrentPart(n)
+  }
+  sendExtraValueTo = (n: number) : void => {   
+    this.Model.setCurrentPartForExtra(n)
   }
 
 }

@@ -2,6 +2,8 @@ import { View } from './../view/view'
 import { Model } from './../model/model'
 import { Presenter } from './../presenter/presenter'
 
+import jQuery from 'jquery'
+
 (function($){
   $.fn.customRangeSlider = function(options){
     const initE = this[0]

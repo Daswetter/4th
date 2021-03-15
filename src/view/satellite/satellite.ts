@@ -35,15 +35,15 @@ class Satellite {
     this.rotateElement(this.satelliteExtra)
   }
   
-  definePosition = (element: HTMLElement, position: string): void => {
-    element.style.left = position
+  definePosition = (element: HTMLElement, part: number, lineWidth: number): void => {
+    element.style.left = part * lineWidth + 'px'
   }
 
-  setPos = (pos: string): void => {
-    this.definePosition(this.satellite, pos)
+  setPos = (part: number,  lineWidth: number): void => {
+    this.definePosition(this.satellite, part, lineWidth)
   }
-  setExtraPos = (pos: string): void => {
-    this.definePosition(this.satelliteExtra, pos)
+  setExtraPos = (part: number, lineWidth: number): void => {
+    this.definePosition(this.satelliteExtra, part, lineWidth)
   }
 
   defineValue = (element: HTMLElement, value: number): void => {

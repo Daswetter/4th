@@ -89,3 +89,15 @@ $line-border-radius: 10px;
   text-align: center;
   padding: 0 3px;
 }
+
+.range-slider__input{
+  max-width: 50px;
+  background: oldlace;
+  font-family: Roboto, sans-serif;
+  border: 2px salmon solid ;
+  border-radius: 5px;
+  margin: 10px;
+  &:focus {
+    outline: none;
+  }
+}

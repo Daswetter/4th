@@ -5,6 +5,10 @@ interface IModel {
   countCurrentValue(part: number): number
   setCurrentValueForExtra(part: number): void
 
+  setCurrentPart(part: number): void
+  countCurrentPart(part: number): number
+  setCurrentPartForExtra(part: number): void
+
   countInitialPart(initial: number): number
   setInitialPart(): number
   setInitialPartForExtra(): number

@@ -1,7 +1,7 @@
 class Progress{
   public progress!: HTMLElement 
-  private extraThumbPos = '0px'
-  private thumbPos = '0px'
+  private partExtra = 0
+  private part = 0
 
   constructor() {
     this.progress = this.init(this.progress)
@@ -15,23 +15,23 @@ class Progress{
   returnAsHTMLElement = (): HTMLElement => {
     return this.progress
   }
-  setThumbPos = (thumbPos: string, lineWidth: number) :void => {
-    this.thumbPos = thumbPos
+  setThumbPos = (part: number, lineWidth: number) :void => {
+    this.part = part
     this.setProgress(lineWidth)
   } 
-  setExtraThumbProp = (extraThumbPos: string, lineWidth: number) :void => {
-    this.extraThumbPos = extraThumbPos
+  setExtraThumbProp = (partExtra: number, lineWidth: number) :void => {
+    this.partExtra = partExtra
     this.setProgress(lineWidth)
   } 
 
   setProgress = (lineWidth: number): void => {
-    if (parseInt(this.thumbPos) < parseInt(this.extraThumbPos)){
-      this.progress.style.left = this.thumbPos
-      this.progress.style.right = lineWidth - parseInt(this.extraThumbPos) + 'px'
+    if (this.part < this.partExtra){
+      this.progress.style.left = this.part * lineWidth + 'px'
+      this.progress.style.right = lineWidth - this.partExtra * lineWidth + 'px'
       
     } else {
-      this.progress.style.left = parseInt(this.extraThumbPos) + 'px'
-      this.progress.style.right = lineWidth - parseInt(this.thumbPos) + 'px'
+      this.progress.style.left = this.partExtra * lineWidth + 'px'
+      this.progress.style.right = lineWidth - this.part * lineWidth + 'px'
     }
   }
 }

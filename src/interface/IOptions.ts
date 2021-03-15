@@ -8,4 +8,5 @@ interface IOptions {
   satellite: boolean,
   scale: boolean,
   progress: boolean,
+  input: boolean
 }
