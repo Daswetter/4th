@@ -102,10 +102,10 @@ class Thumb{
   }
 
   countPartForHorizontal = (lineLeft: number, lineWidth: number, event: MouseEvent): number => {
-    let part = (event.clientX - lineLeft) / lineWidth
-    if (event.clientX < lineLeft) {
+    let part = (event.pageX - lineLeft) / lineWidth
+    if (event.pageX < lineLeft) {
       part = 0
-    } else if (event.clientX > lineLeft + lineWidth){
+    } else if (event.pageX > lineLeft + lineWidth){
       part = 1
     }
     
@@ -113,12 +113,20 @@ class Thumb{
   }
 
   countPartForVertical = (lineBottom: number, lineWidth: number, event: MouseEvent): number => {
-    const part = (event.clientX - lineBottom) / lineWidth
+    let part = (- event.pageY + lineBottom) / lineWidth
+    if (event.pageY > lineBottom) {
+      part = 0
+    } else if (event.pageY < lineBottom - lineWidth){
+      part = 1
+    }
+    console.log('part', part);
+    
     return part
   }
 
   onMouseMove = ( element: HTMLElement, leftStop: number, countPart:(lineParam: number, lineWidth: number, event: MouseEvent) => number, lineParam: number, lineWidth: number, event: MouseEvent): void => {
     const rightStop = 1
+    console.log('leftstop1', leftStop);
     
     if (leftStop < 0) {
       leftStop = 0
@@ -127,8 +135,6 @@ class Thumb{
       leftStop = rightStop
       element.style.left = lineWidth + 'px'
     }
-    // element.style.left = leftStop - element.offsetWidth / 2 + 'px'
-    // const elementPosition = element.offsetLeft + element.offsetWidth / 2 + 'px'
     
     if (element === this.thumb){
       this.onThumbChanged(countPart(lineParam, lineWidth, event))
@@ -150,7 +156,6 @@ class Thumb{
 
   changeElementPosition = (element: HTMLElement, part: number, lineWidth: number): void => {
     element.style.left = part * lineWidth - element.offsetWidth / 2 + 'px'
-    // callbackFn(part)
   }
 
   

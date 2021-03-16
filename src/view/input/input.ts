@@ -1,20 +1,32 @@
 
 class Input{
   public input!: HTMLInputElement
+  public inputExtra!: HTMLInputElement
   public onValueWasChanged!: (value: number) => void
+  public onValueExtraWasChanged!: (value: number) => void
 
   constructor(){
-    this.init()
+    this.input = this.init(this.input)
     this.eventListener(this.input, this.sendValue.bind(null, this.input))
   }
 
-  init = (): void => {
-    this.input = document.createElement('input')
-    this.input.classList.add('range-slider__input')
+  init = (element: HTMLInputElement): HTMLInputElement => {
+    element = document.createElement('input')
+    element.classList.add('range-slider__input')
+    return element
   }
 
-  returnAsHTMLElement = (): HTMLElement => {
+  initInputExtra = (): void => {
+    this.inputExtra = this.init(this.inputExtra)
+    this.eventListener(this.inputExtra, this.sendValueForExtra.bind(null, this.inputExtra))
+  }
+
+  returnAsHTML = (): HTMLElement => {
     return this.input
+  }
+
+  returnInputExtraAsHTML = (): HTMLElement => {
+    return this.inputExtra
   }
 
   eventListener = (element: HTMLInputElement, fn: () => void): void => {
@@ -27,13 +39,25 @@ class Input{
     const value = +element.value
     this.onValueWasChanged(value)
   }
+  sendValueForExtra = (element: HTMLInputElement): void => {
+    const value = +element.value
+    this.onValueExtraWasChanged(value)
+  }
 
   displayCurrentValue = (res: number): void => {
     this.input.value = res + ''
   }
 
+  verticalMod = (): void => {
+    this.input.style.transform = 'rotate(90deg)'
+    this.inputExtra.style.transform = 'rotate(90deg)'
+  }
+
   bindValueWasChanged(callback: (arg0:number) => void): void {
     this.onValueWasChanged = callback;
+  }
+  bindValueExtraWasChanged(callback: (arg0:number) => void): void {
+    this.onValueExtraWasChanged = callback;
   }
 }
 

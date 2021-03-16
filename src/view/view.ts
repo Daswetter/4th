@@ -135,10 +135,17 @@ class View implements IView {
 
   initInput = (): void => {
     this.input = new Input()
-    this.line.returnAsHTML().after(this.input.returnAsHTMLElement())
+    this.line.returnAsHTML().after(this.input.returnAsHTML())
     this.input.bindValueWasChanged(this.valueChanged)
     if (this.options.thumbType === 'double'){
-      this.input.bindValueWasChanged(this.changePositionForTheNearest)
+      
+      this.input.initInputExtra()
+      this.input.returnAsHTML().after(this.input.returnInputExtraAsHTML())
+      this.input.bindValueExtraWasChanged(this.extraValueChanged)
+
+    }
+    if (this.options.orientation === 'vertical'){
+      this.input.verticalMod()
     }
   }
 
