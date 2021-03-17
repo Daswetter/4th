@@ -3,19 +3,15 @@ $line-height: 10px;
 $line-border-radius: 10px;
 
 .range-slider__wrapper{
+  
   width: 60%;
-  margin: 200px auto;
+  margin: 50px auto;
 }
 
-.js-slider2 {
-  .range-slider__wrapper{
-    width: 200px;
-    margin: 200px auto;
-  }
-}
 
 .range-slider__line{
   position: relative;
+  width: 100%;
   // margin: 0 20px;
   height: $line-height;
   border-radius: $line-border-radius;
@@ -24,7 +20,7 @@ $line-border-radius: 10px;
 }
 .range-slider__thumb{
   position: absolute;
-  top: -$thumb-height/4;
+  // top: -$thumb-height/4;
   width: 20px;
   height: $thumb-height;
   background: indigo;
@@ -35,7 +31,7 @@ $line-border-radius: 10px;
 }
 .range-slider__thumbExtra {
   position: absolute;
-  top: -$thumb-height/4;
+  // top: -$thumb-height/4;
   width: 20px;
   height: $thumb-height;
   border-radius: 50%;
@@ -44,12 +40,9 @@ $line-border-radius: 10px;
   background: rgb(23, 19, 218);
 } 
 .range-slider__progress{
-  position: absolute;
-  top: 0;
   height: $line-height;
   background: rgb(153, 60, 153);
   border-radius: $line-border-radius;
-  z-index: 1;
 }
 
 .js-slider3 {
@@ -81,7 +74,6 @@ $line-border-radius: 10px;
 
 .range-slider__satellite{
   position: absolute;
-  top: -30px;
   height: 20px;
   min-width: 20px;
   background: palegoldenrod;

@@ -12,12 +12,15 @@ class Wrapper implements IWrapper{
     this.wrapper = document.createElement('div')
     this.wrapper.classList.add('range-slider__wrapper')
     this.initElement.append(this.wrapper)
+    this.wrapper.style.display = 'flex'
+    this.wrapper.style.flexDirection = 'column'
   }
   returnAsHTML = (): HTMLElement => {
     return this.wrapper
   }
   setOrientation = (): void => {
-    this.wrapper.style.transform = 'rotate(-90deg)'
+    this.wrapper.style.flexDirection = 'row'
+    this.wrapper.style.alignItems = 'flex-start'
   }
 }
 

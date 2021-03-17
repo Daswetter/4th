@@ -10,6 +10,8 @@ class Progress{
   init = (element: HTMLElement): HTMLElement => {
     element = document.createElement('div')
     element.classList.add('range-slider__progress')
+    element.style.position = 'absolute'
+    element.style.zIndex = '1'
     return element
   }
   returnAsHTMLElement = (): HTMLElement => {
@@ -19,12 +21,26 @@ class Progress{
     this.part = part
     this.setProgress(lineWidth)
   } 
+
   setExtraThumbProp = (partExtra: number, lineWidth: number) :void => {
     this.partExtra = partExtra
     this.setProgress(lineWidth)
+  }
+
+  setThumbPosForVertical = (part: number, lineHeight: number) :void => {
+    this.part = part
+    
+    
+    this.setProgressForVertical(lineHeight)
   } 
+  setThumbExtraPosForVertical = (partExtra: number, lineHeight: number) :void => {
+    this.partExtra = partExtra
+    this.setProgressForVertical(lineHeight)
+  } 
+   
 
   setProgress = (lineWidth: number): void => {
+    
     if (this.part < this.partExtra){
       this.progress.style.left = this.part * lineWidth + 'px'
       this.progress.style.right = lineWidth - this.partExtra * lineWidth + 'px'
@@ -33,6 +49,28 @@ class Progress{
       this.progress.style.left = this.partExtra * lineWidth + 'px'
       this.progress.style.right = lineWidth - this.part * lineWidth + 'px'
     }
+  }
+
+  setProgressForVertical = (lineHeight: number): void => {
+    this.progress.style.height = ''
+    console.log('part', this.part);
+    console.log('part extra', this.partExtra);
+    
+    if (this.part < this.partExtra){
+
+      this.progress.style.bottom = this.part * lineHeight + 'px'
+      this.progress.style.top = lineHeight - this.partExtra * lineHeight + 'px'
+      
+    } else {
+      this.progress.style.bottom = this.partExtra * lineHeight + 'px'
+      this.progress.style.top = lineHeight - this.part * lineHeight + 'px'
+    }
+  }
+
+  setVerticalMod = (): void => {
+    
+    this.progress.style.transform = 'rotate(90deg)'
+
   }
 }
 

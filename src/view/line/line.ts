@@ -25,6 +25,10 @@ class Line{
   width(): number {
     return this.line.offsetWidth
   }
+  
+  height(): number {
+    return this.line.offsetHeight
+  }
 
   left(): number {
     const left = this.line.getBoundingClientRect().left
@@ -35,22 +39,24 @@ class Line{
     return bottom
   }
  
-  countPart = (dist: number): number => {
-    return dist / this.width()
-  }
   
   moveThumbByClickingForVertical = (event: MouseEvent) : void => {
     const distFromBeginToClick = - event.clientY + this.line.getBoundingClientRect().bottom
-    const part = this.countPart(distFromBeginToClick)
+    const part = distFromBeginToClick / this.line.offsetHeight
     this.onLineClicked(part)
   }
 
   moveThumbByClickingForHorizontal = (event: MouseEvent) : void => {
     const distFromBeginToClick = event.clientX - this.left()
-    const part = this.countPart(distFromBeginToClick)
+    const part = distFromBeginToClick / this.width()
     this.onLineClicked(part)
   }
 
+  verticalMod = (): void => {
+    const height = this.line.offsetHeight + 'px';
+    const width = this.line.offsetWidth + 'px';
+    [this.line.style.width, this.line.style.height] = [height, width]
+  }
 
   bindLineClicked(callback: (arg0:number) => void): void {
     this.onLineClicked = callback;

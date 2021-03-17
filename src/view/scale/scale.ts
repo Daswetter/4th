@@ -42,7 +42,10 @@ class Scale{
   rotateScaleElement = (): void => {
     this.scaleHTMLElements.forEach( (elem: HTMLElement): string => elem.style.transform = 'rotate(90deg)')
   }
-
+  setVerticalMod = (): void => {
+    this.scale.style.flexDirection = 'column-reverse'
+    this.scale.style.alignSelf = 'stretch'
+  }
   bindScaleWasClicked = (callback: (arg0: number) => void): void => {
     this.onScaleWasClicked = callback;
   }
