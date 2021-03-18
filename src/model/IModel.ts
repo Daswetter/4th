@@ -9,9 +9,9 @@ interface IModel {
   countCurrentPart(part: number): number
   setCurrentPartForExtra(part: number): void
 
-  countInitialPart(initial: number): number
-  setInitialPart(): number
-  setInitialPartForExtra(): number
+  // countInitialPart(initial: number): number
+  // setInitialPart(): number
+  // setInitialPartForExtra(): number
   countScaleElements(): Array<number>
   bindCurrentChanged(callback: (arg0: number, arg1: number) => void): void
   bindExtraCurrentChanged(callback: (arg0: number, arg1: number) => void): void

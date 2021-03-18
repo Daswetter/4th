@@ -52,26 +52,6 @@ class Model implements IModel{
     this.onExtraCurrentChanged(currentValue, part)
   }
 
-  countInitialPart = (initial: number): number => {
-    const min = this.options.min
-    const max = this.options.max
-
-    if (initial > max || initial < min){
-      throw new Error('Initial value is bigger than max value or smaller than min value')
-    }
-    const initialPart = (initial - min) / Math.abs( max - min )
-    
-    return initialPart
-  }
-
-  setInitialPart = (): number => {
-    return this.countInitialPart(this.options.initial[0])
-  }
-
-  setInitialPartForExtra = (): number => {
-    return this.countInitialPart(this.options.initial[1])
-  }
-
   countScaleElements = (): Array<number> => {
     const scaleElements = []
     const stepSize = this.options.stepSize

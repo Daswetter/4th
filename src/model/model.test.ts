@@ -28,24 +28,7 @@ describe('Model', () => {
     })
   })
 
-  describe('Initial part', () => {
-    test('should return right part', () => {
-      options = {
-        min: 0,
-        max: 200,
-        initial: [100],
-        stepSize: 100,
-        progress: true,
-        satellite: true,
-        scale: true,
-        orientation: 'vertical',
-        thumbType: 'double',
-        input: true
-      }
-      _ = new Model(options)
-      expect(_.countInitialPart(options.initial[0])).toBe(0.5)
-    })
-  })
+  
 
   // test('should throw error', () => {
   //   const options = {

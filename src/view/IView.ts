@@ -2,8 +2,8 @@ import '../interface/IOptions'
 
 interface IView {
   initView(scaleElements: number[]): void
-  setInitialPos(part: () => number): void
-  setExtraInitialPos(part: () => number): void
+  // setInitialPos(part: () => number): void
+  // setExtraInitialPos(part: () => number): void
   // thumbPosWasChanged(part: number): void
   currentWasSentFromModel(res: number, part: number): void
   extraCurrentWasSentFromModel(res: number, part: number): void

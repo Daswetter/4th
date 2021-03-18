@@ -79,27 +79,6 @@ class Thumb{
     this.onMouseDown(element, event, this.onMouseMoveForVertical, shiftY, lineBottom, lineHeight)
   }
   
-  countInitialPos = (element: HTMLElement, part: number, lineWidth: number, countPart: (element: HTMLElement, part: number, lineWidth: number) => number, callbackFn: (thumbCenterProp: string, part: number) => void ): void => {
-    // element.style.left =  lineWidth * part - element.offsetWidth / 2 + 'px'
-    // callbackFn(element.offsetLeft + element.offsetWidth / 2 + 'px', countPart(element, part, lineWidth))
-    
-  }
-
-  setInitialPosForHorizontal(part: number, lineWidth: number): void{
-    // this.countInitialPos(this.thumb, part, lineWidth, this.countPartForHorizontal, this.onThumbChanged )
-  }
-
-  setExtraInitialPosForHorizontal(part: number, lineWidth: number): void{
-    // this.countInitialPos(this.thumbExtra, part, lineWidth, this.countPartForHorizontal, this.onExtraThumbChanged )
-  }
-
-  setInitialPosForVertical(part: number, lineWidth: number): void{
-    // this.countInitialPos(this.thumb, part, lineWidth, this.countPartForVertical, this.onThumbChanged )
-  }
-
-  setExtraInitialPosForVertical(part: number, lineWidth: number): void{
-    // this.countInitialPos(this.thumbExtra, part, lineWidth, this.countPartForVertical, this.onExtraThumbChanged )
-  }
 
   countPartForHorizontal = (element: HTMLElement, lineLeft: number, lineWidth: number, event: MouseEvent): number => {
     let part = (event.pageX - lineLeft) / lineWidth

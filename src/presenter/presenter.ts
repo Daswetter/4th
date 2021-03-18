@@ -17,12 +17,9 @@ class Presenter{
 
     this.Model.bindCurrentChanged(this.sendResultTo)
     this.Model.bindExtraCurrentChanged(this.sendExtraResultTo)
+
     this.View.initView(this.Model.countScaleElements())
     
-    if (this.Model.getOptions().thumbType === 'double'){
-      this.View.setExtraInitialPos(this.Model.setInitialPartForExtra)
-    }
-    this.View.setInitialPos(this.Model.setInitialPart)
   }
 
   sendResultTo = (res: number, part: number): void => {

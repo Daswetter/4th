@@ -46,7 +46,14 @@ class View implements IView {
     this.options.progress ? this.initProgress() : ''
     this.options.input ? this.initInput() : ''
     this.options.scale ? this.initScale(scaleElements): ''
+
+    this.valueChanged(this.options.initial[0])
+    if (this.options.thumbType === 'double'){
+      this.extraValueChanged(this.options.initial[1])
+    }
+    
   }
+
   initWrapper = (): void => {
     this.wrapper = new Wrapper(this.initElement)
     this.initElement.append(this.wrapper.returnAsHTML())
@@ -145,21 +152,6 @@ class View implements IView {
   }
 
 
-
-  setInitialPos(part: () => number): void {
-    this.thumb.setInitialPosForHorizontal(part(), this.line.width())
-    // if (this.options.orientation === 'vertical'){
-    //   this.thumb.setInitialPosForVertical(part(), this.line.width())
-    // }
-  }
-
-  setExtraInitialPos(part: () => number): void {
-    this.thumb.setExtraInitialPosForHorizontal(part(), this.line.width())
-    // if (this.options.orientation === 'vertical'){
-    //   this.thumb.setExtraInitialPosForVertical(part(), this.line.width())
-    // }
-  }
-
   currentWasSentFromModel(res: number, part: number): void{
     this.part = part
     this.options.input ? this.input.displayCurrentValue(res) : ''
@@ -211,8 +203,19 @@ class View implements IView {
 
   windowWasResized = (): void => {
     this.partChanged(this.part)
+
+    this.thumb.setEventListenerHorizontalForThumb(this.line.left(), this.line.width())
+
     if (this.options.thumbType === 'double'){
+      this.thumb.setEventListenerHorizontalForThumbExtra(this.line.left(), this.line.width())
       this.extraPartChanged(this.partExtra)
+    }
+
+    if (this.options.orientation === 'vertical'){
+      this.thumb.setEventListenerVerticalForThumb(this.line.bottom(), this.line.height())
+      if (this.options.thumbType === 'double'){
+        this.thumb.setEventListenerVerticalForThumbExtra(this.line.bottom(), this.line.height())
+      }
     }
   }
   
