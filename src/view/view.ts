@@ -53,6 +53,7 @@ class View implements IView {
     if (this.options.orientation === 'vertical'){
       this.wrapper.setOrientation()
     }
+    this.wrapper.bindWrapperWasResized(this.windowWasResized)
   }
 
   initLine = () : void => {
@@ -107,15 +108,7 @@ class View implements IView {
     if (this.options.thumbType === 'double'){
       this.satellite.initSatelliteExtra()
       this.line.returnAsHTML().append(this.satellite.returnSatelliteExtraAsHTMLElement())
-      
-      // if (this.options.orientation === 'vertical'){
-      //   this.satellite.rotateSatelliteExtra()
-      // }
     }
-    // if (this.options.orientation === 'vertical'){
-    //   this.satellite.rotateSatellite()
-    // }
-    
   }
   initScale = (scaleElements: number[]): void => {
     this.scale = new Scale()
@@ -135,15 +128,13 @@ class View implements IView {
   initProgress = (): void => {
     this.progress = new Progress()
     this.line.returnAsHTML().append(this.progress.returnAsHTMLElement()) 
-    if (this.options.orientation === 'vertical'){
-      this.progress.setVerticalMod()
-    }
   }
 
   initInput = (): void => {
     this.input = new Input()
     this.line.returnAsHTML().after(this.input.returnAsHTML())
     this.input.bindValueWasChanged(this.valueChanged)
+
     if (this.options.thumbType === 'double'){
       
       this.input.initInputExtra()
@@ -151,9 +142,6 @@ class View implements IView {
       this.input.bindValueExtraWasChanged(this.extraValueChanged)
 
     }
-    // if (this.options.orientation === 'vertical'){
-    //   this.input.verticalMod()
-    // }
   }
 
 
@@ -173,6 +161,7 @@ class View implements IView {
   }
 
   currentWasSentFromModel(res: number, part: number): void{
+    this.part = part
     this.options.input ? this.input.displayCurrentValue(res) : ''
     if (this.options.orientation === 'horizontal'){
       this.thumb.changeThumbPosition(part, this.line.width())
@@ -187,7 +176,9 @@ class View implements IView {
     }
   }
   extraCurrentWasSentFromModel(res: number, part: number): void{
+    this.partExtra = part
     console.log('extra current', res)
+    this.options.input ? this.input.displayCurrentValueForExtra(res) : ''
     if (this.options.orientation === 'horizontal'){
       this.thumb.changeThumbExtraPosition(part, this.line.width())
       this.options.progress ? this.progress.setExtraThumbProp(part, this.line.width()) : ''
@@ -200,40 +191,30 @@ class View implements IView {
     }
   }
 
-  changePositionForTheNearest = (value: number): void => {
-    if (Math.abs(this.thumb.currentPart(this.line.width()) - value) > Math.abs(this.thumb.currentExtraPart(this.line.width()) - value)){
-      this.extraPartChanged(value)
-    } else {
-      this.partChanged(value)
+  changePositionForTheNearest = (part: number): void => {
+    if (this.options.orientation === 'horizontal'){
+      if (Math.abs(this.thumb.currentPart(this.line.width()) - part) > Math.abs(this.thumb.currentExtraPart(this.line.width()) - part)){
+        this.extraPartChanged(part)
+      } else {
+        this.partChanged(part)
+      }
+    } else if (this.options.orientation === 'vertical'){
+      if (Math.abs(this.thumb.currentPartForVertical(this.line.height()) - part) > Math.abs(this.thumb.currentExtraPartForVertical(this.line.height()) - part)){
+        this.extraPartChanged(part)
+      } else {
+        this.partChanged(part)
+      }
     }
   }
 
 
 
-  // windowWasResized = (event: Event): void => {
-
-  //   this.thumb.setEventListenerHorizontalForThumb(this.line.left(), this.line.width())
-
-  //   if (this.options.thumbType === 'double'){
-  //     this.thumb.setEventListenerHorizontalForThumbExtra(this.line.left(), this.line.width())
-  //   }
-
-  //   if (this.options.orientation === 'vertical'){
-  //     this.thumb.setEventListenerVerticalForThumb(this.line.bottom(), this.line.width())
-  //     if (this.options.thumbType === 'double'){
-  //       this.thumb.setEventListenerVerticalForThumbExtra(this.line.bottom(), this.line.width())
-  //     }
-  //   }
-
-  //   console.log('this.part', this.part);
-    
-  //   this.thumb.changeThumbPosition(this.part, this.line.width())
-
-  //   if (this.options.thumbType === 'double'){
-  //     this.thumb.changeThumbExtraPosition(this.partExtra, this.line.width())
-  
-  //   }
-  // }
+  windowWasResized = (): void => {
+    this.partChanged(this.part)
+    if (this.options.thumbType === 'double'){
+      this.extraPartChanged(this.partExtra)
+    }
+  }
   
 
 

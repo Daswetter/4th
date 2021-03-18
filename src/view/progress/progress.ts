@@ -40,7 +40,7 @@ class Progress{
    
 
   setProgress = (lineWidth: number): void => {
-    
+    this.progress.style.height = '10px'
     if (this.part < this.partExtra){
       this.progress.style.left = this.part * lineWidth + 'px'
       this.progress.style.right = lineWidth - this.partExtra * lineWidth + 'px'
@@ -52,10 +52,8 @@ class Progress{
   }
 
   setProgressForVertical = (lineHeight: number): void => {
-    this.progress.style.height = ''
-    console.log('part', this.part);
-    console.log('part extra', this.partExtra);
-    
+    this.progress.style.width = '10px'
+
     if (this.part < this.partExtra){
 
       this.progress.style.bottom = this.part * lineHeight + 'px'
@@ -67,11 +65,6 @@ class Progress{
     }
   }
 
-  setVerticalMod = (): void => {
-    
-    this.progress.style.transform = 'rotate(90deg)'
-
-  }
 }
 
 

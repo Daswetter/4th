@@ -1,11 +1,13 @@
 import { IWrapper } from './IWrapper'
 class Wrapper implements IWrapper{
   public wrapper!: HTMLElement
-  onWrapperWidthWasChanged!:() => void
+  private wrapperWasResized!: () => void
 
   constructor(public initElement: HTMLElement){
     this.initElement = initElement
     this.init()
+  
+    this.addEvent(window, "resize", this.onResize);
     
   }
   init = (): void => {
@@ -21,6 +23,20 @@ class Wrapper implements IWrapper{
   setOrientation = (): void => {
     this.wrapper.style.flexDirection = 'row'
     this.wrapper.style.alignItems = 'flex-start'
+  }
+
+  addEvent = (element: Window, type: string, callback: () => void): void => {
+    if (element.addEventListener) {
+      element.addEventListener(type, callback, false);
+    }  else {
+      element.onresize = callback;
+    }
+  }
+  onResize = (): void => {
+    this.wrapperWasResized()
+  }
+  bindWrapperWasResized(callback: () => void): void {
+    this.wrapperWasResized = callback;
   }
 }
 

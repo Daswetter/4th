@@ -195,10 +195,20 @@ class Thumb{
   }
   currentPart = (lineWidth: number): number => {
     const part = (this.thumb.offsetLeft + this.thumb.offsetWidth / 2 ) / lineWidth
+     
     return part
   }
   currentExtraPart = (lineWidth: number): number => {
     const part = (this.thumbExtra.offsetLeft + this.thumbExtra.offsetWidth / 2 ) / lineWidth
+    return part
+  }
+  currentPartForVertical = (lineHeight: number): number => {
+    const part = 1 - (this.thumb.offsetTop + this.thumb.offsetHeight / 2 ) / lineHeight   
+     
+    return part
+  }
+  currentExtraPartForVertical = (lineHeight: number): number => {
+    const part = 1 - (this.thumbExtra.offsetTop + this.thumbExtra.offsetHeight / 2 ) / lineHeight
     return part
   }
   setVerticalMod = (): void => {

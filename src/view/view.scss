@@ -3,7 +3,6 @@ $line-height: 10px;
 $line-border-radius: 10px;
 
 .range-slider__wrapper{
-  
   width: 60%;
   margin: 50px auto;
 }
@@ -40,7 +39,6 @@ $line-border-radius: 10px;
   background: rgb(23, 19, 218);
 } 
 .range-slider__progress{
-  height: $line-height;
   background: rgb(153, 60, 153);
   border-radius: $line-border-radius;
 }

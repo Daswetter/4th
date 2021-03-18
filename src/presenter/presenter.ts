@@ -27,6 +27,7 @@ class Presenter{
 
   sendResultTo = (res: number, part: number): void => {
     this.View.currentWasSentFromModel(res, part)
+    
   }
   sendExtraResultTo = (res: number, part: number): void => {
     this.View.extraCurrentWasSentFromModel(res, part)

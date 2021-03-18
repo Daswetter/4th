@@ -47,10 +47,8 @@ class Input{
   displayCurrentValue = (res: number): void => {
     this.input.value = res + ''
   }
-
-  verticalMod = (): void => {
-    this.input.style.transform = 'rotate(90deg)'
-    this.inputExtra.style.transform = 'rotate(90deg)'
+  displayCurrentValueForExtra = (res: number): void => {
+    this.inputExtra.value = res + ''
   }
 
   bindValueWasChanged(callback: (arg0:number) => void): void {
