@@ -7,7 +7,7 @@ describe('Model', () => {
     options = {
       min: -1800,
       max: 200,
-      initial: [0],
+      initial: [0, 100],
       stepSize: 100,
       progress: true,
       satellite: true,
@@ -19,47 +19,108 @@ describe('Model', () => {
     _ = new Model(options)
   })
   
-  describe('getOptions', () => {
-    test('should return options', () => {
-      expect(_.getOptions()).toEqual(options)
-    })
-    test('should not be undefined', () => {
-      expect(_.getOptions()).not.toBeUndefined
-    })
-  })
-
-  
-
-  // test('should throw error', () => {
-  //   const options = {
-  //     min: 0,
-  //     max: 10,
-  //     initial: 150,
-  //   }
-  //   _ = new Model(options)
-  //   expect(_.countInitialPart()).toThrowError
-  // })
-
-  describe('Binding', () => {
-    test('should return callback', () => {
-      const callback = jest.fn()
-      _.bindCurrentChanged(callback)
-      expect(_.onCurrentChanged).toEqual(callback)
-    })
-  })
-
   describe('setCurrentValue', () => {
-    beforeEach(() => {
+    test('should be called', () => {
       const callback = jest.fn()
       _.bindCurrentChanged(callback)
-    })
-    test('should return undefined', () => {
-      expect(_.setCurrentValue(0.1)).toBeUndefined
-    })
-    test('should call onCurrentChanged', () => {
-      expect(_.onCurrentChanged).toBeCalled
+      _.setCurrentValue(0.1)
+      expect(callback).toHaveBeenCalled()
     })
   })
+
+  describe('setCurrentValueForExtra', () => {
+    test('should be called', () => {
+      const callback = jest.fn()
+      _.bindExtraCurrentChanged(callback)
+      _.setCurrentValueForExtra(0.1)
+      expect(callback).toHaveBeenCalled()
+    })
+  })
+
+  describe('countCurrentPart', () => {
+    beforeEach(() => {
+      options = {
+        min: -1800,
+        max: 200,
+        initial: [0, 100],
+        stepSize: 100,
+        progress: true,
+        satellite: true,
+        scale: true,
+        orientation: 'vertical',
+        thumbType: 'double',
+        input: true
+      }
+      _ = new Model(options)
+    })
+    test('should return correct part', () => {
+      expect(_.countCurrentPart(100)).toBe(0.95)
+    })
+    test('should return a number', () => {
+      expect(_.countCurrentPart(300)).toBe(1)
+    })
+    test('should return a number', () => {
+      expect(_.countCurrentPart(-2000)).toBe(0)
+    })
+  })
+
+  describe('setCurrentPart', () => {
+    beforeEach(() => {
+      options = {
+        min: 0,
+        max: 200,
+        initial: [0, 100],
+        stepSize: 1,
+        progress: true,
+        satellite: true,
+        scale: true,
+        orientation: 'vertical',
+        thumbType: 'double',
+        input: true
+      }
+      _ = new Model(options)
+      
+    })
+    test('', () => {
+      const callback = jest.fn()
+      _.bindCurrentChanged(callback)
+      _.setCurrentPart(1)
+      expect(callback).toHaveBeenCalled()
+    })
+    test('', () => {
+      const callback = jest.fn()
+      _.bindCurrentChanged(callback)
+      _.setCurrentPart(1)
+      expect(callback).toHaveBeenCalledWith(1, 0.005)
+    })
+  })
+
+  describe('setCurrentPartForExtra', () => {
+    beforeEach(() => {
+      options = {
+        min: 0,
+        max: 200,
+        initial: [0, 100],
+        stepSize: 1,
+        progress: true,
+        satellite: true,
+        scale: true,
+        orientation: 'vertical',
+        thumbType: 'double',
+        input: true
+      }
+      _ = new Model(options)
+      
+    })
+    test('', () => {
+      const callback = jest.fn()
+      _.bindExtraCurrentChanged(callback)
+      _.setCurrentPartForExtra(1)
+      expect(callback).toHaveBeenCalled()
+    })
+  })
+
+
 
   describe('countScaleElements', () => {
     test('should return array', () => {
@@ -80,19 +141,7 @@ describe('Model', () => {
       expect(_.countScaleElements()).toEqual(result)
     })
   })
-
-  describe('roundToDecimal', () => {
-    test('should round number to decimal', () => {
-      expect(_.roundToDecimal(1.259, 2)).toBe(1.26)
-    })
-    test('should round number to negative decimal', () => {
-      expect(_.roundToDecimal(25651.259, -3)).toBe(26000)
-    })
-    test('should round number to integer', () => {
-      expect(_.roundToDecimal(-651.9, 0)).toBe(-652)
-    })
-  })
-
+  
   describe('convertStepSizeToDecimal', () => {
     test('should convert step size 0.01 to -2', () => {
       const options = {
@@ -141,6 +190,35 @@ describe('Model', () => {
       }
       _ = new Model(options)
       expect(_.convertStepSizeToDecimal(5)).toBeCloseTo(0)
+    })
+  })
+
+  
+  describe('roundToDecimal', () => {
+    test('should round number to decimal', () => {
+      expect(_.roundToDecimal(1.259, 2)).toBe(1.26)
+    })
+    test('should round number to negative decimal', () => {
+      expect(_.roundToDecimal(25651.259, -3)).toBe(26000)
+    })
+    test('should round number to integer', () => {
+      expect(_.roundToDecimal(-651.9, 0)).toBe(-652)
+    })
+  })
+
+  describe('Binding', () => {
+    test('should return callback', () => {
+      const callback = jest.fn()
+      _.bindCurrentChanged(callback)
+      expect(_.onCurrentChanged).toEqual(callback)
+    })
+  })
+
+  describe('Binding extra', () => {
+    test('should return callback', () => {
+      const callback = jest.fn()
+      _.bindExtraCurrentChanged(callback)
+      expect(_.onExtraCurrentChanged).toEqual(callback)
     })
   })
 })

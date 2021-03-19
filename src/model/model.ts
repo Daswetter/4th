@@ -7,11 +7,8 @@ class Model implements IModel{
   
   constructor(private options: IOptions){
     this.options = options
-    
   }
-  getOptions = (): IOptions => {
-    return this.options
-  }
+
   countCurrentValue(part: number): number {
     const min = this.options.min
     const max = this.options.max
@@ -20,6 +17,7 @@ class Model implements IModel{
     const currentValue = Math.round((max - min) / stepSize * part) * stepSize + min
     return currentValue
   }
+
   setCurrentValue(part: number): void {
     const currentValue = this.countCurrentValue(part)
     this.onCurrentChanged(currentValue, part)
@@ -29,6 +27,7 @@ class Model implements IModel{
     const currentValue = this.countCurrentValue(part)
     this.onExtraCurrentChanged(currentValue, part)
   }
+  
   countCurrentPart(currentValue: number): number {
     const min = this.options.min
     const max = this.options.max

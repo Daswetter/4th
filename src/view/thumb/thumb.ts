@@ -26,16 +26,6 @@ class Thumb{
     return element
   }
 
-  setEventListenerForHorizontal = (element: HTMLElement, lineLeft: number, lineWidth: number): void =>  {
-    element.onmousedown = this.onMouseDownForHorizontal.bind(null, element, lineLeft, lineWidth)
-    
-  } 
-
-  setEventListenerForVertical = (element: HTMLElement, lineBottom: number, lineHeight: number): void =>  {
-    element.onmousedown = this.onMouseDownForVertical.bind(null, element, lineBottom, lineHeight)
-  } 
-
-
   initThumb = (): void => {
     this.thumb = this.init(this.thumb)
   }
@@ -44,6 +34,16 @@ class Thumb{
     this.thumbExtra = this.init(this.thumbExtra)
     this.thumbExtra.classList.add('range-slider__thumbExtra')
   }
+
+
+  setEventListenerForHorizontal = (element: HTMLElement, lineLeft: number, lineWidth: number): void =>  {
+    element.onmousedown = this.onMouseDownForHorizontal.bind(null, element, lineLeft, lineWidth)
+    
+  } 
+
+  setEventListenerForVertical = (element: HTMLElement, lineBottom: number, lineHeight: number): void =>  {
+    element.onmousedown = this.onMouseDownForVertical.bind(null, element, lineBottom, lineHeight)
+  } 
 
   setEventListenerHorizontalForThumb = (lineLeft: number, lineWidth: number): void => {
     this.setEventListenerForHorizontal(this.thumb, lineLeft, lineWidth)
@@ -139,18 +139,6 @@ class Thumb{
     element.style.left = part * lineWidth - element.offsetWidth / 2 + 'px'
   }
 
-  
-  changeThumbsPositions = (part: number, lineWidth: number): void => {
-    const eventPosition = part * lineWidth
-    const distFromThumbToEvent = eventPosition - this.thumb.offsetLeft
-    const distFromThumbExtraToEvent = eventPosition - this.thumbExtra.offsetLeft
-
-    if (Math.abs(distFromThumbToEvent) > Math.abs(distFromThumbExtraToEvent)){
-      this.changeElementPosition(this.thumbExtra, part, lineWidth)
-    } else {
-      this.changeElementPosition(this.thumb, part, lineWidth)
-    }
-  }
 
   changeThumbPosition = (part: number, lineWidth: number): void => {
     this.changeElementPosition(this.thumb, part, lineWidth)
@@ -160,11 +148,14 @@ class Thumb{
     this.changeElementPosition(this.thumbExtra, part, lineWidth)
   }
 
+  changeElementPositionForVertical = (element: HTMLElement, part: number, lineHeight: number): void => {
+    element.style.bottom = part * lineHeight - element.offsetWidth / 2 + 'px'
+  }
   changeThumbPositionForVertical = (part: number, lineHeight: number): void => {
-    this.thumb.style.bottom = part * lineHeight - this.thumb.offsetWidth / 2 + 'px'
+    this.changeElementPositionForVertical(this.thumb, part, lineHeight)
   }
   changeThumbExtraPositionForVertical = (part: number, lineHeight: number): void => {
-    this.thumbExtra.style.bottom = part * lineHeight - this.thumbExtra.offsetWidth / 2 + 'px'
+    this.changeElementPositionForVertical(this.thumbExtra, part, lineHeight)
   }
 
   
@@ -172,38 +163,53 @@ class Thumb{
     document.removeEventListener('mousemove', this.boundOnMouseMove)
     document.removeEventListener('mouseup', this.boundOnMouseUp)
   }
-  currentPart = (lineWidth: number): number => {
-    const part = (this.thumb.offsetLeft + this.thumb.offsetWidth / 2 ) / lineWidth
-     
+
+  countCurrentPart = (element: HTMLElement, lineWidth: number): number => {
+    const part = (element.offsetLeft + element.offsetWidth / 2 ) / lineWidth
     return part
   }
-  currentExtraPart = (lineWidth: number): number => {
-    const part = (this.thumbExtra.offsetLeft + this.thumbExtra.offsetWidth / 2 ) / lineWidth
+  countCurrentPartForThumb = (lineWidth: number): number => {
+    return this.countCurrentPart(this.thumb, lineWidth)
+  }
+  countCurrentExtraForThumbExtra = (lineWidth: number): number => {
+    return this.countCurrentPart(this.thumbExtra, lineWidth)
+  }
+  
+
+  countCurrentPartForVertical = (element: HTMLElement, lineHeight: number): number => {
+    const part = 1 - (element.offsetTop + element.offsetHeight / 2 ) / lineHeight
     return part
   }
-  currentPartForVertical = (lineHeight: number): number => {
-    const part = 1 - (this.thumb.offsetTop + this.thumb.offsetHeight / 2 ) / lineHeight   
-     
-    return part
+  countCurrentPartForVerticalForThumb = (lineHeight: number): number => {
+    return this.countCurrentPartForVertical(this.thumb, lineHeight)
   }
-  currentExtraPartForVertical = (lineHeight: number): number => {
-    const part = 1 - (this.thumbExtra.offsetTop + this.thumbExtra.offsetHeight / 2 ) / lineHeight
-    return part
+  currentPartForVerticalForThumbExtra = (lineHeight: number): number => {
+    return this.countCurrentPartForVertical(this.thumbExtra, lineHeight)
   }
-  setVerticalMod = (): void => {
-    this.thumb.style.top = ''
-    this.thumb.style.left = `-${this.thumb.offsetWidth / 4}px`
+
+  setVerticalMod = (element: HTMLElement): void => {
+    element.style.top = ''
+    element.style.left = `-${element.offsetWidth / 4}px`
+  }
+  setVerticalModForThumb = (): void => {
+    this.setVerticalMod(this.thumb)
   }
   setVerticalModForExtra = (): void => {
-    this.thumbExtra.style.top = ''
-    this.thumbExtra.style.left = `-${this.thumbExtra.offsetWidth / 4}px`
+    this.setVerticalMod(this.thumbExtra)
   }
-  setHorizontalMod = (): void => {
-    this.thumb.style.top = `-${this.thumb.offsetWidth / 4}px`
+
+
+  setHorizontalMod = (element: HTMLElement): void => {
+    element.style.top = `-${element.offsetWidth / 4}px`
   }
-  setHorizontalModForExtra = (): void => {
-    this.thumbExtra.style.top = `-${this.thumbExtra.offsetWidth / 4}px`
+  setHorizontalModForThumb = (): void => {
+    this.setHorizontalMod(this.thumb)
   }
+  setHorizontalModForThumbExtra = (): void => {
+    this.setHorizontalMod(this.thumbExtra)
+  }
+
+
 
   bindThumbChangedPos(callback: (part: number) => void ): void {
     this.onThumbChanged = callback;

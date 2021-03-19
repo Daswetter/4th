@@ -51,7 +51,6 @@ class View implements IView {
     if (this.options.thumbType === 'double'){
       this.extraValueChanged(this.options.initial[1])
     }
-    
   }
 
   initWrapper = (): void => {
@@ -84,18 +83,18 @@ class View implements IView {
     this.thumb = new Thumb() 
     this.line.returnAsHTML().append(this.thumb.returnThumbAsHTML())
     this.thumb.setEventListenerHorizontalForThumb(this.line.left(), this.line.width())
-    this.thumb.setHorizontalMod()
+    this.thumb.setHorizontalModForThumb()
 
     if (this.options.thumbType === 'double'){
       this.thumb.initThumbExtra()
       
       this.line.returnAsHTML().append(this.thumb.returnThumbExtraAsHTML())
       this.thumb.setEventListenerHorizontalForThumbExtra(this.line.left(), this.line.width())
-      this.thumb.setHorizontalModForExtra()
+      this.thumb.setHorizontalModForThumbExtra()
     }
 
     if (this.options.orientation === 'vertical'){
-      this.thumb.setVerticalMod()
+      this.thumb.setVerticalModForThumb()
       this.thumb.setEventListenerVerticalForThumb(this.line.bottom(), this.line.height())
       if (this.options.thumbType === 'double'){
         // this.thumb.setVerticalModForExtra()
@@ -117,6 +116,7 @@ class View implements IView {
       this.line.returnAsHTML().append(this.satellite.returnSatelliteExtraAsHTMLElement())
     }
   }
+  
   initScale = (scaleElements: number[]): void => {
     this.scale = new Scale()
     this.line.returnAsHTML().after(this.scale.returnAsHTMLElement())
@@ -167,6 +167,8 @@ class View implements IView {
       this.options.satellite ? this.satellite.setPosForVertical(part, res, this.line.height()) : ''
     }
   }
+
+
   extraCurrentWasSentFromModel(res: number, part: number): void{
     this.partExtra = part
     console.log('extra current', res)
@@ -185,13 +187,13 @@ class View implements IView {
 
   changePositionForTheNearest = (part: number): void => {
     if (this.options.orientation === 'horizontal'){
-      if (Math.abs(this.thumb.currentPart(this.line.width()) - part) > Math.abs(this.thumb.currentExtraPart(this.line.width()) - part)){
+      if (Math.abs(this.thumb.countCurrentPartForThumb(this.line.width()) - part) > Math.abs(this.thumb.countCurrentExtraForThumbExtra(this.line.width()) - part)){
         this.extraPartChanged(part)
       } else {
         this.partChanged(part)
       }
     } else if (this.options.orientation === 'vertical'){
-      if (Math.abs(this.thumb.currentPartForVertical(this.line.height()) - part) > Math.abs(this.thumb.currentExtraPartForVertical(this.line.height()) - part)){
+      if (Math.abs(this.thumb.countCurrentPartForVerticalForThumb(this.line.height()) - part) > Math.abs(this.thumb.currentPartForVerticalForThumbExtra(this.line.height()) - part)){
         this.extraPartChanged(part)
       } else {
         this.partChanged(part)

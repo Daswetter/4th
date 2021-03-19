@@ -7,21 +7,29 @@ import './../interface/IOptions'
 
 class Presenter{
   constructor(private View: IView, private Model: IModel) {
+    this.bindView()
+    this.bindModel()
 
+    this.initView()
+  }
+
+  bindView = (): void => {
     this.View.bindSendPartToModel(this.sendPartTo)
     this.View.bindSendExtraPartToModel(this.sendExtraPartTo)
     this.View.bindSendValueToModel(this.sendValueTo)
     this.View.bindSendExtraValueToModel(this.sendExtraValueTo)
-
-    
-
-    this.Model.bindCurrentChanged(this.sendResultTo)
-    this.Model.bindExtraCurrentChanged(this.sendExtraResultTo)
-
-    this.View.initView(this.Model.countScaleElements())
-    
   }
 
+  bindModel = (): void => {
+    this.Model.bindCurrentChanged(this.sendResultTo)
+    this.Model.bindExtraCurrentChanged(this.sendExtraResultTo)
+  }
+
+  initView = (): void => {
+    this.View.initView(this.Model.countScaleElements())
+  }
+
+  
   sendResultTo = (res: number, part: number): void => {
     this.View.currentWasSentFromModel(res, part)
     

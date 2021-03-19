@@ -6,9 +6,6 @@ class Wrapper implements IWrapper{
   constructor(public initElement: HTMLElement){
     this.initElement = initElement
     this.init()
-  
-    this.addEvent(window, "resize", this.onResize);
-    
   }
   init = (): void => {
     this.wrapper = document.createElement('div')
@@ -16,6 +13,7 @@ class Wrapper implements IWrapper{
     this.initElement.append(this.wrapper)
     this.wrapper.style.display = 'flex'
     this.wrapper.style.flexDirection = 'column'
+    window.addEventListener("resize", this.onResize)
   }
   returnAsHTML = (): HTMLElement => {
     return this.wrapper
@@ -25,13 +23,6 @@ class Wrapper implements IWrapper{
     this.wrapper.style.alignItems = 'flex-start'
   }
 
-  addEvent = (element: Window, type: string, callback: () => void): void => {
-    if (element.addEventListener) {
-      element.addEventListener(type, callback, false);
-    }  else {
-      element.onresize = callback;
-    }
-  }
   onResize = (): void => {
     this.wrapperWasResized()
   }
