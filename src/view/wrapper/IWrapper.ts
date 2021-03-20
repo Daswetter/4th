@@ -1,5 +1,5 @@
 interface IWrapper {
-  setOrientation(orientation: string): void
+  setVertical(orientation: string): void
 }
 
 export {IWrapper}

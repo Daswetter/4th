@@ -42,7 +42,6 @@ class View implements IView {
     this.initThumb()
     
     this.options.satellite ? this.initSatellite(): ''
-    
     this.options.progress ? this.initProgress() : ''
     this.options.input ? this.initInput() : ''
     this.options.scale ? this.initScale(scaleElements): ''
@@ -57,7 +56,7 @@ class View implements IView {
     this.wrapper = new Wrapper(this.initElement)
     this.initElement.append(this.wrapper.returnAsHTML())
     if (this.options.orientation === 'vertical'){
-      this.wrapper.setOrientation()
+      this.wrapper.setVertical()
     }
     this.wrapper.bindWrapperWasResized(this.windowWasResized)
   }
@@ -68,7 +67,7 @@ class View implements IView {
     this.line.setClickListenerForHorizontal()
 
     if (this.options.orientation === 'vertical'){
-      this.line.verticalMod()
+      this.line.setVertical()
       this.line.setClickListenerForVertical()
     }
 
@@ -97,7 +96,6 @@ class View implements IView {
       this.thumb.setVerticalModForThumb()
       this.thumb.setEventListenerVerticalForThumb(this.line.bottom(), this.line.height())
       if (this.options.thumbType === 'double'){
-        // this.thumb.setVerticalModForExtra()
         this.thumb.setVerticalModForExtra()
         this.thumb.setEventListenerVerticalForThumbExtra(this.line.bottom(), this.line.height())
       }
@@ -109,11 +107,11 @@ class View implements IView {
 
   initSatellite = (): void => {
     this.satellite = new Satellite()
-    this.line.returnAsHTML().append(this.satellite.returnSatelliteAsHTMLElement())
+    this.wrapper.returnAsHTML().append(this.satellite.returnSatelliteAsHTMLElement())
     
     if (this.options.thumbType === 'double'){
       this.satellite.initSatelliteExtra()
-      this.line.returnAsHTML().append(this.satellite.returnSatelliteExtraAsHTMLElement())
+      this.wrapper.returnAsHTML().append(this.satellite.returnSatelliteExtraAsHTMLElement())
     }
   }
   
@@ -129,7 +127,6 @@ class View implements IView {
     if (this.options.orientation === 'vertical') {
       this.scale.setVerticalMod()
     }
-    
   }
 
   initProgress = (): void => {
@@ -158,13 +155,14 @@ class View implements IView {
     if (this.options.orientation === 'horizontal'){
       this.thumb.changeThumbPosition(part, this.line.width())
       this.options.progress ? this.progress.setThumbPos(part, this.line.width()) : ''
-      this.options.satellite ? this.satellite.setPos(part, res, this.line.width()) : ''
+
+      this.options.satellite ? this.satellite.setPos(part, res, this.line.width(), this.line.height(), this.line.bottom(), this.line.left(), this.thumb.height()) : ''
       
     }
     if (this.options.orientation === 'vertical'){
       this.thumb.changeThumbPositionForVertical(part, this.line.height())
       this.options.progress ? this.progress.setThumbPosForVertical(part, this.line.height()) : ''
-      this.options.satellite ? this.satellite.setPosForVertical(part, res, this.line.height()) : ''
+      this.options.satellite ? this.satellite.setPosForVertical(part, res, this.line.height(), this.line.bottom(), this.line.left(), this.thumb.height()) : ''
     }
   }
 
@@ -176,12 +174,13 @@ class View implements IView {
     if (this.options.orientation === 'horizontal'){
       this.thumb.changeThumbExtraPosition(part, this.line.width())
       this.options.progress ? this.progress.setExtraThumbProp(part, this.line.width()) : ''
-      this.options.satellite ? this.satellite.setExtraPos(part, res, this.line.width()) : ''
+      this.options.satellite ? this.satellite.setExtraPos(part, res, this.line.width(), this.line.height(), this.line.bottom(), this.line.left(), this.thumb.height()) : ''
+
     }
     if (this.options.orientation === 'vertical'){
       this.thumb.changeThumbExtraPositionForVertical(part, this.line.height())
       this.options.progress ? this.progress.setThumbExtraPosForVertical(part, this.line.height()) : ''
-      this.options.satellite ? this.satellite.setExtraPosForVertical(part, res, this.line.height()) : ''
+      this.options.satellite ? this.satellite.setExtraPosForVertical(part, res, this.line.height(), this.line.bottom(), this.line.left(), this.thumb.width()) : ''
     }
   }
 

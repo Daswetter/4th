@@ -1,7 +1,7 @@
-class Line{
+import { ILine } from './ILine'
+class Line implements ILine{
   public line!: HTMLElement
   private onLineClicked!: (arg0:number) => void;
-  private onLineWidthWasChanged!: (arg0:number) => void;
 
   constructor() {
     this.init()
@@ -11,15 +11,20 @@ class Line{
     this.line = document.createElement('div')
     this.line.classList.add('range-slider__line')
   }
+
   returnAsHTML = (): HTMLElement => {
     return this.line
   }
 
+  setClickListener = (callback: (event: MouseEvent) => void): void => {
+    this.line.onclick = callback
+  }
+
   setClickListenerForVertical = (): void => {
-    this.line.onclick = this.moveThumbByClickingForVertical
+    this.setClickListener(this.moveByClickingForVertical)
   }
   setClickListenerForHorizontal = (): void => {
-    this.line.onclick = this.moveThumbByClickingForHorizontal
+    this.setClickListener(this.moveByClickingForHorizontal)
   }
 
   width(): number {
@@ -38,21 +43,34 @@ class Line{
     const bottom = this.line.getBoundingClientRect().bottom + document.documentElement.scrollTop
     return bottom
   }
- 
   
-  moveThumbByClickingForVertical = (event: MouseEvent) : void => {
-    const distFromBeginToClick = - event.clientY + this.line.getBoundingClientRect().bottom
-    const part = distFromBeginToClick / this.line.offsetHeight
-    this.onLineClicked(part)
+  moveByClicking = (client: keyof MouseEvent, side: keyof DOMRect, size: keyof HTMLElement, event: MouseEvent) : void => {
+    let part
+    let distFromBeginToClick = (event[client] as number) - (this.line.getBoundingClientRect()[side] as number)
+
+    if (side === 'bottom'){
+      distFromBeginToClick = - distFromBeginToClick
+    }
+    
+    if (distFromBeginToClick < 0){
+      part = 0
+    } else if (distFromBeginToClick > (this.line[size] as number)) {
+      part = 1
+    } else{
+      part = distFromBeginToClick / (this.line[size] as number)
+      this.onLineClicked(part)
+    }
   }
 
-  moveThumbByClickingForHorizontal = (event: MouseEvent) : void => {
-    const distFromBeginToClick = event.clientX - this.left()
-    const part = distFromBeginToClick / this.width()
-    this.onLineClicked(part)
+  moveByClickingForVertical = (event: MouseEvent) : void => {
+    this.moveByClicking.call(null, 'clientY', 'bottom', 'offsetHeight', event)
   }
 
-  verticalMod = (): void => {
+  moveByClickingForHorizontal = (event: MouseEvent) : void => {
+    this.moveByClicking.call(null, 'clientX', 'left', 'offsetWidth', event)
+  }
+
+  setVertical = (): void => {
     const height = this.line.offsetHeight + 'px';
     const width = this.line.offsetWidth + 'px';
     [this.line.style.width, this.line.style.height] = [height, width]

@@ -209,7 +209,12 @@ class Thumb{
     this.setHorizontalMod(this.thumbExtra)
   }
 
-
+  width = (): number => {
+    return this.thumb.offsetWidth
+  }
+  height = (): number => {
+    return this.thumb.offsetHeight
+  }
 
   bindThumbChangedPos(callback: (part: number) => void ): void {
     this.onThumbChanged = callback;

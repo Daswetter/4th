@@ -18,7 +18,7 @@ class Wrapper implements IWrapper{
   returnAsHTML = (): HTMLElement => {
     return this.wrapper
   }
-  setOrientation = (): void => {
+  setVertical = (): void => {
     this.wrapper.style.flexDirection = 'row'
     this.wrapper.style.alignItems = 'flex-start'
   }
