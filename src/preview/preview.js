@@ -4,7 +4,7 @@ $(".js-slider1").customRangeSlider({
   min: 0,
   max: 1,
   initial: [0.25, 0.5],
-  stepSize: 0.05,
+  stepSize: 0.01,
   progress: true,
   satellite: true,
   scale: true,

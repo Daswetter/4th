@@ -20,149 +20,128 @@ class Thumb{
   }
 
   
-  init = (element: HTMLElement): HTMLElement => {
+  init = (element: HTMLElement, style: string): HTMLElement => {
     element = document.createElement('div')
-    element.classList.add(`range-slider__thumb`)
+    element.classList.add(`range-slider__${style}`)
     return element
   }
-
   initThumb = (): void => {
-    this.thumb = this.init(this.thumb)
+    this.thumb = this.init(this.thumb, 'thumb')
   }
-
   initThumbExtra = (): void => {
-    this.thumbExtra = this.init(this.thumbExtra)
+    this.thumbExtra = this.init(this.thumbExtra, 'thumb')
     this.thumbExtra.classList.add('range-slider__thumbExtra')
   }
 
 
-  setEventListenerForHorizontal = (element: HTMLElement, lineLeft: number, lineWidth: number): void =>  {
-    element.onmousedown = this.onMouseDownForHorizontal.bind(null, element, lineLeft, lineWidth)
-    
-  } 
-
-  setEventListenerForVertical = (element: HTMLElement, lineBottom: number, lineHeight: number): void =>  {
-    element.onmousedown = this.onMouseDownForVertical.bind(null, element, lineBottom, lineHeight)
-  } 
-
+  getOrientationParams = (orientation = 'horizontal'): [keyof MouseEvent, keyof DOMRect, keyof HTMLElement] => {
+    const sides = [
+      'pageX',
+      'left',
+      'scrollLeft',
+    ] as [
+      keyof MouseEvent,
+      keyof DOMRect,
+      keyof HTMLElement,
+    ]
+    if (orientation === 'vertical'){
+      sides[0] = 'pageY'
+      sides[1] = 'bottom'
+      sides[2] = 'scrollTop'
+    }
+    return sides
+  }
+  setOnMouseDown = (element: HTMLElement, sides: [keyof MouseEvent, keyof DOMRect, keyof HTMLElement ], lineSide: number, lineSize: number): void => {
+    element.onmousedown = this.onMouseDown.bind(null, element, sides, lineSide, lineSize)   
+  }
   setEventListenerHorizontalForThumb = (lineLeft: number, lineWidth: number): void => {
-    this.setEventListenerForHorizontal(this.thumb, lineLeft, lineWidth)
+    const sides = this.getOrientationParams()
+    this.setOnMouseDown(this.thumb, sides, lineLeft, lineWidth)
   }
   setEventListenerVerticalForThumb = (lineBottom: number, lineHeight: number): void => {
-    this.setEventListenerForVertical(this.thumb, lineBottom, lineHeight)
+    const sides = this.getOrientationParams('vertical')
+    this.setOnMouseDown(this.thumb, sides, lineBottom, lineHeight)
   }
   setEventListenerHorizontalForThumbExtra = (lineLeft: number, lineWidth: number): void => {
-    this.setEventListenerForHorizontal(this.thumbExtra, lineLeft, lineWidth)
+    const sides = this.getOrientationParams()
+    this.setOnMouseDown(this.thumbExtra, sides, lineLeft, lineWidth)
   }
   setEventListenerVerticalForThumbExtra = (lineBottom: number, lineHeight: number): void => {
-    this.setEventListenerForVertical(this.thumbExtra, lineBottom, lineHeight)
+    const sides = this.getOrientationParams('vertical')
+    this.setOnMouseDown(this.thumbExtra, sides, lineBottom, lineHeight)
   }
-  
 
-  onMouseDown = (element: HTMLElement, event: MouseEvent, onMouseMove: ( element: HTMLElement, shift: number, lineParam: number, lineWidth: number, event: MouseEvent ) => void, shift: number, lineParam: number, lineWidth: number) : void => {
-    this.boundOnMouseUp = this.onMouseUp.bind(this)
-    this.boundOnMouseMove = onMouseMove.bind(this, element, shift, lineParam, lineWidth)
+
+  onMouseDown = (element: HTMLElement, array: [keyof MouseEvent, keyof DOMRect, keyof HTMLElement], lineSide: number, lineSize: number, event: MouseEvent) : void => { 
 
     event.preventDefault()
+
+    let shift = (event[array[0]] as number) - (element.getBoundingClientRect()[array[1]] as number) - (document.documentElement[array[2]] as number)
+
+    if (array[0] === 'pageY'){
+      shift = - shift
+    }
+
+    this.boundOnMouseUp = this.onMouseUp.bind(this)
+
+    const params: Array<number> = [lineSide, lineSize, shift]
+    this.boundOnMouseMove = this.onMouseMove.bind(this, element, params, array[0])
     
     document.addEventListener('mousemove', this.boundOnMouseMove)
     document.addEventListener('mouseup', this.boundOnMouseUp)
   }
 
-  onMouseDownForHorizontal = (element: HTMLElement, lineLeft: number, lineWidth: number, event: MouseEvent) : void => {
-    const shiftX = event.clientX - element.getBoundingClientRect().left 
-    this.onMouseDown(element, event, this.onMouseMoveForHorizontal, shiftX, lineLeft, lineWidth)
-  }
 
-  onMouseDownForVertical = (element: HTMLElement, lineBottom: number, lineHeight: number, event: MouseEvent) : void => {
-    const shiftY = element.getBoundingClientRect().bottom - event.clientY
-    this.onMouseDown(element, event, this.onMouseMoveForVertical, shiftY, lineBottom, lineHeight)
-  }
-  
+  onMouseMove = (element: HTMLElement, params: Array<number>, page: keyof MouseEvent, event: MouseEvent): void => {
 
-  countPartForHorizontal = (element: HTMLElement, lineLeft: number, lineWidth: number, event: MouseEvent): number => {
-    let part = (event.pageX - lineLeft) / lineWidth
-    if (event.pageX < lineLeft) {
-      part = 0
-      element.style.left = - element.offsetWidth / 2 + 'px'
-    } else if (event.pageX > lineLeft + lineWidth){
-      part = 1
-      element.style.left = lineWidth + 'px'
+    let part = (event[page] as number - params[0] - params[2]) / params[1]
+    console.log('shift', params[2]);
+    
+    console.log('part', part);
+
+    if (page === 'pageY'){
+      part = -part
     }
     
-    return part
-  }
-
-  countPartForVertical = (element: HTMLElement, lineBottom: number, lineHeight: number, event: MouseEvent): number => {
-    let part = (- event.pageY + lineBottom) / lineHeight
-    if (event.pageY > lineBottom) {
-      part = 0
-      element.style.bottom = - element.offsetWidth / 2 + 'px'
-    } else if (event.pageY < lineBottom - lineHeight){
+    if (part < 0){
+      part = 0;
+    } else if (part > 1){
       part = 1
-      element.style.bottom = lineHeight + 'px'
     }
-    
-    
-    return part
-  }
 
-  onMouseMove = ( element: HTMLElement, leftStop: number, countPart:(element: HTMLElement, lineParam: number, lineWidth: number, event: MouseEvent) => number, lineParam: number, lineWidth: number, event: MouseEvent): void => {
-    // const rightStop = 1
-    // if (leftStop < 0) {
-    //   leftStop = 0
-    //   element.style.left = - element.offsetWidth / 2 + 'px'
-    // } else if (leftStop > rightStop) {
-    //   leftStop = rightStop
-    //   element.style.left = lineWidth + 'px'
-    // }
-    
     if (element === this.thumb){
-      this.onThumbChanged(countPart(element, lineParam, lineWidth, event))
-    } else {
-      this.onExtraThumbChanged(countPart(element, lineParam, lineWidth, event))
+      this.onThumbChanged(part)
+    } else if (element === this.thumbExtra){
+      this.onExtraThumbChanged(part)
     }
   }
 
-  onMouseMoveForHorizontal = ( element: HTMLElement, shiftX: number, lineLeft: number, lineWidth: number, event: MouseEvent ) : void => {
-    const leftStop = (event.pageX - shiftX - lineLeft  + element.offsetWidth / 2) / lineWidth
-    this.onMouseMove(element, leftStop, this.countPartForHorizontal,  lineLeft, lineWidth, event )
-  }
 
-  onMouseMoveForVertical = ( element: HTMLElement, shiftY: number, lineBottom: number, lineHeight: number, event: MouseEvent  ) : void => {
-    const leftStop = lineBottom - event.pageY - shiftY + element.offsetWidth / 2
-    this.onMouseMove(element, leftStop, this.countPartForVertical,  lineBottom, lineHeight, event )
-  }
-
-
-  changeElementPosition = (element: HTMLElement, part: number, lineWidth: number): void => {
-    element.style.left = part * lineWidth - element.offsetWidth / 2 + 'px'
-  }
-
-
-  changeThumbPosition = (part: number, lineWidth: number): void => {
-    this.changeElementPosition(this.thumb, part, lineWidth)
-  }
-
-  changeThumbExtraPosition = (part: number, lineWidth: number): void => {
-    this.changeElementPosition(this.thumbExtra, part, lineWidth)
-  }
-
-  changeElementPositionForVertical = (element: HTMLElement, part: number, lineHeight: number): void => {
-    element.style.bottom = part * lineHeight - element.offsetWidth / 2 + 'px'
-  }
-  changeThumbPositionForVertical = (part: number, lineHeight: number): void => {
-    this.changeElementPositionForVertical(this.thumb, part, lineHeight)
-  }
-  changeThumbExtraPositionForVertical = (part: number, lineHeight: number): void => {
-    this.changeElementPositionForVertical(this.thumbExtra, part, lineHeight)
-  }
-
-  
   onMouseUp = () : void => {
     document.removeEventListener('mousemove', this.boundOnMouseMove)
     document.removeEventListener('mouseup', this.boundOnMouseUp)
   }
+
+  changeElementPosition = (element: HTMLElement, side: string, part: number, lineSize: number): void => {
+    if (side === 'left'){
+      element.style[side] = part * lineSize - element.offsetWidth / 2 + 'px'
+    } else if(side === 'bottom') {
+      element.style[side] = part * lineSize - element.offsetWidth / 2 + 'px'
+    }
+  }
+  changeThumbPosition = (part: number, lineWidth: number): void => {
+    this.changeElementPosition(this.thumb, 'left', part, lineWidth)
+  }
+  changeThumbExtraPosition = (part: number, lineWidth: number): void => {
+    this.changeElementPosition(this.thumbExtra, 'left', part, lineWidth)
+  }
+  changeThumbPositionForVertical = (part: number, lineHeight: number): void => {
+    this.changeElementPosition(this.thumb, 'bottom', part, lineHeight)
+  }
+  changeThumbExtraPositionForVertical = (part: number, lineHeight: number): void => {
+    this.changeElementPosition(this.thumbExtra, 'bottom', part, lineHeight)
+  }
+
 
   countCurrentPart = (element: HTMLElement, lineWidth: number): number => {
     const part = (element.offsetLeft + element.offsetWidth / 2 ) / lineWidth
@@ -187,6 +166,7 @@ class Thumb{
     return this.countCurrentPartForVertical(this.thumbExtra, lineHeight)
   }
 
+
   setVerticalMod = (element: HTMLElement): void => {
     element.style.top = ''
     element.style.left = `-${element.offsetWidth / 4}px`
@@ -209,12 +189,14 @@ class Thumb{
     this.setHorizontalMod(this.thumbExtra)
   }
 
+
   width = (): number => {
     return this.thumb.offsetWidth
   }
   height = (): number => {
     return this.thumb.offsetHeight
   }
+
 
   bindThumbChangedPos(callback: (part: number) => void ): void {
     this.onThumbChanged = callback;
