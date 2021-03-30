@@ -13,8 +13,11 @@ class Model implements IModel{
     const min = this.options.min
     const max = this.options.max
     const stepSize = this.options.stepSize
-
-    const currentValue = Math.round((max - min) / stepSize * part) * stepSize + min
+    let currentValue = +(Math.round((max - min) / stepSize * part) * stepSize + min)
+    
+    if(!this.isInteger(stepSize)){
+      currentValue = +currentValue.toFixed(this.convertStepSizeToDecimal(stepSize))
+    } 
     return currentValue
   }
 
@@ -31,7 +34,6 @@ class Model implements IModel{
   countCurrentPart(currentValue: number): number {
     const min = this.options.min
     const max = this.options.max
-    // const stepSize = this.options.stepSize
     
     let part = (currentValue - min) / (max - min)
     if (currentValue > max){
@@ -60,11 +62,8 @@ class Model implements IModel{
     const half = (max - min) / 2 + min
     const threeQuarter = (max - min) / 4 * 3 + min 
 
-    scaleElements.push( quarter, half, threeQuarter)
+    scaleElements.push(min, quarter, half, threeQuarter, max)
     const roundScaleElements: Array<number> = scaleElements.map( x => this.roundToDecimal(x, this.convertStepSizeToDecimal(stepSize)))
-
-    roundScaleElements.push(max)
-    roundScaleElements.unshift(min)
 
     return roundScaleElements
   }
@@ -84,6 +83,10 @@ class Model implements IModel{
   roundToDecimal = (value: number, decimal = 0): number => {
     return (Math.round( value * Math.pow(10, decimal) ) / Math.pow(10, decimal))
   }
+
+  isInteger = (num: number) : boolean => {
+    return (num ^ 0) === num
+  } 
 
   bindCurrentChanged(callback: (arg0: number, arg1: number) => void): void {
     this.onCurrentChanged = callback;
