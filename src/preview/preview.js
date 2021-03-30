@@ -13,7 +13,7 @@ $(".js-slider1").customRangeSlider({
 })
 
 $(".js-slider2").customRangeSlider({
-  min: -18.8,
+  min: -18.1,
   max: 0.9,
   initial: [-16, 0],
   stepSize: 0.2,
@@ -39,7 +39,7 @@ $(".js-slider3").customRangeSlider({
 })
 
 $(".js-slider4").customRangeSlider({
-  min: -9,
+  min: -10,
   max: 9,
   initial: [5],
   stepSize: 3,
@@ -64,7 +64,7 @@ $(".js-slider5").customRangeSlider({
 })
 
 $(".js-slider6").customRangeSlider({
-  min: -1000,
+  min: -1050,
   max: 100,
   initial: [-500, -100],
   stepSize: 100,
