@@ -1,10 +1,10 @@
 import $ from 'jquery'
 
 $(".js-slider1").customRangeSlider({
-  min: 0,
-  max: 1,
-  initial: [0.25, 0.5],
-  stepSize: 0.01,
+  min: -150,
+  max: 1000,
+  initial: [200, 500],
+  stepSize: 100,
   progress: true,
   satellite: true,
   scale: true,
@@ -72,5 +72,17 @@ $(".js-slider6").customRangeSlider({
   satellite: true,
   scale: true,
   orientation: 'horizontal',
+  thumbType: 'double'
+})
+
+$(".js-slider7").customRangeSlider({
+  min: -1050,
+  max: 100,
+  initial: [-500, -100],
+  stepSize: 100,
+  progress: true,
+  satellite: true,
+  scale: true,
+  orientation: 'vertical',
   thumbType: 'double'
 })

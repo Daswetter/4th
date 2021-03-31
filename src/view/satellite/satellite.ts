@@ -38,6 +38,7 @@ class Satellite {
   definePositionAndValueForVertical = (element: HTMLElement, part: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbWidth: number): void => {
     element.style.top = lineBottom - part * lineHeight - element.offsetHeight / 2 + 'px'
     element.style.left = lineLeft - element.offsetWidth - thumbWidth + 'px'
+    // element.style.left = lineLeft - element.offsetWidth - thumbWidth + 'px'
   }
 
   setPos = (part: number, res: number, lineWidth: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbHeight: number): void => {

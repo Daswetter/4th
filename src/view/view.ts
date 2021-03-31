@@ -67,7 +67,6 @@ class View implements IView {
     this.line.setClickListenerForHorizontal()
 
     if (this.options.orientation === 'vertical'){
-      this.line.setVertical()
       this.line.setClickListenerForVertical()
     }
 
@@ -82,21 +81,20 @@ class View implements IView {
     this.thumb = new Thumb() 
     this.line.returnAsHTML().append(this.thumb.returnThumbAsHTML())
     this.thumb.setEventListenerHorizontalForThumb(this.line.left(), this.line.width())
-    this.thumb.setHorizontalModForThumb()
+    this.thumb.setHorizontalModForThumb(this.line.height())
 
     if (this.options.thumbType === 'double'){
       this.thumb.initThumbExtra()
-      
       this.line.returnAsHTML().append(this.thumb.returnThumbExtraAsHTML())
       this.thumb.setEventListenerHorizontalForThumbExtra(this.line.left(), this.line.width())
-      this.thumb.setHorizontalModForThumbExtra()
+      this.thumb.setHorizontalModForThumbExtra(this.line.height())
     }
 
     if (this.options.orientation === 'vertical'){
-      this.thumb.setVerticalModForThumb()
+      this.thumb.setVerticalModForThumb(this.line.width())
       this.thumb.setEventListenerVerticalForThumb(this.line.bottom(), this.line.height())
       if (this.options.thumbType === 'double'){
-        this.thumb.setVerticalModForExtra()
+        this.thumb.setVerticalModForExtra(this.line.width())
         this.thumb.setEventListenerVerticalForThumbExtra(this.line.bottom(), this.line.height())
       }
     }
@@ -132,6 +130,10 @@ class View implements IView {
   initProgress = (): void => {
     this.progress = new Progress()
     this.line.returnAsHTML().append(this.progress.returnAsHTMLElement()) 
+    this.progress.setHorizontalMod(this.line.height())
+    if (this.options.orientation === 'vertical') {
+      this.progress.setVerticalMod(this.line.width())
+    }
   }
 
   initInput = (): void => {
@@ -169,7 +171,7 @@ class View implements IView {
 
   extraCurrentWasSentFromModel(res: number, part: number): void{
     this.partExtra = part
-    console.log('extra current', res)
+    // console.log('extra current', res)
     this.options.input ? this.input.displayCurrentValueForExtra(res) : ''
     if (this.options.orientation === 'horizontal'){
       this.thumb.changeThumbExtraPosition(part, this.line.width())

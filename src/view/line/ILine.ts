@@ -16,7 +16,6 @@ interface ILine {
   moveByClickingForVertical(event: MouseEvent) : void
   moveByClickingForHorizontal(event: MouseEvent) : void
 
-  setVertical(): void
 
   bindLineClicked(callback: (arg0:number) => void): void
 }

@@ -97,9 +97,6 @@ class Thumb{
   onMouseMove = (element: HTMLElement, params: Array<number>, page: keyof MouseEvent, event: MouseEvent): void => {
 
     let part = (event[page] as number - params[0] - params[2]) / params[1]
-    console.log('shift', params[2]);
-    
-    console.log('part', part);
 
     if (page === 'pageY'){
       part = -part
@@ -128,7 +125,7 @@ class Thumb{
     if (side === 'left'){
       element.style[side] = part * lineSize - element.offsetWidth / 2 + 'px'
     } else if(side === 'bottom') {
-      element.style[side] = part * lineSize - element.offsetWidth / 2 + 'px'
+      element.style[side] = part * lineSize - element.offsetHeight / 2 + 'px'
     }
   }
   changeThumbPosition = (part: number, lineWidth: number): void => {
@@ -169,26 +166,26 @@ class Thumb{
   }
 
 
-  setVerticalMod = (element: HTMLElement): void => {
+  setVerticalMod = (element: HTMLElement, lineWidth: number): void => {
     element.style.top = ''
-    element.style.left = `-${element.offsetWidth / 4}px`
+    element.style.left = (lineWidth - element.offsetWidth) / 2 + 'px'
   }
-  setVerticalModForThumb = (): void => {
-    this.setVerticalMod(this.thumb)
+  setVerticalModForThumb = (lineWidth: number): void => {
+    this.setVerticalMod(this.thumb, lineWidth)
   }
-  setVerticalModForExtra = (): void => {
-    this.setVerticalMod(this.thumbExtra)
+  setVerticalModForExtra = (lineWidth: number): void => {
+    this.setVerticalMod(this.thumbExtra, lineWidth)
   }
 
 
-  setHorizontalMod = (element: HTMLElement): void => {
-    element.style.top = `-${element.offsetWidth / 4}px`
+  setHorizontalMod = (element: HTMLElement, lineHeight: number): void => {
+    element.style.top = (lineHeight - element.offsetHeight) / 2 + 'px'
   }
-  setHorizontalModForThumb = (): void => {
-    this.setHorizontalMod(this.thumb)
+  setHorizontalModForThumb = (lineHeight: number): void => {
+    this.setHorizontalMod(this.thumb, lineHeight)
   }
-  setHorizontalModForThumbExtra = (): void => {
-    this.setHorizontalMod(this.thumbExtra)
+  setHorizontalModForThumbExtra = (lineHeight: number): void => {
+    this.setHorizontalMod(this.thumbExtra, lineHeight)
   }
 
 

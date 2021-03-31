@@ -10,7 +10,6 @@ class Line implements ILine{
   init = () : void => {
     this.line = document.createElement('div')
     this.line.style.position = 'relative'
-    this.line.style.width = '100%'
     this.line.style.cursor = 'pointer'
     this.line.classList.add('range-slider__line')
   }
@@ -73,11 +72,6 @@ class Line implements ILine{
     this.moveByClicking.call(null, 'clientX', 'left', 'offsetWidth', event)
   }
 
-  setVertical = (): void => {
-    const height = this.line.offsetHeight + 'px';
-    const width = this.line.offsetWidth + 'px';
-    [this.line.style.width, this.line.style.height] = [height, width]
-  }
 
   bindLineClicked(callback: (arg0:number) => void): void {
     this.onLineClicked = callback;

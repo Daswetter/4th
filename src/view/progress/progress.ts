@@ -14,6 +14,18 @@ class Progress{
     element.style.zIndex = '1'
     return element
   }
+
+  setHorizontalMod = (lineHeight: number): void => {
+    this.progress.style.top = (lineHeight - this.progress.offsetHeight) / 2 + 'px'
+  }
+  setVerticalMod = (lineWidth: number): void => {
+    this.progress.style.top = ''
+    this.progress.style.left = (lineWidth - this.progress.offsetWidth) / 2 + 'px'
+    console.log('lineWidth', lineWidth);
+    console.log('this.progress.offsetWidth', this.progress.offsetWidth);
+  }
+  
+
   returnAsHTMLElement = (): HTMLElement => {
     return this.progress
   }
@@ -29,8 +41,6 @@ class Progress{
 
   setThumbPosForVertical = (part: number, lineHeight: number) :void => {
     this.part = part
-    
-    
     this.setProgressForVertical(lineHeight)
   } 
   setThumbExtraPosForVertical = (partExtra: number, lineHeight: number) :void => {
@@ -40,7 +50,7 @@ class Progress{
    
 
   setProgress = (lineWidth: number): void => {
-    this.progress.style.height = '10px'
+    // this.progress.style.height = '10px'
     if (this.part < this.partExtra){
       this.progress.style.left = this.part * lineWidth + 'px'
       this.progress.style.right = lineWidth - this.partExtra * lineWidth + 'px'
@@ -52,7 +62,7 @@ class Progress{
   }
 
   setProgressForVertical = (lineHeight: number): void => {
-    this.progress.style.width = '10px'
+    // this.progress.style.width = '10px'
 
     if (this.part < this.partExtra){
 
