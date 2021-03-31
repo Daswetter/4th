@@ -22,6 +22,8 @@ class Thumb{
   
   init = (element: HTMLElement, style: string): HTMLElement => {
     element = document.createElement('div')
+    element.style.position = 'absolute'
+    element.style.zIndex = '2'
     element.classList.add(`range-slider__${style}`)
     return element
   }

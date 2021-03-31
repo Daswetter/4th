@@ -9,6 +9,8 @@ class Scale{
   
   init = (): void => {
     this.scale = document.createElement('div')
+    this.scale.style.display = 'flex'
+    this.scale.style.justifyContent = 'space-between'
     this.scale.classList.add('range-slider__scale')
   }
 
@@ -28,6 +30,7 @@ class Scale{
   initScaleElement = (scaleValue: number, flag: number): HTMLElement => {
     const element = document.createElement('div')
     this.scale.append(element)
+    element.style.cursor = 'pointer'
     element.classList.add('range-slider__scale-number')
     element.innerText = scaleValue + ''
     element.dataset.id = flag + ''

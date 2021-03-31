@@ -9,6 +9,9 @@ class Line implements ILine{
 
   init = () : void => {
     this.line = document.createElement('div')
+    this.line.style.position = 'relative'
+    this.line.style.width = '100%'
+    this.line.style.cursor = 'pointer'
     this.line.classList.add('range-slider__line')
   }
 
