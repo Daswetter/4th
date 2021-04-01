@@ -158,31 +158,33 @@ class View implements IView {
       this.thumb.changeThumbPosition(part, this.line.width())
       this.options.progress ? this.progress.setThumbPos(part, this.line.width()) : ''
 
-      this.options.satellite ? this.satellite.setPos(part, res, this.line.width(), this.line.height(), this.line.bottom(), this.line.left(), this.thumb.height()) : ''
+      this.options.satellite ? this.satellite.setPosition(part, res, this.line.width(), this.line.height(), this.line.bottom(), this.line.left(), this.thumb.height()) : ''
       
     }
     if (this.options.orientation === 'vertical'){
       this.thumb.changeThumbPositionForVertical(part, this.line.height())
       this.options.progress ? this.progress.setThumbPosForVertical(part, this.line.height()) : ''
-      this.options.satellite ? this.satellite.setPosForVertical(part, res, this.line.height(), this.line.bottom(), this.line.left(), this.thumb.height()) : ''
+      this.options.satellite ? this.satellite.setPosition(part, res, this.line.width(), this.line.height(), this.line.bottom(), this.line.left(), this.thumb.width(), 'vertical') : ''
     }
   }
 
 
   extraCurrentWasSentFromModel(res: number, part: number): void{
+    const orientation = this.options.orientation
+    const element = 'extra'
     this.partExtra = part
     // console.log('extra current', res)
     this.options.input ? this.input.displayCurrentValueForExtra(res) : ''
-    if (this.options.orientation === 'horizontal'){
+    if (orientation === 'horizontal'){
       this.thumb.changeThumbExtraPosition(part, this.line.width())
       this.options.progress ? this.progress.setExtraThumbProp(part, this.line.width()) : ''
-      this.options.satellite ? this.satellite.setExtraPos(part, res, this.line.width(), this.line.height(), this.line.bottom(), this.line.left(), this.thumb.height()) : ''
-
+      this.options.satellite ? this.satellite.setPosition(part, res, this.line.width(), this.line.height(), this.line.bottom(), this.line.left(), this.thumb.height(), orientation, element) : ''
     }
-    if (this.options.orientation === 'vertical'){
+
+    if (orientation === 'vertical'){
       this.thumb.changeThumbExtraPositionForVertical(part, this.line.height())
       this.options.progress ? this.progress.setThumbExtraPosForVertical(part, this.line.height()) : ''
-      this.options.satellite ? this.satellite.setExtraPosForVertical(part, res, this.line.height(), this.line.bottom(), this.line.left(), this.thumb.width()) : ''
+      this.options.satellite ? this.satellite.setPosition(part, res, this.line.width(), this.line.height(), this.line.bottom(), this.line.left(), this.thumb.width(), orientation, element) : ''
     }
   }
 

@@ -74,7 +74,7 @@
     background: rgb(166, 154, 211);
   }
   .range-slider__thumb{
-    width: 40px;
+    width: 30px;
     height: 20px;
     background: rgb(247, 250, 81);
   }
@@ -94,8 +94,7 @@
   }
   
   .range-slider__satellite{
-    height: 40px;
-    min-width: 20px;
+    padding: 5px;
     background: rgb(236, 230, 157);
     font-family: Roboto, sans-serif;
   }
@@ -244,7 +243,7 @@
     background: rgb(236, 153, 188);
   }
   .range-slider__thumb{
-    width: 50px;
+    width: 70px;
     height: 25px;
     background: rgb(234, 0, 255);
     border-radius: 100px / 50px;
@@ -259,7 +258,7 @@
   }
   
   .range-slider__satellite{
-    min-width: 50px;
+    min-width: 23px;
     background: rgb(228, 209, 226);
   }
   

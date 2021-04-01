@@ -29,38 +29,48 @@ class Satellite {
     element.innerText = res + ''
   }
   
-  definePositionAndValue = (element: HTMLElement, part: number, lineWidth: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbHeight: number ): void => {
+  definePosition = (element: HTMLElement, part: number, lineWidth: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbHeight: number ): void => {
+
     element.style.left = lineLeft + part * lineWidth - element.offsetWidth / 2 + 'px'
-    element.style.top = lineBottom - element.offsetHeight - thumbHeight + 'px'
-    
+    if (lineHeight >= thumbHeight){
+      element.style.top = lineBottom - lineHeight - 1.2 * element.offsetHeight + 'px'
+    } else {
+      element.style.top = lineBottom - lineHeight - 1.2 * element.offsetHeight - (thumbHeight - lineHeight) / 2 + 'px'
+    }
   }
 
-  definePositionAndValueForVertical = (element: HTMLElement, part: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbWidth: number): void => {
-    element.style.top = lineBottom - part * lineHeight - element.offsetHeight / 2 + 'px'
-    element.style.left = lineLeft - element.offsetWidth - thumbWidth + 'px'
-    // element.style.left = lineLeft - element.offsetWidth - thumbWidth + 'px'
+  definePositionForVertical = (element: HTMLElement, part: number, lineWidth: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbWidth: number): void => {
+
+    element.style.top = lineBottom - part * lineHeight - element.offsetHeight / 2 + 'px'    
+    if (lineWidth >= thumbWidth){
+      element.style.left = lineLeft - 1.2 * element.offsetWidth + 'px'
+    } else {
+      element.style.left = lineLeft - 1.2 * element.offsetWidth - (thumbWidth - lineWidth) / 2 + 'px'
+    }
   }
 
-  setPos = (part: number, res: number, lineWidth: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbHeight: number): void => {
-    this.definePositionAndValue(this.satellite, part, lineWidth, lineHeight, lineBottom, lineLeft, thumbHeight)
-    this.defineInnerText(this.satellite, res)
-  }
+  setPosition = (part: number, res: number, lineWidth: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbSize: number, orientation = 'horizontal', element = ''): void => {
+    if (orientation === 'horizontal' && element === ''){
+      
+      this.defineInnerText(this.satellite, res)
+      this.definePosition(this.satellite, part, lineWidth, lineHeight, lineBottom, lineLeft, thumbSize)
+    }
 
-  setExtraPos = (part: number, res:number, lineWidth: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbHeight: number): void => {
-    this.definePositionAndValue(this.satelliteExtra, part, lineWidth, lineHeight, lineBottom, lineLeft, thumbHeight)
-    this.defineInnerText(this.satelliteExtra, res)
-  }
+    if (orientation === 'horizontal' && element === 'extra'){
+      this.defineInnerText(this.satelliteExtra, res)
+      this.definePosition(this.satelliteExtra, part, lineWidth, lineHeight, lineBottom, lineLeft, thumbSize)
+    }
 
+    if (orientation === 'vertical' && element === ''){
+      this.defineInnerText(this.satellite, res)
+      this.definePositionForVertical(this.satellite, part, lineWidth, lineHeight, lineBottom, lineLeft, thumbSize)
+    }
 
-  setPosForVertical = (part: number, res: number, lineHeight: number,  lineBottom: number, lineLeft: number, thumbHeight: number): void => {
-    this.definePositionAndValueForVertical(this.satellite, part, lineHeight, lineBottom, lineLeft, thumbHeight)
-    this.defineInnerText(this.satellite, res)
+    if (orientation === 'vertical' && element === 'extra'){
+      this.defineInnerText(this.satelliteExtra, res)
+      this.definePositionForVertical(this.satelliteExtra, part, lineWidth, lineHeight, lineBottom, lineLeft, thumbSize)
+    }  
   }
-  setExtraPosForVertical = (part: number, res:number, lineHeight: number, lineBottom: number, lineLeft: number, thumbHeight: number): void => {
-    this.definePositionAndValueForVertical(this.satelliteExtra, part, lineHeight, lineBottom, lineLeft, thumbHeight)
-    this.defineInnerText(this.satelliteExtra, res)
-  }
-
 }
 
 export { Satellite }
