@@ -44,11 +44,12 @@ class Input{
     this.onValueExtraWasChanged(value)
   }
 
-  displayCurrentValue = (res: number): void => {
-    this.input.value = res + ''
-  }
-  displayCurrentValueForExtra = (res: number): void => {
-    this.inputExtra.value = res + ''
+  displayCurrentValue = (res: number, element = 'primary'): void => {
+    if (element === 'primary'){
+      this.input.value = res + ''
+    } else if ( element === 'extra'){
+      this.inputExtra.value = res + ''
+    } 
   }
 
   bindValueWasChanged(callback: (arg0:number) => void): void {

@@ -78,24 +78,23 @@ class View implements IView {
   }
 
   initThumb = () : void => {
+    const orientation = this.options.orientation 
     this.thumb = new Thumb() 
     this.line.returnAsHTML().append(this.thumb.returnThumbAsHTML())
-    this.thumb.setEventListenerHorizontalForThumb(this.line.left(), this.line.width())
+    this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, 'primary')
     this.thumb.setHorizontalModForThumb(this.line.height())
 
     if (this.options.thumbType === 'double'){
       this.thumb.initThumbExtra()
       this.line.returnAsHTML().append(this.thumb.returnThumbExtraAsHTML())
-      this.thumb.setEventListenerHorizontalForThumbExtra(this.line.left(), this.line.width())
+      this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, 'extra')
       this.thumb.setHorizontalModForThumbExtra(this.line.height())
     }
 
     if (this.options.orientation === 'vertical'){
       this.thumb.setVerticalModForThumb(this.line.width())
-      this.thumb.setEventListenerVerticalForThumb(this.line.bottom(), this.line.height())
       if (this.options.thumbType === 'double'){
         this.thumb.setVerticalModForExtra(this.line.width())
-        this.thumb.setEventListenerVerticalForThumbExtra(this.line.bottom(), this.line.height())
       }
     }
     this.thumb.bindThumbChangedPos(this.partChanged)
@@ -115,7 +114,8 @@ class View implements IView {
   
   initScale = (scaleElements: number[]): void => {
     this.scale = new Scale()
-    this.line.returnAsHTML().after(this.scale.returnAsHTMLElement())
+    this.line.returnAsHTML().after(this.scale.returnAsHTML())
+
     this.scale.bindScaleWasClicked(this.partChanged)
     if (this.options.thumbType === 'double'){
       this.scale.bindScaleWasClicked(this.changePositionForTheNearest)
@@ -129,7 +129,7 @@ class View implements IView {
 
   initProgress = (): void => {
     this.progress = new Progress()
-    this.line.returnAsHTML().append(this.progress.returnAsHTMLElement()) 
+    this.line.returnAsHTML().append(this.progress.returnAsHTML()) 
     this.progress.setHorizontalMod(this.line.height())
     if (this.options.orientation === 'vertical') {
       this.progress.setVerticalMod(this.line.width())
@@ -150,24 +150,15 @@ class View implements IView {
     }
   }
 
-
   currentWasSentFromModel(res: number, part: number): void{
     const orientation = this.options.orientation
     const element = 'primary'
     this.part = part
+
+    this.thumb.setPosition(part, this.line.size(), orientation, element)
     this.options.input ? this.input.displayCurrentValue(res) : ''
     this.options.progress ? this.progress.setPosition(part, this.line.size(), orientation, element) : ''
-    this.options.satellite ? this.satellite.setPosition(part, res, this.line.size(), this.line.side(), this.thumb.size()) : ''
-
-    if (this.options.orientation === 'horizontal'){
-      this.thumb.changeThumbPosition(part, this.line.width())
-    
-      
-      
-    }
-    if (this.options.orientation === 'vertical'){
-      this.thumb.changeThumbPositionForVertical(part, this.line.height())
-    }
+    this.options.satellite ? this.satellite.setPosition(part, res, this.line.size(), this.line.side(), this.thumb.size(), orientation) : ''
   }
 
 
@@ -176,53 +167,35 @@ class View implements IView {
     const element = 'extra'
     this.partExtra = part
     
-    this.options.input ? this.input.displayCurrentValueForExtra(res) : ''
+    this.thumb.setPosition(part, this.line.size(), orientation, element)
+    this.options.input ? this.input.displayCurrentValue(res, 'extra') : ''
     this.options.progress ? this.progress.setPosition(part, this.line.size(), orientation, element) : ''
     this.options.satellite ? this.satellite.setPosition(part, res, this.line.size(), this.line.side(), this.thumb.size(), orientation, element) : ''
-
-    if (orientation === 'horizontal'){
-      this.thumb.changeThumbExtraPosition(part, this.line.width())
-    }
-
-    if (orientation === 'vertical'){
-      this.thumb.changeThumbExtraPositionForVertical(part, this.line.height())
-      
-    }
   }
 
   changePositionForTheNearest = (part: number): void => {
-    if (this.options.orientation === 'horizontal'){
-      if (Math.abs(this.thumb.countCurrentPartForThumb(this.line.width()) - part) > Math.abs(this.thumb.countCurrentExtraForThumbExtra(this.line.width()) - part)){
-        this.extraPartChanged(part)
-      } else {
-        this.partChanged(part)
-      }
-    } else if (this.options.orientation === 'vertical'){
-      if (Math.abs(this.thumb.countCurrentPartForVerticalForThumb(this.line.height()) - part) > Math.abs(this.thumb.currentPartForVerticalForThumbExtra(this.line.height()) - part)){
-        this.extraPartChanged(part)
-      } else {
-        this.partChanged(part)
-      }
+    const orientation = this.options.orientation
+    const distFromActionToPrimary = Math.abs(this.thumb.countCurrentPart(this.line.size(), orientation, 'primary') - part)
+    const distFromActionToExtra = Math.abs(this.thumb.countCurrentPart(this.line.size(), orientation, 'extra') - part)
+
+    if (distFromActionToPrimary > distFromActionToExtra){
+      this.extraPartChanged(part)
+    } else {
+      this.partChanged(part)
     }
   }
 
 
 
   windowWasResized = (): void => {
+    const orientation = this.options.orientation
     this.partChanged(this.part)
 
-    this.thumb.setEventListenerHorizontalForThumb(this.line.left(), this.line.width())
+    this.thumb.setEventListener(this.line.size(), this.line.side(), orientation)
 
     if (this.options.thumbType === 'double'){
-      this.thumb.setEventListenerHorizontalForThumbExtra(this.line.left(), this.line.width())
+      this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, 'extra')
       this.extraPartChanged(this.partExtra)
-    }
-
-    if (this.options.orientation === 'vertical'){
-      this.thumb.setEventListenerVerticalForThumb(this.line.bottom(), this.line.height())
-      if (this.options.thumbType === 'double'){
-        this.thumb.setEventListenerVerticalForThumbExtra(this.line.bottom(), this.line.height())
-      }
     }
   }
   

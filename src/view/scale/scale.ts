@@ -14,7 +14,7 @@ class Scale{
     this.scale.classList.add('range-slider__scale')
   }
 
-  returnAsHTMLElement = (): HTMLElement => {
+  returnAsHTML = (): HTMLElement => {
     return this.scale
   }
 

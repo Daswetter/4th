@@ -24,7 +24,7 @@ class Progress{
   }
   
 
-  returnAsHTMLElement = (): HTMLElement => {
+  returnAsHTML = (): HTMLElement => {
     return this.progress
   }
   
