@@ -49,26 +49,26 @@ class Satellite {
     }
   }
 
-  setPosition = (part: number, res: number, lineWidth: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbSize: number, orientation = 'horizontal', element = ''): void => {
+  setPosition = (part: number, res: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbSize: {width: number, height: number}, orientation = 'horizontal', element = ''): void => {
     if (orientation === 'horizontal' && element === ''){
       
       this.defineInnerText(this.satellite, res)
-      this.definePosition(this.satellite, part, lineWidth, lineHeight, lineBottom, lineLeft, thumbSize)
+      this.definePosition(this.satellite, part, lineSize.width, lineSize.height, lineSide.bottom, lineSide.left, thumbSize.height)
     }
 
     if (orientation === 'horizontal' && element === 'extra'){
       this.defineInnerText(this.satelliteExtra, res)
-      this.definePosition(this.satelliteExtra, part, lineWidth, lineHeight, lineBottom, lineLeft, thumbSize)
+      this.definePosition(this.satelliteExtra, part, lineSize.width, lineSize.height, lineSide.bottom, lineSide.left, thumbSize.height)
     }
 
     if (orientation === 'vertical' && element === ''){
       this.defineInnerText(this.satellite, res)
-      this.definePositionForVertical(this.satellite, part, lineWidth, lineHeight, lineBottom, lineLeft, thumbSize)
+      this.definePositionForVertical(this.satellite, part, lineSize.width, lineSize.height, lineSide.bottom, lineSide.left, thumbSize.width)
     }
 
     if (orientation === 'vertical' && element === 'extra'){
       this.defineInnerText(this.satelliteExtra, res)
-      this.definePositionForVertical(this.satelliteExtra, part, lineWidth, lineHeight, lineBottom, lineLeft, thumbSize)
+      this.definePositionForVertical(this.satelliteExtra, part, lineSize.width, lineSize.height, lineSide.bottom, lineSide.left, thumbSize.width)
     }  
   }
 }

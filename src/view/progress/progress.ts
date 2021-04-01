@@ -21,36 +21,59 @@ class Progress{
   setVerticalMod = (lineWidth: number): void => {
     this.progress.style.top = ''
     this.progress.style.left = (lineWidth - this.progress.offsetWidth) / 2 + 'px'
-    console.log('lineWidth', lineWidth);
-    console.log('this.progress.offsetWidth', this.progress.offsetWidth);
   }
   
 
   returnAsHTMLElement = (): HTMLElement => {
     return this.progress
   }
-  setThumbPos = (part: number, lineWidth: number) :void => {
-    this.part = part
-    this.setProgress(lineWidth)
+  
+  setPosition = (part: number, lineSize: {width: number, height: number}, orientation = 'horizontal', element = 'primary') :void => {
+    if (element === 'primary' && orientation === 'horizontal'){
+      this.part = part
+      this.setProgress(lineSize.width)
+    } 
+
+    if (element === 'extra' && orientation === 'horizontal'){
+      this.partExtra = part
+      this.setProgress(lineSize.width)
+      
+    } 
+
+    if (element === 'primary' && orientation === 'vertical'){
+      this.part = part
+      this.setProgressForVertical(lineSize.height)
+    } 
+
+    if (element === 'extra' && orientation === 'vertical'){
+      this.partExtra = part
+      this.setProgressForVertical(lineSize.height)
+    } 
+    
+    
   } 
 
-  setExtraThumbProp = (partExtra: number, lineWidth: number) :void => {
-    this.partExtra = partExtra
-    this.setProgress(lineWidth)
-  }
+  // setThumbPos = (part: number, lineWidth: number) :void => {
+  //   this.part = part
+  //   this.setProgress(lineWidth)
+  // } 
 
-  setThumbPosForVertical = (part: number, lineHeight: number) :void => {
-    this.part = part
-    this.setProgressForVertical(lineHeight)
-  } 
-  setThumbExtraPosForVertical = (partExtra: number, lineHeight: number) :void => {
-    this.partExtra = partExtra
-    this.setProgressForVertical(lineHeight)
-  } 
+  // setExtraThumbProp = (partExtra: number, lineWidth: number) :void => {
+  //   this.partExtra = partExtra
+  //   this.setProgress(lineWidth)
+  // }
+
+  // setThumbPosForVertical = (part: number, lineHeight: number) :void => {
+  //   this.part = part
+  //   this.setProgressForVertical(lineHeight)
+  // } 
+  // setThumbExtraPosForVertical = (partExtra: number, lineHeight: number) :void => {
+  //   this.partExtra = partExtra
+  //   this.setProgressForVertical(lineHeight)
+  // } 
    
 
   setProgress = (lineWidth: number): void => {
-    // this.progress.style.height = '10px'
     if (this.part < this.partExtra){
       this.progress.style.left = this.part * lineWidth + 'px'
       this.progress.style.right = lineWidth - this.partExtra * lineWidth + 'px'
@@ -62,8 +85,6 @@ class Progress{
   }
 
   setProgressForVertical = (lineHeight: number): void => {
-    // this.progress.style.width = '10px'
-
     if (this.part < this.partExtra){
 
       this.progress.style.bottom = this.part * lineHeight + 'px'

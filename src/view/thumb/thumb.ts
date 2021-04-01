@@ -189,6 +189,13 @@ class Thumb{
   }
 
 
+  size = (): {width: number, height: number} => {
+    return {
+      width: this.thumb.offsetWidth,
+      height: this.thumb.offsetHeight,
+    }
+  }
+
   width = (): number => {
     return this.thumb.offsetWidth
   }

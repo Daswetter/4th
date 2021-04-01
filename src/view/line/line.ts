@@ -29,6 +29,20 @@ class Line implements ILine{
     this.setClickListener(this.moveByClickingForHorizontal)
   }
 
+  size = (): {width: number, height: number} => {
+    return {
+      width: this.line.offsetWidth,
+      height: this.line.offsetHeight,
+    }
+  }
+
+  side = (): {left: number, bottom: number} => {
+    return {
+      left: this.line.getBoundingClientRect().left + document.documentElement.scrollLeft,
+      bottom: this.line.getBoundingClientRect().bottom + document.documentElement.scrollTop
+    }
+  }
+  
   width(): number {
     return this.line.offsetWidth
   }
