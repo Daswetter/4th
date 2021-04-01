@@ -7,7 +7,7 @@ class Line implements ILine{
     this.init()
   }
 
-  init = () : void => {
+  private init = () : void => {
     this.line = document.createElement('div')
     this.line.style.position = 'relative'
     this.line.style.cursor = 'pointer'
@@ -18,15 +18,17 @@ class Line implements ILine{
     return this.line
   }
 
-  setClickListener = (callback: (event: MouseEvent) => void): void => {
+  private setClickListener = (callback: (event: MouseEvent) => void): void => {
     this.line.onclick = callback
   }
 
-  setClickListenerForVertical = (): void => {
-    this.setClickListener(this.moveByClickingForVertical)
-  }
-  setClickListenerForHorizontal = (): void => {
-    this.setClickListener(this.moveByClickingForHorizontal)
+  setEventListener = (orientation: string): void => {
+    if (orientation === 'horizontal'){
+      this.setClickListener(this.moveByClickingForHorizontal)
+    } 
+    if (orientation === 'vertical'){
+      this.setClickListener(this.moveByClickingForVertical)
+    } 
   }
 
   size = (): {width: number, height: number} => {
@@ -41,23 +43,6 @@ class Line implements ILine{
       left: this.line.getBoundingClientRect().left + document.documentElement.scrollLeft,
       bottom: this.line.getBoundingClientRect().bottom + document.documentElement.scrollTop
     }
-  }
-  
-  width(): number {
-    return this.line.offsetWidth
-  }
-  
-  height(): number {
-    return this.line.offsetHeight
-  }
-
-  left(): number {
-    const left = this.line.getBoundingClientRect().left
-    return left
-  }
-  bottom(): number {
-    const bottom = this.line.getBoundingClientRect().bottom + document.documentElement.scrollTop
-    return bottom
   }
   
   moveByClicking = (client: keyof MouseEvent, side: keyof DOMRect, size: keyof HTMLElement, event: MouseEvent) : void => {

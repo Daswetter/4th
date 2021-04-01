@@ -147,6 +147,10 @@ class Thumb{
     const part = (element.offsetLeft + element.offsetWidth / 2 ) / lineWidth
     return part
   }
+  countCurrentPartForVertical = (element: HTMLElement, lineHeight: number): number => {
+    const part = 1 - (element.offsetTop + element.offsetHeight / 2 ) / lineHeight
+    return part
+  }
   countCurrentPart = (lineSize: {width: number, height: number}, orientation = 'horizontal', element = 'primary'): number => {
     let part
     if (orientation === 'horizontal' && element === 'primary'){
@@ -164,32 +168,22 @@ class Thumb{
     return part as number
   }
 
-  countCurrentPartForVertical = (element: HTMLElement, lineHeight: number): number => {
-    const part = 1 - (element.offsetTop + element.offsetHeight / 2 ) / lineHeight
-    return part
-  }
-
-
-  setVerticalMod = (element: HTMLElement, lineWidth: number): void => {
-    element.style.top = ''
-    element.style.left = (lineWidth - element.offsetWidth) / 2 + 'px'
-  }
-  setVerticalModForThumb = (lineWidth: number): void => {
-    this.setVerticalMod(this.thumb, lineWidth)
-  }
-  setVerticalModForExtra = (lineWidth: number): void => {
-    this.setVerticalMod(this.thumbExtra, lineWidth)
-  }
-
-
-  setHorizontalMod = (element: HTMLElement, lineHeight: number): void => {
-    element.style.top = (lineHeight - element.offsetHeight) / 2 + 'px'
-  }
-  setHorizontalModForThumb = (lineHeight: number): void => {
-    this.setHorizontalMod(this.thumb, lineHeight)
-  }
-  setHorizontalModForThumbExtra = (lineHeight: number): void => {
-    this.setHorizontalMod(this.thumbExtra, lineHeight)
+  
+  setInitialSettings = (lineSize: {width: number, height: number}, orientation = 'horizontal', element = 'thumb'): void => {
+    if (orientation === 'horizontal' && element === 'thumb'){
+      this.thumb.style.top = (lineSize.height - this.thumb.offsetHeight) / 2 + 'px'
+    }
+    if (orientation === 'horizontal' && element === 'extra'){
+      this.thumbExtra.style.top = (lineSize.height - this.thumbExtra.offsetHeight) / 2 + 'px'
+    }
+    if (orientation === 'vertical' && element === 'thumb'){
+      this.thumb.style.top = ''
+      this.thumb.style.left = (lineSize.width - this.thumb.offsetWidth) / 2 + 'px'
+    }
+    if (orientation === 'vertical' && element === 'extra'){
+      this.thumbExtra.style.top = ''
+      this.thumbExtra.style.left = (lineSize.width - this.thumbExtra.offsetWidth) / 2 + 'px'
+    }
   }
 
 

@@ -1,15 +1,8 @@
 interface ILine {
-  init() : void
   returnAsHTML(): HTMLElement
 
-  setClickListenerForVertical(): void
-  setClickListenerForHorizontal(): void
+  setEventListener(orientation: string): void
 
-  width(): number
-  height(): number
-  left(): number
-  bottom(): number
- 
   
   moveByClicking(client: keyof MouseEvent, side: keyof DOMRect, size: keyof HTMLElement, event: MouseEvent):void
 

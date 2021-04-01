@@ -15,12 +15,12 @@ class Progress{
     return element
   }
 
-  setHorizontalMod = (lineHeight: number): void => {
-    this.progress.style.top = (lineHeight - this.progress.offsetHeight) / 2 + 'px'
-  }
-  setVerticalMod = (lineWidth: number): void => {
-    this.progress.style.top = ''
-    this.progress.style.left = (lineWidth - this.progress.offsetWidth) / 2 + 'px'
+  setInitialSettings = (lineSize: {width: number, height: number}, orientation = 'horizontal'): void => {
+    this.progress.style.top = (lineSize.height - this.progress.offsetHeight) / 2 + 'px'
+    if (orientation === 'vertical'){
+      this.progress.style.top = ''
+      this.progress.style.left = (lineSize.width - this.progress.offsetWidth) / 2 + 'px'
+    }
   }
   
 
@@ -37,7 +37,6 @@ class Progress{
     if (element === 'extra' && orientation === 'horizontal'){
       this.partExtra = part
       this.setProgress(lineSize.width)
-      
     } 
 
     if (element === 'primary' && orientation === 'vertical'){
@@ -52,25 +51,6 @@ class Progress{
     
     
   } 
-
-  // setThumbPos = (part: number, lineWidth: number) :void => {
-  //   this.part = part
-  //   this.setProgress(lineWidth)
-  // } 
-
-  // setExtraThumbProp = (partExtra: number, lineWidth: number) :void => {
-  //   this.partExtra = partExtra
-  //   this.setProgress(lineWidth)
-  // }
-
-  // setThumbPosForVertical = (part: number, lineHeight: number) :void => {
-  //   this.part = part
-  //   this.setProgressForVertical(lineHeight)
-  // } 
-  // setThumbExtraPosForVertical = (partExtra: number, lineHeight: number) :void => {
-  //   this.partExtra = partExtra
-  //   this.setProgressForVertical(lineHeight)
-  // } 
    
 
   setProgress = (lineWidth: number): void => {

@@ -62,14 +62,11 @@ class View implements IView {
   }
 
   initLine = () : void => {
+    const orientation = this.options.orientation
+
     this.line = new Line()
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
-    this.line.setClickListenerForHorizontal()
-
-    if (this.options.orientation === 'vertical'){
-      this.line.setClickListenerForVertical()
-    }
-
+    this.line.setEventListener(orientation)
     this.line.bindLineClicked(this.partChanged)
 
     if (this.options.thumbType === 'double'){
@@ -82,20 +79,13 @@ class View implements IView {
     this.thumb = new Thumb() 
     this.line.returnAsHTML().append(this.thumb.returnThumbAsHTML())
     this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, 'primary')
-    this.thumb.setHorizontalModForThumb(this.line.height())
+    this.thumb.setInitialSettings(this.line.size(), orientation)
 
     if (this.options.thumbType === 'double'){
       this.thumb.initThumbExtra()
       this.line.returnAsHTML().append(this.thumb.returnThumbExtraAsHTML())
       this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, 'extra')
-      this.thumb.setHorizontalModForThumbExtra(this.line.height())
-    }
-
-    if (this.options.orientation === 'vertical'){
-      this.thumb.setVerticalModForThumb(this.line.width())
-      if (this.options.thumbType === 'double'){
-        this.thumb.setVerticalModForExtra(this.line.width())
-      }
+      this.thumb.setInitialSettings(this.line.size(), orientation, 'extra')
     }
     this.thumb.bindThumbChangedPos(this.partChanged)
     this.thumb.bindExtraThumbChangedPos(this.extraPartChanged)
@@ -128,12 +118,11 @@ class View implements IView {
   }
 
   initProgress = (): void => {
+    const orientation = this.options.orientation
+    
     this.progress = new Progress()
     this.line.returnAsHTML().append(this.progress.returnAsHTML()) 
-    this.progress.setHorizontalMod(this.line.height())
-    if (this.options.orientation === 'vertical') {
-      this.progress.setVerticalMod(this.line.width())
-    }
+    this.progress.setInitialSettings(this.line.size(), orientation)
   }
 
   initInput = (): void => {
@@ -142,9 +131,8 @@ class View implements IView {
     this.input.bindValueWasChanged(this.valueChanged)
 
     if (this.options.thumbType === 'double'){
-      
       this.input.initInputExtra()
-      this.input.returnAsHTML().after(this.input.returnInputExtraAsHTML())
+      this.input.returnAsHTML().after(this.input.returnExtraAsHTML())
       this.input.bindValueExtraWasChanged(this.extraValueChanged)
 
     }

@@ -25,7 +25,7 @@ class Input{
     return this.input
   }
 
-  returnInputExtraAsHTML = (): HTMLElement => {
+  returnExtraAsHTML = (): HTMLElement => {
     return this.inputExtra
   }
 
