@@ -16,7 +16,7 @@
 //   })
 //   describe('width', () => {
 //     beforeEach(() => {
-//       _.moveByClickingForHorizontal(event)
+//       _.onClickForHorizontal(event)
 //     }
 //     test('should return ri ght value', () => {
       

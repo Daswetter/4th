@@ -1,6 +1,8 @@
 import { ILine } from './ILine'
 class Line implements ILine{
   public line!: HTMLElement
+  private mouseDownValue!: number 
+  private mouseUpValue!: number 
   private onLineClicked!: (arg0:number) => void;
 
   constructor() {
@@ -18,18 +20,38 @@ class Line implements ILine{
     return this.line
   }
 
-  private setClickListener = (callback: (event: MouseEvent) => void): void => {
-    this.line.onclick = callback
+  onMouseDown = (client: keyof MouseEvent, event: MouseEvent): void => {
+    this.mouseDownValue = (event[client] as number)
+  }
+  onMouseUp = (client: keyof MouseEvent, event: MouseEvent): void => {
+    this.mouseUpValue = (event[client] as number)
   }
 
   setEventListener = (orientation: string): void => {
     if (orientation === 'horizontal'){
-      this.setClickListener(this.moveByClickingForHorizontal)
-    } 
+      const params = {
+        client: 'clientX' as keyof MouseEvent,
+        side: 'left' as keyof DOMRect,
+        offset: 'offsetWidth' as keyof HTMLElement
+      }
+      this.line.onmousedown = this.onMouseDown.bind(null, 'clientX')
+      this.line.onmouseup = this.onMouseUp.bind(null, 'clientX')
+      
+      this.line.addEventListener('click', this.onClick.bind(null, params))
+    }
     if (orientation === 'vertical'){
-      this.setClickListener(this.moveByClickingForVertical)
+      this.line.onmousedown = this.onMouseDown.bind(null, 'clientY')
+      this.line.onmouseup = this.onMouseUp.bind(null, 'clientY')
+      const params = {
+        client: 'clientY' as keyof MouseEvent,
+        side: 'bottom' as keyof DOMRect,
+        offset: 'offsetHeight' as keyof HTMLElement
+      }
+
+      this.line.addEventListener('click', this.onClick.bind(null, params))
     } 
   }
+  
 
   size = (): {width: number, height: number} => {
     return {
@@ -45,31 +67,27 @@ class Line implements ILine{
     }
   }
   
-  moveByClicking = (client: keyof MouseEvent, side: keyof DOMRect, size: keyof HTMLElement, event: MouseEvent) : void => {
-    let part
-    let distFromBeginToClick = (event[client] as number) - (this.line.getBoundingClientRect()[side] as number)
-    
-    if (side === 'bottom'){
-      distFromBeginToClick = - distFromBeginToClick
-    }
-    
-    if (distFromBeginToClick < 0){
-      part = 0
-    } else if (distFromBeginToClick > (this.line[size] as number)) {
-      part = 1
-    } else{
-      part = distFromBeginToClick / (this.line[size] as number)
-      this.onLineClicked(part)
+  onClick = (params: {client: keyof MouseEvent, side: keyof DOMRect, offset: keyof HTMLElement}, event: MouseEvent) : void => {
+    if ( this.mouseDownValue === this.mouseUpValue){
+      let part
+      let distFromBeginToClick = (event[params.client] as number) - (this.line.getBoundingClientRect()[params.side] as number)
+      
+      if (params.side === 'bottom'){
+        distFromBeginToClick = - distFromBeginToClick
+      }
+      
+      if (distFromBeginToClick < 0){
+        part = 0
+      } else if (distFromBeginToClick > (this.line[params.offset] as number)) {
+        part = 1
+      } else{
+        part = distFromBeginToClick / (this.line[params.offset] as number)
+        this.onLineClicked(part)
+      }
     }
   }
 
-  moveByClickingForVertical = (event: MouseEvent) : void => {
-    this.moveByClicking.call(null, 'clientY', 'bottom', 'offsetHeight', event)
-  }
-
-  moveByClickingForHorizontal = (event: MouseEvent) : void => {
-    this.moveByClicking.call(null, 'clientX', 'left', 'offsetWidth', event)
-  }
+  
 
 
   bindLineClicked(callback: (arg0:number) => void): void {

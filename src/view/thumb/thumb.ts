@@ -15,7 +15,7 @@ class Thumb{
   returnThumbAsHTML = (): HTMLElement =>  {
     return this.thumb
   }
-  returnThumbExtraAsHTML = (): HTMLElement =>  {
+  returnExtraAsHTML = (): HTMLElement =>  {
     return this.thumbExtra
   }
 
@@ -37,69 +37,68 @@ class Thumb{
   }
 
 
-  getOrientationParams = (orientation = 'horizontal'): [keyof MouseEvent, keyof DOMRect, keyof HTMLElement] => {
-    const sides = [
-      'clientX',
-      'left',
-      'offsetWidth',
-    ] as [
-      keyof MouseEvent,
-      keyof DOMRect,
-      keyof HTMLElement,
-    ]
-    if (orientation === 'vertical'){
-      sides[0] = 'clientY'
-      sides[1] = 'bottom'
-      sides[2] = 'offsetHeight'
+  getOrientationParams = (orientation = 'horizontal', lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): {page: keyof MouseEvent, side: keyof HTMLElement, size: keyof HTMLElement, lineSize: number, lineSide: number} => {
+    let params = {
+      page: 'pageX' as keyof MouseEvent,
+      side: 'offsetLeft' as keyof HTMLElement,
+      size: 'offsetWidth' as keyof HTMLElement,
+      lineSize: lineSize.width, 
+      lineSide: lineSide.left, 
     }
-    return sides
+    if (orientation === 'vertical'){
+      params = {
+        page: 'pageY' as keyof MouseEvent,
+        side: 'offsetTop' as keyof HTMLElement,
+        size:'offsetHeight' as keyof HTMLElement,
+        lineSize: lineSize.height, 
+        lineSide: lineSide.bottom, 
+      }
+      
+    }
+    
+    return params
   }
-  setOnMouseDown = (element: HTMLElement, sides: [keyof MouseEvent, keyof DOMRect, keyof HTMLElement ], lineSide: number, lineSize: number): void => {
-    element.onmousedown = this.onMouseDown.bind(null, element, sides, lineSide, lineSize)   
+
+  setOnMouseDown = (element: HTMLElement, params: {page: keyof MouseEvent, side: keyof HTMLElement, size: keyof HTMLElement, lineSide: number, lineSize: number}): void => {
+    element.onmousedown = this.onMouseDown.bind(null, element, params)   
   }
 
   setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, orientation = 'horizontal', element = 'primary'): void => {
-    const sides = this.getOrientationParams(orientation)
-    if (orientation === 'horizontal' && element === 'primary'){
-      this.setOnMouseDown(this.thumb, sides, lineSide.left, lineSize.width)
+    const params = this.getOrientationParams(orientation, lineSize, lineSide)
+
+    if (element === 'primary'){
+      this.setOnMouseDown(this.thumb, params)
     }
-    if (orientation === 'horizontal' && element === 'extra'){
-      this.setOnMouseDown(this.thumbExtra, sides, lineSide.left, lineSize.width)
-    }
-    if (orientation === 'vertical' && element === 'primary'){
-      this.setOnMouseDown(this.thumb, sides, lineSide.bottom, lineSize.height)
-    }
-    if (orientation === 'vertical' && element === 'extra'){
-      this.setOnMouseDown(this.thumbExtra, sides, lineSide.bottom, lineSize.height)
+    if (element === 'extra'){
+      this.setOnMouseDown(this.thumbExtra, params)
     }
   }
 
-  onMouseDown = (element: HTMLElement, array: [keyof MouseEvent, keyof DOMRect, keyof HTMLElement], lineSide: number, lineSize: number, event: MouseEvent) : void => { 
+  onMouseDown = (element: HTMLElement, params: {page: keyof MouseEvent, side: keyof HTMLElement, size: keyof HTMLElement, lineSize: number, lineSide: number}, event: MouseEvent) : void => { 
 
     event.preventDefault()
 
-    let shift = (event[array[0]] as number) - (element.getBoundingClientRect()[array[1]] as number)
-
-    if (array[0] === 'clientY'){
-      shift = - shift
+    
+    let shift = (event[params.page] as number) - (element[params.side] as number) - params.lineSide
+    
+    if (params.page === 'pageY'){
+      shift = shift + params.lineSize
     }
 
     this.boundOnMouseUp = this.onMouseUp.bind(this)
-
-    const params: Array<number> = [lineSide, lineSize, shift]
-    this.boundOnMouseMove = this.onMouseMove.bind(this, element, params, array)
+    this.boundOnMouseMove = this.onMouseMove.bind(this, element, {...params, shift: shift})
     
     document.addEventListener('mousemove', this.boundOnMouseMove)
     document.addEventListener('mouseup', this.boundOnMouseUp)
   }
 
 
-  onMouseMove = (element: HTMLElement, params: Array<number>, array: [keyof MouseEvent, keyof DOMRect, keyof HTMLElement], event: MouseEvent): void => {
+  onMouseMove = (element: HTMLElement, params: {page: keyof MouseEvent, side: keyof HTMLElement, size: keyof HTMLElement, lineSize: number, lineSide: number, shift: number}, event: MouseEvent): void => {
     
-    let part = (event[array[0]] as number - params[0] - params[2] + (element[array[2]] as number) / 2) / params[1]
-
-    if (array[0] === 'clientY'){
-      part = -part
+    let part = (event[params.page] as number - params.lineSide - params.shift + (element[params.size] as number) / 2) / params.lineSize    
+    
+    if (params.page === 'pageY'){
+      part = - part 
     }
     
     if (part < 0){

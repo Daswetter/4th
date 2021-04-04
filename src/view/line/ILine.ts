@@ -4,10 +4,7 @@ interface ILine {
   setEventListener(orientation: string): void
 
   
-  moveByClicking(client: keyof MouseEvent, side: keyof DOMRect, size: keyof HTMLElement, event: MouseEvent):void
-
-  moveByClickingForVertical(event: MouseEvent) : void
-  moveByClickingForHorizontal(event: MouseEvent) : void
+  onClick(params: {client: keyof MouseEvent, side: keyof DOMRect, offset: keyof HTMLElement}, event: MouseEvent) : void
 
 
   bindLineClicked(callback: (arg0:number) => void): void

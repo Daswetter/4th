@@ -72,18 +72,22 @@ class View implements IView {
     if (this.options.thumbType === 'double'){
       this.line.bindLineClicked(this.changePositionForTheNearest)
     }
+    
   }
 
   initThumb = () : void => {
     const orientation = this.options.orientation 
     this.thumb = new Thumb() 
     this.line.returnAsHTML().append(this.thumb.returnThumbAsHTML())
+    
+    
     this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, 'primary')
+    
     this.thumb.setInitialSettings(this.line.size(), orientation)
-
+    
     if (this.options.thumbType === 'double'){
       this.thumb.initThumbExtra()
-      this.line.returnAsHTML().append(this.thumb.returnThumbExtraAsHTML())
+      this.line.returnAsHTML().append(this.thumb.returnExtraAsHTML())
       this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, 'extra')
       this.thumb.setInitialSettings(this.line.size(), orientation, 'extra')
     }
@@ -94,11 +98,11 @@ class View implements IView {
 
   initSatellite = (): void => {
     this.satellite = new Satellite()
-    this.wrapper.returnAsHTML().append(this.satellite.returnSatelliteAsHTMLElement())
+    this.wrapper.returnAsHTML().append(this.satellite.returnAsHTML())
     
     if (this.options.thumbType === 'double'){
       this.satellite.initSatelliteExtra()
-      this.wrapper.returnAsHTML().append(this.satellite.returnSatelliteExtraAsHTMLElement())
+      this.wrapper.returnAsHTML().append(this.satellite.returnExtraAsHTML())
     }
   }
   

@@ -18,6 +18,7 @@ class Model implements IModel{
     if(!this.isInteger(stepSize)){
       currentValue = +currentValue.toFixed(this.convertStepSizeToDecimal(stepSize))
     } 
+
     return currentValue
   }
 
@@ -31,11 +32,13 @@ class Model implements IModel{
     this.onExtraCurrentChanged(currentValue, part)
   }
   
+  
   countCurrentPart(currentValue: number): number {
     const min = this.options.min
     const max = this.options.max
     
     let part = (currentValue - min) / (max - min)
+
     if (currentValue > max){
       part = 1
     } else if (currentValue < min){
@@ -43,13 +46,27 @@ class Model implements IModel{
     }
     return part
   }
+
+  filterCurrentValue = (currentValue: number): number => {
+    const min = this.options.min
+    const max = this.options.max
+    if (currentValue < min){
+      return min
+    } else if (currentValue > max) {
+      return max
+    }
+    return currentValue
+  }
+  
   setCurrentPart(currentValue: number): void {
     const part = this.countCurrentPart(currentValue)
+    currentValue = this.filterCurrentValue(currentValue)
     this.onCurrentChanged(currentValue, part)
   }
   
   setCurrentPartForExtra(currentValue: number): void {
     const part = this.countCurrentPart(currentValue)
+    currentValue = this.filterCurrentValue(currentValue)
     this.onExtraCurrentChanged(currentValue, part)
   }
 
@@ -62,8 +79,11 @@ class Model implements IModel{
     const half = (max - min) / 2 + min
     const threeQuarter = (max - min) / 4 * 3 + min 
 
-    scaleElements.push(min, quarter, half, threeQuarter, max)
+    scaleElements.push(quarter, half, threeQuarter)
     const roundScaleElements: Array<number> = scaleElements.map( x => this.roundToDecimal(x, this.convertStepSizeToDecimal(stepSize)))
+
+    roundScaleElements.push(max)
+    roundScaleElements.unshift(min)
 
     return roundScaleElements
   }

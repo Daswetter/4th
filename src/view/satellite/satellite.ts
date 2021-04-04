@@ -17,11 +17,11 @@ class Satellite {
     this.satelliteExtra = this.init(this.satelliteExtra)
   }
 
-  returnSatelliteAsHTMLElement = (): HTMLElement => {
+  returnAsHTML = (): HTMLElement => {
     return this.satellite
   }
 
-  returnSatelliteExtraAsHTMLElement = (): HTMLElement => {
+  returnExtraAsHTML = (): HTMLElement => {
     return this.satelliteExtra
   }
 
