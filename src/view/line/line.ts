@@ -38,17 +38,17 @@ class Line implements ILine{
     }
   }
 
-  side = (): {left: number, bottom: number} => {
+  side = (): {left: number, bottom: number} => { 
     return {
-      left: this.line.getBoundingClientRect().left + document.documentElement.scrollLeft,
-      bottom: this.line.getBoundingClientRect().bottom + document.documentElement.scrollTop
+      left: this.line.offsetLeft,
+      bottom: this.line.offsetTop + this.line.offsetHeight
     }
   }
   
   moveByClicking = (client: keyof MouseEvent, side: keyof DOMRect, size: keyof HTMLElement, event: MouseEvent) : void => {
     let part
     let distFromBeginToClick = (event[client] as number) - (this.line.getBoundingClientRect()[side] as number)
-
+    
     if (side === 'bottom'){
       distFromBeginToClick = - distFromBeginToClick
     }

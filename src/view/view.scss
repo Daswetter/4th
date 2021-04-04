@@ -1,13 +1,15 @@
-
 .range-slider__input{
   &:focus {
     outline: none;
   }
 }
+html {
+  overflow-y: scroll; 
+}
 
 .js-slider1{
   .range-slider__wrapper{
-    width: 60%;
+    width: 300px;
     margin: 50px auto;
   }
   .range-slider__line{
@@ -65,7 +67,7 @@
   .range-slider__wrapper{
     width: 200px;
     height: 300px;
-    margin: 60px;
+    margin: 0;
     padding: 40px;
   }
   .range-slider__line{
@@ -110,6 +112,10 @@
 }
 
 .js-slider3 {
+  .range-slider__wrapper{ 
+    margin: 100px auto;
+    width: 200px;
+  }
   .range-slider__line{
     height: 20px;
     background: paleturquoise;
@@ -235,7 +241,7 @@
 
 .js-slider7 {
   .range-slider__wrapper{
-    margin: 100px;
+    margin: 100px 100px 100px 100px;
     height: 300px;
   }
   .range-slider__line{

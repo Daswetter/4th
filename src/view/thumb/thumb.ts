@@ -30,6 +30,7 @@ class Thumb{
   initThumb = (): void => {
     this.thumb = this.init(this.thumb, 'thumb')
   }
+
   initThumbExtra = (): void => {
     this.thumbExtra = this.init(this.thumbExtra, 'thumb')
     this.thumbExtra.classList.add('range-slider__thumbExtra')
@@ -38,18 +39,18 @@ class Thumb{
 
   getOrientationParams = (orientation = 'horizontal'): [keyof MouseEvent, keyof DOMRect, keyof HTMLElement] => {
     const sides = [
-      'pageX',
+      'clientX',
       'left',
-      'scrollLeft',
+      'offsetWidth',
     ] as [
       keyof MouseEvent,
       keyof DOMRect,
       keyof HTMLElement,
     ]
     if (orientation === 'vertical'){
-      sides[0] = 'pageY'
+      sides[0] = 'clientY'
       sides[1] = 'bottom'
-      sides[2] = 'scrollTop'
+      sides[2] = 'offsetHeight'
     }
     return sides
   }
@@ -77,27 +78,27 @@ class Thumb{
 
     event.preventDefault()
 
-    let shift = (event[array[0]] as number) - (element.getBoundingClientRect()[array[1]] as number) - (document.documentElement[array[2]] as number)
+    let shift = (event[array[0]] as number) - (element.getBoundingClientRect()[array[1]] as number)
 
-    if (array[0] === 'pageY'){
+    if (array[0] === 'clientY'){
       shift = - shift
     }
 
     this.boundOnMouseUp = this.onMouseUp.bind(this)
 
     const params: Array<number> = [lineSide, lineSize, shift]
-    this.boundOnMouseMove = this.onMouseMove.bind(this, element, params, array[0])
+    this.boundOnMouseMove = this.onMouseMove.bind(this, element, params, array)
     
     document.addEventListener('mousemove', this.boundOnMouseMove)
     document.addEventListener('mouseup', this.boundOnMouseUp)
   }
 
 
-  onMouseMove = (element: HTMLElement, params: Array<number>, page: keyof MouseEvent, event: MouseEvent): void => {
+  onMouseMove = (element: HTMLElement, params: Array<number>, array: [keyof MouseEvent, keyof DOMRect, keyof HTMLElement], event: MouseEvent): void => {
+    
+    let part = (event[array[0]] as number - params[0] - params[2] + (element[array[2]] as number) / 2) / params[1]
 
-    let part = (event[page] as number - params[0] - params[2]) / params[1]
-
-    if (page === 'pageY'){
+    if (array[0] === 'clientY'){
       part = -part
     }
     
@@ -116,8 +117,8 @@ class Thumb{
 
 
   onMouseUp = () : void => {
-    document.removeEventListener('mousemove', this.boundOnMouseMove)
     document.removeEventListener('mouseup', this.boundOnMouseUp)
+    document.removeEventListener('mousemove', this.boundOnMouseMove)
   }
 
   changeElementPosition = (element: HTMLElement, side: string, part: number, lineSize: number): void => {
