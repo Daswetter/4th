@@ -13,7 +13,7 @@ class View implements IView {
   wrapper!: Wrapper
   line!: Line
   thumb!: Thumb 
-  progress!: Progress 
+  progress!: Progress
   scale!: Scale 
   satellite!: Satellite
   input!: Input
@@ -141,33 +141,41 @@ class View implements IView {
     }
   }
 
-  currentWasSentFromModel(res: number, part: number): void{
+  notify = (current: number, part: number, element: string): void => {
     const orientation = this.options.orientation
-    const element = 'primary'
-    this.part = part
+
+    if (element === 'primary'){
+      this.part = part
+    }
+
+    if (element === 'extra'){
+      this.partExtra = part
+    }
 
     this.thumb.setPosition(part, this.line.size(), orientation, element)
-    this.options.input ? this.input.displayCurrentValue(res) : ''
+    this.options.input ? this.input.update(current, element) : ''
     this.options.progress ? this.progress.setPosition(part, this.line.size(), orientation, element) : ''
-    this.options.satellite ? this.satellite.setPosition(part, res, this.line.size(), this.line.side(), this.thumb.size(), orientation) : ''
+    this.options.satellite ? this.satellite.setPosition(part, current, this.line.size(), this.line.side(), this.thumb.size(), orientation, element) : ''
   }
 
+  currentWasSentFromModel(current: number, part: number): void{
+    const element = 'primary'
+    this.notify(current, part, element)
+  }
 
-  extraCurrentWasSentFromModel(res: number, part: number): void{
-    const orientation = this.options.orientation
+  extraCurrentWasSentFromModel(current: number, part: number): void{
     const element = 'extra'
-    this.partExtra = part
-    
-    this.thumb.setPosition(part, this.line.size(), orientation, element)
-    this.options.input ? this.input.displayCurrentValue(res, 'extra') : ''
-    this.options.progress ? this.progress.setPosition(part, this.line.size(), orientation, element) : ''
-    this.options.satellite ? this.satellite.setPosition(part, res, this.line.size(), this.line.side(), this.thumb.size(), orientation, element) : ''
+    this.notify(current, part, element)
+  }
+
+  countDistance = (part: number, element: string): number => {
+    const orientation = this.options.orientation
+    return Math.abs(this.thumb.countCurrentPart(this.line.size(), orientation, element) - part)
   }
 
   changePositionForTheNearest = (part: number): void => {
-    const orientation = this.options.orientation
-    const distFromActionToPrimary = Math.abs(this.thumb.countCurrentPart(this.line.size(), orientation, 'primary') - part)
-    const distFromActionToExtra = Math.abs(this.thumb.countCurrentPart(this.line.size(), orientation, 'extra') - part)
+    const distFromActionToPrimary = this.countDistance(part, 'primary')
+    const distFromActionToExtra = this.countDistance(part, 'extra')
 
     if (distFromActionToPrimary > distFromActionToExtra){
       this.extraPartChanged(part)

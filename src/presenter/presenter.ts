@@ -1,6 +1,5 @@
 
 import { IModel } from '../model/IModel'
-
 import { IView } from '../view/IView'
 import './../interface/IOptions'
 

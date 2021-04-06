@@ -1,5 +1,4 @@
-import { IWrapper } from './IWrapper'
-class Wrapper implements IWrapper{
+class Wrapper{
   public wrapper!: HTMLElement
   private wrapperWasResized!: () => void
 
@@ -7,7 +6,8 @@ class Wrapper implements IWrapper{
     this.initElement = initElement
     this.init()
   }
-  init = (): void => {
+  
+  private init = (): void => {
     this.wrapper = document.createElement('div')
     this.wrapper.classList.add('range-slider__wrapper')
     this.initElement.append(this.wrapper)

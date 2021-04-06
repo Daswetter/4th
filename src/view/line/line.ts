@@ -1,5 +1,4 @@
-import { ILine } from './ILine'
-class Line implements ILine{
+class Line{
   public line!: HTMLElement
   private mouseDownValue!: number 
   private mouseUpValue!: number 

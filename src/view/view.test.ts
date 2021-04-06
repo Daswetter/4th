@@ -1,6 +1,5 @@
 import { IView } from './IView'
 import { View } from './view'
-import { IWrapper } from './wrapper/IWrapper'
 
 describe('View', () => {
   let _: IView
@@ -101,15 +100,15 @@ describe('View', () => {
       expect(_.thumb.setPosition).toHaveBeenCalled()
     })
     test('should call input"s method', () => {
-      _.input.displayCurrentValue = jest.fn()
+      _.input.update = jest.fn()
       _.currentWasSentFromModel(100, 0.5)
-      expect(_.input.displayCurrentValue).toHaveBeenCalledWith(100)
+      expect(_.input.update).toHaveBeenCalledWith(100, 'primary')
     })
     test('should not call input"s method if input: false', () => {
       options.input = false
-      _.input.displayCurrentValue = jest.fn()
+      _.input.update = jest.fn()
       _.currentWasSentFromModel(1, 0.5)
-      expect(_.input.displayCurrentValue).not.toHaveBeenCalled()
+      expect(_.input.update).not.toHaveBeenCalled()
     })
     test('should call progress"s method', () => {
       _.progress.setPosition = jest.fn()
@@ -154,15 +153,15 @@ describe('View', () => {
       expect(_.thumb.setPosition).toHaveBeenCalled()
     })
     test('should call input"s method', () => {
-      _.input.displayCurrentValue = jest.fn()
+      _.input.update = jest.fn()
       _.extraCurrentWasSentFromModel(100, 0.5)
-      expect(_.input.displayCurrentValue).toHaveBeenCalledWith(100, 'extra')
+      expect(_.input.update).toHaveBeenCalledWith(100, 'extra')
     })
     test('should not call input"s method', () => {
       options.input = false
-      _.input.displayCurrentValue = jest.fn()
+      _.input.update = jest.fn()
       _.extraCurrentWasSentFromModel(100, 0.5)
-      expect(_.input.displayCurrentValue).not.toHaveBeenCalled()
+      expect(_.input.update).not.toHaveBeenCalled()
     })
     test('should call progress"s method', () => {
       _.progress.setPosition = jest.fn()
