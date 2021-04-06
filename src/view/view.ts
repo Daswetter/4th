@@ -7,20 +7,19 @@ import { Satellite } from './satellite/satellite'
 import { Input } from './input/input'
 
 import './../interface/IOptions'
-import './IView'
 import { IView } from './IView'
 
 class View implements IView { 
-  public wrapper!: Wrapper
-  public line!: Line
-  public thumb!: Thumb 
-  public progress!: Progress 
-  public scale!: Scale 
-  public satellite!: Satellite
-  public input!: Input
+  wrapper!: Wrapper
+  line!: Line
+  thumb!: Thumb 
+  progress!: Progress 
+  scale!: Scale 
+  satellite!: Satellite
+  input!: Input
 
-  private part!: number
-  private partExtra!: number
+  part!: number
+  partExtra!: number
   
   private partChanged!: (arg0: number) => void
   private extraPartChanged!: (arg0: number) => void

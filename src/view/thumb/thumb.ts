@@ -65,20 +65,18 @@ class Thumb{
 
   setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, orientation = 'horizontal', element = 'primary'): void => {
     const params = this.getOrientationParams(orientation, lineSize, lineSide)
+    let currentElement = this.thumb
 
-    if (element === 'primary'){
-      this.setOnMouseDown(this.thumb, params)
-    }
     if (element === 'extra'){
-      this.setOnMouseDown(this.thumbExtra, params)
+      currentElement = this.thumbExtra
     }
+    this.setOnMouseDown(currentElement, params)
   }
 
   onMouseDown = (element: HTMLElement, params: {page: keyof MouseEvent, side: keyof HTMLElement, size: keyof HTMLElement, lineSize: number, lineSide: number}, event: MouseEvent) : void => { 
 
     event.preventDefault()
 
-    
     let shift = (event[params.page] as number) - (element[params.side] as number) - params.lineSide
     
     if (params.page === 'pageY'){
@@ -128,43 +126,48 @@ class Thumb{
     }
   }
   setPosition = (part: number, lineSize: { width: number, height: number}, orientation = 'horizontal', element = 'primary'): void => {
-    if (orientation === 'horizontal' && element === 'primary'){
-      this.changeElementPosition(this.thumb, 'left', part, lineSize.width)
-    }
+    let currentElement = this.thumb
+    let side = 'left'
+    let lineParameter = lineSize.width
+  
     if (orientation === 'horizontal' && element === 'extra'){
-      this.changeElementPosition(this.thumbExtra, 'left', part, lineSize.width)
+      currentElement = this.thumbExtra
     }
     if (orientation === 'vertical' && element === 'primary'){
-      this.changeElementPosition(this.thumb, 'bottom', part, lineSize.height)
+      side = 'bottom'
+      lineParameter = lineSize.height
     }
     if (orientation === 'vertical' && element === 'extra'){
-      this.changeElementPosition(this.thumbExtra, 'bottom', part, lineSize.height)
+      currentElement = this.thumbExtra
+      side = 'bottom'
+      lineParameter = lineSize.height
     }
+    this.changeElementPosition(currentElement, side, part, lineParameter)
   }
 
 
-  countCurrentPartForHorizontal = (element: HTMLElement, lineWidth: number): number => {
-    const part = (element.offsetLeft + element.offsetWidth / 2 ) / lineWidth
-    return part
-  }
-  countCurrentPartForVertical = (element: HTMLElement, lineHeight: number): number => {
-    const part = 1 - (element.offsetTop + element.offsetHeight / 2 ) / lineHeight
+  currentPart = (element: HTMLElement, lineSize: number, orientation: string): number => {
+    let part = (element.offsetLeft + element.offsetWidth / 2 ) / lineSize
+    if (orientation === 'vertical'){
+      part = 1 - (element.offsetTop + element.offsetHeight / 2 ) / lineSize
+    }
     return part
   }
   countCurrentPart = (lineSize: {width: number, height: number}, orientation = 'horizontal', element = 'primary'): number => {
-    let part
-    if (orientation === 'horizontal' && element === 'primary'){
-      part = this.countCurrentPartForHorizontal(this.thumb, lineSize.width)
-    } 
+    let currentElement = this.thumb
+    let lineParameter = lineSize.width
+
     if (orientation === 'horizontal' && element === 'extra'){
-      part = this.countCurrentPartForHorizontal(this.thumbExtra, lineSize.width)
+      currentElement = this.thumbExtra
     } 
     if (orientation === 'vertical' && element === 'primary'){
-      part = this.countCurrentPartForVertical(this.thumb, lineSize.height)
+      lineParameter = lineSize.height
     } 
     if (orientation === 'vertical' && element === 'extra'){
-      part = this.countCurrentPartForVertical(this.thumbExtra, lineSize.height)
+      currentElement = this.thumbExtra
+      lineParameter = lineSize.height
     } 
+    const part = this.currentPart(currentElement, lineParameter, orientation)
     return part as number
   }
 

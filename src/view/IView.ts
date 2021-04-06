@@ -1,6 +1,24 @@
 import '../interface/IOptions'
+import { Thumb } from './thumb/thumb'
+import { Wrapper } from './wrapper/wrapper'
+import { Line } from './line/line'
+import { Progress } from './progress/progress'
+import { Scale } from './scale/scale'
+import { Satellite } from './satellite/satellite'
+import { Input } from './input/input'
 
 interface IView {
+  wrapper: Wrapper
+  line: Line
+  thumb: Thumb 
+  progress: Progress 
+  scale: Scale 
+  satellite: Satellite
+  input: Input
+
+  part: number
+  partExtra: number
+
   initView(scaleElements: number[]): void
   initWrapper(): void
   initLine(): void
