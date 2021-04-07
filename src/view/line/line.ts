@@ -15,63 +15,58 @@ class Line{
     this.line.classList.add('range-slider__line')
   }
 
-  returnAsHTML = (): HTMLElement => {
+  public returnAsHTML = (): HTMLElement => {
     return this.line
   }
 
-  onMouseDown = (client: keyof MouseEvent, event: MouseEvent): void => {
+  private onMouseDown = (client: keyof MouseEvent, event: MouseEvent): void => {
     this.mouseDownValue = (event[client] as number)
   }
-  onMouseUp = (client: keyof MouseEvent, event: MouseEvent): void => {
+  private onMouseUp = (client: keyof MouseEvent, event: MouseEvent): void => {
     this.mouseUpValue = (event[client] as number)
   }
 
-  setEventListener = (orientation: string): void => {
-    if (orientation === 'horizontal'){
-      const params = {
-        client: 'clientX' as keyof MouseEvent,
-        side: 'left' as keyof DOMRect,
-        offset: 'offsetWidth' as keyof HTMLElement
-      }
-      this.line.onmousedown = this.onMouseDown.bind(null, 'clientX')
-      this.line.onmouseup = this.onMouseUp.bind(null, 'clientX')
-      
-      this.line.addEventListener('click', this.onClick.bind(null, params))
+  public setEventListener = (orientation: string): void => {
+    let params = {
+      client: 'clientX' as keyof MouseEvent,
+      side: 'left' as keyof DOMRect,
+      offset: 'offsetWidth' as keyof HTMLElement
     }
     if (orientation === 'vertical'){
-      this.line.onmousedown = this.onMouseDown.bind(null, 'clientY')
-      this.line.onmouseup = this.onMouseUp.bind(null, 'clientY')
-      const params = {
-        client: 'clientY' as keyof MouseEvent,
-        side: 'bottom' as keyof DOMRect,
-        offset: 'offsetHeight' as keyof HTMLElement
+      params = {
+        client: 'clientY',
+        side: 'bottom',
+        offset: 'offsetHeight',
       }
-
-      this.line.addEventListener('click', this.onClick.bind(null, params))
     } 
+
+    this.line.onmousedown = this.onMouseDown.bind(null, params.client)
+    this.line.onmouseup = this.onMouseUp.bind(null, params.client)
+
+    this.line.addEventListener('click', this.onClick.bind(null, params))
   }
   
 
-  size = (): {width: number, height: number} => {
+  public size = (): {width: number, height: number} => {
     return {
       width: this.line.offsetWidth,
       height: this.line.offsetHeight,
     }
   }
 
-  side = (): {left: number, bottom: number} => { 
+  public side = (): {left: number, bottom: number} => { 
     return {
       left: this.line.offsetLeft,
       bottom: this.line.offsetTop + this.line.offsetHeight
     }
   }
   
-  onClick = (params: {client: keyof MouseEvent, side: keyof DOMRect, offset: keyof HTMLElement}, event: MouseEvent) : void => {
+  private onClick = (params: {client: keyof MouseEvent, side: keyof DOMRect, offset: keyof HTMLElement}, event: MouseEvent) : void => {
     if ( this.mouseDownValue === this.mouseUpValue){
       let part
       let distFromBeginToClick = (event[params.client] as number) - (this.line.getBoundingClientRect()[params.side] as number)
       
-      if (params.side === 'bottom'){
+      if (params.client === 'clientY'){
         distFromBeginToClick = - distFromBeginToClick
       }
       
@@ -81,15 +76,16 @@ class Line{
         part = 1
       } else{
         part = distFromBeginToClick / (this.line[params.offset] as number)
-        this.onLineClicked(part)
+        
       }
+      this.onLineClicked(part)
     }
   }
 
   
 
 
-  bindLineClicked(callback: (arg0:number) => void): void {
+  public bindLineClicked(callback: (arg0:number) => void): void {
     this.onLineClicked = callback;
   }
 }
