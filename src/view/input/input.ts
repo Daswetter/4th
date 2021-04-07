@@ -6,8 +6,7 @@ class Input{
   private onValueExtraWasChanged!: (value: number) => void
 
   constructor(){
-    this.input = this.init(this.input)
-    this.eventListener(this.input, this.sendValue.bind(null, this.input))
+    this.initInput()
   }
 
   private init = (element: HTMLInputElement): HTMLInputElement => {
@@ -16,51 +15,61 @@ class Input{
     return element
   }
 
-  initInputExtra = (): void => {
-    this.inputExtra = this.init(this.inputExtra)
-    this.eventListener(this.inputExtra, this.sendValueForExtra.bind(null, this.inputExtra))
+  private initInput = (): void => {
+    this.input = this.init(this.input)
+    this.setEventListener(this.input, this.sendValue.bind(null, this.input))
   }
 
-  returnAsHTML = (): HTMLElement => {
+  public initInputExtra = (): void => {
+    this.inputExtra = this.init(this.inputExtra)
+    this.setEventListener(this.inputExtra, this.sendValueForExtra.bind(null, this.inputExtra))
+  }
+
+  public returnAsHTML = (): HTMLElement => {
     return this.input
   }
 
-  returnExtraAsHTML = (): HTMLElement => {
+  public returnExtraAsHTML = (): HTMLElement => {
     return this.inputExtra
   }
 
-  private eventListener = (element: HTMLInputElement, fn: () => void): void => {
+  private setEventListener = (element: HTMLInputElement, fn: () => void): void => {
     ['enter','blur'].forEach( evt => 
       element.addEventListener(evt, fn, false)
     )
   }
 
-  private setValue = (element: HTMLInputElement): number => {
+  private getValue = (element: HTMLInputElement): number => {
     return +element.value
   }
 
-  sendValue = (element: HTMLInputElement): void => {
-    const value = this.setValue(element)
+  private sendValue = (element: HTMLInputElement): void => {
+    element.classList.add('test')
+    const value = this.getValue(element)
+    this.onValueWasChanged(value)
+  }
+
+  private sendValueForExtra = (element: HTMLInputElement): void => {
+    const value = this.getValue(element)
     this.onValueExtraWasChanged(value)
   }
 
-  sendValueForExtra = (element: HTMLInputElement): void => {
-    const value = this.setValue(element)
-    this.onValueExtraWasChanged(value)
+  private setValue = (element: HTMLInputElement, result: number): void => {
+    element.value = result + ''
   }
 
-  update = (res: number, element = 'primary'): void => {
-    if (element === 'primary'){
-      this.input.value = res + ''
-    } else if ( element === 'extra'){
-      this.inputExtra.value = res + ''
+  public update = (result: number, element = 'primary'): void => {
+    let targetElement = this.input
+    if ( element === 'extra'){
+      targetElement = this.inputExtra
     } 
+    this.setValue(targetElement, result)
   }
 
-  bindValueWasChanged(callback: (arg0:number) => void): void {
+  public bindValueWasChanged(callback: (arg0:number) => void): void {
     this.onValueWasChanged = callback;
   }
-  bindValueExtraWasChanged(callback: (arg0:number) => void): void {
+  public bindValueExtraWasChanged(callback: (arg0:number) => void): void {
     this.onValueExtraWasChanged = callback;
   }
 }
