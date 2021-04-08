@@ -4,10 +4,10 @@ class Progress{
   private part = 0
 
   constructor() {
-    this.progress = this.init(this.progress)
+    this.initProgress()
   }
 
-  init = (element: HTMLElement): HTMLElement => {
+  private init = (element: HTMLElement): HTMLElement => {
     element = document.createElement('div')
     element.classList.add('range-slider__progress')
     element.style.position = 'absolute'
@@ -15,8 +15,14 @@ class Progress{
     return element
   }
 
-  setInitialSettings = (lineSize: {width: number, height: number}, orientation = 'horizontal'): void => {
+  private initProgress = (): void => {
+    this.progress = this.init(this.progress)
+  }
+
+  public setInitialSettings = (lineSize: {width: number, height: number}, orientation = 'horizontal'): void => {
+
     this.progress.style.top = (lineSize.height - this.progress.offsetHeight) / 2 + 'px'
+
     if (orientation === 'vertical'){
       this.progress.style.top = ''
       this.progress.style.left = (lineSize.width - this.progress.offsetWidth) / 2 + 'px'
@@ -24,56 +30,55 @@ class Progress{
   }
   
 
-  returnAsHTML = (): HTMLElement => {
+  public returnAsHTML = (): HTMLElement => {
     return this.progress
   }
   
-  setPosition = (part: number, lineSize: {width: number, height: number}, orientation = 'horizontal', element = 'primary') :void => {
+  public update = (part: number, lineSize: {width: number, height: number}, orientation = 'horizontal', element = 'primary') :void => {
+    let lineOneSize = lineSize.width
+    let generalSide = 'left'
+    let secondSide = 'right'
+
     if (element === 'primary' && orientation === 'horizontal'){
       this.part = part
-      this.setProgress(lineSize.width)
     } 
 
     if (element === 'extra' && orientation === 'horizontal'){
       this.partExtra = part
-      this.setProgress(lineSize.width)
     } 
 
     if (element === 'primary' && orientation === 'vertical'){
       this.part = part
-      this.setProgressForVertical(lineSize.height)
+      lineOneSize = lineSize.height
+      generalSide = 'bottom'
+      secondSide = 'top'
     } 
 
     if (element === 'extra' && orientation === 'vertical'){
       this.partExtra = part
-      this.setProgressForVertical(lineSize.height)
+      lineOneSize = lineSize.height
+      generalSide = 'bottom'
+      secondSide = 'top'
     } 
-    
-    
+
+    this.setProgress(lineOneSize, generalSide, secondSide)
   } 
    
 
-  setProgress = (lineWidth: number): void => {
-    if (this.part < this.partExtra){
-      this.progress.style.left = this.part * lineWidth + 'px'
-      this.progress.style.right = lineWidth - this.partExtra * lineWidth + 'px'
-      
-    } else {
-      this.progress.style.left = this.partExtra * lineWidth + 'px'
-      this.progress.style.right = lineWidth - this.part * lineWidth + 'px'
-    }
-  }
+  private setProgress = (lineSide: number, generalSideName: string, secondSideName: string ): void => {
+    let partForGeneral = this.part
+    let partForSecond = this.partExtra
 
-  setProgressForVertical = (lineHeight: number): void => {
-    if (this.part < this.partExtra){
+    if (this.part >= this.partExtra){
+      partForGeneral = this.partExtra
+      partForSecond = this.part
+    } 
 
-      this.progress.style.bottom = this.part * lineHeight + 'px'
-      this.progress.style.top = lineHeight - this.partExtra * lineHeight + 'px'
-      
-    } else {
-      this.progress.style.bottom = this.partExtra * lineHeight + 'px'
-      this.progress.style.top = lineHeight - this.part * lineHeight + 'px'
-    }
+    const generalSide = partForGeneral * lineSide
+    const secondSide = lineSide - partForSecond * lineSide
+
+    this.progress.style.setProperty(`${generalSideName}`, `${generalSide}px`);
+    this.progress.style.setProperty(`${secondSideName}`, `${secondSide}px`);
   }
 
 }
