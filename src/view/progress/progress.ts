@@ -19,6 +19,10 @@ class Progress{
     this.progress = this.init(this.progress)
   }
 
+  public returnAsHTML = (): HTMLElement => {
+    return this.progress
+  }
+
   public setInitialSettings = (lineSize: {width: number, height: number}, orientation = 'horizontal'): void => {
 
     this.progress.style.top = (lineSize.height - this.progress.offsetHeight) / 2 + 'px'
@@ -30,9 +34,7 @@ class Progress{
   }
   
 
-  public returnAsHTML = (): HTMLElement => {
-    return this.progress
-  }
+  
   
   public update = (part: number, lineSize: {width: number, height: number}, orientation = 'horizontal', element = 'primary') :void => {
     let lineOneSize = lineSize.width

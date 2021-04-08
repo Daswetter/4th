@@ -1,33 +1,31 @@
 class Scale{
-  private scale!: HTMLElement 
-  private scaleHTMLElements!: Array<HTMLElement>
+  public scale!: HTMLElement 
   private onScaleWasClicked!: (arg0: number) => void;
 
   constructor() {
     this.init()
   }
   
-  init = (): void => {
+  private init = (): void => {
     this.scale = document.createElement('div')
     this.scale.style.display = 'flex'
     this.scale.style.justifyContent = 'space-between'
     this.scale.classList.add('range-slider__scale')
   }
 
-  returnAsHTML = (): HTMLElement => {
+  public returnAsHTML = (): HTMLElement => {
     return this.scale
   }
 
-  setScaleValues = (scaleValues: Array<number>): void => {
+  public setScaleValues = (scaleValues: Array<number>): void => {
     const scaleHTMLElements: Array<HTMLElement> = [];
     [0, 1, 2, 3, 4].forEach( (i: number): void => {
-      const value = this.initScaleElement(scaleValues[i], i / 4)
-      scaleHTMLElements.push(value)
+      const scaleElement = this.initScaleElement(scaleValues[i], i / 4)
+      scaleHTMLElements.push(scaleElement)
     })
-    this.scaleHTMLElements = scaleHTMLElements
   }
   
-  initScaleElement = (scaleValue: number, flag: number): HTMLElement => {
+  private initScaleElement = (scaleValue: number, flag: number): HTMLElement => {
     const element = document.createElement('div')
     this.scale.append(element)
     element.style.cursor = 'pointer'
@@ -37,16 +35,18 @@ class Scale{
     this.setScaleListener(element)
     return element
   } 
-  setScaleListener = (element: HTMLElement): void => {
+
+  private setScaleListener = (element: HTMLElement): void => {
     const dataAttribute = +(element.getAttribute('data-id') as string)
     element.onclick = this.onScaleWasClicked.bind(null, dataAttribute)
   }
 
-  setVerticalMod = (): void => {
+  public setVertical = (): void => {
     this.scale.style.flexDirection = 'column-reverse'
     this.scale.style.alignSelf = 'stretch'
   }
-  bindScaleWasClicked = (callback: (arg0: number) => void): void => {
+  
+  public bindScaleWasClicked = (callback: (arg0: number) => void): void => {
     this.onScaleWasClicked = callback;
   }
 }

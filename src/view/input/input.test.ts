@@ -57,6 +57,18 @@ describe('Input', () => {
     })
   })
 
+  describe('returnAsHTML', () => {
+    test('should return input as HTMLElement', () => {
+      expect(_.returnAsHTML()).toEqual(_.input)
+    })
+  })
+
+  describe('returnExtraAsHTML', () => {
+    test('should return inputExtra as HTMLElement', () => {
+      expect(_.returnExtraAsHTML()).toEqual(_.inputExtra)
+    })
+  })
+
   describe('update', () => {
     test('should set value to input', () => {
       _.update(100)

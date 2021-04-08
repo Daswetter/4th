@@ -18,6 +18,12 @@ describe('Line', () => {
     });
   })
 
+  describe('returnAsHTML', () => {
+    test('should return line as HTMLElement', () => {
+      expect(_.returnAsHTML()).toEqual(_.line)
+    })
+  })
+
   describe('setEventListener', () => {
     test('should set click to line ', () => {
       _.setEventListener('horizontal')
@@ -169,7 +175,38 @@ describe('Line', () => {
       _.line.dispatchEvent(click);
       expect(callback).toBeCalledWith(1);
     });
+  })
 
+  describe('size', () => {
+    test('should return line.offsetWidth and line.offsetHeight', () => {
+      Object.defineProperty(_.line, 'offsetWidth', {
+        value: 50,
+      })
+      Object.defineProperty(_.line, 'offsetHeight', {
+        value: 5,
+      })
+      expect(_.size()).toEqual({
+        width: 50,
+        height: 5
+      })
+    })
+  })
 
+  describe('side', () => {
+    test('should return line"s left and line"s bottom', () => {
+      Object.defineProperty(_.line, 'offsetLeft', {
+        value: 50,
+      })
+      Object.defineProperty(_.line, 'offsetHeight', {
+        value: 100,
+      })
+      Object.defineProperty(_.line, 'offsetTop', {
+        value: 5,
+      })
+      expect(_.side()).toEqual({
+        left: 50,
+        bottom: 105 
+      })
+    })
   })
 })

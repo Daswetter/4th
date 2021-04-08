@@ -14,6 +14,12 @@ describe('Progress', () => {
     })
   })
 
+  describe('returnAsHTML', () => {
+    test('should return progress as HTMLElement', () => {
+      expect(_.returnAsHTML()).toEqual(_.progress)
+    })
+  })
+
   describe('setInitialSettings', () => {
     test('set right style.top for horizontal', () => {
       const lineSize = {
