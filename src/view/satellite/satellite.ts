@@ -3,71 +3,81 @@ class Satellite {
   satelliteExtra!: HTMLElement
 
   constructor() {
-    this.satellite = this.init(this.satellite)
+    this.initSatellite()
   }
 
-  init = (element: HTMLElement): HTMLElement => {
+  private init = (element: HTMLElement): HTMLElement => {
     element = document.createElement('div')
     element.style.position = 'absolute'
     element.classList.add('range-slider__satellite')
     return element
   }
 
-  initSatelliteExtra = (): void => {
+  private initSatellite = (): void => {
+    this.satellite = this.init(this.satellite)
+  }
+  public initSatelliteExtra = (): void => {
     this.satelliteExtra = this.init(this.satelliteExtra)
   }
 
-  returnAsHTML = (): HTMLElement => {
+  public returnAsHTML = (): HTMLElement => {
     return this.satellite
   }
 
-  returnExtraAsHTML = (): HTMLElement => {
+  public returnExtraAsHTML = (): HTMLElement => {
     return this.satelliteExtra
   }
 
-  defineInnerText = (element: HTMLElement, res: number): void => {
-    element.innerText = res + ''
+  private defineInnerText = (element: HTMLElement, result: number): void => {
+    element.innerText = result + ''
   }
   
-  definePosition = (element: HTMLElement, part: number, lineWidth: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbHeight: number ): void => {
+  private setPosition = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbHeight: number ): void => {
 
-    element.style.left = lineLeft + part * lineWidth - element.offsetWidth / 2 + 'px'
-    if (lineHeight >= thumbHeight){
-      element.style.top = lineBottom - lineHeight - 1.2 * element.offsetHeight + 'px'
+    element.style.left = lineSide.left + part * lineSize.width - element.offsetWidth / 2 + 'px'
+
+    if (lineSize.height >= thumbHeight){
+      element.style.top = lineSide.bottom - lineSize.height - 1.2 * element.offsetHeight + 'px'
     } else {
-      element.style.top = lineBottom - lineHeight - 1.2 * element.offsetHeight - (thumbHeight - lineHeight) / 2 + 'px'
+      element.style.top = lineSide.bottom - lineSize.height - 1.2 * element.offsetHeight - (thumbHeight - lineSize.height) / 2 + 'px'
     }
   }
 
-  definePositionForVertical = (element: HTMLElement, part: number, lineWidth: number, lineHeight: number, lineBottom: number, lineLeft: number, thumbWidth: number): void => {
-    element.style.top = lineBottom - part * lineHeight - element.offsetHeight / 2 + 'px'    
-    if (lineWidth >= thumbWidth){
-      element.style.left = lineLeft - 1.2 * element.offsetWidth + 'px'
+  private setPositionForVertical = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbWidth: number): void => {
+    element.style.top = lineSide.bottom - part * lineSize.height - element.offsetHeight / 2 + 'px'    
+    if (lineSize.width >= thumbWidth){
+      element.style.left = lineSide.left - 1.2 * element.offsetWidth + 'px'
     } else {
-      element.style.left = lineLeft - 1.2 * element.offsetWidth - (thumbWidth - lineWidth) / 2 + 'px'
+      element.style.left = lineSide.left - 1.2 * element.offsetWidth - (thumbWidth - lineSize.width) / 2 + 'px'
     }
   }
 
-  setPosition = (part: number, res: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbSize: {width: number, height: number}, orientation = 'horizontal', element = 'primary'): void => {
-    if (orientation === 'horizontal' && element === 'primary'){
-      this.defineInnerText(this.satellite, res)
-      this.definePosition(this.satellite, part, lineSize.width, lineSize.height, lineSide.bottom, lineSide.left, thumbSize.height)
-    }
+  public update = (part: number, result: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbSize: {width: number, height: number}, orientation = 'horizontal', elementName = 'primary'): void => {
 
-    if (orientation === 'horizontal' && element === 'extra'){
-      this.defineInnerText(this.satelliteExtra, res)
-      this.definePosition(this.satelliteExtra, part, lineSize.width, lineSize.height, lineSide.bottom, lineSide.left, thumbSize.height)
-    }
+    let element = this.satellite
+    let thumbParameter = thumbSize.height
 
-    if (orientation === 'vertical' && element === 'primary'){
-      this.defineInnerText(this.satellite, res)
-      this.definePositionForVertical(this.satellite, part, lineSize.width, lineSize.height, lineSide.bottom, lineSide.left, thumbSize.width)
+    if (orientation === 'horizontal'){
+      if (elementName === 'extra'){
+        element = this.satelliteExtra
+      } 
+      this.defineInnerText(element, result)
+      this.setPosition(element, part, lineSize, lineSide, thumbParameter)
     }
+    
 
-    if (orientation === 'vertical' && element === 'extra'){
-      this.defineInnerText(this.satelliteExtra, res)
-      this.definePositionForVertical(this.satelliteExtra, part, lineSize.width, lineSize.height, lineSide.bottom, lineSide.left, thumbSize.width)
-    }  
+    if (orientation === 'vertical'){
+      if (elementName === 'primary'){
+        thumbParameter = thumbSize.width
+      }
+      if (elementName === 'extra'){
+        element = this.satelliteExtra
+        thumbParameter = thumbSize.width
+      }  
+      this.defineInnerText(element, result)
+      this.setPositionForVertical(element, part, lineSize, lineSide, thumbSize.width)
+    }
+    
   }
 }
 
