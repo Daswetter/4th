@@ -15,18 +15,21 @@ class Wrapper{
     this.wrapper.style.flexDirection = 'column'
     window.addEventListener("resize", this.onResize)
   }
-  returnAsHTML = (): HTMLElement => {
+
+  public returnAsHTML = (): HTMLElement => {
     return this.wrapper
   }
-  setVertical = (): void => {
+
+  public setVertical = (): void => {
     this.wrapper.style.flexDirection = 'row'
     this.wrapper.style.alignItems = 'flex-start'
   }
 
-  onResize = (): void => {
+  private onResize = (): void => {
     this.wrapperWasResized()
   }
-  bindWrapperWasResized(callback: () => void): void {
+  
+  public bindWrapperWasResized(callback: () => void): void {
     this.wrapperWasResized = callback;
   }
 }
