@@ -10,9 +10,6 @@ describe('Line', () => {
     test('should create div', () => {
       expect(_.line.nodeName).toEqual('DIV')
     });
-    test('should set relative position', () => {
-      expect(window.getComputedStyle(_.line).getPropertyValue("position")).toEqual('relative')
-    });
     test('should set correct class', () => {
       expect(_.line.classList).toContain('range-slider__line')
     });
