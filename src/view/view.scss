@@ -7,6 +7,36 @@ html {
   overflow-y: scroll; 
 }
 
+.range-slider__wrapper{
+  display: flex;
+  flex-direction: column;
+}
+.range-slider__line{
+  position: relative;
+  cursor: pointer;
+}
+.range-slider__thumb{
+  position: absolute;
+  z-index: 2;
+}
+.range-slider__progress{
+  position: absolute;
+  z-index: 1;
+}
+.range-slider__scale{
+  display: flex;
+  justify-content: space-between;
+}
+.range-slider__scale-number{
+  cursor: pointer;
+}
+
+.range-slider__satellite{
+  position: absolute;
+}
+
+
+
 .js-slider1{
   .range-slider__wrapper{
     width: 300px;

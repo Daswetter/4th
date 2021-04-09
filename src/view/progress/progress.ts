@@ -10,8 +10,6 @@ class Progress{
   private init = (element: HTMLElement): HTMLElement => {
     element = document.createElement('div')
     element.classList.add('range-slider__progress')
-    element.style.position = 'absolute'
-    element.style.zIndex = '1'
     return element
   }
 

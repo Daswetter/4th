@@ -8,8 +8,6 @@ class Scale{
   
   private init = (): void => {
     this.scale = document.createElement('div')
-    this.scale.style.display = 'flex'
-    this.scale.style.justifyContent = 'space-between'
     this.scale.classList.add('range-slider__scale')
   }
 
@@ -18,6 +16,8 @@ class Scale{
   }
 
   public setScaleValues = (scaleValues: Array<number>): void => {
+    console.log('scaleValues', scaleValues);
+    
     const scaleHTMLElements: Array<HTMLElement> = [];
     [0, 1, 2, 3, 4].forEach( (i: number): void => {
       const scaleElement = this.initScaleElement(scaleValues[i], i / 4)
@@ -28,7 +28,6 @@ class Scale{
   private initScaleElement = (scaleValue: number, flag: number): HTMLElement => {
     const element = document.createElement('div')
     this.scale.append(element)
-    element.style.cursor = 'pointer'
     element.classList.add('range-slider__scale-number')
     element.innerText = scaleValue + ''
     element.dataset.id = flag + ''

@@ -26,6 +26,21 @@ describe('Satellite', () => {
     })
   })
 
+  describe('returnAsHTML', () => {
+    test('should return satellite', () => {
+      expect(_.returnAsHTML()).toBe(_.satellite)
+    })
+    
+  })
+
+  describe('returnExtraAsHTML', () => {
+    test('returnExtraAsHTML', () => {
+      _.initSatelliteExtra()
+      expect(_.returnExtraAsHTML()).toBe(_.satelliteExtra)
+    })
+    
+  })
+
   describe('update', () => {
     
     test('should set position for primary satellite and horizontal mod', () => {

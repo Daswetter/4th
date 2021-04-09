@@ -8,7 +8,6 @@ class Satellite {
 
   private init = (element: HTMLElement): HTMLElement => {
     element = document.createElement('div')
-    element.style.position = 'absolute'
     element.classList.add('range-slider__satellite')
     return element
   }
