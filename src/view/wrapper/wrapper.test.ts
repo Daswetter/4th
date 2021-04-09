@@ -2,13 +2,10 @@ import { Wrapper } from './wrapper'
 
 describe('Wrapper', () => {
   let _: Wrapper
-  let callback: jest.Mock
   beforeEach(() => {
     const initElement: HTMLElement = document.createElement('div')
     
     _ = new Wrapper(initElement)
-    callback = jest.fn()
-    _.bindWrapperWasResized(callback)
   })
   
   describe('constructor', () => {
@@ -17,14 +14,6 @@ describe('Wrapper', () => {
     })
     test('should set class', () => {
       expect(_.wrapper.className).toBe('range-slider__wrapper')
-    })
-    test('add eventListener', () => {
-      
-      const resize = new MouseEvent('resize', {
-        bubbles: true,
-      });
-      window.dispatchEvent(resize)
-      expect(callback).toBeCalled()
     })
   })
 
@@ -41,8 +30,5 @@ describe('Wrapper', () => {
       expect(_.wrapper.style.alignItems).toEqual('flex-start')
     })
   })
-
-
-
   
 })
