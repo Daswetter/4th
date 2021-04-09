@@ -12,44 +12,42 @@ class Thumb{
     this.initThumb()
   }
 
-  returnThumbAsHTML = (): HTMLElement =>  {
+  public returnAsHTML = (): HTMLElement =>  {
     return this.thumb
   }
-  returnExtraAsHTML = (): HTMLElement =>  {
+  public returnExtraAsHTML = (): HTMLElement =>  {
     return this.thumbExtra
   }
 
   
-  init = (element: HTMLElement, style: string): HTMLElement => {
+  private init = (element: HTMLElement, style: string): HTMLElement => {
     element = document.createElement('div')
-    element.style.position = 'absolute'
-    element.style.zIndex = '2'
     element.classList.add(`range-slider__${style}`)
     return element
   }
-  initThumb = (): void => {
+  private initThumb = (): void => {
     this.thumb = this.init(this.thumb, 'thumb')
   }
 
-  initThumbExtra = (): void => {
+  public initThumbExtra = (): void => {
     this.thumbExtra = this.init(this.thumbExtra, 'thumb')
     this.thumbExtra.classList.add('range-slider__thumbExtra')
   }
 
 
-  getOrientationParams = (orientation = 'horizontal', lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): {page: keyof MouseEvent, side: keyof HTMLElement, size: keyof HTMLElement, lineSize: number, lineSide: number} => {
+  private getOrientationParams = (orientation: string, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number} => {
     let params = {
-      page: 'pageX' as keyof MouseEvent,
-      side: 'offsetLeft' as keyof HTMLElement,
-      size: 'offsetWidth' as keyof HTMLElement,
+      pageName: 'pageX' as keyof MouseEvent,
+      sideName: 'offsetLeft' as keyof HTMLElement,
+      sizeName: 'offsetWidth' as keyof HTMLElement,
       lineSize: lineSize.width, 
       lineSide: lineSide.left, 
     }
     if (orientation === 'vertical'){
       params = {
-        page: 'pageY' as keyof MouseEvent,
-        side: 'offsetTop' as keyof HTMLElement,
-        size:'offsetHeight' as keyof HTMLElement,
+        pageName: 'pageY' as keyof MouseEvent,
+        sideName: 'offsetTop' as keyof HTMLElement,
+        sizeName:'offsetHeight' as keyof HTMLElement,
         lineSize: lineSize.height, 
         lineSide: lineSide.bottom, 
       }
@@ -59,43 +57,43 @@ class Thumb{
     return params
   }
 
-  setOnMouseDown = (element: HTMLElement, params: {page: keyof MouseEvent, side: keyof HTMLElement, size: keyof HTMLElement, lineSide: number, lineSize: number}): void => {
+  private setOnMouseDown = (element: HTMLElement, params: {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSide: number, lineSize: number}): void => {
     element.onmousedown = this.onMouseDown.bind(null, element, params)   
   }
 
-  setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, orientation = 'horizontal', element = 'primary'): void => {
+  public setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, orientation = 'horizontal', elementName = 'primary'): void => {
     const params = this.getOrientationParams(orientation, lineSize, lineSide)
-    let currentElement = this.thumb
+    let element = this.thumb
 
-    if (element === 'extra'){
-      currentElement = this.thumbExtra
+    if (elementName === 'extra'){
+      element = this.thumbExtra
     }
-    this.setOnMouseDown(currentElement, params)
+    this.setOnMouseDown(element, params)
   }
 
-  onMouseDown = (element: HTMLElement, params: {page: keyof MouseEvent, side: keyof HTMLElement, size: keyof HTMLElement, lineSize: number, lineSide: number}, event: MouseEvent) : void => { 
+  private onMouseDown = (element: HTMLElement, params: {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number}, event: MouseEvent) : void => { 
 
     event.preventDefault()
 
-    let shift = (event[params.page] as number) - (element[params.side] as number) - params.lineSide
+    let shift = (event[params.pageName] as number) - (element[params.sideName] as number) - params.lineSide
     
-    if (params.page === 'pageY'){
+    if (params.pageName === 'pageY'){
       shift = shift + params.lineSize
     }
-
+   
     this.boundOnMouseUp = this.onMouseUp.bind(this)
-    this.boundOnMouseMove = this.onMouseMove.bind(this, element, {...params, shift: shift})
+    this.boundOnMouseMove = this.onMouseMove.bind(this, element, {...params, shift})
     
     document.addEventListener('mousemove', this.boundOnMouseMove)
     document.addEventListener('mouseup', this.boundOnMouseUp)
   }
 
 
-  onMouseMove = (element: HTMLElement, params: {page: keyof MouseEvent, side: keyof HTMLElement, size: keyof HTMLElement, lineSize: number, lineSide: number, shift: number}, event: MouseEvent): void => {
+  private onMouseMove = (element: HTMLElement, params: {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number, shift: number}, event: MouseEvent): void => {
     
-    let part = (event[params.page] as number - params.lineSide - params.shift + (element[params.size] as number) / 2) / params.lineSize    
-    
-    if (params.page === 'pageY'){
+    let part = (event[params.pageName] as number - params.lineSide - params.shift + (element[params.sizeName] as number) / 2) / params.lineSize    
+
+    if (params.pageName === 'pageY'){
       part = - part 
     }
     
@@ -107,90 +105,105 @@ class Thumb{
 
     if (element === this.thumb){
       this.onThumbChanged(part)
-    } else if (element === this.thumbExtra){
+    }
+    if (element === this.thumbExtra){
       this.onExtraThumbChanged(part)
     }
   }
 
 
-  onMouseUp = () : void => {
+  private onMouseUp = () : void => {
     document.removeEventListener('mouseup', this.boundOnMouseUp)
     document.removeEventListener('mousemove', this.boundOnMouseMove)
   }
 
-  changeElementPosition = (element: HTMLElement, side: string, part: number, lineSize: number): void => {
-    if (side === 'left'){
-      element.style[side] = part * lineSize - element.offsetWidth / 2 + 'px'
-    } else if(side === 'bottom') {
-      element.style[side] = part * lineSize - element.offsetHeight / 2 + 'px'
-    }
+  private changeElementPosition = (element: HTMLElement, sideName: string, part: number, lineSize: number, elementSizeName: keyof HTMLElement): void => {
+    const side = part * lineSize - (element[elementSizeName] as number) / 2 + 'px'
+    element.style.setProperty(`${sideName}`, `${side}`)
   }
-  setPosition = (part: number, lineSize: { width: number, height: number}, orientation = 'horizontal', element = 'primary'): void => {
-    let currentElement = this.thumb
+
+  public update = (part: number, lineSize: { width: number, height: number}, orientation = 'horizontal', elementName = 'primary'): void => {
+    let element = this.thumb
     let side = 'left'
+    let elementSizeName = 'offsetWidth' as keyof HTMLElement
     let lineParameter = lineSize.width
   
-    if (orientation === 'horizontal' && element === 'extra'){
-      currentElement = this.thumbExtra
+    if (orientation === 'horizontal' && elementName === 'extra'){
+      element = this.thumbExtra
     }
-    if (orientation === 'vertical' && element === 'primary'){
+    if (orientation === 'vertical' && elementName === 'primary'){
       side = 'bottom'
+      elementSizeName = 'offsetHeight'
       lineParameter = lineSize.height
     }
-    if (orientation === 'vertical' && element === 'extra'){
-      currentElement = this.thumbExtra
+    if (orientation === 'vertical' && elementName === 'extra'){
+      element = this.thumbExtra
       side = 'bottom'
+      elementSizeName = 'offsetHeight'
       lineParameter = lineSize.height
     }
-    this.changeElementPosition(currentElement, side, part, lineParameter)
+    this.changeElementPosition(element, side, part, lineParameter, elementSizeName)
   }
 
 
-  currentPart = (element: HTMLElement, lineSize: number, orientation: string): number => {
+  private currentPart = (element: HTMLElement, lineSize: number, orientation: string): number => {
+
     let part = (element.offsetLeft + element.offsetWidth / 2 ) / lineSize
+
     if (orientation === 'vertical'){
       part = 1 - (element.offsetTop + element.offsetHeight / 2 ) / lineSize
     }
     return part
   }
-  countCurrentPart = (lineSize: {width: number, height: number}, orientation = 'horizontal', element = 'primary'): number => {
-    let currentElement = this.thumb
+
+  public countCurrentPart = (lineSize: {width: number, height: number}, orientation = 'horizontal', elementName = 'primary'): number => {
+    let element = this.thumb
     let lineParameter = lineSize.width
 
-    if (orientation === 'horizontal' && element === 'extra'){
-      currentElement = this.thumbExtra
+    if (orientation === 'horizontal' && elementName === 'extra'){
+      element = this.thumbExtra
     } 
-    if (orientation === 'vertical' && element === 'primary'){
+    if (orientation === 'vertical' && elementName === 'primary'){
       lineParameter = lineSize.height
     } 
-    if (orientation === 'vertical' && element === 'extra'){
-      currentElement = this.thumbExtra
+    if (orientation === 'vertical' && elementName === 'extra'){
+      element = this.thumbExtra
       lineParameter = lineSize.height
     } 
-    const part = this.currentPart(currentElement, lineParameter, orientation)
+    const part = this.currentPart(element, lineParameter, orientation)
     return part as number
   }
 
+  private countInitialParameter = (element: HTMLElement, lineSize: number, thumbSizeName: keyof HTMLElement): string => {
+    const initParameter = (lineSize - (element[thumbSizeName] as number)) / 2 + 'px'
+    return initParameter
+  }
   
-  setInitialSettings = (lineSize: {width: number, height: number}, orientation = 'horizontal', element = 'thumb'): void => {
-    if (orientation === 'horizontal' && element === 'thumb'){
-      this.thumb.style.top = (lineSize.height - this.thumb.offsetHeight) / 2 + 'px'
+  public setInitialSettings = (lineSize: {width: number, height: number}, orientation = 'horizontal', elementName = 'primary'): void => {
+    let lineSizeParam = lineSize.height
+    let element = this.thumb
+    let thumbSizeName = 'offsetHeight' as keyof HTMLElement
+
+    if (orientation === 'horizontal'){
+      if (elementName === 'extra'){
+        element = this.thumbExtra
+      }
+      element.style.top = this.countInitialParameter(element, lineSizeParam, thumbSizeName)
     }
-    if (orientation === 'horizontal' && element === 'extra'){
-      this.thumbExtra.style.top = (lineSize.height - this.thumbExtra.offsetHeight) / 2 + 'px'
-    }
-    if (orientation === 'vertical' && element === 'thumb'){
-      this.thumb.style.top = ''
-      this.thumb.style.left = (lineSize.width - this.thumb.offsetWidth) / 2 + 'px'
-    }
-    if (orientation === 'vertical' && element === 'extra'){
-      this.thumbExtra.style.top = ''
-      this.thumbExtra.style.left = (lineSize.width - this.thumbExtra.offsetWidth) / 2 + 'px'
+
+    if (orientation === 'vertical'){
+      lineSizeParam = lineSize.width
+      thumbSizeName = 'offsetWidth'
+      if (elementName === 'extra'){
+        element = this.thumbExtra
+      }
+      element.style.top = ''
+      element.style.left = this.countInitialParameter(element, lineSizeParam, thumbSizeName)
     }
   }
 
 
-  size = (): {width: number, height: number} => {
+  public size = (): {width: number, height: number} => {
     return {
       width: this.thumb.offsetWidth,
       height: this.thumb.offsetHeight,
@@ -198,10 +211,10 @@ class Thumb{
   }
 
 
-  bindThumbChangedPos(callback: (part: number) => void ): void {
+  public bindThumbChangedPos(callback: (part: number) => void ): void {
     this.onThumbChanged = callback;
   }
-  bindExtraThumbChangedPos(callback: (part: number) => void ): void {
+  public bindExtraThumbChangedPos(callback: (part: number) => void ): void {
     this.onExtraThumbChanged = callback;
   }
 }
