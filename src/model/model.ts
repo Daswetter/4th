@@ -2,14 +2,14 @@ import './../interface/IOptions'
 import { IModel } from './IModel'
 
 class Model implements IModel{
-  public onCurrentChanged!: (arg0: number, arg1: number) => void
-  public onExtraCurrentChanged!: (arg0: number, arg1: number) => void
+  private onCurrentChanged!: (arg0: number, arg1: number) => void
+  private onExtraCurrentChanged!: (arg0: number, arg1: number) => void
   
   constructor(private options: IOptions){
     this.options = options
   }
 
-  countCurrentValue(part: number): number {
+  private countCurrentValue(part: number): number {
     const min = this.options.min
     const max = this.options.max
     const stepSize = this.options.stepSize
@@ -22,18 +22,18 @@ class Model implements IModel{
     return currentValue
   }
 
-  setCurrentValue(part: number): void {
+  public setCurrentValue(part: number): void {
     const currentValue = this.countCurrentValue(part)
     this.onCurrentChanged(currentValue, part)
   }
   
-  setCurrentValueForExtra(part: number): void {
+  public setCurrentValueForExtra(part: number): void {
     const currentValue = this.countCurrentValue(part)
     this.onExtraCurrentChanged(currentValue, part)
   }
   
   
-  countCurrentPart(currentValue: number): number {
+  private countCurrentPart(currentValue: number): number {
     const min = this.options.min
     const max = this.options.max
     
@@ -47,7 +47,7 @@ class Model implements IModel{
     return part
   }
 
-  filterCurrentValue = (currentValue: number): number => {
+  private filterCurrentValue = (currentValue: number): number => {
     const min = this.options.min
     const max = this.options.max
     if (currentValue < min){
@@ -58,19 +58,19 @@ class Model implements IModel{
     return currentValue
   }
   
-  setCurrentPart(currentValue: number): void {
+  public setCurrentPart(currentValue: number): void {
     const part = this.countCurrentPart(currentValue)
     currentValue = this.filterCurrentValue(currentValue)
     this.onCurrentChanged(currentValue, part)
   }
   
-  setCurrentPartForExtra(currentValue: number): void {
+  public setCurrentPartForExtra(currentValue: number): void {
     const part = this.countCurrentPart(currentValue)
     currentValue = this.filterCurrentValue(currentValue)
     this.onExtraCurrentChanged(currentValue, part)
   }
 
-  countScaleElements = (): Array<number> => {
+  public countScaleElements = (): Array<number> => {
     const scaleElements = []
     const stepSize = this.options.stepSize
     const min = this.options.min
@@ -88,7 +88,7 @@ class Model implements IModel{
     return roundScaleElements
   }
 
-  convertStepSizeToDecimal = (stepSize: number) : number => {
+  private convertStepSizeToDecimal = (stepSize: number) : number => {
     const digits = stepSize.toString().split('')
     let decimal: number
     if ( stepSize > 0 && stepSize < 1){
@@ -100,18 +100,18 @@ class Model implements IModel{
     }
   }
 
-  roundToDecimal = (value: number, decimal = 0): number => {
+  private roundToDecimal = (value: number, decimal: number): number => {
     return (Math.round( value * Math.pow(10, decimal) ) / Math.pow(10, decimal))
   }
 
-  isInteger = (num: number) : boolean => {
+  private isInteger = (num: number) : boolean => {
     return (num ^ 0) === num
   } 
 
-  bindCurrentChanged(callback: (arg0: number, arg1: number) => void): void {
+  public bindCurrentChanged(callback: (arg0: number, arg1: number) => void): void {
     this.onCurrentChanged = callback;
   }
-  bindExtraCurrentChanged(callback: (arg0: number, arg1: number) => void): void {
+  public bindExtraCurrentChanged(callback: (arg0: number, arg1: number) => void): void {
     this.onExtraCurrentChanged = callback;
   }
 }
