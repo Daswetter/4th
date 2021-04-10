@@ -42,17 +42,28 @@ describe('Satellite', () => {
   })
 
   describe('update', () => {
-    
-    test('should set position for primary satellite and horizontal mod', () => {
-      const lineSize = {
+    type ISize = {
+      width: number
+      height: number
+    }
+    type ISide = {
+      left: number
+      bottom: number
+    }
+    let lineSize: ISize
+    let lineSide: ISide
+    let thumbSize: ISize
+
+    beforeEach(() => {
+      lineSize = {
         width: 150,
         height: 9,
       }
-      const lineSide = {
+      lineSide = {
         left: 50,
         bottom: 60,
       }
-      const thumbSize = {
+      thumbSize = {
         width: 30,
         height: 10,
       }
@@ -62,6 +73,16 @@ describe('Satellite', () => {
       Object.defineProperty(_.satellite, 'offsetHeight', {
         value: '20'
       })
+      _.initSatelliteExtra()
+      Object.defineProperty(_.satelliteExtra, 'offsetWidth', {
+        value: '30'
+      })
+      Object.defineProperty(_.satelliteExtra, 'offsetHeight', {
+        value: '20'
+      })
+    })
+    
+    test('should set position for primary satellite and horizontal mod', () => {
       _.update(0.1, 5, lineSize, lineSide, thumbSize)
       expect(_.satellite.innerText).toBe('5')
       expect(_.satellite.style.left).toBe('50px')
@@ -69,25 +90,10 @@ describe('Satellite', () => {
     })
 
     test('should set position for extra satellite and horizontal mod', () => {
-      const lineSize = {
+      lineSize = {
         width: 150,
         height: 10,
       }
-      const lineSide = {
-        left: 50,
-        bottom: 60,
-      }
-      const thumbSize = {
-        width: 30,
-        height: 10,
-      }
-      _.initSatelliteExtra()
-      Object.defineProperty(_.satelliteExtra, 'offsetWidth', {
-        value: '30'
-      })
-      Object.defineProperty(_.satelliteExtra, 'offsetHeight', {
-        value: '20'
-      })
       _.update(0.5, 500, lineSize, lineSide, thumbSize, 'horizontal', 'extra')
       expect(_.satelliteExtra.innerText).toBe('500')
       expect(_.satelliteExtra.style.left).toBe('110px')
@@ -95,24 +101,18 @@ describe('Satellite', () => {
     })
 
     test('should set position for primary satellite and vertical mod', () => {
-      const lineSize = {
+      lineSize = {
         width: 10,
         height: 300,
       }
-      const lineSide = {
+      lineSide = {
         left: 100,
         bottom: 500,
       }
-      const thumbSize = {
+      thumbSize = {
         width: 20,
         height: 20,
       }
-      Object.defineProperty(_.satellite, 'offsetWidth', {
-        value: '30'
-      })
-      Object.defineProperty(_.satellite, 'offsetHeight', {
-        value: '20'
-      })
       _.update(1, 125, lineSize, lineSide, thumbSize, 'vertical')
       expect(_.satellite.innerText).toBe('125')
       expect(_.satellite.style.left).toBe('59px')
@@ -120,25 +120,14 @@ describe('Satellite', () => {
     })
 
     test('should set position for extra satellite and horizontal mod', () => {
-      const lineSize = {
+      lineSize = {
         width: 40,
         height: 100,
       }
-      const lineSide = {
+      lineSide = {
         left: 50,
         bottom: 300,
       }
-      const thumbSize = {
-        width: 30,
-        height: 10,
-      }
-      _.initSatelliteExtra()
-      Object.defineProperty(_.satelliteExtra, 'offsetWidth', {
-        value: '30'
-      })
-      Object.defineProperty(_.satelliteExtra, 'offsetHeight', {
-        value: '20'
-      })
       _.update(0.1, 170, lineSize, lineSide, thumbSize, 'vertical', 'extra')
       expect(_.satelliteExtra.innerText).toBe('170')
       expect(_.satelliteExtra.style.left).toBe('14px')
