@@ -3,9 +3,7 @@ import { Wrapper } from './wrapper'
 describe('Wrapper', () => {
   let _: Wrapper
   beforeEach(() => {
-    const initElement: HTMLElement = document.createElement('div')
-    
-    _ = new Wrapper(initElement)
+    _ = new Wrapper()
   })
   
   describe('constructor', () => {

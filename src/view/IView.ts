@@ -1,11 +1,10 @@
-import '../interface/IOptions'
-import { Thumb } from './thumb/thumb'
-import { Wrapper } from './wrapper/wrapper'
-import { Line } from './line/line'
-import { Progress } from './progress/progress'
-import { Scale } from './scale/scale'
-import { Satellite } from './satellite/satellite'
-import { Input } from './input/input'
+import { Wrapper } from './subviews/wrapper/wrapper'
+import { Line } from './subviews/line/line'
+import { Thumb } from './subviews/thumb/thumb'
+import { Progress } from './subviews/progress/progress'
+import { Scale } from './subviews/scale/scale'
+import { Satellite } from './subviews/satellite/satellite'
+import { Input } from './subviews/input/input'
 
 interface IView {
   wrapper: Wrapper
@@ -20,19 +19,10 @@ interface IView {
   partExtra: number
 
   initView(scaleElements: number[]): void
-  initWrapper(): void
-  initLine(): void
-  initThumb(): void
-  initSatellite(): void
-  initScale(scaleElements: number[]): void
-  initProgress(): void
-  initInput(): void
 
-  currentWasSentFromModel(res: number, part: number): void
-  extraCurrentWasSentFromModel(res: number, part: number): void
+  notifyPrimaryElement(res: number, part: number): void
+  notifyExtraElement(res: number, part: number): void
   
-  changePositionForTheNearest(part: number): void
-  windowWasResized(): void
 
   bindSendPartToModel(callback: (arg0: number) => void): void
   bindSendExtraPartToModel(callback: (arg0: number) => void): void

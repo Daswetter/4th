@@ -1,14 +1,15 @@
-class Scale{
-  public scale!: HTMLElement 
-  private onScaleWasClicked!: (arg0: number) => void;
+import { SubView } from "../SubView";
 
-  constructor() {
-    this.init()
+class Scale extends SubView{
+  public scale!: HTMLElement 
+
+  constructor(){
+    super()
+    this.initPrimaryElement()
   }
-  
-  private init = (): void => {
-    this.scale = document.createElement('div')
-    this.scale.classList.add('range-slider__scale')
+
+  initPrimaryElement = (): void => {
+    this.scale = this.init(this.scale, 'scale')
   }
 
   public returnAsHTML = (): HTMLElement => {
@@ -35,17 +36,13 @@ class Scale{
   } 
 
   private setScaleListener = (element: HTMLElement): void => {
-    const dataAttribute = +(element.getAttribute('data-id') as string)
-    element.onclick = this.onScaleWasClicked.bind(null, dataAttribute)
+    const part = +(element.getAttribute('data-id') as string)
+    element.onclick = this.onChanged.bind(null, part)
   }
 
   public setVertical = (): void => {
     this.scale.style.flexDirection = 'column-reverse'
     this.scale.style.alignSelf = 'stretch'
-  }
-  
-  public bindScaleWasClicked = (callback: (arg0: number) => void): void => {
-    this.onScaleWasClicked = callback;
   }
 }
 

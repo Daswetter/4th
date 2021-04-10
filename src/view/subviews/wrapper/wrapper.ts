@@ -1,15 +1,15 @@
-class Wrapper{
+import { SubView } from "../SubView"
+
+class Wrapper extends SubView{
   public wrapper!: HTMLElement
 
-  constructor(public initElement: HTMLElement){
-    this.initElement = initElement
-    this.init()
+  constructor(){
+    super()
+    this.initPrimaryElement()
   }
   
-  private init = (): void => {
-    this.wrapper = document.createElement('div')
-    this.wrapper.classList.add('range-slider__wrapper')
-    this.initElement.append(this.wrapper)
+  initPrimaryElement = (): void => {
+    this.wrapper = this.init(this.wrapper, 'wrapper')
   }
 
   public returnAsHTML = (): HTMLElement => {

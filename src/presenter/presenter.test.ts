@@ -3,6 +3,7 @@ import { IModel } from '../model/IModel';
 import { Model } from '../model/model';
 import { IView } from '../view/IView';
 import { View } from '../view/view';
+import { IOptions } from '../interface/IOptions';
 
 describe('Presenter', () => {
   let _: Presenter
@@ -51,10 +52,10 @@ describe('Presenter', () => {
       _ = new Presenter(concreteView, concreteModel)
       expect(concreteView.bindSendExtraValueToModel).toHaveBeenCalledWith(_.sendExtraValueTo)
     })
-    test('should not call currentWasSentFromModel', () => {
-      concreteView.currentWasSentFromModel = jest.fn()
+    test('should not call notifyPrimaryElement', () => {
+      concreteView.notifyPrimaryElement = jest.fn()
       _ = new Presenter(concreteView, concreteModel)
-      expect(concreteView.currentWasSentFromModel).toHaveBeenCalled()
+      expect(concreteView.notifyPrimaryElement).toHaveBeenCalled()
     })
 
     test('should call bindCurrentChanged with sendResultTo as argument', () => {
@@ -76,17 +77,17 @@ describe('Presenter', () => {
 
   describe('sendResultTo', () =>{
     test('should call view"s method', () => {
-      concreteView.currentWasSentFromModel = jest.fn()
+      concreteView.notifyPrimaryElement = jest.fn()
       _.sendResultTo(1, 100)
-      expect(concreteView.currentWasSentFromModel).toHaveBeenCalledWith(1, 100)
+      expect(concreteView.notifyPrimaryElement).toHaveBeenCalledWith(1, 100)
     })
   })
 
   describe('sendExtraResultTo', () =>{
     test('should call view"s method', () => {
-      concreteView.extraCurrentWasSentFromModel = jest.fn()
+      concreteView.notifyExtraElement = jest.fn()
       _.sendExtraResultTo(100, 0.5)
-      expect(concreteView.extraCurrentWasSentFromModel).toHaveBeenCalledWith(100, 0.5)
+      expect(concreteView.notifyExtraElement).toHaveBeenCalledWith(100, 0.5)
     })
   })
 

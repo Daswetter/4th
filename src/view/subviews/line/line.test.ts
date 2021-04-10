@@ -25,7 +25,7 @@ describe('Line', () => {
     test('should set click to line ', () => {
       _.setEventListener('horizontal')
       const callback = jest.fn();
-      _.bindLineClicked(callback)
+      _.bindChangedPosition(callback)
       _.line.getBoundingClientRect = jest.fn(() => ({
         x: 0,
         y: 10,
@@ -51,7 +51,7 @@ describe('Line', () => {
     test('should set click to vertical line and call subscriber with 0', () => {
       _.setEventListener('vertical')
       const callback = jest.fn();
-      _.bindLineClicked(callback)
+      _.bindChangedPosition(callback)
       _.line.getBoundingClientRect = jest.fn(() => ({
         x: 0,
         y: 10,
@@ -77,7 +77,7 @@ describe('Line', () => {
     test('should call subscriber if it is true click ', () => {
       _.setEventListener('horizontal')
       const callback = jest.fn();
-      _.bindLineClicked(callback)
+      _.bindChangedPosition(callback)
       _.line.getBoundingClientRect = jest.fn(() => ({
         x: 0,
         y: 10,
@@ -113,7 +113,7 @@ describe('Line', () => {
     test('should not call subscriber if it is not click but thumb moving', () => {
       _.setEventListener('horizontal')
       const callback = jest.fn();
-      _.bindLineClicked(callback)
+      _.bindChangedPosition(callback)
       _.line.getBoundingClientRect = jest.fn(() => ({
         x: 0,
         y: 10,
@@ -150,7 +150,7 @@ describe('Line', () => {
     test('should set click to vertical line and call subscriber with 1', () => {
       _.setEventListener('vertical')
       const callback = jest.fn();
-      _.bindLineClicked(callback)
+      _.bindChangedPosition(callback)
       _.line.getBoundingClientRect = jest.fn(() => ({
         x: 0,
         y: 10,

@@ -23,14 +23,14 @@ describe('Thumb', () =>{
 
   describe('returnExtraAsHTML', () => {
     test('should return thumb', () => {
-      _.initThumbExtra()
+      _.initExtraElement()
       expect(_.returnExtraAsHTML()).toBe(_.thumbExtra)
     })
   })
 
-  describe('initThumbExtra', () => {
+  describe('initExtraElement', () => {
     beforeEach(() => {
-      _.initThumbExtra()
+      _.initExtraElement()
     })
     test('should create div', () => {
       expect(_.thumbExtra.nodeName).toBe('DIV')
@@ -43,7 +43,7 @@ describe('Thumb', () =>{
   describe('setEventListener', () => {
     test('should set mouse down and mouse move for horizontal and primary', () => {
       const callback = jest.fn()
-      _.bindThumbChangedPos(callback)
+      _.bindChangedPosition(callback)
       const lineSize ={
         width: 600,
         height: 6
@@ -83,8 +83,8 @@ describe('Thumb', () =>{
 
     test('should set mouse down and mouse move for vertical and extra', () => {
       const callback = jest.fn()
-      _.bindExtraThumbChangedPos(callback)
-      _.initThumbExtra()
+      _.bindExtraChangedPosition(callback)
+      _.initExtraElement()
       const lineSize ={
         width: 50,
         height: 6
@@ -147,7 +147,7 @@ describe('Thumb', () =>{
       })
 
       test('should set correct style.left to thumbExtra and horizontal', () => {
-        _.initThumbExtra()
+        _.initExtraElement()
         const lineSize = {
           width: 300,
           height: 20
@@ -172,7 +172,7 @@ describe('Thumb', () =>{
       })
 
       test('should set correct style.left to thumbExtra and vertical', () => {
-        _.initThumbExtra()
+        _.initExtraElement()
         const lineSize = {
           width: 50,
           height: 1000
@@ -202,7 +202,7 @@ describe('Thumb', () =>{
       expect(_.countCurrentPart(lineSize)).toBeCloseTo(0.85)
     })
     test('should return correct part for thumbExtra and horizontal mod', () => {
-      _.initThumbExtra()
+      _.initExtraElement()
       const lineSize = {
         width: 150,
         height: 5
@@ -231,7 +231,7 @@ describe('Thumb', () =>{
     })
 
     test('should return correct part for thumbExtra and vertical mod', () => {
-      _.initThumbExtra()
+      _.initExtraElement()
       const lineSize = {
         width: 10,
         height: 500
@@ -260,7 +260,7 @@ describe('Thumb', () =>{
     })
 
     test('should set style top for thumbExtra and horizontal mod', () => {
-      _.initThumbExtra()
+      _.initExtraElement()
       const lineSize = {
         width: 256,
         height: 12
@@ -286,7 +286,7 @@ describe('Thumb', () =>{
     })
 
     test('should set style top for thumbExtra and vertical mod', () => {
-      _.initThumbExtra()
+      _.initExtraElement()
       const lineSize = {
         width: 1200,
         height: 2

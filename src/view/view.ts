@@ -1,12 +1,12 @@
-import { Wrapper } from './wrapper/wrapper'
-import { Line } from './line/line'
-import { Thumb } from './thumb/thumb'
-import { Progress } from './progress/progress'
-import { Scale } from './scale/scale'
-import { Satellite } from './satellite/satellite'
-import { Input } from './input/input'
+import { Wrapper } from './subviews/wrapper/wrapper'
+import { Line } from './subviews/line/line'
+import { Thumb } from './subviews/thumb/thumb'
+import { Progress } from './subviews/progress/progress'
+import { Scale } from './subviews/scale/scale'
+import { Satellite } from './subviews/satellite/satellite'
+import { Input } from './subviews/input/input'
 
-import './../interface/IOptions'
+import { IOptions } from './../interface/IOptions'
 import { IView } from './IView'
 
 class View implements IView { 
@@ -27,14 +27,12 @@ class View implements IView {
   private valueChanged!: (arg0: number) => void
   private extraValueChanged!: (arg0: number) => void
 
-  private options!: IOptions
-
-  constructor(public initElement: HTMLElement, options: IOptions) {
+  constructor(private initElement: HTMLElement, private options: IOptions) {
     this.options = options
     this.initElement = initElement
   }
 
-  initView = (scaleElements: number[]): void => {
+  public initView = (scaleElements: number[]): void => {
     
     this.initWrapper()
     this.initLine()
@@ -50,32 +48,33 @@ class View implements IView {
       this.extraValueChanged(this.options.initial[1])
     }
 
-    window.addEventListener('resize', this.windowWasResized)
+    window.addEventListener('resize', this.initElementsForResized)
   }
 
-  initWrapper = (): void => {
-    this.wrapper = new Wrapper(this.initElement)
+  private initWrapper = (): void => {
+    this.wrapper = new Wrapper()
+    
     this.initElement.append(this.wrapper.returnAsHTML())
     if (this.options.orientation === 'vertical'){
       this.wrapper.setVertical()
     }
   }
 
-  initLine = () : void => {
+  private initLine = () : void => {
     const orientation = this.options.orientation
 
     this.line = new Line()
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
     this.line.setEventListener(orientation)
-    this.line.bindLineClicked(this.partChanged)
+    this.line.bindChangedPosition(this.partChanged)
 
     if (this.options.thumbType === 'double'){
-      this.line.bindLineClicked(this.changePositionForTheNearest)
+      this.line.bindChangedPosition(this.changePositionForTheNearest)
     }
     
   }
 
-  initThumb = () : void => {
+  private initThumb = () : void => {
     const orientation = this.options.orientation 
     this.thumb = new Thumb() 
     this.line.returnAsHTML().append(this.thumb.returnAsHTML())
@@ -86,33 +85,33 @@ class View implements IView {
     this.thumb.setInitialSettings(this.line.size(), orientation)
     
     if (this.options.thumbType === 'double'){
-      this.thumb.initThumbExtra()
+      this.thumb.initExtraElement()
       this.line.returnAsHTML().append(this.thumb.returnExtraAsHTML())
       this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, 'extra')
       this.thumb.setInitialSettings(this.line.size(), orientation, 'extra')
     }
-    this.thumb.bindThumbChangedPos(this.partChanged)
-    this.thumb.bindExtraThumbChangedPos(this.extraPartChanged)
+    this.thumb.bindChangedPosition(this.partChanged)
+    this.thumb.bindExtraChangedPosition(this.extraPartChanged)
     
   }
 
-  initSatellite = (): void => {
+  private initSatellite = (): void => {
     this.satellite = new Satellite()
     this.wrapper.returnAsHTML().append(this.satellite.returnAsHTML())
     
     if (this.options.thumbType === 'double'){
-      this.satellite.initSatelliteExtra()
+      this.satellite.initExtraElement()
       this.wrapper.returnAsHTML().append(this.satellite.returnExtraAsHTML())
     }
   }
   
-  initScale = (scaleElements: number[]): void => {
+  private initScale = (scaleElements: number[]): void => {
     this.scale = new Scale()
     this.line.returnAsHTML().after(this.scale.returnAsHTML())
 
-    this.scale.bindScaleWasClicked(this.partChanged)
+    this.scale.bindChangedPosition(this.partChanged)
     if (this.options.thumbType === 'double'){
-      this.scale.bindScaleWasClicked(this.changePositionForTheNearest)
+      this.scale.bindChangedPosition(this.changePositionForTheNearest)
     }
     this.scale.setScaleValues(scaleElements)
     
@@ -121,7 +120,7 @@ class View implements IView {
     }
   }
 
-  initProgress = (): void => {
+  private initProgress = (): void => {
     const orientation = this.options.orientation
     
     this.progress = new Progress()
@@ -129,20 +128,20 @@ class View implements IView {
     this.progress.setInitialSettings(this.line.size(), orientation)
   }
 
-  initInput = (): void => {
+  private initInput = (): void => {
     this.input = new Input()
     this.line.returnAsHTML().after(this.input.returnAsHTML())
-    this.input.bindValueWasChanged(this.valueChanged)
+    this.input.bindChangedPosition(this.valueChanged)
 
     if (this.options.thumbType === 'double'){
       this.input.initInputExtra()
       this.input.returnAsHTML().after(this.input.returnExtraAsHTML())
-      this.input.bindValueExtraWasChanged(this.extraValueChanged)
+      this.input.bindExtraChangedPosition(this.extraValueChanged)
 
     }
   }
 
-  notify = (current: number, part: number, element: string): void => {
+  private notify = (current: number, part: number, element: string): void => {
     const orientation = this.options.orientation
 
     if (element === 'primary'){
@@ -159,22 +158,22 @@ class View implements IView {
     this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.line.side(), this.thumb.size(), orientation, element) : ''
   }
 
-  currentWasSentFromModel(current: number, part: number): void{
+  public notifyPrimaryElement(current: number, part: number): void{
     const element = 'primary'
     this.notify(current, part, element)
   }
 
-  extraCurrentWasSentFromModel(current: number, part: number): void{
+  public notifyExtraElement(current: number, part: number): void{
     const element = 'extra'
     this.notify(current, part, element)
   }
 
-  countDistance = (part: number, element: string): number => {
+  private countDistance = (part: number, element: string): number => {
     const orientation = this.options.orientation
     return Math.abs(this.thumb.countCurrentPart(this.line.size(), orientation, element) - part)
   }
 
-  changePositionForTheNearest = (part: number): void => {
+  private changePositionForTheNearest = (part: number): void => {
     const distFromActionToPrimary = this.countDistance(part, 'primary')
     const distFromActionToExtra = this.countDistance(part, 'extra')
 
@@ -187,31 +186,32 @@ class View implements IView {
 
 
 
-  windowWasResized = (): void => {
+  private initElementsForResized = (): void => {
     const orientation = this.options.orientation
+    let element = 'primary'
     this.partChanged(this.part)
 
-    this.thumb.setEventListener(this.line.size(), this.line.side(), orientation)
-
     if (this.options.thumbType === 'double'){
-      this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, 'extra')
+      element = 'extra'
       this.extraPartChanged(this.partExtra)
     }
+
+    this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, element)
   }
   
 
 
-  bindSendPartToModel(callback: (arg0: number) => void): void {
+  public bindSendPartToModel(callback: (arg0: number) => void): void {
     this.partChanged = callback;
   }
-  bindSendExtraPartToModel(callback: (arg0: number) => void): void {
+  public bindSendExtraPartToModel(callback: (arg0: number) => void): void {
     this.extraPartChanged = callback;
   }
 
-  bindSendValueToModel(callback: (arg0: number) => void): void {
+  public bindSendValueToModel(callback: (arg0: number) => void): void {
     this.valueChanged = callback;
   }
-  bindSendExtraValueToModel(callback: (arg0: number) => void): void {
+  public bindSendExtraValueToModel(callback: (arg0: number) => void): void {
     this.extraValueChanged = callback;
   }
 }

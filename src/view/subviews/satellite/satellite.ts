@@ -1,22 +1,20 @@
-class Satellite {
+import { SubView } from "../SubView"
+
+class Satellite extends SubView {
   satellite!: HTMLElement
   satelliteExtra!: HTMLElement
 
-  constructor() {
-    this.initSatellite()
+  constructor(){
+    super()
+    this.initPrimaryElement()
   }
 
-  private init = (element: HTMLElement): HTMLElement => {
-    element = document.createElement('div')
-    element.classList.add('range-slider__satellite')
-    return element
+  initPrimaryElement = (): void => {
+    this.satellite = this.init(this.satellite, 'satellite')
   }
 
-  private initSatellite = (): void => {
-    this.satellite = this.init(this.satellite)
-  }
-  public initSatelliteExtra = (): void => {
-    this.satelliteExtra = this.init(this.satelliteExtra)
+  public initExtraElement = (): void => {
+    this.satelliteExtra = this.init(this.satelliteExtra, 'satellite')
   }
 
   public returnAsHTML = (): HTMLElement => {

@@ -1,3 +1,4 @@
+import { IOptions } from '../interface/IOptions'
 import { Model } from './model'
 
 describe('Model', () => {

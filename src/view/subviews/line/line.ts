@@ -1,16 +1,17 @@
-class Line{
+import { SubView } from "../SubView"
+
+class Line extends SubView{
   public line!: HTMLElement
   private mouseDownValue!: number 
   private mouseUpValue!: number 
-  private onLineClicked!: (arg0:number) => void;
 
-  constructor() {
-    this.init()
+  constructor(){
+    super()
+    this.initPrimaryElement()
   }
 
-  private init = () : void => {
-    this.line = document.createElement('div')
-    this.line.classList.add('range-slider__line')
+  initPrimaryElement = (): void => {
+    this.line = this.init(this.line, 'line')
   }
 
   public returnAsHTML = (): HTMLElement => {
@@ -76,16 +77,10 @@ class Line{
         part = distFromBeginToClick / (this.line[params.offset] as number)
         
       }
-      this.onLineClicked(part)
+      this.onChanged(part)
     }
   }
 
-  
-
-
-  public bindLineClicked(callback: (arg0:number) => void): void {
-    this.onLineClicked = callback;
-  }
 }
 
 export { Line }

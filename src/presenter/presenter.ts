@@ -30,11 +30,11 @@ class Presenter{
 
   
   sendResultTo = (res: number, part: number): void => {
-    this.View.currentWasSentFromModel(res, part)
+    this.View.notifyPrimaryElement(res, part)
     
   }
   sendExtraResultTo = (res: number, part: number): void => {
-    this.View.extraCurrentWasSentFromModel(res, part)
+    this.View.notifyExtraElement(res, part)
   }
 
   sendPartTo = (n: number) : void => {   

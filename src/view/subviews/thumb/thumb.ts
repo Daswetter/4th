@@ -1,15 +1,22 @@
-class Thumb{
+import { SubView } from './../SubView'
+class Thumb extends SubView{
   public thumb!: HTMLElement
   public thumbExtra!: HTMLElement
   private boundOnMouseMove!: (event: MouseEvent) => void
   private boundOnMouseUp!: () => void
 
-  private onThumbChanged!: (part: number) => void;
-  private onExtraThumbChanged!: (part: number) => void
+  constructor(){
+    super()
+    this.initPrimaryElement()
+  }
   
 
-  constructor() {
-    this.initThumb()
+  initPrimaryElement = (): void => {
+    this.thumb = this.init(this.thumb, 'thumb')
+  }
+
+  public initExtraElement = (): void => {
+    this.thumbExtra = this.init(this.thumbExtra, 'thumb')
   }
 
   public returnAsHTML = (): HTMLElement =>  {
@@ -18,22 +25,6 @@ class Thumb{
   public returnExtraAsHTML = (): HTMLElement =>  {
     return this.thumbExtra
   }
-
-  
-  private init = (element: HTMLElement, style: string): HTMLElement => {
-    element = document.createElement('div')
-    element.classList.add(`range-slider__${style}`)
-    return element
-  }
-  private initThumb = (): void => {
-    this.thumb = this.init(this.thumb, 'thumb')
-  }
-
-  public initThumbExtra = (): void => {
-    this.thumbExtra = this.init(this.thumbExtra, 'thumb')
-    this.thumbExtra.classList.add('range-slider__thumbExtra')
-  }
-
 
   private getOrientationParams = (orientation: string, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number} => {
     let params = {
@@ -104,10 +95,10 @@ class Thumb{
     }
 
     if (element === this.thumb){
-      this.onThumbChanged(part)
+      this.onChanged(part)
     }
     if (element === this.thumbExtra){
-      this.onExtraThumbChanged(part)
+      this.onExtraChanged(part)
     }
   }
 
@@ -210,13 +201,6 @@ class Thumb{
     }
   }
 
-
-  public bindThumbChangedPos(callback: (part: number) => void ): void {
-    this.onThumbChanged = callback;
-  }
-  public bindExtraThumbChangedPos(callback: (part: number) => void ): void {
-    this.onExtraThumbChanged = callback;
-  }
 }
 
 export { Thumb }

@@ -16,7 +16,7 @@ describe('Satellite', () => {
 
   describe('initSatelliteExtra', () => {
     beforeEach(() => {
-      _.initSatelliteExtra()
+      _.initExtraElement()
     })
     test('should create div', () => {
       expect(_.satelliteExtra.nodeName).toBe('DIV')
@@ -35,7 +35,7 @@ describe('Satellite', () => {
 
   describe('returnExtraAsHTML', () => {
     test('returnExtraAsHTML', () => {
-      _.initSatelliteExtra()
+      _.initExtraElement()
       expect(_.returnExtraAsHTML()).toBe(_.satelliteExtra)
     })
     
@@ -73,7 +73,7 @@ describe('Satellite', () => {
       Object.defineProperty(_.satellite, 'offsetHeight', {
         value: '20'
       })
-      _.initSatelliteExtra()
+      _.initExtraElement()
       Object.defineProperty(_.satelliteExtra, 'offsetWidth', {
         value: '30'
       })

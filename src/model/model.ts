@@ -1,4 +1,5 @@
 import './../interface/IOptions'
+import { IOptions } from './../interface/IOptions'
 import { IModel } from './IModel'
 
 class Model implements IModel{

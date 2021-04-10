@@ -19,14 +19,14 @@ describe('Input', () => {
     })
     test('should set blur event listener on input', () => {
       const callback = jest.fn();
-      _.bindValueWasChanged(callback)
+      _.bindChangedPosition(callback)
       const blur = new MouseEvent('blur', { bubbles: true});
       _.input.dispatchEvent(blur);
       expect(callback).toBeCalled();
     })
     test('should not set click event listener on input', () => {
       const callback = jest.fn();
-      _.bindValueWasChanged(callback)
+      _.bindChangedPosition(callback)
       const click = new MouseEvent('click', { bubbles: true});
       _.input.dispatchEvent(click);
       expect(callback).not.toBeCalled();
@@ -36,7 +36,7 @@ describe('Input', () => {
         value: '0.215'
       })
       const callback = jest.fn();
-      _.bindValueWasChanged(callback)
+      _.bindChangedPosition(callback)
       const enter = new MouseEvent('enter', { bubbles: true});
       _.input.dispatchEvent(enter);
       expect(callback).toBeCalledWith(0.215);
@@ -50,7 +50,7 @@ describe('Input', () => {
         value: '2658.5'
       })
       const callback = jest.fn();
-      _.bindValueExtraWasChanged(callback)
+      _.bindExtraChangedPosition(callback)
       const blur = new MouseEvent('blur', { bubbles: true});
       _.inputExtra.dispatchEvent(blur);
       expect(callback).toBeCalledWith(2658.5);

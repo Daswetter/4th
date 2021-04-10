@@ -1,20 +1,17 @@
-class Progress{
+import { SubView } from "../SubView"
+
+class Progress extends SubView{
   public progress!: HTMLElement 
   private partExtra = 0
   private part = 0
 
-  constructor() {
-    this.initProgress()
+  constructor(){
+    super()
+    this.initPrimaryElement()
   }
 
-  private init = (element: HTMLElement): HTMLElement => {
-    element = document.createElement('div')
-    element.classList.add('range-slider__progress')
-    return element
-  }
-
-  private initProgress = (): void => {
-    this.progress = this.init(this.progress)
+  initPrimaryElement = (): void => {
+    this.progress = this.init(this.progress, 'progress')
   }
 
   public returnAsHTML = (): HTMLElement => {

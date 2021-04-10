@@ -10,3 +10,5 @@ interface IOptions {
   progress: boolean,
   input: boolean
 }
+
+export { IOptions }
