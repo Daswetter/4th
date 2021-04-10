@@ -49,6 +49,8 @@ class View implements IView {
     if (this.options.thumbType === 'double'){
       this.extraValueChanged(this.options.initial[1])
     }
+
+    window.addEventListener('resize', this.windowWasResized)
   }
 
   initWrapper = (): void => {
@@ -57,7 +59,6 @@ class View implements IView {
     if (this.options.orientation === 'vertical'){
       this.wrapper.setVertical()
     }
-    this.wrapper.bindWrapperWasResized(this.windowWasResized)
   }
 
   initLine = () : void => {
@@ -77,7 +78,7 @@ class View implements IView {
   initThumb = () : void => {
     const orientation = this.options.orientation 
     this.thumb = new Thumb() 
-    this.line.returnAsHTML().append(this.thumb.returnThumbAsHTML())
+    this.line.returnAsHTML().append(this.thumb.returnAsHTML())
     
     
     this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, 'primary')
@@ -116,7 +117,7 @@ class View implements IView {
     this.scale.setScaleValues(scaleElements)
     
     if (this.options.orientation === 'vertical') {
-      this.scale.setVerticalMod()
+      this.scale.setVertical()
     }
   }
 
@@ -152,10 +153,10 @@ class View implements IView {
       this.partExtra = part
     }
 
-    this.thumb.setPosition(part, this.line.size(), orientation, element)
+    this.thumb.update(part, this.line.size(), orientation, element)
     this.options.input ? this.input.update(current, element) : ''
-    this.options.progress ? this.progress.setPosition(part, this.line.size(), orientation, element) : ''
-    this.options.satellite ? this.satellite.setPosition(part, current, this.line.size(), this.line.side(), this.thumb.size(), orientation, element) : ''
+    this.options.progress ? this.progress.update(part, this.line.size(), orientation, element) : ''
+    this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.line.side(), this.thumb.size(), orientation, element) : ''
   }
 
   currentWasSentFromModel(current: number, part: number): void{
