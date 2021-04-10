@@ -16,7 +16,6 @@ class Scale{
   }
 
   public setScaleValues = (scaleValues: Array<number>): void => {
-    console.log('scaleValues', scaleValues);
     
     const scaleHTMLElements: Array<HTMLElement> = [];
     [0, 1, 2, 3, 4].forEach( (i: number): void => {
