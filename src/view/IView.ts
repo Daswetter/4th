@@ -1,34 +1,42 @@
-import { Wrapper } from './subviews/wrapper/wrapper'
-import { Line } from './subviews/line/line'
-import { Thumb } from './subviews/thumb/thumb'
-import { Progress } from './subviews/progress/progress'
-import { Scale } from './subviews/scale/scale'
-import { Satellite } from './subviews/satellite/satellite'
-import { Input } from './subviews/input/input'
+import { SubView } from "./subviews/SubView"
 
-interface IView {
-  wrapper: Wrapper
-  line: Line
-  thumb: Thumb 
-  progress: Progress 
-  scale: Scale 
-  satellite: Satellite
-  input: Input
+abstract class IView {
+  protected partChanged!: (arg0: number) => void
+  protected extraPartChanged!: (arg0: number) => void
 
-  part: number
-  partExtra: number
+  protected valueChanged!: (arg0: number) => void
+  protected extraValueChanged!: (arg0: number) => void
 
-  initView(scaleElements: number[]): void
-
-  notifyPrimaryElement(res: number, part: number): void
-  notifyExtraElement(res: number, part: number): void
+  add = (element: SubView, elementName: string, changedValue: string): void => {
+    if (elementName === 'primary' && changedValue === 'part'){
+      element.bindChangedPosition(this.partChanged)
+    }
+    if (elementName === 'primary' && changedValue === 'current'){
+      element.bindChangedPosition(this.valueChanged)
+    }
+    if (elementName === 'extra' && changedValue === 'part'){
+      element.bindExtraChangedPosition(this.extraPartChanged)
+    }
+    if (elementName === 'extra' && changedValue === 'current'){
+      element.bindExtraChangedPosition(this.extraValueChanged)
+    }
+    
+  }
   
-
-  bindSendPartToModel(callback: (arg0: number) => void): void
-  bindSendExtraPartToModel(callback: (arg0: number) => void): void
-  bindSendValueToModel(callback: (arg0: number) => void): void
-  bindSendExtraValueToModel(callback: (arg0: number) => void): void
   
+  public bindChangedPart(callback: (arg0: number) => void): void {
+    this.partChanged = callback;
+  }
+  public bindChangedExtraPart(callback: (arg0: number) => void): void {
+    this.extraPartChanged = callback;
+  }
+
+  public bindChangedValue(callback: (arg0: number) => void): void {
+    this.valueChanged = callback;
+  }
+  public bindChangedExtraValue(callback: (arg0: number) => void): void {
+    this.extraValueChanged = callback;
+  }
 }
 
 export { IView }
