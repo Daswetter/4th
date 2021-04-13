@@ -12,43 +12,44 @@ class Presenter{
     this.initView()
   }
 
-  bindView = (): void => {
-    this.View.bindSendPartToModel(this.sendPartTo)
-    this.View.bindSendExtraPartToModel(this.sendExtraPartTo)
-    this.View.bindSendValueToModel(this.sendValueTo)
-    this.View.bindSendExtraValueToModel(this.sendExtraValueTo)
+  private bindView = (): void => {
+    this.View.bindChangedPart(this.sendCurrentToModel)
+    this.View.bindChangedExtraPart(this.sendExtraToModel)
+
+    this.View.bindChangedCurrent(this.sendPartToModel)
+    this.View.bindChangedExtraCurrent(this.sendExtraPartToModel)
   }
 
-  bindModel = (): void => {
-    this.Model.bindCurrentChanged(this.sendResultTo)
-    this.Model.bindExtraCurrentChanged(this.sendExtraResultTo)
+  private bindModel = (): void => {
+    this.Model.bindChangedValues(this.sendCurrentToView)
+    this.Model.bindChangedExtraValues(this.sendExtraToView)
   }
 
-  initView = (): void => {
+  private initView = (): void => {
     this.View.initView(this.Model.countScaleElements())
   }
 
   
-  sendResultTo = (res: number, part: number): void => {
-    this.View.notifyPrimaryElement(res, part)
-    
+  private sendCurrentToView = (current: number, part: number): void => {
+    this.View.notifyPrimaryElement(current, part)
   }
-  sendExtraResultTo = (res: number, part: number): void => {
-    this.View.notifyExtraElement(res, part)
+  private sendExtraToView = (current: number, part: number): void => {
+    this.View.notifyExtraElement(current, part)
+  }
+  
+
+  private sendCurrentToModel = (part: number) : void => {   
+    this.Model.setCurrent('primary', part)
+  }
+  private sendExtraToModel = (part: number) : void => {   
+    this.Model.setCurrent('extra', part)
   }
 
-  sendPartTo = (n: number) : void => {   
-    this.Model.setCurrentValue(n)
+  private sendPartToModel = (part: number) : void => { 
+    this.Model.setPart('primary', part)
   }
-  sendExtraPartTo = (n: number) : void => {   
-    this.Model.setCurrentValueForExtra(n)
-  }
-
-  sendValueTo = (n: number) : void => { 
-    this.Model.setCurrentPart(n)
-  }
-  sendExtraValueTo = (n: number) : void => {   
-    this.Model.setCurrentPartForExtra(n)
+  private sendExtraPartToModel = (part: number) : void => {   
+    this.Model.setPart('extra', part)
   }
 
 }

@@ -24,7 +24,7 @@ describe('Model', () => {
 
   describe('setCurrent', () => {
     beforeEach(() => {
-      _.bindChangedState('primary', callback)
+      _.bindChangedValues(callback)
     })
     test('call mock', () => {
       _.setCurrent('primary', 0.1)
@@ -39,7 +39,7 @@ describe('Model', () => {
 
   describe('setCurrentValueForExtra', () => {
     beforeEach(() => {
-      _.bindChangedState('extra', callback)
+      _.bindChangedExtraValues(callback)
     })
     test('should call mock with max', () => {
       _.setCurrent('extra', 1)
@@ -51,7 +51,7 @@ describe('Model', () => {
 
   describe('setPart', () => {
     beforeEach(() => {
-      _.bindChangedState('primary', callback)
+      _.bindChangedValues(callback)
     })
     test('should call mock', () => {
       _.setPart('primary', 1)
@@ -77,7 +77,7 @@ describe('Model', () => {
 
   describe('setPartForExtra', () => {
     beforeEach(() => {
-      _.bindChangedState('extra', callback)
+      _.bindChangedExtraValues(callback)
     })
     test('should call mock with correct parameters', () => {
       _.setPart('extra', 1)

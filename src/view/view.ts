@@ -8,9 +8,8 @@ import { Input } from './subviews/input/input'
 
 import { IOptions } from './../interface/IOptions'
 import { IView } from './IView'
-import { SubView } from './subviews/SubView'
 
-class View extends IView { 
+class View implements IView { 
   wrapper!: Wrapper
   line!: Line
   thumb!: Thumb 
@@ -22,8 +21,13 @@ class View extends IView {
   part!: number
   partExtra!: number
 
+  private partChanged!: (arg0: number) => void
+  private extraPartChanged!: (arg0: number) => void
+
+  private currentChanged!: (arg0: number) => void
+  private extraCurrentChanged!: (arg0: number) => void
+
   constructor(private initElement: HTMLElement, private options: IOptions) {
-    super()
     this.options = options
     this.initElement = initElement
     
@@ -40,9 +44,9 @@ class View extends IView {
     this.options.input ? this.initInput() : ''
     this.options.scale ? this.initScale(scaleElements): ''
 
-    this.valueChanged(this.options.initial[0])
+    this.currentChanged(this.options.initial[0])
     if (this.options.thumbType === 'double'){
-      this.extraValueChanged(this.options.initial[1])
+      this.extraCurrentChanged(this.options.initial[1])
     }
 
     window.addEventListener('resize', this.initElementsForResized)
@@ -64,10 +68,10 @@ class View extends IView {
     
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
     this.line.setEventListener(orientation)
-    this.add(this.line, 'primary', 'part')
+    this.line.bindChangedState(this.partChanged)
 
     if (this.options.thumbType === 'double'){
-      this.line.bindChangedPosition(this.changePositionForTheNearest)
+      this.line.bindChangedState(this.changePositionForTheNearest)
     }
     
   }
@@ -81,7 +85,7 @@ class View extends IView {
     
     this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, elementName)
     this.thumb.setInitialSettings(this.line.size(), orientation)
-    this.add(this.thumb, elementName, 'part')
+    this.thumb.bindChangedState(this.partChanged)
 
     if (this.options.thumbType === 'double'){
       elementName = 'extra'
@@ -89,7 +93,7 @@ class View extends IView {
       this.line.returnAsHTML().append(this.thumb.returnExtraAsHTML())
       this.thumb.setEventListener(this.line.size(), this.line.side(), orientation, elementName)
       this.thumb.setInitialSettings(this.line.size(), orientation, elementName)
-      this.add(this.thumb, elementName, 'part')
+      this.thumb.bindExtraChangedPosition(this.extraPartChanged)
     }    
     
   }
@@ -107,14 +111,13 @@ class View extends IView {
   private initScale = (scaleElements: number[]): void => {
     this.scale = new Scale()
     this.line.returnAsHTML().after(this.scale.returnAsHTML())
-    this.add(this.scale, 'primary', 'part')
-    
+    this.scale.bindChangedState(this.partChanged)
     
     if (this.options.orientation === 'vertical') {
       this.scale.setVertical()
     }
     if (this.options.thumbType === 'double'){
-      this.scale.bindChangedPosition(this.changePositionForTheNearest)
+      this.scale.bindChangedState(this.changePositionForTheNearest)
     }
     this.scale.setScaleValues(scaleElements)
   }
@@ -130,12 +133,12 @@ class View extends IView {
   private initInput = (): void => {
     this.input = new Input()
     this.line.returnAsHTML().after(this.input.returnAsHTML())
-    this.add(this.input, 'primary', 'value')
-    
+    this.input.bindChangedState(this.currentChanged)
+
     if (this.options.thumbType === 'double'){
       this.input.initInputExtra()
       this.input.returnAsHTML().after(this.input.returnExtraAsHTML())
-      this.add(this.scale, 'extra', 'value')
+      this.input.bindExtraChangedPosition(this.extraCurrentChanged)
     }
   }
 
@@ -202,6 +205,20 @@ class View extends IView {
     }
 
     
+  }
+
+
+  public bindChangedPart = (callback: (arg0: number) => void):void  =>  {
+    this.partChanged = callback
+  }
+  public bindChangedExtraPart = (callback: (arg0: number) => void):void  =>  {
+    this.extraPartChanged = callback
+  }
+  public bindChangedCurrent = (callback: (arg0: number) => void):void  =>  {
+    this.currentChanged = callback
+  }
+  public bindChangedExtraCurrent = (callback: (arg0: number) => void):void  =>  {
+    this.extraCurrentChanged = callback
   }
 }
 

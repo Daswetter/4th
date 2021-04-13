@@ -32,94 +32,57 @@ describe('Presenter', () => {
 
   describe('constructor', () => {
 
-    test('should call bindSendPartToModel with sendPartTo as argument', () => {
-      concreteView.bindSendPartToModel = jest.fn()
+    test('should call bindChangedPart', () => {
+      concreteView.bindChangedPart = jest.fn()
       _ = new Presenter(concreteView, concreteModel)
-      expect(concreteView.bindSendPartToModel).toHaveBeenCalled()
+      expect(concreteView.bindChangedPart).toHaveBeenCalled()
     })
-    test('should call bindSendExtraPartToModel with sendExtraPartTo as argument', () => {
-      concreteView.bindSendExtraPartToModel = jest.fn()
+    test('should call bindChangedExtraPart', () => {
+      concreteView.bindChangedExtraPart = jest.fn()
       _ = new Presenter(concreteView, concreteModel)
-      expect(concreteView.bindSendExtraPartToModel).toHaveBeenCalledWith(_.sendExtraPartTo)
+      expect(concreteView.bindChangedExtraPart).toHaveBeenCalled()
     })
-    test('should call bindSendExtraPartToModel with sendExtraPartTo as argument', () => {
-      concreteView.bindSendValueToModel = jest.fn()
+    test('should call bindChangedCurrent', () => {
+      concreteView.bindChangedCurrent = jest.fn()
       _ = new Presenter(concreteView, concreteModel)
-      expect(concreteView.bindSendValueToModel).toHaveBeenCalledWith(_.sendValueTo)
+      expect(concreteView.bindChangedCurrent).toHaveBeenCalled()
     })
-    test('should call bindSendExtraValueToModel with sendExtraValueTo as argument', () => {
-      concreteView.bindSendExtraValueToModel = jest.fn()
+    test('should call bindChangedExtraCurrent', () => {
+      concreteView.bindChangedExtraCurrent = jest.fn()
       _ = new Presenter(concreteView, concreteModel)
-      expect(concreteView.bindSendExtraValueToModel).toHaveBeenCalledWith(_.sendExtraValueTo)
+      expect(concreteView.bindChangedExtraCurrent).toHaveBeenCalled()
     })
-    test('should not call notifyPrimaryElement', () => {
+
+    test('should call notifyPrimaryElement', () => {
       concreteView.notifyPrimaryElement = jest.fn()
       _ = new Presenter(concreteView, concreteModel)
       expect(concreteView.notifyPrimaryElement).toHaveBeenCalled()
     })
 
-    test('should call bindCurrentChanged with sendResultTo as argument', () => {
-      concreteModel.bindCurrentChanged = jest.fn()
+    test('should call bindChangedValues', () => {
+      concreteModel.bindChangedValues = jest.fn()
       _ = new Presenter(concreteView, concreteModel)
-      expect(concreteModel.bindCurrentChanged).toHaveBeenCalledWith(_.sendResultTo)
+      expect(concreteModel.bindChangedValues).toHaveBeenCalled()
     })
-    test('should call bindExtraCurrentChanged with sendExtraResultTo as argument', () => {
-      concreteModel.bindExtraCurrentChanged = jest.fn()
+    test('should call bindChangedExtraValues', () => {
+      concreteModel.bindChangedExtraValues = jest.fn()
       _ = new Presenter(concreteView, concreteModel)
-      expect(concreteModel.bindExtraCurrentChanged).toHaveBeenCalledWith(_.sendExtraResultTo)
+      expect(concreteModel.bindChangedExtraValues).toHaveBeenCalled()
     })
-    test('should call bindCurrentChanged with sendResultTo as argument', () => {
+    test('should call initView', () => {
       concreteView.initView = jest.fn()
       _ = new Presenter(concreteView, concreteModel)
       expect(concreteView.initView).toHaveBeenCalled()
     }) 
+
+    test('should call setCurrent in Model', () => {
+      concreteModel.setCurrent = jest.fn()
+      const onResize = new Event('resize')
+      window.dispatchEvent(onResize)
+      _ = new Presenter(concreteView, concreteModel)
+      expect(concreteModel.setCurrent).toHaveBeenCalled()
+    }) 
   })
 
-  describe('sendResultTo', () =>{
-    test('should call view"s method', () => {
-      concreteView.notifyPrimaryElement = jest.fn()
-      _.sendResultTo(1, 100)
-      expect(concreteView.notifyPrimaryElement).toHaveBeenCalledWith(1, 100)
-    })
-  })
-
-  describe('sendExtraResultTo', () =>{
-    test('should call view"s method', () => {
-      concreteView.notifyExtraElement = jest.fn()
-      _.sendExtraResultTo(100, 0.5)
-      expect(concreteView.notifyExtraElement).toHaveBeenCalledWith(100, 0.5)
-    })
-  })
-
-  describe('sendPartTo', () =>{
-    test('should call model"s method', () => {
-      concreteModel.setCurrentValue = jest.fn()
-      _.sendPartTo(1)
-      expect(concreteModel.setCurrentValue).toHaveBeenCalledWith(1)
-    })
-  })
-
-  describe('sendExtraPartTo', () =>{
-    test('should call model"s method', () => {
-      concreteModel.setCurrentValueForExtra = jest.fn()
-      _.sendExtraPartTo(0.2)
-      expect(concreteModel.setCurrentValueForExtra).toHaveBeenCalledWith(0.2)
-    })
-  })
-
-  describe('sendValueTo', () =>{
-    test('should call model"s method', () => {
-      concreteModel.setCurrentPart = jest.fn()
-      _.sendValueTo(2)
-      expect(concreteModel.setCurrentPart).toHaveBeenCalledWith(2)
-    })
-  })
-
-  describe('sendExtraValueTo', () =>{
-    test('should call model"s method', () => {
-      concreteModel.setCurrentPartForExtra = jest.fn()
-      _.sendExtraValueTo(0.001)
-      expect(concreteModel.setCurrentPartForExtra).toHaveBeenCalledWith(0.001)
-    })
-  })
+  
 })

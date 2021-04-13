@@ -6,7 +6,8 @@ interface IModel {
 
   countScaleElements(): Array<number>
 
-  bindChangedState(element: string, callback: (arg0: number, arg1: number) => void): void
+  bindChangedValues(callback: (arg0: number, arg1: number) => void): void
+  bindChangedExtraValues(callback: (arg0: number, arg1: number) => void): void
 }
 
 export { IModel }

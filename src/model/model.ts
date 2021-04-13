@@ -109,13 +109,11 @@ class Model implements IModel{
     return (num ^ 0) === num
   } 
 
-  public bindChangedState(element: string, callback: (arg0: number, arg1: number) => void): void {
-    if (element === 'primary'){
-      this.valuesWereChanged = callback;
-    }
-    if (element === 'extra'){
-      this.extraValuesWereChanged = callback;
-    }
+  public bindChangedValues(callback: (arg0: number, arg1: number) => void): void {
+    this.valuesWereChanged = callback;
+  }
+  public bindChangedExtraValues( callback: (arg0: number, arg1: number) => void): void {
+    this.extraValuesWereChanged = callback;
   }
 }
 

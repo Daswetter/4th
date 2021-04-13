@@ -6,11 +6,11 @@ describe('View', () => {
   let _: View
   let options: IOptions
   
-  const callback = jest.fn()
-  const callbackExtra = jest.fn()
+  const callbackCurrent = jest.fn()
+  const callbackExtraCurrent = jest.fn()
 
-  const callbackForPart = jest.fn()
-  const callbackExtraForPart = jest.fn()
+  const callbackPart = jest.fn()
+  const callbackExtraPart = jest.fn()
   
   const initElement: HTMLElement = document.createElement('div')
 
@@ -29,15 +29,16 @@ describe('View', () => {
     }
 
     _ = new View(initElement, options)
-    _.bindChangedValue(callback)
-    _.bindChangedExtraValue(callbackExtra)
+    _.bindChangedCurrent(callbackCurrent)
+    _.bindChangedExtraCurrent(callbackExtraCurrent)
 
-    _.bindChangedPart(callbackForPart)
-    _.bindChangedExtraPart(callbackExtraForPart)
-    callback.mockClear()
-    callbackExtra.mockClear()
-    callbackForPart.mockClear()
-    callbackExtraForPart.mockClear()
+    _.bindChangedPart(callbackPart)
+    _.bindChangedExtraPart(callbackExtraPart)
+    
+    callbackCurrent.mockClear()
+    callbackExtraCurrent.mockClear()
+    callbackPart.mockClear()
+    callbackExtraPart.mockClear()
     
   })
 
@@ -98,7 +99,7 @@ describe('View', () => {
       _.initView([1, 2, 5, 8, 9])
       const event = new MouseEvent('click')
       _.line.returnAsHTML().dispatchEvent(event)
-      expect(callbackForPart).toHaveBeenCalled()
+      expect(callbackPart).toHaveBeenCalled()
     })
     test('should call mock for extra if line was clicked near extra thumb', () => {
       options.thumbType = 'double'
@@ -113,7 +114,7 @@ describe('View', () => {
         clientX: 500,
       })
       _.line.returnAsHTML().dispatchEvent(event)
-      expect(callbackExtraForPart).toHaveBeenCalled()
+      expect(callbackExtraPart).toHaveBeenCalled()
     })
     test('should not create scale', () => {
       options.scale = false
@@ -133,7 +134,7 @@ describe('View', () => {
     test('should not call mock for extra if thumbType is single', () => {
       options.thumbType = 'single'
       _.initView([1, 2, 3, 4, 5])
-      expect(callbackExtra).not.toHaveBeenCalled()
+      expect(callbackExtraCurrent).not.toHaveBeenCalled()
     })
     test('should not call initExtraElement for single', () => {
       options.thumbType = 'single'
