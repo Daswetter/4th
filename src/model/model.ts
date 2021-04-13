@@ -3,72 +3,72 @@ import { IOptions } from './../interface/IOptions'
 import { IModel } from './IModel'
 
 class Model implements IModel{
-  private onCurrentChanged!: (arg0: number, arg1: number) => void
-  private onExtraCurrentChanged!: (arg0: number, arg1: number) => void
+  private valuesWereChanged!: (arg0: number, arg1: number) => void
+  private extraValuesWereChanged!: (arg0: number, arg1: number) => void
   
   constructor(private options: IOptions){
     this.options = options
   }
 
-  private countCurrentValue(part: number): number {
+  private countCurrent(part: number): number {
     const min = this.options.min
     const max = this.options.max
     const stepSize = this.options.stepSize
-    let currentValue = +(Math.round((max - min) / stepSize * part) * stepSize + min)
+    let current = +(Math.round((max - min) / stepSize * part) * stepSize + min)
     
     if(!this.isInteger(stepSize)){
-      currentValue = +currentValue.toFixed(this.convertStepSizeToDecimal(stepSize))
+      current = +current.toFixed(this.convertStepSizeToDecimal(stepSize))
     } 
 
-    return currentValue
+    return current
   }
 
-  public setCurrentValue(part: number): void {
-    const currentValue = this.countCurrentValue(part)
-    this.onCurrentChanged(currentValue, part)
+  public setCurrent(element: string, part: number): void {
+    const current = this.countCurrent(part)
+
+    if (element === 'primary'){
+      this.valuesWereChanged(current, part)
+    }
+    if (element === 'extra'){
+      this.extraValuesWereChanged(current, part)
+    }
   }
   
-  public setCurrentValueForExtra(part: number): void {
-    const currentValue = this.countCurrentValue(part)
-    this.onExtraCurrentChanged(currentValue, part)
-  }
-  
-  
-  private countCurrentPart(currentValue: number): number {
+  private countPart(current: number): number {
     const min = this.options.min
     const max = this.options.max
     
-    let part = (currentValue - min) / (max - min)
+    let part = (current - min) / (max - min)
 
-    if (currentValue > max){
+    if (current > max){
       part = 1
-    } else if (currentValue < min){
+    } else if (current < min){
       part = 0
     }
     return part
   }
 
-  private filterCurrentValue = (currentValue: number): number => {
+  private filterCurrent = (current: number): number => {
     const min = this.options.min
     const max = this.options.max
-    if (currentValue < min){
+    if (current < min){
       return min
-    } else if (currentValue > max) {
+    } else if (current > max) {
       return max
     }
-    return currentValue
+    return current
   }
   
-  public setCurrentPart(currentValue: number): void {
-    const part = this.countCurrentPart(currentValue)
-    currentValue = this.filterCurrentValue(currentValue)
-    this.onCurrentChanged(currentValue, part)
-  }
-  
-  public setCurrentPartForExtra(currentValue: number): void {
-    const part = this.countCurrentPart(currentValue)
-    currentValue = this.filterCurrentValue(currentValue)
-    this.onExtraCurrentChanged(currentValue, part)
+  public setPart(element: string, current: number): void {
+    const part = this.countPart(current)
+    current = this.filterCurrent(current)
+
+    if (element === 'primary'){
+      this.valuesWereChanged(current, part)
+    }
+    if (element === 'extra'){
+      this.extraValuesWereChanged(current, part)
+    }
   }
 
   public countScaleElements = (): Array<number> => {
@@ -109,11 +109,13 @@ class Model implements IModel{
     return (num ^ 0) === num
   } 
 
-  public bindCurrentChanged(callback: (arg0: number, arg1: number) => void): void {
-    this.onCurrentChanged = callback;
-  }
-  public bindExtraCurrentChanged(callback: (arg0: number, arg1: number) => void): void {
-    this.onExtraCurrentChanged = callback;
+  public bindChangedState(element: string, callback: (arg0: number, arg1: number) => void): void {
+    if (element === 'primary'){
+      this.valuesWereChanged = callback;
+    }
+    if (element === 'extra'){
+      this.extraValuesWereChanged = callback;
+    }
   }
 }
 
