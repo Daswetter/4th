@@ -8,6 +8,8 @@ interface IModel {
 
   bindChangedValues(callback: (arg0: number, arg1: number) => void): void
   bindChangedExtraValues(callback: (arg0: number, arg1: number) => void): void
+
+  bindChangedScaleElements(callback: (scaleElements: Array<number>) => void): void
 }
 
 export { IModel }

@@ -10,3 +10,5 @@ import './model/model'
 import './presenter/presenter'
 import './jquery-wrapper/jquery-wrapper'
 import './preview/preview'
+
+import './preview/configPanel'

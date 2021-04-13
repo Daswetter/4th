@@ -2,6 +2,7 @@ import { SubView } from "../SubView";
 
 class Scale extends SubView{
   public scale!: HTMLElement 
+  private elements: Array<HTMLElement> = [] 
 
   constructor(){
     super()
@@ -16,8 +17,11 @@ class Scale extends SubView{
     return this.scale
   }
 
+  public removeScaleElement = (): void => {
+    this.elements.forEach(element => element.remove())
+  }
+
   public setScaleValues = (scaleValues: Array<number>): void => {
-    
     const scaleHTMLElements: Array<HTMLElement> = [];
     [0, 1, 2, 3, 4].forEach( (i: number): void => {
       const scaleElement = this.initScaleElement(scaleValues[i], i / 4)
@@ -31,7 +35,8 @@ class Scale extends SubView{
     element.classList.add('range-slider__scale-number')
     element.innerText = scaleValue + ''
     element.dataset.id = flag + ''
-    this.setScaleListener(element)
+    this.setScaleListener(element)    
+    this.elements[flag * 4] = element
     return element
   } 
 

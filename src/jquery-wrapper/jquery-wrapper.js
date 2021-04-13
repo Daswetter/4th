@@ -1,16 +1,15 @@
-import { View } from './../view/view'
-import { Model } from './../model/model'
-import { Presenter } from './../presenter/presenter'
+import { View } from '../view/view'
+import { Model } from '../model/model'
+import { Presenter } from '../presenter/presenter'
 
 import jQuery from 'jquery'
 
 (function($){
-  $.fn.customRangeSlider = function(options){
-    const initE = this[0]
-    options = $.extend({},{
+  const customRangeSlider = function(initElement, setOptions) {
+    const options = $.extend({},{
       min: 0,
       max: 100,
-      initial: [(this.min - this.max) / 2],
+      initial: 50,
       stepSize: 1,
       orientation: 'horizontal',
       thumbType: 'single',
@@ -18,7 +17,33 @@ import jQuery from 'jquery'
       scale: true,
       progress: true,
       input: true
-    }, options);
-    new Presenter(new View(initE, options), new Model(options))
+    }, setOptions);
+    this.options = options
+    this.init(initElement, options)
   }
+
+  customRangeSlider.prototype = {
+
+    init: function(initElement, options){
+      this.initElement = initElement
+      this.model = new Model(options)
+      this.view = new View(initElement, options)
+      new Presenter(this.view, this.model)
+    },
+    update: function(updatedOptions){
+      this.options = $.extend(this.options, updatedOptions);
+      this.model.update(this.options)
+      this.view.update(this.options)
+    }
+
+  }
+
+  $.fn.customRangeSlider = function(options){
+    return this.each(function () {
+      if (!$.data(this, 'customRangeSlider')) {
+        $.data(this, 'customRangeSlider', new customRangeSlider(this, options));
+      }
+    });
+  }
+
 })(jQuery)

@@ -144,7 +144,7 @@ class View implements IView {
 
   private notify = (current: number, part: number, element: string): void => {
     const orientation = this.options.orientation
-
+    
     if (element === 'primary'){
       this.part = part
     }
@@ -157,6 +157,7 @@ class View implements IView {
     this.options.input ? this.input.update(current, element) : ''
     this.options.progress ? this.progress.update(part, this.line.size(), orientation, element) : ''
     this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.line.side(), this.thumb.size(), orientation, element) : ''
+
   }
 
   public notifyPrimaryElement(current: number, part: number): void{
@@ -168,6 +169,13 @@ class View implements IView {
     const element = 'extra'
     this.notify(current, part, element)
   }
+
+  public notifyScale(scaleElements: Array<number>): void{
+    this.scale.removeScaleElement()
+    this.scale.setScaleValues(scaleElements)
+  }
+
+
 
   private countDistance = (part: number, element: string): number => {
     let currentPart = this.part
@@ -205,6 +213,9 @@ class View implements IView {
     }
 
     
+  }
+  update = (options: IOptions): void => {
+    this.options = options
   }
 
 

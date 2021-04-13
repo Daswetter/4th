@@ -3,8 +3,9 @@ import { IOptions } from './../interface/IOptions'
 import { IModel } from './IModel'
 
 class Model implements IModel{
-  private valuesWereChanged!: (arg0: number, arg1: number) => void
-  private extraValuesWereChanged!: (arg0: number, arg1: number) => void
+  private valuesWereChanged!: (current: number, part: number) => void
+  private extraValuesWereChanged!: (current: number, part: number) => void
+  private scaleElementsWereChanged!: (scaleElements: Array<number>) => void
   
   constructor(private options: IOptions){
     this.options = options
@@ -109,11 +110,29 @@ class Model implements IModel{
     return (num ^ 0) === num
   } 
 
-  public bindChangedValues(callback: (arg0: number, arg1: number) => void): void {
+  public update = (options: IOptions): void => {
+    this.options = options
+    this.setPart('primary', this.options.initial[0])
+
+    if (this.options.thumbType == 'double'){
+      this.setPart('extra', this.options.initial[1])
+    }
+
+    if (this.options.scale){
+      this.scaleElementsWereChanged(this.countScaleElements())
+    }
+  }
+
+
+  public bindChangedValues(callback: (current: number, part: number) => void): void {
     this.valuesWereChanged = callback;
   }
-  public bindChangedExtraValues( callback: (arg0: number, arg1: number) => void): void {
+  public bindChangedExtraValues( callback: (current: number, part: number) => void): void {
     this.extraValuesWereChanged = callback;
+  }
+
+  public bindChangedScaleElements(callback: (scaleElements: Array<number>) => void): void {
+    this.scaleElementsWereChanged = callback;
   }
 }
 
