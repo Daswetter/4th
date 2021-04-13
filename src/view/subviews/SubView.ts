@@ -11,7 +11,7 @@ abstract class SubView {
   }
   
 
-  public bindChangedPosition(callback: (arg0: number) => void ): void {
+  public bindChangedState(callback: (arg0: number) => void ): void {
     this.onChanged = callback;
   }
   public bindExtraChangedPosition(callback: (arg0: number) => void ): void {

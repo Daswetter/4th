@@ -43,7 +43,7 @@ describe('Thumb', () =>{
   describe('setEventListener', () => {
     test('should set mouse down and mouse move for horizontal and primary', () => {
       const callback = jest.fn()
-      _.bindChangedPosition(callback)
+      _.bindChangedState(callback)
       const lineSize ={
         width: 600,
         height: 6
@@ -184,65 +184,6 @@ describe('Thumb', () =>{
         expect(_.thumbExtra.style.bottom).toBe('597.5px')
       })
       
-    })
-  })
-
-  describe('countCurrentPart', () => {
-    test('should return correct part for thumb and horizontal mod', () => {
-      const lineSize = {
-        width: 100,
-        height: 3
-      }
-      Object.defineProperty(_.thumb, 'offsetLeft', {
-        value: 60
-      })
-      Object.defineProperty(_.thumb, 'offsetWidth', {
-        value: 50
-      })
-      expect(_.countCurrentPart(lineSize)).toBeCloseTo(0.85)
-    })
-    test('should return correct part for thumbExtra and horizontal mod', () => {
-      _.initExtraElement()
-      const lineSize = {
-        width: 150,
-        height: 5
-      }
-      Object.defineProperty(_.thumbExtra, 'offsetLeft', {
-        value: 90
-      })
-      Object.defineProperty(_.thumbExtra, 'offsetWidth', {
-        value: 20
-      })
-      expect(_.countCurrentPart(lineSize, 'horizontal', 'extra')).toBeCloseTo(0.666)
-    })
-
-    test('should return correct part for thumb and vertical mod', () => {
-      const lineSize = {
-        width: 10,
-        height: 300
-      }
-      Object.defineProperty(_.thumb, 'offsetTop', {
-        value: 50
-      })
-      Object.defineProperty(_.thumb, 'offsetHeight', {
-        value: 50
-      })
-      expect(_.countCurrentPart(lineSize, 'vertical')).toBeCloseTo(0.75)
-    })
-
-    test('should return correct part for thumbExtra and vertical mod', () => {
-      _.initExtraElement()
-      const lineSize = {
-        width: 10,
-        height: 500
-      }
-      Object.defineProperty(_.thumbExtra, 'offsetTop', {
-        value: 250
-      })
-      Object.defineProperty(_.thumbExtra, 'offsetHeight', {
-        value: 10
-      })
-      expect(_.countCurrentPart(lineSize, 'vertical', 'extra')).toBeCloseTo(0.49)
     })
   })
 

@@ -136,35 +136,6 @@ class Thumb extends SubView{
     this.changeElementPosition(element, side, part, lineParameter, elementSizeName)
   }
 
-
-  private currentPart = (element: HTMLElement, lineSize: number, orientation: string): number => {
-
-    let part = (element.offsetLeft + element.offsetWidth / 2 ) / lineSize
-
-    if (orientation === 'vertical'){
-      part = 1 - (element.offsetTop + element.offsetHeight / 2 ) / lineSize
-    }
-    return part
-  }
-
-  public countCurrentPart = (lineSize: {width: number, height: number}, orientation = 'horizontal', elementName = 'primary'): number => {
-    let element = this.thumb
-    let lineParameter = lineSize.width
-
-    if (orientation === 'horizontal' && elementName === 'extra'){
-      element = this.thumbExtra
-    } 
-    if (orientation === 'vertical' && elementName === 'primary'){
-      lineParameter = lineSize.height
-    } 
-    if (orientation === 'vertical' && elementName === 'extra'){
-      element = this.thumbExtra
-      lineParameter = lineSize.height
-    } 
-    const part = this.currentPart(element, lineParameter, orientation)
-    return part as number
-  }
-
   private countInitialParameter = (element: HTMLElement, lineSize: number, thumbSizeName: keyof HTMLElement): string => {
     const initParameter = (lineSize - (element[thumbSizeName] as number)) / 2 + 'px'
     return initParameter
