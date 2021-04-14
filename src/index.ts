@@ -11,4 +11,4 @@ import './presenter/presenter'
 import './jquery-wrapper/jquery-wrapper'
 import './preview/preview'
 
-import './preview/configPanel'
+import './preview/config-panel/config-panel'

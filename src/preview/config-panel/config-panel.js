@@ -1,4 +1,8 @@
 import $ from 'jquery'
+import './components/toggle/toggle'
+import './components/input/input'
+
+import './config-panel.scss'
 
 const inputMin = document.querySelector('.config-panel__min')
 inputMin.addEventListener('change', changeMin)

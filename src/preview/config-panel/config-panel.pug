@@ -1,0 +1,31 @@
+include ./components/toggle/toggle 
+include ./components/input/input
+
+mixin config-panel 
+  .config-panel__container
+    .config-panel__inputs
+      +input('min', 'js-config-panel__min')
+      +input('max', 'js-config-panel__min')
+      +input('step', 'js-config-panel__step')
+      +input('from', 'js-config-panel__from')
+      +input('to', 'js-config-panel__to')
+    
+    .config-panel__toggles
+      +toggle('vertical')
+      +toggle('double')
+      +toggle('scale')
+      +toggle('satellite')
+
+    //- label(class = 'config-panel__min_container')
+    //-   input.config-panel__min
+    //- input.config-panel__max
+    //- input.config-panel__step
+    //- input.config-panel__from
+    //- input.config-panel__to
+
+
+    //- input(type = 'checkbox', class = 'config-panel__orientation')
+    //- input(type = 'checkbox', class = 'config-panel__thumbType')
+    //- input(type = 'checkbox', class = 'config-panel__thumbType')
+    //- input(type = 'checkbox', class = 'config-panel__scale')
+    //- input(type = 'checkbox', class = 'config-panel__satellite')

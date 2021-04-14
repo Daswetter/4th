@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+include ./config-panel/config-panel.pug
+
+doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
@@ -7,8 +9,7 @@ html(lang="en")
     
   body
     .js-slider1
-    .config-panel 
-      input.config-panel__min
+    +config-panel
     .js-slider2
     .js-slider3
     .js-slider4
