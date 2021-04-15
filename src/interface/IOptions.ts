@@ -1,7 +1,8 @@
 interface IOptions {
   min: number,
   max: number,
-  initial: Array<number>, 
+  from: number, 
+  to?: number, 
   stepSize: number,
   orientation: string,
   thumbType: string,

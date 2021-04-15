@@ -24,12 +24,14 @@ class Presenter{
     this.Model.bindChangedValues(this.sendCurrentToView)
     this.Model.bindChangedExtraValues(this.sendExtraToView)
 
-    this.Model.bindChangedScaleElements(this.sendScaleElementsToView)
-
-
+    this.Model.bindChangedOptions(this.initNewView)
   }
 
   private initView = (): void => {
+    this.View.initView(this.Model.countScaleElements())
+  }
+  private initNewView = (): void => {
+    this.View.clearAllView()
     this.View.initView(this.Model.countScaleElements())
   }
 
@@ -41,9 +43,6 @@ class Presenter{
     this.View.notifyExtraElement(current, part)
   }
 
-  private sendScaleElementsToView = (scaleElements: Array<number>): void => {
-    this.View.notifyScale(scaleElements)
-  }
   
 
   private sendCurrentToModel = (part: number) : void => {   

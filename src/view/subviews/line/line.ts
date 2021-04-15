@@ -59,6 +59,15 @@ class Line extends SubView{
       bottom: this.line.offsetTop + this.line.offsetHeight
     }
   }
+
+  public setVertical = (): void => {
+    const oldWidth = this.line.offsetWidth
+    const height = this.line.offsetHeight
+    this.line.style.width = height + 'px'
+    this.line.style.height = oldWidth + 'px'
+    
+    
+  }
   
   private onClick = (params: {client: keyof MouseEvent, side: keyof DOMRect, offset: keyof HTMLElement}, event: MouseEvent) : void => {
     if ( this.mouseDownValue === this.mouseUpValue){

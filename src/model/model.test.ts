@@ -9,7 +9,8 @@ describe('Model', () => {
     options = {
       min: -1800,
       max: 200,
-      initial: [0, 100],
+      from: 0,
+      to: 100,
       stepSize: 100,
       progress: true,
       satellite: true,

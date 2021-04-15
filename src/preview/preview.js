@@ -1,9 +1,11 @@
 import $ from 'jquery'
+import { configPanel } from './config-panel/config-panel.ts'
 
 $(".js-slider1").customRangeSlider({
   min: 0.2,
   max: 1,
-  initial: [0.2, 0.5],
+  from: 0.2,
+  to: 0.5,
   stepSize: 0.01,
   progress: true,
   satellite: true,
@@ -12,6 +14,7 @@ $(".js-slider1").customRangeSlider({
   thumbType: 'double',
   input: true
 })
+const config = new configPanel('.js-slider1')
 
 
 
@@ -19,7 +22,8 @@ $(".js-slider1").customRangeSlider({
 $(".js-slider2").customRangeSlider({
   min: -18.1,
   max: 0.9,
-  initial: [-16, 0],
+  from: -16,
+  to: 0,
   stepSize: 0.2,
   progress: true,
   satellite: true,
@@ -32,7 +36,7 @@ $(".js-slider2").customRangeSlider({
 $(".js-slider3").customRangeSlider({
   min: -108.8,
   max: 0.9,
-  initial: [-50],
+  from: -50,
   stepSize: 0.2,
   progress: true,
   satellite: true,
@@ -45,7 +49,7 @@ $(".js-slider3").customRangeSlider({
 $(".js-slider4").customRangeSlider({
   min: -10,
   max: 9,
-  initial: [5],
+  from: 5,
   stepSize: 3,
   progress: true,
   satellite: true,

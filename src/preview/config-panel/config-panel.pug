@@ -5,16 +5,17 @@ mixin config-panel
   .config-panel__container
     .config-panel__inputs
       +input('min', 'js-config-panel__min')
-      +input('max', 'js-config-panel__min')
+      +input('max', 'js-config-panel__max')
       +input('step', 'js-config-panel__step')
       +input('from', 'js-config-panel__from')
       +input('to', 'js-config-panel__to')
     
     .config-panel__toggles
-      +toggle('vertical')
-      +toggle('double')
-      +toggle('scale')
-      +toggle('satellite')
+      +toggle('vertical', 'js-config-panel__orientation')
+      +toggle('double', 'js-config-panel__thumbType')
+      +toggle('scale', 'js-config-panel__scale')
+      +toggle('progress', 'js-config-panel__progress')
+      +toggle('satellite', 'js-config-panel__satellite')
 
     //- label(class = 'config-panel__min_container')
     //-   input.config-panel__min

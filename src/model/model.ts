@@ -6,6 +6,7 @@ class Model implements IModel{
   private valuesWereChanged!: (current: number, part: number) => void
   private extraValuesWereChanged!: (current: number, part: number) => void
   private scaleElementsWereChanged!: (scaleElements: Array<number>) => void
+  private optionsWereUpdated!: (scaleElements: Array<number>, options: IOptions) => void
   
   constructor(private options: IOptions){
     this.options = options
@@ -112,15 +113,9 @@ class Model implements IModel{
 
   public update = (options: IOptions): void => {
     this.options = options
-    this.setPart('primary', this.options.initial[0])
 
-    if (this.options.thumbType == 'double'){
-      this.setPart('extra', this.options.initial[1])
-    }
-
-    if (this.options.scale){
-      this.scaleElementsWereChanged(this.countScaleElements())
-    }
+    const scaleElements = this.countScaleElements()
+    this.optionsWereUpdated(scaleElements, options)
   }
 
 
@@ -131,8 +126,8 @@ class Model implements IModel{
     this.extraValuesWereChanged = callback;
   }
 
-  public bindChangedScaleElements(callback: (scaleElements: Array<number>) => void): void {
-    this.scaleElementsWereChanged = callback;
+  public bindChangedOptions(callback: (scaleElements: Array<number>, options: IOptions) => void): void {
+    this.optionsWereUpdated = callback;
   }
 }
 

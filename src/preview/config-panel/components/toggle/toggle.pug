@@ -1,6 +1,6 @@
-mixin toggle(title)
+mixin toggle(title, className)
   label(class='toggle__label')
     .toggle__title= title
-    input(class='toggle__input', type='checkbox')
+    input(class='toggle__input', class!=className, type='checkbox')
 
 

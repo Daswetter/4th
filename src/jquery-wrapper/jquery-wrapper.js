@@ -9,7 +9,7 @@ import jQuery from 'jquery'
     const options = $.extend({},{
       min: 0,
       max: 100,
-      initial: 50,
+      from: 50,
       stepSize: 1,
       orientation: 'horizontal',
       thumbType: 'single',

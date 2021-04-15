@@ -17,7 +17,10 @@ class Progress extends SubView{
   public returnAsHTML = (): HTMLElement => {
     return this.progress
   }
-
+  public setVertical = (): void => {
+    this.progress.style.width = this.progress.offsetHeight + 'px'
+    this.progress.style.height = 'auto'
+  }
   public setInitialSettings = (lineSize: {width: number, height: number}, orientation = 'horizontal'): void => {
 
     this.progress.style.top = (lineSize.height - this.progress.offsetHeight) / 2 + 'px'

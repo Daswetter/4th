@@ -33,7 +33,8 @@ class View implements IView {
     
   }
 
-  public initView = (scaleElements: number[]): void => {
+  public initView = (scaleElements: number[], options = this.options): void => {
+    this.options = options
     
     this.initWrapper()
     this.initLine()
@@ -43,13 +44,14 @@ class View implements IView {
     this.options.progress ? this.initProgress() : ''
     this.options.input ? this.initInput() : ''
     this.options.scale ? this.initScale(scaleElements): ''
-
-    this.currentChanged(this.options.initial[0])
+    
+    this.currentChanged(this.options.from)
     if (this.options.thumbType === 'double'){
-      this.extraCurrentChanged(this.options.initial[1])
+      this.extraCurrentChanged(this.options.to as number)
     }
 
     window.addEventListener('resize', this.initElementsForResized)
+    
   }
 
   private initWrapper = (): void => {
@@ -67,9 +69,13 @@ class View implements IView {
     this.line = new Line()
     
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
+    if (this.options.orientation === 'vertical'){
+      this.line.setVertical()
+    }
     this.line.setEventListener(orientation)
     this.line.bindChangedState(this.partChanged)
 
+    
     if (this.options.thumbType === 'double'){
       this.line.bindChangedState(this.changePositionForTheNearest)
     }
@@ -127,7 +133,11 @@ class View implements IView {
     
     this.progress = new Progress()
     this.line.returnAsHTML().append(this.progress.returnAsHTML()) 
+    if (orientation === 'vertical'){
+      this.progress.setVertical()
+    }
     this.progress.setInitialSettings(this.line.size(), orientation)
+    
   }
 
   private initInput = (): void => {
@@ -140,6 +150,10 @@ class View implements IView {
       this.input.returnAsHTML().after(this.input.returnExtraAsHTML())
       this.input.bindExtraChangedPosition(this.extraCurrentChanged)
     }
+  }
+
+  clearAllView = (): void => {
+    this.wrapper.returnAsHTML().remove()
   }
 
   private notify = (current: number, part: number, element: string): void => {
@@ -169,13 +183,6 @@ class View implements IView {
     const element = 'extra'
     this.notify(current, part, element)
   }
-
-  public notifyScale(scaleElements: Array<number>): void{
-    this.scale.removeScaleElement()
-    this.scale.setScaleValues(scaleElements)
-  }
-
-
 
   private countDistance = (part: number, element: string): number => {
     let currentPart = this.part

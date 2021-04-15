@@ -4,7 +4,8 @@ interface IView {
 
   notifyPrimaryElement(current: number, part: number): void,
   notifyExtraElement(current: number, part: number): void,
-  notifyScale(scaleElements: Array<number>): void,
+
+  clearAllView(): void,
 
 
   bindChangedPart(callback: (arg0: number) => void):void,

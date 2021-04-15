@@ -17,10 +17,6 @@ class Scale extends SubView{
     return this.scale
   }
 
-  public removeScaleElement = (): void => {
-    this.elements.forEach(element => element.remove())
-  }
-
   public setScaleValues = (scaleValues: Array<number>): void => {
     const scaleHTMLElements: Array<HTMLElement> = [];
     [0, 1, 2, 3, 4].forEach( (i: number): void => {
