@@ -5,7 +5,6 @@ import { IModel } from './IModel'
 class Model implements IModel{
   private valuesWereChanged!: (current: number, part: number) => void
   private extraValuesWereChanged!: (current: number, part: number) => void
-  private scaleElementsWereChanged!: (scaleElements: Array<number>) => void
   private optionsWereUpdated!: (scaleElements: Array<number>, options: IOptions) => void
   
   constructor(private options: IOptions){

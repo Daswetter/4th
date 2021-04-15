@@ -1,4 +1,3 @@
-import '../interface/IOptions'
 import { IOptions } from '../interface/IOptions'
 
 interface IModel {
@@ -6,6 +5,7 @@ interface IModel {
   setPart(element: string, current: number): void
 
   countScaleElements(): Array<number>
+  update (options: IOptions): void
 
   bindChangedValues(callback: (arg0: number, arg1: number) => void): void
   bindChangedExtraValues(callback: (arg0: number, arg1: number) => void): void

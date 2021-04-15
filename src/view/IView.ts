@@ -1,3 +1,4 @@
+import { IOptions } from "../interface/IOptions";
 
 interface IView {
   initView(scaleElements: number[]): void,
@@ -6,7 +7,7 @@ interface IView {
   notifyExtraElement(current: number, part: number): void,
 
   clearAllView(): void,
-
+  update(options: IOptions): void
 
   bindChangedPart(callback: (arg0: number) => void):void,
   bindChangedExtraPart(callback: (arg0: number) => void):void,

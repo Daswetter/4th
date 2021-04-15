@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import { configPanel } from './config-panel/config-panel.ts'
+import './preview.scss'
 
 $(".js-slider1").customRangeSlider({
   min: 0.2,
