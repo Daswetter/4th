@@ -11,8 +11,8 @@ $(".js-slider1").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
-  orientation: 'horizontal',
-  thumbType: 'double',
+  vertical: false,
+  double: true,
   input: true
 })
 const config = new configPanel('.js-slider1')
@@ -29,8 +29,8 @@ $(".js-slider2").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
-  thumbType: 'double',
-  orientation: 'vertical',
+  double: true,
+  vertical: true,
   input: true
 })
 
@@ -42,8 +42,8 @@ $(".js-slider3").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
-  thumbType: 'single',
-  orientation: 'horizontal',
+  double: false,
+  vertical: false,
   input: true
 })
 
@@ -55,8 +55,8 @@ $(".js-slider4").customRangeSlider({
   progress: true,
   satellite: true,
   scale: false,
-  // orientation: 'vertical',
-  thumbType: 'single',
+  // vertical: true,
+  double: false,
   input: true
 })
 

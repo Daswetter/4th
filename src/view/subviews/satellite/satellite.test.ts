@@ -90,17 +90,19 @@ describe('Satellite', () => {
     })
 
     test('should set position for extra satellite and horizontal mod', () => {
+      const vertical = false
       lineSize = {
         width: 150,
         height: 10,
       }
-      _.update(0.5, 500, lineSize, lineSide, thumbSize, 'horizontal', 'extra')
+      _.update(0.5, 500, lineSize, lineSide, thumbSize, vertical, 'extra')
       expect(_.satelliteExtra.innerText).toBe('500')
       expect(_.satelliteExtra.style.left).toBe('110px')
       expect(_.satelliteExtra.style.top).toBe('26px')
     })
 
     test('should set position for primary satellite and vertical mod', () => {
+      const vertical = true
       lineSize = {
         width: 10,
         height: 300,
@@ -113,13 +115,14 @@ describe('Satellite', () => {
         width: 20,
         height: 20,
       }
-      _.update(1, 125, lineSize, lineSide, thumbSize, 'vertical')
+      _.update(1, 125, lineSize, lineSide, thumbSize, vertical)
       expect(_.satellite.innerText).toBe('125')
       expect(_.satellite.style.left).toBe('59px')
       expect(_.satellite.style.top).toBe('190px')
     })
 
     test('should set position for extra satellite and horizontal mod', () => {
+      const vertical = true
       lineSize = {
         width: 40,
         height: 100,
@@ -128,7 +131,7 @@ describe('Satellite', () => {
         left: 50,
         bottom: 300,
       }
-      _.update(0.1, 170, lineSize, lineSide, thumbSize, 'vertical', 'extra')
+      _.update(0.1, 170, lineSize, lineSide, thumbSize, vertical, 'extra')
       expect(_.satelliteExtra.innerText).toBe('170')
       expect(_.satelliteExtra.style.left).toBe('14px')
       expect(_.satelliteExtra.style.top).toBe('280px')

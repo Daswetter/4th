@@ -21,11 +21,11 @@ class Progress extends SubView{
     this.progress.style.width = this.progress.offsetHeight + 'px'
     this.progress.style.height = 'auto'
   }
-  public setInitialSettings = (lineSize: {width: number, height: number}, orientation = 'horizontal'): void => {
+  public setInitialSettings = (lineSize: {width: number, height: number}, vertical = false): void => {
 
     this.progress.style.top = (lineSize.height - this.progress.offsetHeight) / 2 + 'px'
 
-    if (orientation === 'vertical'){
+    if (vertical){
       this.progress.style.top = ''
       this.progress.style.left = (lineSize.width - this.progress.offsetWidth) / 2 + 'px'
     }
@@ -34,27 +34,27 @@ class Progress extends SubView{
 
   
   
-  public update = (part: number, lineSize: {width: number, height: number}, orientation = 'horizontal', element = 'primary') :void => {
+  public update = (part: number, lineSize: {width: number, height: number}, vertical = false, element = 'primary') :void => {
     let lineOneSize = lineSize.width
     let generalSide = 'left'
     let secondSide = 'right'
 
-    if (element === 'primary' && orientation === 'horizontal'){
+    if (element === 'primary' && !vertical){
       this.part = part
     } 
 
-    if (element === 'extra' && orientation === 'horizontal'){
+    if (element === 'extra' && !vertical){
       this.partExtra = part
     } 
 
-    if (element === 'primary' && orientation === 'vertical'){
+    if (element === 'primary' && vertical){
       this.part = part
       lineOneSize = lineSize.height
       generalSide = 'bottom'
       secondSide = 'top'
     } 
 
-    if (element === 'extra' && orientation === 'vertical'){
+    if (element === 'extra' && vertical){
       this.partExtra = part
       lineOneSize = lineSize.height
       generalSide = 'bottom'

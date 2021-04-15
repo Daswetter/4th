@@ -15,8 +15,8 @@ describe('Model', () => {
       progress: true,
       satellite: true,
       scale: true,
-      orientation: 'vertical',
-      thumbType: 'double',
+      vertical: true,
+      double: true,
       input: true
     }
     _ = new Model(options)

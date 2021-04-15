@@ -26,7 +26,7 @@ class Thumb extends SubView{
     return this.thumbExtra
   }
 
-  private getOrientationParams = (orientation: string, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number} => {
+  private getOrientationParams = (vertical: boolean, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number} => {
     let params = {
       pageName: 'pageX' as keyof MouseEvent,
       sideName: 'offsetLeft' as keyof HTMLElement,
@@ -34,7 +34,7 @@ class Thumb extends SubView{
       lineSize: lineSize.width, 
       lineSide: lineSide.left, 
     }
-    if (orientation === 'vertical'){
+    if (vertical){
       params = {
         pageName: 'pageY' as keyof MouseEvent,
         sideName: 'offsetTop' as keyof HTMLElement,
@@ -52,8 +52,8 @@ class Thumb extends SubView{
     element.onmousedown = this.onMouseDown.bind(null, element, params)   
   }
 
-  public setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, orientation = 'horizontal', elementName = 'primary'): void => {
-    const params = this.getOrientationParams(orientation, lineSize, lineSide)
+  public setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical = false, elementName = 'primary'): void => {
+    const params = this.getOrientationParams(vertical, lineSize, lineSide)
     let element = this.thumb
 
     if (elementName === 'extra'){
@@ -113,21 +113,21 @@ class Thumb extends SubView{
     element.style.setProperty(`${sideName}`, `${side}`)
   }
 
-  public update = (part: number, lineSize: { width: number, height: number}, orientation = 'horizontal', elementName = 'primary'): void => {
+  public update = (part: number, lineSize: { width: number, height: number}, vertical = false, elementName = 'primary'): void => {
     let element = this.thumb
     let side = 'left'
     let elementSizeName = 'offsetWidth' as keyof HTMLElement
     let lineParameter = lineSize.width
   
-    if (orientation === 'horizontal' && elementName === 'extra'){
+    if (!vertical && elementName === 'extra'){
       element = this.thumbExtra
     }
-    if (orientation === 'vertical' && elementName === 'primary'){
+    if (vertical && elementName === 'primary'){
       side = 'bottom'
       elementSizeName = 'offsetHeight'
       lineParameter = lineSize.height
     }
-    if (orientation === 'vertical' && elementName === 'extra'){
+    if (vertical && elementName === 'extra'){
       element = this.thumbExtra
       side = 'bottom'
       elementSizeName = 'offsetHeight'
@@ -141,19 +141,19 @@ class Thumb extends SubView{
     return initParameter
   }
   
-  public setInitialSettings = (lineSize: {width: number, height: number}, orientation = 'horizontal', elementName = 'primary'): void => {
+  public setInitialSettings = (lineSize: {width: number, height: number}, vertical = false, elementName = 'primary'): void => {
     let lineSizeParam = lineSize.height
     let element = this.thumb
     let thumbSizeName = 'offsetHeight' as keyof HTMLElement
 
-    if (orientation === 'horizontal'){
+    if (!vertical){
       if (elementName === 'extra'){
         element = this.thumbExtra
       }
       element.style.top = this.countInitialParameter(element, lineSizeParam, thumbSizeName)
     }
 
-    if (orientation === 'vertical'){
+    if (vertical){
       lineSizeParam = lineSize.width
       thumbSizeName = 'offsetWidth'
       if (elementName === 'extra'){

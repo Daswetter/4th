@@ -49,12 +49,12 @@ class Satellite extends SubView {
     }
   }
 
-  public update = (part: number, result: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbSize: {width: number, height: number}, orientation = 'horizontal', elementName = 'primary'): void => {
+  public update = (part: number, result: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbSize: {width: number, height: number}, vertical = false, elementName = 'primary'): void => {
 
     let element = this.satellite
     let thumbParameter = thumbSize.height
 
-    if (orientation === 'horizontal'){
+    if (!vertical){
       if (elementName === 'extra'){
         element = this.satelliteExtra
       } 
@@ -63,7 +63,7 @@ class Satellite extends SubView {
     }
     
 
-    if (orientation === 'vertical'){
+    if (vertical){
       if (elementName === 'primary'){
         thumbParameter = thumbSize.width
       }

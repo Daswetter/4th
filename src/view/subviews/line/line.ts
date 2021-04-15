@@ -25,13 +25,13 @@ class Line extends SubView{
     this.mouseUpValue = (event[client] as number)
   }
 
-  public setEventListener = (orientation: string): void => {
+  public setEventListener = (vertical: boolean): void => {
     let params = {
       client: 'clientX' as keyof MouseEvent,
       side: 'left' as keyof DOMRect,
       offset: 'offsetWidth' as keyof HTMLElement
     }
-    if (orientation === 'vertical'){
+    if (vertical){
       params = {
         client: 'clientY',
         side: 'bottom',
