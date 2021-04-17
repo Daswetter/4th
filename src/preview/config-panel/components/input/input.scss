@@ -14,4 +14,7 @@
   border: 2px solid rgb(102, 93, 93);
   min-width: 50px;
   max-width: 100px;
+  &:disabled{
+    background: rgb(196, 193, 193);
+  }
 }

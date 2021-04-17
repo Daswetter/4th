@@ -1,6 +1,9 @@
 import { IOptions } from "../interface/IOptions";
 
 interface IView {
+  current: number
+  currentExtra: number
+  
   initView(scaleElements: number[]): void,
 
   notifyPrimaryElement(current: number, part: number): void,

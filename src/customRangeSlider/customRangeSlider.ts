@@ -2,6 +2,8 @@ import { View } from '../view/view'
 import { Model } from '../model/model'
 import { Presenter } from '../presenter/presenter'
 
+import { Input } from './../view/subviews/input/input'
+
 import jQuery from 'jquery'
 import { IOptions } from '../interface/IOptions'
 import { IModel } from '../model/IModel'
@@ -15,6 +17,7 @@ import { IView } from '../view/IView'
     initElement: HTMLElement
     model!: IModel
     view!: IView
+    input!: Input
 
     constructor(initElement: HTMLElement, setOptions: IOptions) {
       const options = $.extend({}, {
@@ -47,9 +50,14 @@ import { IView } from '../view/IView'
       this.view.update(this.options)
     }
     
-    returnCurrentState(): IOptions {
+    returnCurrentOptions(): IOptions {
       return this.options
     }
+
+    returnCurrentState(): Array<number> {
+      return [this.view.current, this.view.currentExtra]
+    }
+
   }
 
 

@@ -1,43 +1,20 @@
 import { SubView } from "../SubView"
 
 class Input extends SubView{
-  public input!: HTMLInputElement
-  public inputExtra!: HTMLInputElement
+  public input = document.querySelector('.js-config-panel__from') as HTMLInputElement
+  public inputExtra = document.querySelector('.js-config-panel__to') as HTMLInputElement
 
   constructor(){
     super()
-    this.initPrimaryElement()
-    
     this.setEventListener(this.input, this.sendValue.bind(null, this.input))
   }
 
-  private initInput = (element: HTMLInputElement): HTMLInputElement => {
-    element = document.createElement('input')
-    element.classList.add('range-slider__input')
-    return element
-  }
-
-  initPrimaryElement = (): void => {
-    this.input = this.initInput(this.input)
-  }
-
   public initInputExtra = (): void => {
-    this.inputExtra = this.initInput(this.inputExtra)
     this.setEventListener(this.inputExtra, this.sendValueForExtra.bind(null, this.inputExtra))
   }
 
-  public returnAsHTML = (): HTMLElement => {
-    return this.input
-  }
-
-  public returnExtraAsHTML = (): HTMLElement => {
-    return this.inputExtra
-  }
-
   private setEventListener = (element: HTMLInputElement, fn: () => void): void => {
-    ['enter','blur'].forEach( evt => 
-      element.addEventListener(evt, fn, false)
-    )
+    element.addEventListener('change', fn, false)
   }
 
   private getValue = (element: HTMLInputElement): number => {

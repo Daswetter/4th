@@ -12,7 +12,7 @@ $(".js-slider1").customRangeSlider({
   satellite: true,
   scale: true,
   vertical: false,
-  double: true,
+  double: false,
   input: true
 })
 const config = new configPanel('.js-slider1')

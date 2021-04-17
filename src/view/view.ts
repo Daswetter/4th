@@ -20,6 +20,8 @@ class View implements IView {
 
   part!: number
   partExtra!: number
+  current!: number
+  currentExtra!: number
 
   private partChanged!: (arg0: number) => void
   private extraPartChanged!: (arg0: number) => void
@@ -42,7 +44,7 @@ class View implements IView {
     
     this.options.satellite ? this.initSatellite(): ''
     this.options.progress ? this.initProgress() : ''
-    this.options.input ? this.initInput() : ''
+    this.initInput()
     this.options.scale ? this.initScale(scaleElements): ''
     
     this.currentChanged(this.options.from)
@@ -137,17 +139,15 @@ class View implements IView {
 
   private initInput = (): void => {
     this.input = new Input()
-    this.line.returnAsHTML().after(this.input.returnAsHTML())
     this.input.bindChangedState(this.currentChanged)
-
+    
     if (this.options.double){
       this.input.initInputExtra()
-      this.input.returnAsHTML().after(this.input.returnExtraAsHTML())
       this.input.bindExtraChangedPosition(this.extraCurrentChanged)
     }
   }
 
-  clearAllView = (): void => {
+  public clearAllView = (): void => {
     this.wrapper.returnAsHTML().remove()
   }
 
@@ -155,10 +155,12 @@ class View implements IView {
     
     if (element === 'primary'){
       this.part = part
+      this.current = current
     }
 
     if (element === 'extra'){
       this.partExtra = part
+      this.currentExtra = current
     }
 
     this.thumb.update(part, this.line.size(), this.options.vertical, element)

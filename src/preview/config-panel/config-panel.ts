@@ -33,6 +33,7 @@ class configPanel{
     this.initInput(this.step, 'stepSize')
     this.initInput(this.from, 'from')
     this.initInput(this.to, 'to')
+    
 
     this.initCheckbox(this.vertical, 'vertical')
     this.initCheckbox(this.double, 'double')
@@ -45,7 +46,7 @@ class configPanel{
   }
 
   setEventListenerOnCheckbox = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
-    element.addEventListener('change', this.sendState.bind(null, element, optionKey))
+    element.addEventListener('change', this.sendState.bind(null, optionKey))
   }
 
   initInput = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
@@ -58,23 +59,38 @@ class configPanel{
       [optionKey]: Number(element.value)
     })
   }
+
   setInitialSettings = (element: HTMLInputElement, optionKey: keyof IOptions, checkbox = false): void => {
-    const currentState = $(this.initElement).data("customRangeSlider").returnCurrentState();
+    const currentState = $(this.initElement).data("customRangeSlider").returnCurrentOptions();
     if (checkbox){
       element.checked = currentState[optionKey]
     } else {
+
+      if (optionKey === 'to' && !this.rangeSlider.returnCurrentOptions().double){
+        element.disabled = true
+      }
+
       element.value = currentState[optionKey]
     }
     
   }
+
   initCheckbox = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
     this.setInitialSettings(element, optionKey, true)
     this.setEventListenerOnCheckbox(element, optionKey)
   }
 
 
-  sendState = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
-    const currentState = this.rangeSlider.returnCurrentState()[optionKey];
+  sendState = (optionKey: keyof IOptions): void => {
+    const currentState = this.rangeSlider.returnCurrentOptions()[optionKey];
+    if(optionKey === 'double'){
+      if (this.rangeSlider.returnCurrentOptions().double){
+        this.to.disabled = true
+      } else {
+        this.to.disabled = false
+      }
+    }
+
     if (currentState){
       this.rangeSlider.update({
         [optionKey]: false

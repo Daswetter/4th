@@ -5,7 +5,8 @@ interface IRangeSlider {
   options: IOptions,
   init(initElement: HTMLElement, options: IOptions): void,
   update(options: reducedIOptions): void,
-  returnCurrentState(): IOptions
+  returnCurrentOptions(): IOptions
+  returnCurrentState(): Array<number>
 }
 
 export { IRangeSlider }
