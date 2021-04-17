@@ -115,16 +115,14 @@ class View implements IView {
   
   private initScale = (scaleElements: number[]): void => {
     this.scale = new Scale()
-    this.line.returnAsHTML().after(this.scale.returnAsHTML())
+    this.line.returnAsHTML().append(this.scale.returnAsHTML())
     this.scale.bindChangedState(this.partChanged)
+    this.scale.setScaleValues(scaleElements, this.line.size(), this.options.vertical)
     
-    if (this.options.vertical) {
-      this.scale.setVertical()
-    }
     if (this.options.double){
       this.scale.bindChangedState(this.changePositionForTheNearest)
     }
-    this.scale.setScaleValues(scaleElements)
+    
   }
 
   private initProgress = (): void => {

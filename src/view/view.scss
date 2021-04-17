@@ -23,11 +23,10 @@ html {
   position: absolute;
   z-index: 1;
 }
-.range-slider__scale{
-  display: flex;
-  justify-content: space-between;
-}
+// .range-slider__scale{
+// }
 .range-slider__scale-number{
+  position: absolute;
   cursor: pointer;
 }
 
