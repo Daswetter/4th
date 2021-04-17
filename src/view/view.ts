@@ -105,11 +105,11 @@ class View implements IView {
 
   private initSatellite = (): void => {
     this.satellite = new Satellite()
-    this.wrapper.returnAsHTML().append(this.satellite.returnAsHTML())
+    this.line.returnAsHTML().append(this.satellite.returnAsHTML())
     
     if (this.options.double){
       this.satellite.initExtraElement()
-      this.wrapper.returnAsHTML().append(this.satellite.returnExtraAsHTML())
+      this.line.returnAsHTML().append(this.satellite.returnExtraAsHTML())
     }
   }
   

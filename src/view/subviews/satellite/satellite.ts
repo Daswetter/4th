@@ -31,21 +31,23 @@ class Satellite extends SubView {
   
   private setPosition = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbHeight: number ): void => {
 
-    element.style.left = lineSide.left + part * lineSize.width - element.offsetWidth / 2 + 'px'
+    element.style.left = part * lineSize.width - element.offsetWidth / 2 + 'px'
 
     if (lineSize.height >= thumbHeight){
-      element.style.top = lineSide.bottom - lineSize.height - 1.2 * element.offsetHeight + 'px'
+      element.style.top = - lineSize.height - element.offsetHeight + 'px'
     } else {
-      element.style.top = lineSide.bottom - lineSize.height - 1.2 * element.offsetHeight - (thumbHeight - lineSize.height) / 2 + 'px'
+      element.style.top =  - element.offsetHeight - thumbHeight / 2 + 'px'
     }
   }
 
   private setPositionForVertical = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbWidth: number): void => {
-    element.style.top = lineSide.bottom - part * lineSize.height - element.offsetHeight / 2 + 'px'    
+  
+    element.style.top = lineSize.height - part * lineSize.height - element.offsetHeight / 2 + 'px'    
+
     if (lineSize.width >= thumbWidth){
-      element.style.left = lineSide.left - 1.2 * element.offsetWidth + 'px'
+      element.style.left = - 1.2 * element.offsetWidth + 'px'
     } else {
-      element.style.left = lineSide.left - 1.2 * element.offsetWidth - (thumbWidth - lineSize.width) / 2 + 'px'
+      element.style.left = - 1.2 * element.offsetWidth - (thumbWidth - lineSize.width) / 2 + 'px'
     }
   }
 
