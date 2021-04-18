@@ -14,11 +14,11 @@ class Model implements IModel{
   private countCurrent(part: number): number {
     const min = this.options.min
     const max = this.options.max
-    const stepSize = this.options.stepSize
-    let current = +(Math.round((max - min) / stepSize * part) * stepSize + min)
+    const step = this.options.step
+    let current = +(Math.round((max - min) / step * part) * step + min)
     
-    if(!this.isInteger(stepSize)){
-      current = +current.toFixed(this.convertStepSizeToDecimal(stepSize))
+    if(!this.isInteger(step)){
+      current = +current.toFixed(this.convertstepToDecimal(step))
     } 
 
     return current
@@ -74,7 +74,7 @@ class Model implements IModel{
 
   public countScaleElements = (): { [key: string]: string } => {
     const scaleElements: { [key: string]: string } = {}
-    const stepSize = this.options.stepSize
+    const step = this.options.step
     const min = this.options.min
     const max = this.options.max
 
@@ -85,25 +85,25 @@ class Model implements IModel{
     Object.assign(scaleElements, {0: String(min)})
     Object.assign(scaleElements, {1: String(max)})
 
-    if (((max - min) / stepSize) > 3){
+    if (((max - min) / step) > 3){
       Object.assign(scaleElements, {0.25: String(quarter)})
       Object.assign(scaleElements, {0.75: String(threeQuarter)})
     } 
-    if (((max - min) / stepSize) > 1) {
+    if (((max - min) / step) > 1) {
       Object.assign(scaleElements, {0.5: String(half)})
     }
     
     for (const part in scaleElements){
-      scaleElements[part] = this.roundToDecimal(scaleElements[part], this.convertStepSizeToDecimal(stepSize)) + ''
+      scaleElements[part] = this.roundToDecimal(scaleElements[part], this.convertstepToDecimal(step)) + ''
     }
 
     return scaleElements
   }
 
-  private convertStepSizeToDecimal = (stepSize: number) : number => {
-    const digits = stepSize.toString().split('')
+  private convertstepToDecimal = (step: number) : number => {
+    const digits = step.toString().split('')
     let decimal: number
-    if ( stepSize > 0 && stepSize < 1){
+    if ( step > 0 && step < 1){
       decimal =   digits.length - 2
       return decimal
     } else { 

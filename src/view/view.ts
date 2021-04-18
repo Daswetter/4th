@@ -165,7 +165,7 @@ class View implements IView {
     this.thumb.update(part, this.line.size(), this.options.vertical, element)
     this.options.input ? this.input.update(current, element) : ''
     this.options.progress ? this.progress.update(part, this.line.size(), this.options.vertical, element) : ''
-    this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.line.side(), this.thumb.size(), this.options.vertical, element) : ''
+    this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.thumb.size(), this.options.vertical, element) : ''
   }
 
   public notifyPrimaryElement(current: number, part: number): void{

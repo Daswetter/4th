@@ -7,30 +7,32 @@ import { IRangeSlider } from '../../interface/IRangeSlider'
 import { IOptions } from '../../interface/IOptions'
 
 class configPanel{
-  initElement: string
+  initElement: HTMLElement
+  initElementName: string
   rangeSlider: IRangeSlider
-  min = document.querySelector('.js-config-panel__min') as HTMLInputElement
-  max = document.querySelector('.js-config-panel__max') as HTMLInputElement
-  step = document.querySelector('.js-config-panel__step') as HTMLInputElement
-  from = document.querySelector('.js-config-panel__from') as HTMLInputElement
-  to = document.querySelector('.js-config-panel__to') as HTMLInputElement
+  min!: HTMLInputElement
+  max!: HTMLInputElement
+  step!: HTMLInputElement
+  from!: HTMLInputElement
+  to!: HTMLInputElement
 
-  vertical = document.querySelector('.js-config-panel__vertical') as HTMLInputElement
-  double = document.querySelector('.js-config-panel__double') as HTMLInputElement
-  scale = document.querySelector('.js-config-panel__scale') as HTMLInputElement
-  progress = document.querySelector('.js-config-panel__progress') as HTMLInputElement
-  satellite = document.querySelector('.js-config-panel__satellite') as HTMLInputElement
+  vertical!: HTMLInputElement
+  double!: HTMLInputElement
+  scale!: HTMLInputElement
+  progress!: HTMLInputElement
+  satellite!: HTMLInputElement
 
   constructor(initElement: string){
-    this.initElement = initElement
-    this.rangeSlider = $(this.initElement).data("customRangeSlider");
+    this.initElementName = initElement
+    this.initElement = document.querySelector(initElement) as HTMLElement
+    this.rangeSlider = $(initElement).data("customRangeSlider");
     this.init()
   }
 
   init = (): void => {
     this.initInput(this.min, 'min')
     this.initInput(this.max, 'max')
-    this.initInput(this.step, 'stepSize')
+    this.initInput(this.step, 'step')
     this.initInput(this.from, 'from')
     this.initInput(this.to, 'to')
     
@@ -50,6 +52,7 @@ class configPanel{
   }
 
   initInput = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
+    element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
     this.setInitialSettings(element, optionKey)
     this.setEventListener(element, optionKey)
   }
@@ -61,7 +64,7 @@ class configPanel{
   }
 
   setInitialSettings = (element: HTMLInputElement, optionKey: keyof IOptions, checkbox = false): void => {
-    const currentState = $(this.initElement).data("customRangeSlider").returnCurrentOptions();
+    const currentState = $(this.initElementName).data("customRangeSlider").returnCurrentOptions();
     if (checkbox){
       element.checked = currentState[optionKey]
     } else {
@@ -69,13 +72,14 @@ class configPanel{
       if (optionKey === 'to' && !this.rangeSlider.returnCurrentOptions().double){
         element.disabled = true
       }
-
+      
       element.value = currentState[optionKey]
     }
     
   }
 
   initCheckbox = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
+    element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
     this.setInitialSettings(element, optionKey, true)
     this.setEventListenerOnCheckbox(element, optionKey)
   }

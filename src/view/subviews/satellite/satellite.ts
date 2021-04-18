@@ -29,7 +29,7 @@ class Satellite extends SubView {
     element.innerText = result + ''
   }
   
-  private setPosition = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbHeight: number ): void => {
+  private setPosition = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, thumbHeight: number ): void => {
 
     element.style.left = part * lineSize.width - element.offsetWidth / 2 + 'px'
 
@@ -40,7 +40,7 @@ class Satellite extends SubView {
     }
   }
 
-  private setPositionForVertical = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbWidth: number): void => {
+  private setPositionForVertical = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, thumbWidth: number): void => {
   
     element.style.top = lineSize.height - part * lineSize.height - element.offsetHeight / 2 + 'px'    
 
@@ -51,7 +51,7 @@ class Satellite extends SubView {
     }
   }
 
-  public update = (part: number, result: number, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, thumbSize: {width: number, height: number}, vertical = false, elementName = 'primary'): void => {
+  public update = (part: number, result: number, lineSize: {width: number, height: number}, thumbSize: {width: number, height: number}, vertical = false, elementName = 'primary'): void => {
 
     let element = this.satellite
     let thumbParameter = thumbSize.height
@@ -61,7 +61,7 @@ class Satellite extends SubView {
         element = this.satelliteExtra
       } 
       this.defineInnerText(element, result)
-      this.setPosition(element, part, lineSize, lineSide, thumbParameter)
+      this.setPosition(element, part, lineSize, thumbParameter)
     }
     
 
@@ -74,7 +74,7 @@ class Satellite extends SubView {
         thumbParameter = thumbSize.width
       }  
       this.defineInnerText(element, result)
-      this.setPositionForVertical(element, part, lineSize, lineSide, thumbSize.width)
+      this.setPositionForVertical(element, part, lineSize, thumbSize.width)
     }
     
   }

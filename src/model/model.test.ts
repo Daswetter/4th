@@ -11,7 +11,7 @@ describe('Model', () => {
       max: 200,
       from: 0,
       to: 100,
-      stepSize: 100,
+      step: 100,
       progress: true,
       satellite: true,
       scale: true,
@@ -31,8 +31,8 @@ describe('Model', () => {
       _.setCurrent('primary', 0.1)
       expect(callback).toHaveBeenCalled()
     })
-    test('should round currentValue according to stepSize period nd call mock with correct parameters', () => {
-      options.stepSize = 0.2
+    test('should round currentValue according to step period nd call mock with correct parameters', () => {
+      options.step = 0.2
       _.setCurrent('primary', 0.1)
       expect(callback).toHaveBeenCalledWith(-1600, 0.1)
     })
@@ -92,13 +92,13 @@ describe('Model', () => {
     test('should return a correct array', () => {
       options.min = 0
       options.max = 100
-      options.stepSize = 1
+      options.step = 1
       expect(_.countScaleElements()).toEqual([0, 25, 50, 75, 100])
     })
     test('should round correctly', () => {
       options.min = 0
       options.max = 50
-      options.stepSize = 1
+      options.step = 1
       expect(_.countScaleElements()).toEqual([0, 13, 25, 38, 50])
     })
   })

@@ -3,7 +3,7 @@ interface IOptions {
   max: number,
   from: number, 
   to?: number, 
-  stepSize: number,
+  step: number,
   vertical: boolean,
   double: boolean,
   satellite: boolean,

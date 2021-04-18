@@ -7,7 +7,7 @@ $(".js-slider1").customRangeSlider({
   max: 1,
   from: 0.2,
   to: 0.5,
-  stepSize: 0.01,
+  step: 0.01,
   progress: true,
   satellite: true,
   scale: true,
@@ -15,7 +15,7 @@ $(".js-slider1").customRangeSlider({
   double: false,
   input: true
 })
-const config = new configPanel('.js-slider1')
+new configPanel('.js-slider1')
 
 
 
@@ -25,7 +25,7 @@ $(".js-slider2").customRangeSlider({
   max: 0.9,
   from: -16,
   to: 0,
-  stepSize: 0.2,
+  step: 0.2,
   progress: true,
   satellite: true,
   scale: true,
@@ -33,12 +33,13 @@ $(".js-slider2").customRangeSlider({
   vertical: true,
   input: true
 })
+new configPanel('.js-slider2')
 
 $(".js-slider3").customRangeSlider({
   min: -108.8,
   max: 0.9,
   from: -50,
-  stepSize: 0.2,
+  step: 0.2,
   progress: true,
   satellite: true,
   scale: true,
@@ -46,17 +47,18 @@ $(".js-slider3").customRangeSlider({
   vertical: false,
   input: true
 })
+new configPanel('.js-slider3')
 
 $(".js-slider4").customRangeSlider({
   min: -10,
   max: 9,
   from: 5,
-  stepSize: 3,
+  step: 3,
   progress: true,
   satellite: true,
   scale: false,
-  // vertical: true,
   double: false,
   input: true
 })
+new configPanel('.js-slider4')
 

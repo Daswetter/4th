@@ -18,7 +18,7 @@
 //       max: 1,
 //       from: 0.2,
 //       to: 0.5,
-//       stepSize: 0.01,
+//       step: 0.01,
 //       progress: true,
 //       satellite: true,
 //       scale: true,

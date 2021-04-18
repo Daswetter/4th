@@ -20,7 +20,7 @@
 //       max: 200,
 //       from: 0,
 //       to: 100,
-//       stepSize: 100,
+//       step: 100,
 //       progress: true,
 //       satellite: false,
 //       scale: true,
