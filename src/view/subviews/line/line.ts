@@ -25,7 +25,7 @@ class Line extends SubView{
     this.mouseUpValue = (event[client] as number)
   }
 
-  public setEventListener = (vertical: boolean): void => {
+  public setEventListener = (vertical = false): void => {
     let params = {
       client: 'clientX' as keyof MouseEvent,
       side: 'left' as keyof DOMRect,
@@ -65,28 +65,31 @@ class Line extends SubView{
     const height = this.line.offsetHeight
     this.line.style.width = height + 'px'
     this.line.style.height = oldWidth + 'px'
-    
-    
   }
   
   private onClick = (params: {client: keyof MouseEvent, side: keyof DOMRect, offset: keyof HTMLElement}, event: MouseEvent) : void => {
-    if ( this.mouseDownValue === this.mouseUpValue){
-      let part
-      let distFromBeginToClick = (event[params.client] as number) - (this.line.getBoundingClientRect()[params.side] as number)
-      
-      if (params.client === 'clientY'){
-        distFromBeginToClick = - distFromBeginToClick
-      }
-      
-      if (distFromBeginToClick < 0){
-        part = 0
-      } else if (distFromBeginToClick > (this.line[params.offset] as number)) {
-        part = 1
-      } else{
-        part = distFromBeginToClick / (this.line[params.offset] as number)
+    if (event.clientY < this.line.offsetTop + this.line.offsetHeight){  
+      if ( this.mouseDownValue === this.mouseUpValue){
+        let part
+        let distFromBeginToClick = (event[params.client] as number) - (this.line.getBoundingClientRect()[params.side] as number)
         
+        if (params.client === 'clientY'){
+          distFromBeginToClick = - distFromBeginToClick
+        }
+
+        
+        
+        
+        if (distFromBeginToClick < 0){
+          part = 0
+        } else if (distFromBeginToClick > (this.line[params.offset] as number)) {
+          part = 1
+        } else{
+          part = distFromBeginToClick / (this.line[params.offset] as number)
+          
+        }
+        this.onChanged(part)
       }
-      this.onChanged(part)
     }
   }
 

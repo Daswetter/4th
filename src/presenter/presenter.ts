@@ -30,6 +30,7 @@ class Presenter{
   private initView = (): void => {
     this.View.initView(this.Model.countScaleElements())
   }
+  
   private initNewView = (): void => {
     this.View.clearAllView()
     this.View.initView(this.Model.countScaleElements())

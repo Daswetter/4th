@@ -2,7 +2,7 @@ import { SubView } from "../SubView";
 
 class Scale extends SubView{
   public scale!: HTMLElement 
-
+  scaleElements:{ [key: string]: HTMLElement } = {}
   constructor(){
     super()
     this.initPrimaryElement()
@@ -16,36 +16,46 @@ class Scale extends SubView{
     return this.scale
   }
 
-  public setScaleValues = (scaleValues: Array<number>, lineSize: { width: number; height: number}, vertical: boolean): void => {
-    [0, 1, 2, 3, 4].forEach( (i: number): void => {
-      this.initScaleElement(scaleValues[i], i / 4, lineSize, vertical)
-    })
+  public initScale = (scaleValues: { [key: string]: string }, lineSize: { width: number; height: number}, vertical: boolean): void => {
+    this.createScaleElements(scaleValues)
+    this.printScaleValues(scaleValues)
+    this.setPosition(lineSize, vertical)
+    this.setScaleListener() 
   }
   
-  private initScaleElement = (scaleValue: number, flag: number, lineSize: { width: number; height: number }, vertical: boolean): HTMLElement => {
-    const element = document.createElement('div')
-    this.scale.append(element)
-    element.classList.add('range-slider__scale-number')
-    element.innerText = scaleValue + ''
-    element.dataset.id = flag + ''
-    this.setPosition(element, flag, lineSize, vertical)
-    this.setScaleListener(element) 
-    return element
+  private createScaleElements = (scaleValues: { [key: string]: string }): void => {
+    for (const part in scaleValues) {
+      const element = document.createElement('div')
+      this.scale.append(element)
+      element.classList.add('range-slider__scale-number')
+      Object.assign(this.scaleElements, {[part]: element}) 
+    }
   } 
 
-  private setPosition = (element: HTMLElement, flag: number, lineSize: { width: number; height: number }, vertical: boolean): void => {
-    element.style.left = flag * lineSize.width - element.offsetWidth / 2 + 'px'
-    element.style.top = lineSize.height * 2 + 'px'
+  private printScaleValues = (scaleValues: { [key: string]: string }): void => {
+    for (const part in this.scaleElements) {
+      this.scaleElements[part].innerText = scaleValues[part]
+    }
+  }
+  
 
-    if (vertical){
-      element.style.top = lineSize.height - flag * lineSize.height - element.offsetHeight / 2 + 'px'
-      element.style.left = lineSize.width * 2 + 'px'
+
+  public setPosition = (lineSize: { width: number; height: number }, vertical: boolean): void => {
+    for (const part in this.scaleElements){
+      this.scaleElements[part].style.left = (+part) * lineSize.width - this.scaleElements[part].offsetWidth / 2 + 'px'
+      this.scaleElements[part].style.top = lineSize.height * 2 + 'px'
+
+      if (vertical){
+        this.scaleElements[part].style.top = lineSize.height - (+part) * lineSize.height - this.scaleElements[part].offsetHeight / 2 + 'px'
+        this.scaleElements[part].style.left = lineSize.width * 2 + 'px'
+      }
     }
   }
 
-  private setScaleListener = (element: HTMLElement): void => {
-    const part = +(element.getAttribute('data-id') as string)
-    element.onclick = this.onChanged.bind(null, part)
+  private setScaleListener = (): void => {
+    for (const part in this.scaleElements){
+      this.scaleElements[part].onclick = this.onChanged.bind(null, +part)
+    }
   }
 }
 

@@ -5,7 +5,7 @@ import { IModel } from './IModel'
 class Model implements IModel{
   private valuesWereChanged!: (current: number, part: number) => void
   private extraValuesWereChanged!: (current: number, part: number) => void
-  private optionsWereUpdated!: (scaleElements: Array<number>, options: IOptions) => void
+  private optionsWereUpdated!: (scaleElements: { [key: string]: string }, options: IOptions) => void
   
   constructor(private options: IOptions){
     this.options = options
@@ -72,22 +72,32 @@ class Model implements IModel{
     }
   }
 
-  public countScaleElements = (): Array<number> => {
-    const scaleElements = []
+  public countScaleElements = (): { [key: string]: string } => {
+    const scaleElements: { [key: string]: string } = {}
     const stepSize = this.options.stepSize
     const min = this.options.min
-    const max = this.options.max 
-    const quarter = (max - min) / 4 + min
+    const max = this.options.max
+
+    const quarter = (max - min) / 4 + min 
     const half = (max - min) / 2 + min
     const threeQuarter = (max - min) / 4 * 3 + min 
+    
+    Object.assign(scaleElements, {0: String(min)})
+    Object.assign(scaleElements, {1: String(max)})
 
-    scaleElements.push(quarter, half, threeQuarter)
-    const roundScaleElements: Array<number> = scaleElements.map( x => this.roundToDecimal(x, this.convertStepSizeToDecimal(stepSize)))
+    if (((max - min) / stepSize) > 3){
+      Object.assign(scaleElements, {0.25: String(quarter)})
+      Object.assign(scaleElements, {0.75: String(threeQuarter)})
+    } 
+    if (((max - min) / stepSize) > 1) {
+      Object.assign(scaleElements, {0.5: String(half)})
+    }
+    
+    for (const part in scaleElements){
+      scaleElements[part] = this.roundToDecimal(scaleElements[part], this.convertStepSizeToDecimal(stepSize)) + ''
+    }
 
-    roundScaleElements.push(max)
-    roundScaleElements.unshift(min)
-
-    return roundScaleElements
+    return scaleElements
   }
 
   private convertStepSizeToDecimal = (stepSize: number) : number => {
@@ -102,8 +112,8 @@ class Model implements IModel{
     }
   }
 
-  private roundToDecimal = (value: number, decimal: number): number => {
-    return (Math.round( value * Math.pow(10, decimal) ) / Math.pow(10, decimal))
+  private roundToDecimal = (value: string, decimal: number): number => {
+    return (Math.round( +value * Math.pow(10, decimal) ) / Math.pow(10, decimal))
   }
 
   private isInteger = (num: number) : boolean => {
@@ -125,7 +135,7 @@ class Model implements IModel{
     this.extraValuesWereChanged = callback;
   }
 
-  public bindChangedOptions(callback: (scaleElements: Array<number>, options: IOptions) => void): void {
+  public bindChangedOptions(callback: (scaleElements: { [key: string]: string }, options: IOptions) => void): void {
     this.optionsWereUpdated = callback;
   }
 }

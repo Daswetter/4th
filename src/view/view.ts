@@ -35,7 +35,7 @@ class View implements IView {
     
   }
 
-  public initView = (scaleElements: number[], options = this.options): void => {
+  public initView = (scaleElements: { [key: string]: string }, options = this.options): void => {
     this.options = options
     
     this.initWrapper()
@@ -46,6 +46,7 @@ class View implements IView {
     this.options.progress ? this.initProgress() : ''
     this.initInput()
     this.options.scale ? this.initScale(scaleElements): ''
+  
     
     this.currentChanged(this.options.from)
     if (this.options.double){
@@ -113,12 +114,12 @@ class View implements IView {
     }
   }
   
-  private initScale = (scaleElements: number[]): void => {
+  private initScale = (scaleElements: { [key: string]: string }): void => {
     this.scale = new Scale()
     this.line.returnAsHTML().append(this.scale.returnAsHTML())
     this.scale.bindChangedState(this.partChanged)
-    this.scale.setScaleValues(scaleElements, this.line.size(), this.options.vertical)
-    
+    this.scale.initScale(scaleElements, this.line.size(), this.options.vertical)
+
     if (this.options.double){
       this.scale.bindChangedState(this.changePositionForTheNearest)
     }
@@ -203,6 +204,7 @@ class View implements IView {
     let element = 'primary'
     this.partChanged(this.part)
     this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, element)
+    this.options.scale ? this.scale.setPosition(this.line.size(), this.options.vertical) : ''
 
 
     if (this.options.double){

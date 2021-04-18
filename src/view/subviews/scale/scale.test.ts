@@ -29,7 +29,7 @@
 //       _.bindChangedState(callback)
 //       scaleValues = [0, 25, 50, 75, 100]
 //       idFlags = [0, 0.25, 0.5, 0.75, 1]
-//       _.setScaleValues(scaleValues)
+//       _.initScale(scaleValues)
 //     })
     
 //     test('should create div 5 times', () => {

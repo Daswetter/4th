@@ -4,7 +4,7 @@ interface IView {
   current: number
   currentExtra: number
   
-  initView(scaleElements: number[]): void,
+  initView(scaleElements: { [key: string]: string }): void,
 
   notifyPrimaryElement(current: number, part: number): void,
   notifyExtraElement(current: number, part: number): void,
