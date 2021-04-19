@@ -7,8 +7,8 @@ mixin config-panel
       +input('min', 'js-config-panel__min')
       +input('max', 'js-config-panel__max')
       +input('step', 'js-config-panel__step')
-      +input('from', 'js-config-panel__from')
-      +input('to', 'js-config-panel__to')
+      +input('from', 'js-config-panel__from range-slider__input_from')
+      +input('to', 'js-config-panel__to range-slider__input_to')
     
     .config-panel__toggles
       +toggle('vertical', 'js-config-panel__vertical')
@@ -16,17 +16,3 @@ mixin config-panel
       +toggle('scale', 'js-config-panel__scale')
       +toggle('progress', 'js-config-panel__progress')
       +toggle('satellite', 'js-config-panel__satellite')
-
-    //- label(class = 'config-panel__min_container')
-    //-   input.config-panel__min
-    //- input.config-panel__max
-    //- input.config-panel__step
-    //- input.config-panel__from
-    //- input.config-panel__to
-
-
-    //- input(type = 'checkbox', class = 'config-panel__orientation')
-    //- input(type = 'checkbox', class = 'config-panel__thumbType')
-    //- input(type = 'checkbox', class = 'config-panel__thumbType')
-    //- input(type = 'checkbox', class = 'config-panel__scale')
-    //- input(type = 'checkbox', class = 'config-panel__satellite')

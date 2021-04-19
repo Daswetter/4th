@@ -32,7 +32,6 @@ class View implements IView {
   constructor(private initElement: HTMLElement, private options: IOptions) {
     this.options = options
     this.initElement = initElement
-    
   }
 
   public initView = (scaleElements: { [key: string]: string }, options = this.options): void => {
@@ -137,7 +136,7 @@ class View implements IView {
   }
 
   private initInput = (): void => {
-    this.input = new Input()
+    this.input = new Input(this.initElement)
     this.input.bindChangedState(this.currentChanged)
     
     if (this.options.double){

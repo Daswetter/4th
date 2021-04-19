@@ -7,9 +7,9 @@ import { IRangeSlider } from '../../interface/IRangeSlider'
 import { IOptions } from '../../interface/IOptions'
 
 class configPanel{
-  initElement: HTMLElement
-  initElementName: string
-  rangeSlider: IRangeSlider
+  initElement!: HTMLElement
+  initElementName!: string
+  rangeSlider!: IRangeSlider
   min!: HTMLInputElement
   max!: HTMLInputElement
   step!: HTMLInputElement
@@ -22,27 +22,33 @@ class configPanel{
   progress!: HTMLInputElement
   satellite!: HTMLInputElement
 
-  constructor(initElement: string){
-    this.initElementName = initElement
-    this.initElement = document.querySelector(initElement) as HTMLElement
-    this.rangeSlider = $(initElement).data("customRangeSlider");
+  constructor(initElementName: string){
+    this.defineInitElement(initElementName)
     this.init()
   }
 
-  init = (): void => {
-    this.initInput(this.min, 'min')
-    this.initInput(this.max, 'max')
-    this.initInput(this.step, 'step')
-    this.initInput(this.from, 'from')
-    this.initInput(this.to, 'to')
-    
-
-    this.initCheckbox(this.vertical, 'vertical')
-    this.initCheckbox(this.double, 'double')
-    this.initCheckbox(this.scale, 'scale')
-    this.initCheckbox(this.progress, 'progress')
-    this.initCheckbox(this.satellite, 'satellite')
+  defineInitElement = (initElementName: string): void => {
+    this.initElementName = initElementName
+    this.initElement = document.querySelector(initElementName) as HTMLElement
+    this.rangeSlider = $(initElementName).data("customRangeSlider");
   }
+
+  
+  init = (): void => {
+    this.min = this.initInput(this.min, 'min')
+    this.max = this.initInput(this.max, 'max')
+    this.step = this.initInput(this.step, 'step')
+    this.from = this.initInput(this.from, 'from')
+    this.to = this.initInput(this.to, 'to')    
+
+    this.vertical = this.initCheckbox(this.vertical, 'vertical')
+    this.double = this.initCheckbox(this.double, 'double')
+    this.switchStateForTo(this.to)
+    this.scale = this.initCheckbox(this.scale, 'scale')
+    this.progress = this.initCheckbox(this.progress, 'progress')
+    this.satellite = this.initCheckbox(this.satellite, 'satellite')
+  }
+
   setEventListener = (element: HTMLInputElement, optionKey: string): void => {
     element.addEventListener('change', this.sendElementValue.bind(null, element, optionKey))
   }
@@ -50,11 +56,24 @@ class configPanel{
   setEventListenerOnCheckbox = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
     element.addEventListener('change', this.sendState.bind(null, optionKey))
   }
+  switchStateForTo = (element: HTMLInputElement): void => {
+    this.isDisable(element)
+    this.double.addEventListener('change', this.isDisable.bind(null, element))
+  }
 
-  initInput = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
+  isDisable = (element: HTMLInputElement): void => {
+    if (this.rangeSlider.returnCurrentOptions().double){
+      element.disabled = false
+    } else {
+      element.disabled = true
+    }
+  }
+
+  initInput = (element: HTMLInputElement, optionKey: keyof IOptions): HTMLInputElement => {
     element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
     this.setInitialSettings(element, optionKey)
     this.setEventListener(element, optionKey)
+    return element
   }
 
   sendElementValue = (element: HTMLInputElement, optionKey: string): void => {
@@ -65,35 +84,24 @@ class configPanel{
 
   setInitialSettings = (element: HTMLInputElement, optionKey: keyof IOptions, checkbox = false): void => {
     const currentState = $(this.initElementName).data("customRangeSlider").returnCurrentOptions();
+    
     if (checkbox){
       element.checked = currentState[optionKey]
     } else {
-
-      if (optionKey === 'to' && !this.rangeSlider.returnCurrentOptions().double){
-        element.disabled = true
-      }
-      
       element.value = currentState[optionKey]
     }
     
   }
 
-  initCheckbox = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
+  initCheckbox = (element: HTMLInputElement, optionKey: keyof IOptions): HTMLInputElement => {
     element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
     this.setInitialSettings(element, optionKey, true)
     this.setEventListenerOnCheckbox(element, optionKey)
+    return element
   }
-
 
   sendState = (optionKey: keyof IOptions): void => {
     const currentState = this.rangeSlider.returnCurrentOptions()[optionKey];
-    if(optionKey === 'double'){
-      if (this.rangeSlider.returnCurrentOptions().double){
-        this.to.disabled = true
-      } else {
-        this.to.disabled = false
-      }
-    }
 
     if (currentState){
       this.rangeSlider.update({
