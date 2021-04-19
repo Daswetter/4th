@@ -98,7 +98,7 @@ class View implements IView {
       this.line.returnAsHTML().append(this.thumb.returnExtraAsHTML())
       this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, elementName)
       this.thumb.setInitialSettings(this.line.size(), this.options.vertical, elementName)
-      this.thumb.bindExtraChangedPosition(this.extraPartChanged)
+      this.thumb.bindExtraChangedState(this.extraPartChanged)
     }    
     
   }
@@ -141,7 +141,7 @@ class View implements IView {
     
     if (this.options.double){
       this.input.initInputExtra()
-      this.input.bindExtraChangedPosition(this.extraCurrentChanged)
+      this.input.bindExtraChangedState(this.extraCurrentChanged)
     }
   }
 

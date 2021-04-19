@@ -84,7 +84,7 @@ describe('Thumb', () =>{
     test('should set mouse down and mouse move for vertical and extra', () => {
       const vertical = true
       const callback = jest.fn()
-      _.bindExtraChangedPosition(callback)
+      _.bindExtraChangedState(callback)
       _.initExtraElement()
       const lineSize ={
         width: 50,

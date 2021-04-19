@@ -7,20 +7,20 @@ class Input extends SubView{
   constructor(initElement: HTMLElement){
     super()
     this.initInput(initElement)
-    this.setEventListener(this.input, this.sendValue.bind(null, this.input))
+    this.setEventListener(this.input)
   }
 
-  initInput = (initElement: HTMLElement): void => {
+  private initInput = (initElement: HTMLElement): void => {
     this.input = initElement.querySelector('.range-slider__input_from') as HTMLInputElement
     this.inputExtra = initElement.querySelector('.range-slider__input_to') as HTMLInputElement
 
   }
   public initInputExtra = (): void => {
-    this.setEventListener(this.inputExtra, this.sendValueForExtra.bind(null, this.inputExtra))
+    this.setEventListener(this.inputExtra)
   }
 
-  private setEventListener = (element: HTMLInputElement, fn: () => void): void => {
-    element.addEventListener('change', fn, false)
+  private setEventListener = (element: HTMLInputElement): void => {
+    element.addEventListener('change', this.sendValue.bind(null, element))
   }
 
   private getValue = (element: HTMLInputElement): number => {
@@ -29,15 +29,15 @@ class Input extends SubView{
 
   private sendValue = (element: HTMLInputElement): void => {
     const value = this.getValue(element)
-    this.onChanged(value)
+    if (element === this.input){
+      this.onChanged(value)
+    } else {
+      this.onExtraChanged(value)
+    }
+    
   }
 
-  private sendValueForExtra = (element: HTMLInputElement): void => {
-    const value = this.getValue(element)
-    this.onExtraChanged(value)
-  }
-
-  private setValue = (element: HTMLInputElement, result: number): void => {
+  private printValue = (element: HTMLInputElement, result: number): void => {
     element.value = result + ''
   }
 
@@ -46,7 +46,7 @@ class Input extends SubView{
     if ( element === 'extra'){
       targetElement = this.inputExtra
     } 
-    this.setValue(targetElement, result)
+    this.printValue(targetElement, result)
   }
 }
 
