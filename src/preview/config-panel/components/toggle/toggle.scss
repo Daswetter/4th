@@ -1,4 +1,4 @@
-.toggle__input {
+.toggle {
   display: flex;
   margin: 5px;
   align-items: center;
@@ -17,21 +17,46 @@
   }
 }
 
-.toggle__input:checked{
+.toggle:checked{
   border: 2px solid #BC9CFF;
   &::before{
     margin-left: 18px;
     background: #BC9CFF;
   }
 }
+.toggle_color_primary:checked{
+  border-color: #8fd9a8;
+  &::before{
+    background: #8fd9a8;
+  }
+}
+.toggle_color_secondary:checked{
+  border-color: #a3ddcb;
+  &::before{
+    background: #a3ddcb;
+  }
+}
+.toggle_color_tertiary:checked{
+  border-color: #a6f0c6;
+  &::before{
+    background: #a6f0c6;
+  }
+}
+.toggle_color_quaternary:checked{
+  border-color: #ff8e71;
+  &::before{
+    background: #ff8e71;
+  }
+}
+
+
 .toggle__title{
-  margin: 3px;
+  margin: 5px 0;
   font-family: Roboto, sans-serif;
 }
 .toggle__label{
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-end;
-
   cursor: pointer;
 }
