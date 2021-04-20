@@ -17,10 +17,12 @@ class Progress extends SubView{
   public returnAsHTML = (): HTMLElement => {
     return this.progress
   }
+  
   public setVertical = (): void => {
     this.progress.style.width = this.progress.offsetHeight + 'px'
     this.progress.style.height = 'auto'
   }
+
   public setInitialSettings = (lineSize: {width: number, height: number}, vertical = false): void => {
 
     this.progress.style.top = (lineSize.height - this.progress.offsetHeight) / 2 + 'px'
@@ -30,9 +32,6 @@ class Progress extends SubView{
       this.progress.style.left = (lineSize.width - this.progress.offsetWidth) / 2 + 'px'
     }
   }
-  
-
-  
   
   public update = (part: number, lineSize: {width: number, height: number}, vertical = false, element = 'primary') :void => {
     let lineOneSize = lineSize.width
