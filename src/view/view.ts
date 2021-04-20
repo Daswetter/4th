@@ -29,7 +29,7 @@ class View implements IView {
   private currentChanged!: (arg0: number) => void
   private extraCurrentChanged!: (arg0: number) => void
 
-  constructor(private initElement: HTMLElement, private options: IOptions) {
+  constructor(private initElement: HTMLElement, public options: IOptions) {
     this.options = options
     this.initElement = initElement
   }
@@ -214,7 +214,7 @@ class View implements IView {
 
     
   }
-  update = (options: IOptions): void => {
+  public update = (options: IOptions): void => {
     this.options = options
   }
 
