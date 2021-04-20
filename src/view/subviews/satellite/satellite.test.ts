@@ -46,12 +46,7 @@ describe('Satellite', () => {
       width: number
       height: number
     }
-    type ISide = {
-      left: number
-      bottom: number
-    }
     let lineSize: ISize
-    let lineSide: ISide
     let thumbSize: ISize
 
     beforeEach(() => {

@@ -54,9 +54,7 @@ describe('Thumb', () =>{
       }
       _.setEventListener(lineSize, lineSide)
 
-      const mouseDown = new MouseEvent('mousedown', {
-        bubbles: true,
-      });
+      const mouseDown = new MouseEvent('mousedown');
       Object.defineProperty(mouseDown, 'pageX', {
         value: 380
       })
@@ -67,9 +65,7 @@ describe('Thumb', () =>{
         value: 10,
       })
       
-      const mouseMove = new MouseEvent('mousemove', {
-        bubbles: true,
-      });
+      const mouseMove = new MouseEvent('mousemove');
       Object.defineProperty(mouseMove, 'pageX', {
         value: 1000
       })
@@ -96,9 +92,7 @@ describe('Thumb', () =>{
       }
       _.setEventListener(lineSize, lineSide, vertical, 'extra')
 
-      const mouseDown = new MouseEvent('mousedown', {
-        bubbles: true,
-      });
+      const mouseDown = new MouseEvent('mousedown');
       Object.defineProperty(mouseDown, 'pageY', {
         value: 380
       })
@@ -110,9 +104,7 @@ describe('Thumb', () =>{
       })
 
 
-      const mouseMove = new MouseEvent('mousemove', {
-        bubbles: true,
-      });
+      const mouseMove = new MouseEvent('mousemove');
       Object.defineProperty(mouseMove, 'pageY', {
         value: 250
       })
@@ -123,9 +115,7 @@ describe('Thumb', () =>{
       expect(callback).toBeCalled()
       expect(callback).toBeCalledWith(0)
 
-      const mouseUp = new MouseEvent('mouseup', {
-        bubbles: true,
-      })
+      const mouseUp = new MouseEvent('mouseup')
 
       // *check if mouseUp works
 

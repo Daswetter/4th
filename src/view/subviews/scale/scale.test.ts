@@ -1,78 +1,83 @@
-// import { Scale } from "./scale"
+import { Scale } from "./scale"
 
-// describe('Scale', () => {
-//   let _: Scale
-//   beforeEach(() => {
-//     _ = new Scale()
-//   })
+describe('Scale', () => {
+  let _: Scale
+  beforeEach(() => {
+    _ = new Scale()
+  })
 
-//   describe('constructor', () => {
-//     test('should create div', () => {
-//       expect(_.scale.nodeName).toBe('DIV')
-//     })
-//     test('should add correct class', () => {
-//       expect(_.scale.className).toBe('range-slider__scale')
-//     })
-//   })
+  describe('constructor', () => {
+    test('should create div', () => {
+      expect(_.scale.nodeName).toBe('DIV')
+    })
+    test('should add correct class', () => {
+      expect(_.scale.className).toBe('range-slider__scale')
+    })
+  })
 
-//   describe('returnAsHTML', () => {
-//     test('should return scale as HTMLElement', () => {
-//       expect(_.returnAsHTML()).toEqual(_.scale)
-//     })
-//   })
+  describe('returnAsHTML', () => {
+    test('should return scale as HTMLElement', () => {
+      expect(_.returnAsHTML()).toEqual(_.scale)
+    })
+  })
 
-//   describe('setScaleValue', () => {
-//     let scaleValues: Array<number>
-//     let idFlags: Array<number>
-//     const callback = jest.fn()
-//     beforeEach(() => {
-//       _.bindChangedState(callback)
-//       scaleValues = [0, 25, 50, 75, 100]
-//       idFlags = [0, 0.25, 0.5, 0.75, 1]
-//       _.initScale(scaleValues)
-//     })
+  describe('initScale', () => {
+    let callback: jest.Mock
+    const scaleValues = {
+        '0': '0',
+        '0.25': '0.25',
+        '0.5': '0.5',
+        '0.75': '0.75',
+        '1': '1',
+      }
+    beforeEach(() => {
+      callback = jest.fn()
+      _.bindChangedState(callback)
+      
+      const lineSize = {
+        width: 100,
+        height: 10
+      }
+      const vertical = true
+
+      _.initScale(scaleValues, lineSize, vertical)
+    })
     
-//     test('should create div 5 times', () => {
-//       for(let i = 0; i < scaleValues.length; i++){
-//         expect(_.scale.childNodes[i].nodeName).toBe('DIV')
-//       }
-//     })
+    test('should create at least one div', () => {
+        expect(_.scale.childNodes[0].nodeName).toBe('DIV')
+      }
+    )
 
-//     test('should create correct class to all divs', () => {
-//       for(let i = 0; i < scaleValues.length; i++){
-//         expect((_.scale.childNodes[i] as HTMLElement).classList).toContain('range-slider__scale-number')
-//       }
-//     })
+    test('should call event listener', () => {
+      const click = new MouseEvent('click');
+      _.scale.childNodes[0].dispatchEvent(click);
+      expect(callback).toBeCalled()
+      }
+    )
+  })
 
-//     test('should set correct innerText for all divs', () => {
-//       for(let i = 0; i < scaleValues.length; i++){
-//         expect((_.scale.childNodes[i] as HTMLElement).innerText).toContain(scaleValues[i])
-//       }
-//     })
-
-//     test('should set correct id flag', () => {
-//       for(let i = 0; i < scaleValues.length; i++){
-//         expect((_.scale.childNodes[i] as HTMLElement).dataset.id).toContain(idFlags[i])
-//       }
-//     })
-
-//     test('should call event listener', () => {
-//       for(let i = 0; i < scaleValues.length; i++){
-//         const click = new MouseEvent('click', {
-//         bubbles: true,
-//       });
-//       _.scale.childNodes[i].dispatchEvent(click);
-//       expect(callback).toBeCalled()
-//       }
-//     })
-//   })
-
-//   describe('setVertical', () => {
-//     test('should add correct style', () => {
-//       _.setVertical()
-//       expect(_.scale.style.flexDirection).toBe('column-reverse')
-//       expect(_.scale.style.alignSelf).toBe('stretch')
-//     })
-//   })
-
-// })
+  describe('setPosition', () => {
+    test('should set correct top and left to vertical', () => {
+      _.scaleElements[1] = document.createElement('div')
+      const lineSize = {
+        width: 0.2,
+        height: 0.1
+      }
+      
+      Object.defineProperty(_.scaleElements[1], 'offsetHeight', {
+        value: 5
+      })
+      _.setPosition(lineSize, true)
+      expect(_.scaleElements[1].style.top).toBe('-2.5px')
+    })
+    test('should set correct top and left to horizontal', () => {
+      _.scaleElements[1] = document.createElement('div')
+      const lineSize = {
+        width: 0.2,
+        height: 0.1
+      }
+      _.setPosition(lineSize, false)
+      expect(_.scaleElements[1].style.top).toBe('0.2px')
+    })
+  })
+})
