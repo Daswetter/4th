@@ -22,162 +22,168 @@ describe('Line', () => {
   })
 
   describe('setEventListener', () => {
-    test('should set click to line ', () => {
-      const vertical = false
-      _.setEventListener(vertical)
-      const callback = jest.fn();
+    let callback: jest.Mock
+    beforeEach(() => {
+      callback = jest.fn();
       _.bindChangedState(callback)
-      _.line.getBoundingClientRect = jest.fn(() => ({
-        x: 0,
-        y: 10,
-        width: 300,
-        height: 10,
-        top: 50,
-        right: 730,
-        bottom: 100,
-        left: 50,
-        toJSON: jest.fn(),
-      }))
-      Object.defineProperty(_.line, 'offsetWidth', {
-        value: 800
-      })
-      const click = new MouseEvent('click', {
-        bubbles: true,
-        clientX: 250,
-      });
-      _.line.dispatchEvent(click);
-      expect(callback).toBeCalledWith(0.25);
-    });
+    })
 
-    test('should set click to vertical line and call subscriber with 0', () => {
+    describe('horizontal', () => {
+      beforeEach(() => {
+        const vertical = false
+        _.setEventListener(vertical)
+        _.line.getBoundingClientRect = jest.fn(() => ({
+          x: 0,
+          y: 10,
+          width: 300,
+          height: 10,
+          top: 50,
+          right: 730,
+          bottom: 100,
+          left: 50,
+          toJSON: jest.fn(),
+        }))
+        Object.defineProperty(_.line, 'offsetWidth', {
+          value: 800
+        })
+        const mouseDown = new MouseEvent('mousedown', {
+          clientX: 250
+        });
+        _.line.dispatchEvent(mouseDown);
+        
+        const mouseUp = new MouseEvent('mouseup', {
+          clientX: 250
+        });
+        _.line.dispatchEvent(mouseUp);
+      })
+
+      test('should set click to line ', () => {
+        const click = new MouseEvent('click', {
+          clientX: 250,
+        });
+        _.line.dispatchEvent(click);
+        expect(callback).toBeCalledWith(0.25);
+      });
+  
+      test('should set click to line and call callback with 0', () => {
+        const click = new MouseEvent('click', {
+          clientX: -250,
+        });
+        _.line.dispatchEvent(click);
+        expect(callback).toBeCalledWith(0);
+      });
+  
+      test('should set click to horizontal line and call callback with 1', () => {
+        const click = new MouseEvent('click', {
+          clientX: 1000,
+        });
+        _.line.dispatchEvent(click);
+        expect(callback).toBeCalledWith(1);
+      });
+
+      test('should not call callback if scale were clicked', () => {
+        Object.defineProperty(_.line, 'offsetTop', {
+          value: 800
+        })
+        const click = new MouseEvent('click', {
+          clientX: 1000,
+          clientY: 900,
+        });
+        _.line.dispatchEvent(click);
+        expect(callback).not.toHaveBeenCalled()
+      });
+    })
+
+    describe('vertical', () => {
+      beforeEach(() => {
+        const vertical = true
+        _.setEventListener(vertical)
+        
+        _.line.getBoundingClientRect = jest.fn(() => ({
+          x: 0,
+          y: 10,
+          width: 300,
+          height: 10,
+          top: 50,
+          right: 730,
+          bottom: 100,
+          left: 50,
+          toJSON: jest.fn(),
+        }))
+        Object.defineProperty(_.line, 'offsetHeight', {
+          value: 500
+        })
+
+        const mouseDown = new MouseEvent('mousedown', {
+          clientY: 250,
+        });
+        _.line.dispatchEvent(mouseDown);
+        const mouseUp = new MouseEvent('mouseup', {
+          clientY: 250,
+        });
+        _.line.dispatchEvent(mouseUp);
+      })
+      test('should set click to line and call subscriber with 0', () => {
+      
+        const click = new MouseEvent('click', {
+          clientY: 250,
+        });
+        _.line.dispatchEvent(click);
+        expect(callback).toBeCalledWith(0);
+      });
+
+      test('should set click to line and call subscriber with 1', () => {
+        const click = new MouseEvent('click', {
+          clientY: -500,
+        });
+        _.line.dispatchEvent(click);
+        expect(callback).toBeCalledWith(1);
+      });
+
+      test('should set click to line and call subscriber with 0.2', () => {
+        const click = new MouseEvent('click', {
+          clientY: 0,
+        });
+        _.line.dispatchEvent(click);
+        expect(callback).toBeCalledWith(0.2);
+      });
+
+      test('should not call callback if scale were clicked', () => {
+        const click = new MouseEvent('click', {
+          clientX: 1000,
+          clientY: 900,
+        });
+        _.line.dispatchEvent(click);
+        expect(callback).not.toHaveBeenCalled()
+      });
+    })
+
+    test('should not call callback if onMouseDown value is not equal to onMouseUp', () => {
+      
       const vertical = true
       _.setEventListener(vertical)
-      const callback = jest.fn();
-      _.bindChangedState(callback)
-      _.line.getBoundingClientRect = jest.fn(() => ({
-        x: 0,
-        y: 10,
-        width: 300,
-        height: 10,
-        top: 50,
-        right: 730,
-        bottom: 100,
-        left: 50,
-        toJSON: jest.fn(),
-      }))
-      Object.defineProperty(_.line, 'offsetHeight', {
-        value: 500
-      })
+
+      const mouseDown = new MouseEvent('mousedown', {
+        clientX: 20,
+        clientY: 20,
+      });
+      _.line.dispatchEvent(mouseDown);
+      const mouseUp = new MouseEvent('mouseup', {
+        clientX: 250,
+        clientY: 250,
+      });
+      _.line.dispatchEvent(mouseUp);
+      
       const click = new MouseEvent('click', {
-        bubbles: true,
         clientY: 250,
       });
       _.line.dispatchEvent(click);
-      expect(callback).toBeCalledWith(0);
-    });
-
-    test('should call subscriber if it is true click ', () => {
-      const vertical = false
-      _.setEventListener(vertical)
-      const callback = jest.fn();
-      _.bindChangedState(callback)
-      _.line.getBoundingClientRect = jest.fn(() => ({
-        x: 0,
-        y: 10,
-        width: 300,
-        height: 10,
-        top: 50,
-        right: 730,
-        bottom: 300,
-        left: 50,
-        toJSON: jest.fn(),
-      }))
-      Object.defineProperty(_.line, 'offsetWidth', {
-        value: 249
-      })
-      const click = new MouseEvent('click', {
-        bubbles: true,
-        clientX: 50,
-      });
-      _.line.dispatchEvent(click);
-      const mouseDown = new MouseEvent('mousedown', {
-        bubbles: true,
-        clientX: 50,
-      });
-      _.line.dispatchEvent(mouseDown);
-      const mouseUp = new MouseEvent('mouseup', {
-        bubbles: true,
-        clientX: 50,
-      });
-      _.line.dispatchEvent(mouseUp);
-      expect(callback).toBeCalled();
-    });
-
-    test('should not call subscriber if it is not click but thumb moving', () => {
-      const vertical = false
-      _.setEventListener(vertical)
-      const callback = jest.fn();
-      _.bindChangedState(callback)
-      _.line.getBoundingClientRect = jest.fn(() => ({
-        x: 0,
-        y: 10,
-        width: 300,
-        height: 10,
-        top: 50,
-        right: 730,
-        bottom: 300,
-        left: 50,
-        toJSON: jest.fn(),
-      }))
-      Object.defineProperty(_.line, 'offsetWidth', {
-        value: 249
-      })
-      
-      const mouseDown = new MouseEvent('mousedown', {
-        bubbles: true,
-        clientX: 50,
-      });
-      _.line.dispatchEvent(mouseDown);
-      const mouseUp = new MouseEvent('mouseup', {
-        bubbles: true,
-        clientX: 51,
-      });
-      _.line.dispatchEvent(mouseUp);
-      const click = new MouseEvent('click', {
-        bubbles: true,
-      });
-      _.line.dispatchEvent(click);
       expect(callback).not.toBeCalled();
-    });
-
-
-    test('should set click to vertical line and call subscriber with 1', () => {
-      const vertical = true
-      _.setEventListener(vertical)
-      const callback = jest.fn();
-      _.bindChangedState(callback)
-      _.line.getBoundingClientRect = jest.fn(() => ({
-        x: 0,
-        y: 10,
-        width: 300,
-        height: 10,
-        top: 50,
-        right: 730,
-        bottom: 300,
-        left: 50,
-        toJSON: jest.fn(),
-      }))
-      Object.defineProperty(_.line, 'offsetHeight', {
-        value: 249
-      })
-      const click = new MouseEvent('click', {
-        bubbles: true,
-        clientY: 50,
-      });
-      _.line.dispatchEvent(click);
-      expect(callback).toBeCalledWith(1);
-    });
+    })
+  
+      
   })
+  
 
   describe('size', () => {
     test('should return line.offsetWidth and line.offsetHeight', () => {
@@ -211,4 +217,23 @@ describe('Line', () => {
       })
     })
   })
+
+  describe('setVertical', () => {
+    test('should set correct width and height', () => {
+      
+      Object.defineProperty(_.line, 'offsetWidth', {
+        value: 50,
+      })
+      Object.defineProperty(_.line, 'offsetHeight', {
+        value: 100,
+      })
+
+      _.setVertical()
+
+      expect(_.line.style.width).toBe('100px')
+      expect(_.line.style.height).toBe('50px')
+
+    })
+  })
+
 })
