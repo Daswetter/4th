@@ -5,18 +5,18 @@ class Thumb extends SubView{
   private boundOnMouseMove!: (event: MouseEvent) => void
   private boundOnMouseUp!: () => void
 
-  constructor(){
+  constructor(initElement: HTMLElement){
     super()
-    this.initPrimaryElement()
+    this.initPrimaryElement(initElement)
   }
   
 
-  initPrimaryElement = (): void => {
-    this.thumb = this.init(this.thumb, 'thumb')
+  initPrimaryElement = (initElement: HTMLElement): void => {
+    this.thumb = this.init(initElement, this.thumb, 'thumb')
   }
 
-  public initExtraElement = (): void => {
-    this.thumbExtra = this.init(this.thumbExtra, 'thumb')
+  public initExtraElement = (initElement: HTMLElement): void => {
+    this.thumbExtra = this.init(initElement, this.thumbExtra, 'thumb')
   }
 
   public returnAsHTML = (): HTMLElement =>  {

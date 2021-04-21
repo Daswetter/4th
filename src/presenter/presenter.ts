@@ -2,6 +2,7 @@
 import { IModel } from '../model/IModel'
 import { IView } from '../view/IView'
 import './../interface/IOptions'
+import { IOptions } from './../interface/IOptions'
 
 
 class Presenter{
@@ -58,6 +59,15 @@ class Presenter{
   }
   private sendExtraPartToModel = (part: number) : void => {   
     this.Model.setPart('extra', part)
+  }
+
+  public update = (options: IOptions): void => {
+    this.Model.update(options)
+    this.View.update(options)
+  }
+
+  public returnCurrentValues(): Array<number> {
+    return [this.View.current, this.View.currentExtra]
   }
 
 }

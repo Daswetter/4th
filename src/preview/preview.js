@@ -4,16 +4,16 @@ import './preview.scss'
 
 
 $(".js-slider1").customRangeSlider({
-  min: 0.2,
-  max: 1,
-  from: 0.2,
-  to: 0.5,
-  step: 0.01,
+  min: 0,
+  max: 10,
+  from: 0,
+  to: 2,
+  step: 1,
   progress: true,
   satellite: true,
   scale: true,
   vertical: false,
-  double: false,
+  double: true,
 })
 new configPanel('.js-slider1')
 

@@ -5,13 +5,13 @@ class Line extends SubView{
   private mouseDownValue!: number 
   private mouseUpValue!: number 
 
-  constructor(){
+  constructor(initElement: HTMLElement){
     super()
-    this.initPrimaryElement()
+    this.initPrimaryElement(initElement)
   }
 
-  initPrimaryElement = (): void => {
-    this.line = this.init(this.line, 'line')
+  initPrimaryElement = (initElement: HTMLElement): void => {
+    this.line = this.init(initElement, this.line, 'line')
   }
 
   public returnAsHTML = (): HTMLElement => {
@@ -86,7 +86,8 @@ class Line extends SubView{
     } else if (distFromBeginToClick > this.line.offsetWidth) {
       part = 1
     }
-    if (event.clientY <= this.line.offsetTop + this.line.offsetHeight){
+
+    if (event.pageY <= this.line.offsetTop + this.line.offsetHeight){
       this.onChanged(part)
     }
   }
@@ -102,7 +103,7 @@ class Line extends SubView{
       part = 1
     }
     
-    if (event.clientX <= this.line.offsetLeft + this.line.offsetWidth){
+    if (event.pageX <= this.line.offsetLeft + this.line.offsetWidth){
       this.onChanged(part)
     }
   }

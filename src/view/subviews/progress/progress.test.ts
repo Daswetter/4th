@@ -3,7 +3,8 @@ import { Progress } from './progress'
 describe('Progress', () => {
   let _: Progress
   beforeEach(() => {
-    _ = new Progress
+    const initElement = document.createElement('div')
+    _ = new Progress(initElement)
   })
   describe('constructor', () => {
     test('should create div', () => {

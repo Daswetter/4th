@@ -12,8 +12,9 @@ import { IView } from '../view/IView'
 (function($){
   class customRangeSlider {
     private options: IOptions
-    private model!: IModel
-    private view!: IView
+    private Model!: IModel
+    private View!: IView
+    private Presenter!: Presenter
 
     constructor(private initElement: HTMLElement, setOptions: IOptions) {
       const options = $.extend({}, {
@@ -35,15 +36,14 @@ import { IView } from '../view/IView'
 
     private init(initElement: HTMLElement, options: IOptions): void {
       this.initElement = initElement
-      this.model = new Model(options)
-      this.view = new View(initElement, options)
-      new Presenter(this.view, this.model)
+      this.Model = new Model(options)
+      this.View = new View(initElement, options)
+      this.Presenter = new Presenter(this.View, this.Model)
     }
 
     public update(updatedOptions: IOptions): void {
       this.options = $.extend(this.options, updatedOptions)
-      this.model.update(this.options)
-      this.view.update(this.options)
+      this.Presenter.update(this.options)
     }
     
     public returnCurrentOptions(): IOptions {
@@ -51,7 +51,7 @@ import { IView } from '../view/IView'
     }
 
     public returnCurrentState(): Array<number> {
-      return [this.view.current, this.view.currentExtra]
+      return this.Presenter.returnCurrentValues()
     }
 
   }

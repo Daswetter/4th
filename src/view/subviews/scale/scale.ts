@@ -3,13 +3,13 @@ import { SubView } from "../SubView";
 class Scale extends SubView{
   public scale!: HTMLElement 
   scaleElements:{ [key: string]: HTMLElement } = {}
-  constructor(){
+  constructor(initElement: HTMLElement){
     super()
-    this.initPrimaryElement()
+    this.initPrimaryElement(initElement)
   }
 
-  initPrimaryElement = (): void => {
-    this.scale = this.init(this.scale, 'scale')
+  initPrimaryElement = (initElement: HTMLElement): void => {
+    this.scale = this.init(initElement, this.scale, 'scale')
   }
 
   public returnAsHTML = (): HTMLElement => {

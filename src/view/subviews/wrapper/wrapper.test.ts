@@ -3,7 +3,8 @@ import { Wrapper } from './wrapper'
 describe('Wrapper', () => {
   let _: Wrapper
   beforeEach(() => {
-    _ = new Wrapper()
+    const initElement = document.createElement('div')
+    _ = new Wrapper(initElement)
   })
   
   describe('constructor', () => {

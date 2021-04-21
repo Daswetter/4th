@@ -4,9 +4,10 @@ abstract class SubView {
 
   
 
-  protected init = (element: HTMLElement, styleName: string): HTMLElement => {
+  protected init = (initElement: HTMLElement, element: HTMLElement, styleName: string): HTMLElement => {
     element = document.createElement('div')
     element.classList.add(`range-slider__${styleName}`)
+    initElement.append(element)
     return element
   }
   

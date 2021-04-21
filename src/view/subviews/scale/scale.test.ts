@@ -3,7 +3,8 @@ import { Scale } from "./scale"
 describe('Scale', () => {
   let _: Scale
   beforeEach(() => {
-    _ = new Scale()
+    const initElement = document.createElement('div')
+    _ = new Scale(initElement)
   })
 
   describe('constructor', () => {

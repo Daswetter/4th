@@ -10,16 +10,16 @@ import { IOptions } from './../interface/IOptions'
 import { IView } from './IView'
 
 class View implements IView { 
-  private wrapper!: Wrapper
-  private line!: Line
-  private thumb!: Thumb 
-  private progress!: Progress
-  private scale!: Scale 
-  private satellite!: Satellite
-  private input!: Input
+  public wrapper!: Wrapper
+  public line!: Line
+  public thumb!: Thumb 
+  public progress!: Progress
+  public scale!: Scale 
+  public satellite!: Satellite
+  public input!: Input
 
-  private part!: number
-  private partExtra!: number
+  public part!: number
+  public partExtra!: number
   public current!: number
   public currentExtra!: number
 
@@ -37,14 +37,14 @@ class View implements IView {
   public initView = (scaleElements: { [key: string]: string }, options = this.options): void => {
     this.options = options
     
-    this.initWrapper()
-    this.initLine()
-    this.initThumb()
+    this.initWrapper(this.initElement)
+    this.initLine(this.wrapper.returnAsHTML())
+    this.initThumb(this.line.returnAsHTML())
     
-    this.options.satellite ? this.initSatellite(): ''
-    this.options.progress ? this.initProgress() : ''
+    this.options.satellite ? this.initSatellite(this.line.returnAsHTML()): ''
+    this.options.progress ? this.initProgress(this.line.returnAsHTML()) : ''
     this.initInput()
-    this.options.scale ? this.initScale(scaleElements): ''
+    this.options.scale ? this.initScale(this.line.returnAsHTML(), scaleElements): ''
   
     
     this.currentChanged(this.options.from)
@@ -56,8 +56,8 @@ class View implements IView {
     
   }
 
-  private initWrapper = (): void => {
-    this.wrapper = new Wrapper()
+  private initWrapper = (initElement: HTMLElement): void => {
+    this.wrapper = new Wrapper(initElement)
     
     this.initElement.append(this.wrapper.returnAsHTML())
     if (this.options.vertical){
@@ -65,8 +65,8 @@ class View implements IView {
     }
   }
 
-  private initLine = () : void => {
-    this.line = new Line()
+  private initLine = (initElement: HTMLElement) : void => {
+    this.line = new Line(initElement)
     
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
     if (this.options.vertical){
@@ -82,10 +82,9 @@ class View implements IView {
     
   }
 
-  private initThumb = () : void => {
+  private initThumb = (initElement: HTMLElement) : void => {
     let elementName = 'primary'
-    this.thumb = new Thumb() 
-    this.line.returnAsHTML().append(this.thumb.returnAsHTML())
+    this.thumb = new Thumb(initElement) 
     
     
     this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, elementName)
@@ -94,8 +93,7 @@ class View implements IView {
 
     if (this.options.double){
       elementName = 'extra'
-      this.thumb.initExtraElement()
-      this.line.returnAsHTML().append(this.thumb.returnExtraAsHTML())
+      this.thumb.initExtraElement(initElement)
       this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, elementName)
       this.thumb.setInitialSettings(this.line.size(), this.options.vertical, elementName)
       this.thumb.bindExtraChangedState(this.extraPartChanged)
@@ -103,19 +101,16 @@ class View implements IView {
     
   }
 
-  private initSatellite = (): void => {
-    this.satellite = new Satellite()
-    this.line.returnAsHTML().append(this.satellite.returnAsHTML())
+  private initSatellite = (initElement: HTMLElement): void => {
+    this.satellite = new Satellite(initElement)
     
     if (this.options.double){
-      this.satellite.initExtraElement()
-      this.line.returnAsHTML().append(this.satellite.returnExtraAsHTML())
+      this.satellite.initExtraElement(initElement)
     }
   }
   
-  private initScale = (scaleElements: { [key: string]: string }): void => {
-    this.scale = new Scale()
-    this.line.returnAsHTML().append(this.scale.returnAsHTML())
+  private initScale = (initElement: HTMLElement, scaleElements: { [key: string]: string }): void => {
+    this.scale = new Scale(initElement)
     this.scale.bindChangedState(this.partChanged)
     this.scale.initScale(scaleElements, this.line.size(), this.options.vertical)
 
@@ -125,9 +120,8 @@ class View implements IView {
     
   }
 
-  private initProgress = (): void => {
-    this.progress = new Progress()
-    this.line.returnAsHTML().append(this.progress.returnAsHTML()) 
+  private initProgress = (initElement: HTMLElement): void => {
+    this.progress = new Progress(initElement) 
     if (this.options.vertical){
       this.progress.setVertical()
     }
@@ -164,7 +158,7 @@ class View implements IView {
     this.thumb.update(part, this.line.size(), this.options.vertical, element)
     this.input.update(current, element)
     this.options.progress ? this.progress.update(part, this.line.size(), this.options.vertical, element) : ''
-    this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.thumb.size(), this.options.vertical, element) : ''
+    this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.thumb.size(), this.options.vertical, this.options.double, element) : ''
   }
 
   public notifyPrimaryElement(current: number, part: number): void{

@@ -3,13 +3,13 @@ import { SubView } from "../SubView"
 class Wrapper extends SubView{
   public wrapper!: HTMLElement
 
-  constructor(){
+  constructor(initElement: HTMLElement){
     super()
-    this.initPrimaryElement()
+    this.initPrimaryElement(initElement)
   }
   
-  initPrimaryElement = (): void => {
-    this.wrapper = this.init(this.wrapper, 'wrapper')
+  initPrimaryElement = (initElement: HTMLElement): void => {
+    this.wrapper = this.init(initElement, this.wrapper, 'wrapper')
   }
 
   public returnAsHTML = (): HTMLElement => {

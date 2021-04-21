@@ -3,7 +3,8 @@ import { Thumb } from "./thumb"
 describe('Thumb', () =>{
   let _: Thumb
   beforeEach(() => {
-    _ = new Thumb()
+    const initElement = document.createElement('div')
+    _ = new Thumb(initElement)
   })
 
   describe('constructor', () => {
@@ -21,16 +22,10 @@ describe('Thumb', () =>{
     })
   })
 
-  describe('returnExtraAsHTML', () => {
-    test('should return thumb', () => {
-      _.initExtraElement()
-      expect(_.returnExtraAsHTML()).toBe(_.thumbExtra)
-    })
-  })
-
   describe('initExtraElement', () => {
     beforeEach(() => {
-      _.initExtraElement()
+      const initElement = document.createElement('div')
+      _.initExtraElement(initElement)
     })
     test('should create div', () => {
       expect(_.thumbExtra.nodeName).toBe('DIV')
@@ -81,7 +76,8 @@ describe('Thumb', () =>{
       const vertical = true
       const callback = jest.fn()
       _.bindExtraChangedState(callback)
-      _.initExtraElement()
+      const initElement = document.createElement('div')
+      _.initExtraElement(initElement)
       const lineSize ={
         width: 50,
         height: 6
@@ -139,7 +135,8 @@ describe('Thumb', () =>{
 
       test('should set correct style.left to thumbExtra and horizontal', () => {
         const vertical = false
-        _.initExtraElement()
+        const initElement = document.createElement('div')
+        _.initExtraElement(initElement)
         const lineSize = {
           width: 300,
           height: 20
@@ -166,7 +163,8 @@ describe('Thumb', () =>{
 
       test('should set correct style.left to thumbExtra and vertical', () => {
         const vertical = true
-        _.initExtraElement()
+        const initElement = document.createElement('div')
+        _.initExtraElement(initElement)
         const lineSize = {
           width: 50,
           height: 1000
@@ -196,7 +194,8 @@ describe('Thumb', () =>{
 
     test('should set style top for thumbExtra and horizontal mod', () => {
       const vertical = false
-      _.initExtraElement()
+      const initElement = document.createElement('div')
+      _.initExtraElement(initElement)
       const lineSize = {
         width: 256,
         height: 12
@@ -224,7 +223,8 @@ describe('Thumb', () =>{
 
     test('should set style top for thumbExtra and vertical mod', () => {
       const vertical = true
-      _.initExtraElement()
+      const initElement = document.createElement('div')
+      _.initExtraElement(initElement)
       const lineSize = {
         width: 1200,
         height: 2

@@ -3,7 +3,8 @@ import { Line } from './line'
 describe('Line', () => {
   let _: Line
   beforeEach(() => {
-    _ = new Line()
+    const initElement = document.createElement('div')
+    _ = new Line(initElement)
   })
 
   describe('constructor', () => {
