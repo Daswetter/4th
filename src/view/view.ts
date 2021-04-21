@@ -10,24 +10,24 @@ import { IOptions } from './../interface/IOptions'
 import { IView } from './IView'
 
 class View implements IView { 
-  wrapper!: Wrapper
-  line!: Line
-  thumb!: Thumb 
-  progress!: Progress
-  scale!: Scale 
-  satellite!: Satellite
-  input!: Input
+  private wrapper!: Wrapper
+  private line!: Line
+  private thumb!: Thumb 
+  private progress!: Progress
+  private scale!: Scale 
+  private satellite!: Satellite
+  private input!: Input
 
-  part!: number
-  partExtra!: number
-  current!: number
-  currentExtra!: number
+  private part!: number
+  private partExtra!: number
+  public current!: number
+  public currentExtra!: number
 
-  private partChanged!: (arg0: number) => void
-  private extraPartChanged!: (arg0: number) => void
+  private partChanged!: (part: number) => void
+  private extraPartChanged!: (partExtra: number) => void
 
-  private currentChanged!: (arg0: number) => void
-  private extraCurrentChanged!: (arg0: number) => void
+  private currentChanged!: (current: number) => void
+  private extraCurrentChanged!: (currentExtra: number) => void
 
   constructor(private initElement: HTMLElement, public options: IOptions) {
     this.options = options
@@ -162,7 +162,7 @@ class View implements IView {
     }
 
     this.thumb.update(part, this.line.size(), this.options.vertical, element)
-    this.options.input ? this.input.update(current, element) : ''
+    this.input.update(current, element)
     this.options.progress ? this.progress.update(part, this.line.size(), this.options.vertical, element) : ''
     this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.thumb.size(), this.options.vertical, element) : ''
   }
@@ -219,16 +219,16 @@ class View implements IView {
   }
 
 
-  public bindChangedPart = (callback: (arg0: number) => void):void  =>  {
+  public bindChangedPart = (callback: (part: number) => void):void  =>  {
     this.partChanged = callback
   }
-  public bindChangedExtraPart = (callback: (arg0: number) => void):void  =>  {
+  public bindChangedExtraPart = (callback: (partExtra: number) => void):void  =>  {
     this.extraPartChanged = callback
   }
-  public bindChangedCurrent = (callback: (arg0: number) => void):void  =>  {
+  public bindChangedCurrent = (callback: (current: number) => void):void  =>  {
     this.currentChanged = callback
   }
-  public bindChangedExtraCurrent = (callback: (arg0: number) => void):void  =>  {
+  public bindChangedExtraCurrent = (callback: (currentExtra: number) => void):void  =>  {
     this.extraCurrentChanged = callback
   }
 }

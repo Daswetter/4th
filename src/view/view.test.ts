@@ -26,7 +26,6 @@ describe('View', () => {
       scale: true,
       vertical: true,
       double: true,
-      input: true
     }
 
     _ = new View(initElement, options)
@@ -217,7 +216,6 @@ describe('View', () => {
       expect(_.partExtra).toEqual(0.11);
     })
     test('should not call update for input if input is false', () => {
-      options.input = false
       _.initView(scaleElements)
       const spyInput = jest.spyOn(_.input, 'update')
       _.notifyExtraElement(100, 0.11)
@@ -252,7 +250,6 @@ describe('View', () => {
         scale: true,
         vertical: true,
         double: true,
-        input: true
       }
       _.update(options)
       expect(_.options).toEqual(options)

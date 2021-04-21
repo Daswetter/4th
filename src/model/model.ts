@@ -5,7 +5,7 @@ import { IModel } from './IModel'
 class Model implements IModel{
   private valuesWereChanged!: (current: number, part: number) => void
   private extraValuesWereChanged!: (current: number, part: number) => void
-  private optionsWereUpdated!: (scaleElements: { [key: string]: string }, options: IOptions) => void
+  private optionsWereChanged!: (scaleElements: { [key: string]: string }, options: IOptions) => void
   
   constructor(private options: IOptions){
     this.options = options
@@ -18,7 +18,7 @@ class Model implements IModel{
     let current = +(Math.round((max - min) / step * part) * step + min)
     
     if(!this.isInteger(step)){
-      current = +current.toFixed(this.convertstepToDecimal(step))
+      current = +current.toFixed(this.convertStepToDecimal(step))
     } 
 
     return current
@@ -94,13 +94,13 @@ class Model implements IModel{
     }
     
     for (const part in scaleElements){
-      scaleElements[part] = this.roundToDecimal(scaleElements[part], this.convertstepToDecimal(step)) + ''
+      scaleElements[part] = this.roundToDecimal(scaleElements[part], this.convertStepToDecimal(step)) + ''
     }
 
     return scaleElements
   }
 
-  private convertstepToDecimal = (step: number) : number => {
+  private convertStepToDecimal = (step: number) : number => {
     const digits = step.toString().split('')
     let decimal: number
     if ( step > 0 && step < 1){
@@ -124,7 +124,7 @@ class Model implements IModel{
     this.options = options
 
     const scaleElements = this.countScaleElements()
-    this.optionsWereUpdated(scaleElements, options)
+    this.optionsWereChanged(scaleElements, options)
   }
 
 
@@ -136,7 +136,7 @@ class Model implements IModel{
   }
 
   public bindChangedOptions(callback: (scaleElements: { [key: string]: string }, options: IOptions) => void): void {
-    this.optionsWereUpdated = callback;
+    this.optionsWereChanged = callback;
   }
 }
 

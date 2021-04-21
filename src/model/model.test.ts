@@ -17,7 +17,6 @@ describe('Model', () => {
       scale: true,
       vertical: true,
       double: true,
-      input: true
     }
     _ = new Model(options)
     callback = jest.fn()
@@ -93,13 +92,22 @@ describe('Model', () => {
       options.min = 0
       options.max = 100
       options.step = 1
-      expect(_.countScaleElements()).toEqual([0, 25, 50, 75, 100])
+      expect(_.countScaleElements()).toEqual({"0": "0", "0.25": "25", "0.5": "50", "0.75": "75", "1": "100"})
     })
     test('should round correctly', () => {
       options.min = 0
       options.max = 50
       options.step = 1
-      expect(_.countScaleElements()).toEqual([0, 13, 25, 38, 50])
+      expect(_.countScaleElements()).toEqual({"0": "0", "0.25": "13", "0.5": "25", "0.75": "38", "1": "50"})
+    })
+  })
+
+  describe('update', () => {
+    test('should call callback', () => {
+      const callback = jest.fn()
+      _.bindChangedOptions(callback)
+      _.update(options)
+      expect(callback).toHaveBeenCalled()
     })
   })
 })

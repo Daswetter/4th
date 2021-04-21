@@ -14,7 +14,6 @@ $(".js-slider1").customRangeSlider({
   scale: true,
   vertical: false,
   double: false,
-  input: true
 })
 new configPanel('.js-slider1')
 
@@ -32,7 +31,6 @@ $(".js-slider2").customRangeSlider({
   scale: true,
   double: true,
   vertical: true,
-  input: true
 })
 new configPanel('.js-slider2')
 
@@ -46,7 +44,6 @@ $(".js-slider3").customRangeSlider({
   scale: true,
   double: false,
   vertical: false,
-  input: true
 })
 new configPanel('.js-slider3')
 
@@ -59,7 +56,6 @@ $(".js-slider4").customRangeSlider({
   satellite: true,
   scale: false,
   double: false,
-  input: true
 })
 new configPanel('.js-slider4')
 
