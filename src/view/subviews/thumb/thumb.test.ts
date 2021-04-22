@@ -122,6 +122,8 @@ describe('Thumb', () =>{
 
     describe('update', () => {
       test('should set correct style.left to thumb and horizontal', () => {
+        const vertical = false
+        const extra = false
         const lineSize = {
           width: 50,
           height: 10
@@ -129,12 +131,13 @@ describe('Thumb', () =>{
         Object.defineProperty(_.thumb, 'offsetWidth', {
           value: '10'
         })
-        _.update(0.6, lineSize)
+        _.update(0.6, lineSize, vertical, extra)
         expect(_.thumb.style.left).toBe('25px')
       })
 
       test('should set correct style.left to thumbExtra and horizontal', () => {
         const vertical = false
+        const extra = true
         const initElement = document.createElement('div')
         _.initExtraElement(initElement)
         const lineSize = {
@@ -144,12 +147,13 @@ describe('Thumb', () =>{
         Object.defineProperty(_.thumbExtra, 'offsetWidth', {
           value: '15'
         }) 
-        _.update(0.8, lineSize, vertical, 'extra')
+        _.update(0.8, lineSize, vertical, extra)
         expect(_.thumbExtra.style.left).toBe('232.5px')
       })
 
       test('should set correct style.left to thumb and vertical', () => {
         const vertical = true
+        const extra = false
         const lineSize = {
           width: 5,
           height: 100
@@ -157,12 +161,13 @@ describe('Thumb', () =>{
         Object.defineProperty(_.thumb, 'offsetHeight', {
           value: '10'
         })
-        _.update(1, lineSize, vertical)
+        _.update(1, lineSize, vertical, extra)
         expect(_.thumb.style.bottom).toBe('95px')
       })
 
       test('should set correct style.left to thumbExtra and vertical', () => {
         const vertical = true
+        const extra = true
         const initElement = document.createElement('div')
         _.initExtraElement(initElement)
         const lineSize = {
@@ -172,7 +177,7 @@ describe('Thumb', () =>{
         Object.defineProperty(_.thumbExtra, 'offsetHeight', {
           value: '5'
         })
-        _.update(0.6, lineSize, vertical, 'extra')
+        _.update(0.6, lineSize, vertical, extra)
         expect(_.thumbExtra.style.bottom).toBe('597.5px')
       })
       

@@ -1,11 +1,10 @@
-import { path } from 'path'
-import { HTMLWebpackPlugin } from 'html-webpack-plugin'
-import { MiniCssExtractPlugin } from 'mini-css-extract-plugin'
-import { ProvidePlugin } from 'webpack'
-
+const path = require('path')
+const HTMLWebpackPlugin=require('html-webpack-plugin')
+const MiniCssExtractPlugin=require('mini-css-extract-plugin')
+const webpack = require('webpack');
+// const { SourceMapDevToolPlugin } = require("webpack");
 const isDev=process.env.NODE_ENV=='development'
 const isProd=!isDev
-
 module.exports = {
   context: path.resolve(__dirname,'src'),
   entry: './index.ts',
@@ -28,7 +27,7 @@ module.exports = {
         collapseWhitespace: isProd
       }
     }),
-    new ProvidePlugin({
+    new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery':'jquery'

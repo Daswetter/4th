@@ -143,32 +143,29 @@ class View implements IView {
     this.wrapper.returnAsHTML().remove()
   }
 
-  private notify = (current: number, part: number, element: string): void => {
+  private notify = (current: number, part: number, extra = false): void => {
     
-    if (element === 'primary'){
+    if (extra) {
+      this.partExtra = part
+      this.currentExtra = current
+    } else {
       this.part = part
       this.current = current
     }
 
-    if (element === 'extra'){
-      this.partExtra = part
-      this.currentExtra = current
-    }
-
-    this.thumb.update(part, this.line.size(), this.options.vertical, element)
-    this.input.update(current, element)
-    this.options.progress ? this.progress.update(part, this.line.size(), this.options.vertical, element) : ''
-    this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.thumb.size(), this.options.vertical, this.options.double, element) : ''
+    this.thumb.update(part, this.line.size(), this.options.vertical, extra)
+    this.input.update(current, extra)
+    this.options.progress ? this.progress.update(part, this.line.size(), this.options.vertical, extra) : ''
+    this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.thumb.size(), this.options.vertical, this.options.double, extra) : ''
   }
 
   public notifyPrimaryElement(current: number, part: number): void{
-    const element = 'primary'
-    this.notify(current, part, element)
+    this.notify(current, part)
   }
 
   public notifyExtraElement(current: number, part: number): void{
-    const element = 'extra'
-    this.notify(current, part, element)
+    const extra = true
+    this.notify(current, part, extra)
   }
 
   private countDistance = (part: number, element: string): number => {

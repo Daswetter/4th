@@ -12,7 +12,6 @@ class Satellite extends SubView {
     super()
     this.initPrimaryElement(initElement)
     this.unitedSatellite = this.initUnitedSatellite()
-    
   }
 
   initPrimaryElement = (initElement: HTMLElement): void => {
@@ -143,24 +142,21 @@ class Satellite extends SubView {
     element.style.opacity = opacity
   }
 
-  public update = (part: number, current: number, lineSize: {width: number, height: number}, thumbSize: {width: number, height: number}, vertical = false, double: boolean, elementName = 'primary'): void => {
-    
+  public update = (part: number, current: number, lineSize: {width: number, height: number}, thumbSize: {width: number, height: number}, vertical: boolean, double: boolean, extra: boolean): void => {
     let element = this.satellite
 
-    if (elementName === 'primary'){
-      this.current = current
-    }
-    if (elementName === 'extra'){
+    if (extra) {
       element = this.satelliteExtra
       this.currentExtra = current
+    } else {
+      this.current = current
     }
+    
     this.defineInnerText(element, current)
     this.setPosition(element, part, lineSize, thumbSize, vertical)
     if (double){
       this.joinSatellites(element, lineSize.width, thumbSize.width, vertical)
     }
-    
-    
   }
   
 }

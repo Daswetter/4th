@@ -113,21 +113,21 @@ class Thumb extends SubView{
     element.style.setProperty(`${sideName}`, `${side}`)
   }
 
-  public update = (part: number, lineSize: { width: number, height: number}, vertical = false, elementName = 'primary'): void => {
+  public update = (part: number, lineSize: { width: number, height: number}, vertical: boolean, extra: boolean): void => {
     let element = this.thumb
     let side = 'left'
     let elementSizeName = 'offsetWidth' as keyof HTMLElement
     let lineParameter = lineSize.width
   
-    if (!vertical && elementName === 'extra'){
+    if (!vertical && extra){
       element = this.thumbExtra
     }
-    if (vertical && elementName === 'primary'){
+    if (vertical && !extra){
       side = 'bottom'
       elementSizeName = 'offsetHeight'
       lineParameter = lineSize.height
     }
-    if (vertical && elementName === 'extra'){
+    if (vertical && extra){
       element = this.thumbExtra
       side = 'bottom'
       elementSizeName = 'offsetHeight'

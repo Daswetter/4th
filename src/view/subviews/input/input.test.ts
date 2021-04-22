@@ -64,17 +64,17 @@ describe('Input', () => {
 
   describe('update', () => {
     test('should set value to input', () => {
-      _.update(100)
+      _.update(100, false)
       expect(_.input.value).toBe('100')
     })
     test('should set value to inputExtra', () => {
       _.initInputExtra()
-      _.update(0.1, 'extra')
+      _.update(0.1, true)
       expect(_.inputExtra.value).toBe('0.1')
     })
     test('should not set value to input if element is extra', () => {
       _.initInputExtra()
-      _.update(0.1, 'extra')
+      _.update(0.1, true)
       expect(_.input.value).not.toBe('0.1')
     })
   })

@@ -41,9 +41,9 @@ class Input extends SubView{
     element.value = String(current)
   }
 
-  public update = (current: number, element = 'primary'): void => {
+  public update = (current: number, extra: boolean): void => {
     let targetElement = this.input
-    if ( element === 'extra'){
+    if (extra){
       targetElement = this.inputExtra
     } 
     this.printValue(targetElement, current)

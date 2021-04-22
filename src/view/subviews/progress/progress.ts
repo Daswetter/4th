@@ -33,27 +33,27 @@ class Progress extends SubView{
     }
   }
   
-  public update = (part: number, lineSize: {width: number, height: number}, vertical = false, element = 'primary') :void => {
+  public update = (part: number, lineSize: {width: number, height: number}, vertical: boolean, extra: boolean) :void => {
     let lineOneSize = lineSize.width
     let generalSide = 'left'
     let secondSide = 'right'
 
-    if (element === 'primary' && !vertical){
+    if (!extra && !vertical){
       this.part = part
     } 
 
-    if (element === 'extra' && !vertical){
+    if (extra && !vertical){
       this.partExtra = part
     } 
-
-    if (element === 'primary' && vertical){
+    
+    if (!extra && vertical){
       this.part = part
       lineOneSize = lineSize.height
       generalSide = 'bottom'
       secondSide = 'top'
     } 
 
-    if (element === 'extra' && vertical){
+    if (extra && vertical){
       this.partExtra = part
       lineOneSize = lineSize.height
       generalSide = 'bottom'
