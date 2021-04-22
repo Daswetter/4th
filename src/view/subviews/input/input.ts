@@ -1,22 +1,22 @@
 import { SubView } from "../SubView"
 
 class Input extends SubView{
-  public input!: HTMLInputElement
-  public inputExtra!: HTMLInputElement
+  public primary!: HTMLInputElement
+  public extra!: HTMLInputElement
 
   constructor(initElement: HTMLElement){
     super()
-    this.initInput(initElement)
-    this.setEventListener(this.input)
+    this.initPrimary(initElement)
+    this.setEventListener(this.primary)
   }
 
-  private initInput = (initElement: HTMLElement): void => {
-    this.input = initElement.querySelector('.range-slider__input_from') as HTMLInputElement
-    this.inputExtra = initElement.querySelector('.range-slider__input_to') as HTMLInputElement
+  private initPrimary = (initElement: HTMLElement): void => {
+    this.primary = initElement.querySelector('.range-slider__input_from') as HTMLInputElement
+    this.extra = initElement.querySelector('.range-slider__input_to') as HTMLInputElement
 
   }
-  public initInputExtra = (): void => {
-    this.setEventListener(this.inputExtra)
+  public initExtra = (): void => {
+    this.setEventListener(this.extra)
   }
 
   private setEventListener = (element: HTMLInputElement): void => {
@@ -24,12 +24,12 @@ class Input extends SubView{
   }
 
   private getValue = (element: HTMLInputElement): number => {
-    return +element.value
+    return Number(element.value)
   }
 
   private sendValue = (element: HTMLInputElement): void => {
     const value = this.getValue(element)
-    if (element === this.input){
+    if (element === this.primary){
       this.onChanged(value)
     } else {
       this.onExtraChanged(value)
@@ -42,9 +42,9 @@ class Input extends SubView{
   }
 
   public update = (current: number, extra: boolean): void => {
-    let targetElement = this.input
+    let targetElement = this.primary
     if (extra){
-      targetElement = this.inputExtra
+      targetElement = this.extra
     } 
     this.printValue(targetElement, current)
   }

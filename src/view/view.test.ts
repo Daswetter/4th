@@ -156,7 +156,7 @@ describe('View', () => {
       options.double = false
       options.satellite = true
       _.initView(scaleElements)
-      expect(_.satellite.satelliteExtra).not.toBeTruthy()
+      expect(_.satellite.extra).not.toBeTruthy()
     })
     
   })

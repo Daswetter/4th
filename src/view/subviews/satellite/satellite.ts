@@ -1,25 +1,25 @@
 import { SubView } from "../SubView"
 
 class Satellite extends SubView {
-  satellite!: HTMLElement
-  satelliteExtra!: HTMLElement
-  unitedSatellite!: HTMLElement
+  primary!: HTMLElement
+  extra!: HTMLElement
+  united!: HTMLElement
 
   current!: number
   currentExtra!: number
 
   constructor(initElement: HTMLElement){
     super()
-    this.initPrimaryElement(initElement)
-    this.unitedSatellite = this.initUnitedSatellite()
+    this.initPrimary(initElement)
+    this.united = this.initUnited()
   }
 
-  initPrimaryElement = (initElement: HTMLElement): void => {
-    this.satellite = this.init(initElement, this.satellite, 'satellite')
+  initPrimary = (initElement: HTMLElement): void => {
+    this.primary = this.init(initElement, this.primary, 'satellite')
   }
 
-  public initExtraElement = (initElement: HTMLElement): void => {
-    this.satelliteExtra = this.init(initElement, this.satelliteExtra, 'satellite')
+  public initExtra = (initElement: HTMLElement): void => {
+    this.extra = this.init(initElement, this.extra, 'satellite')
   }
 
   private defineInnerText = (element: HTMLElement, current: number | string): void => {
@@ -30,110 +30,86 @@ class Satellite extends SubView {
 
     if (vertical){
       element.style.top = lineSize.height - part * lineSize.height - element.offsetHeight / 2 + 'px'    
-
-      if (lineSize.width >= thumbSize.width){
-        element.style.left = - 1.2 * element.offsetWidth + 'px'
-      } else {
-        element.style.left = - 1.2 * element.offsetWidth - (thumbSize.width - lineSize.width) / 2 + 'px'
-      }
+      element.style.left = - element.offsetWidth - thumbSize.width / 2 + 'px'
+      
     } else {
       element.style.left = part * lineSize.width - element.offsetWidth / 2 + 'px'
-
-      if (lineSize.height >= thumbSize.height){
-        element.style.top = - lineSize.height - element.offsetHeight + 'px'
-      } else {
-        element.style.top =  - element.offsetHeight - thumbSize.height / 2 + 'px'
-      }
+      element.style.top =  - element.offsetHeight - thumbSize.height / 2 + 'px'
     }
-
-    
   }
 
-  initUnitedSatellite = (): HTMLElement => {
+  initUnited = (): HTMLElement => {
     const element = document.createElement('div')
     element.classList.add('range-slider__satellite')
-    this.satellite.after(element)
+    this.primary.after(element)
     return element
   }
 
-  private joinSatellites = (element: HTMLElement, lineWidth: number, thumbWidth: number,  vertical: boolean): void => {
-    let secondElement: HTMLElement
-    if (element === this.satellite){
-      secondElement = this.satelliteExtra
-    } else {
-      secondElement = this.satellite
-    }
-    this.defineInnerTextToUnitedSatellite(vertical)
+  private joinSatellites = (lineWidth: number, thumbWidth: number,  vertical: boolean): void => {
+    this.defineContent(vertical)
 
-    if (vertical){
-      this.setPositionToUnitedSatellite(element, secondElement, lineWidth, thumbWidth, vertical)
-    } else {
-      this.setPositionToUnitedSatellite(element, secondElement, lineWidth, thumbWidth, vertical)
-      
-      if (this.unitedSatellite.offsetLeft + this.unitedSatellite.offsetWidth >= lineWidth){
-        this.unitedSatellite.style.left = ''
-        this.unitedSatellite.style.right = -this.satellite.offsetWidth / 2 + 'px'
+    this.setPositionToUnited(lineWidth, thumbWidth, vertical)
+
+    if (!vertical) {
+      const lineEdge = this.united.offsetLeft + this.united.offsetWidth >= lineWidth
+
+      if (lineEdge){
+        this.united.style.left = ''
+        this.united.style.right = - this.primary.offsetWidth / 2 + 'px'
       } else {
-        this.setPositionToUnitedSatellite(element, secondElement, lineWidth, thumbWidth, vertical)
+        this.setPositionToUnited(lineWidth, thumbWidth, vertical)
       }
       
     }
-    this.switchElements(element, secondElement, vertical)
+    this.switchElements(vertical)
   }
 
-  defineInnerTextToUnitedSatellite = (vertical: boolean): void => {
+  defineContent = (vertical: boolean): void => {
     if (this.current === this.currentExtra){
-      this.defineInnerText(this.unitedSatellite, this.current)
+      this.defineInnerText(this.united, this.current)
     } else {
-
       if (vertical) {
-        this.unitedSatellite.style.textAlign = 'center'
-        this.defineInnerText(this.unitedSatellite, Math.max(this.current, this.currentExtra) + ' — '+ Math.min(this.current, this.currentExtra))
+        this.united.style.textAlign = 'center'
+        this.defineInnerText(this.united, Math.max(this.current, this.currentExtra) + ' — '+ Math.min(this.current, this.currentExtra))
       } else {
-        this.defineInnerText(this.unitedSatellite, Math.min(this.current, this.currentExtra) + ' — '+ Math.max(this.current, this.currentExtra))
+        this.defineInnerText(this.united, Math.min(this.current, this.currentExtra) + ' — '+ Math.max(this.current, this.currentExtra))
       }
-      
-      
     }
   }
 
-  private switchElements = (primary: HTMLElement, extra: HTMLElement, vertical: boolean) => {
-    let primarySide = primary.offsetLeft
-    let primarySize = primary.offsetWidth
-    let extraSide = extra.offsetLeft
-    let extraSize = extra.offsetWidth
-
+  private switchElements = (vertical: boolean) => {
+    let stickTogether = this.primary.offsetLeft <= this.extra.offsetLeft + this.extra.offsetWidth && this.primary.offsetLeft + this.primary.offsetWidth >= this.extra.offsetLeft
+    
+    
     if (vertical){
-      primarySide = primary.offsetTop
-      primarySize = primary.offsetHeight
-      extraSide = extra.offsetTop
-      extraSize = extra.offsetHeight
+      stickTogether = this.primary.offsetTop <= this.extra.offsetTop + this.extra.offsetHeight && this.primary.offsetTop + this.primary.offsetHeight >= this.extra.offsetTop
     } 
 
-    if (primarySide <= extraSide + extraSize && primarySide + primarySize >= extraSide){
-      this.switchOpacity(this.unitedSatellite, true)
-      this.switchOpacity(this.satellite, false)
-      this.switchOpacity(this.satelliteExtra, false)
+    if (stickTogether){
+      this.switchOpacity(this.united, true)
+      this.switchOpacity(this.primary, false)
+      this.switchOpacity(this.extra, false)
     } else {
-      this.switchOpacity(this.unitedSatellite, false)
-      this.switchOpacity(this.satellite, true)
-      this.switchOpacity(this.satelliteExtra, true)
+      this.switchOpacity(this.united, false)
+      this.switchOpacity(this.primary, true)
+      this.switchOpacity(this.extra, true)
     } 
     
   }
 
-  private setPositionToUnitedSatellite = (element: HTMLElement, secondElement: HTMLElement, lineWidth: number, thumbWidth: number, vertical: boolean): void => {
+  private setPositionToUnited = (lineWidth: number, thumbWidth: number, vertical: boolean): void => {
+
     if (vertical){
-      this.unitedSatellite.style.right = lineWidth + thumbWidth / 3 + 'px'
-      this.unitedSatellite.style.width = Math.min(element.offsetWidth, secondElement.offsetWidth) + 'px'
-      this.unitedSatellite.style.top = Math.min(element.offsetTop, secondElement.offsetTop) + 'px'
+      this.united.style.right = lineWidth + thumbWidth / 3 + 'px'
+      this.united.style.width = Math.min(this.primary.offsetWidth, this.extra.offsetWidth) + 'px'
+      this.united.style.top = Math.min(this.primary.offsetTop, this.extra.offsetTop) + 'px'
     } else {
-      this.unitedSatellite.style.top = element.offsetTop + 'px'
-      this.unitedSatellite.style.left = Math.min(element.offsetLeft, secondElement.offsetLeft) + 'px'
-      this.unitedSatellite.style.right = ''
-    }
-    
+      this.united.style.top = this.primary.offsetTop + 'px'
+      this.united.style.left = Math.min(this.primary.offsetLeft, this.extra.offsetLeft) + 'px'
+      this.united.style.right = ''
+    } 
   }
+
   private switchOpacity = (element: HTMLElement, on: boolean): void => {
     let opacity = '0'
     if (on){
@@ -143,10 +119,10 @@ class Satellite extends SubView {
   }
 
   public update = (part: number, current: number, lineSize: {width: number, height: number}, thumbSize: {width: number, height: number}, vertical: boolean, double: boolean, extra: boolean): void => {
-    let element = this.satellite
+    let element = this.primary
 
     if (extra) {
-      element = this.satelliteExtra
+      element = this.extra
       this.currentExtra = current
     } else {
       this.current = current
@@ -154,8 +130,9 @@ class Satellite extends SubView {
     
     this.defineInnerText(element, current)
     this.setPosition(element, part, lineSize, thumbSize, vertical)
+
     if (double){
-      this.joinSatellites(element, lineSize.width, thumbSize.width, vertical)
+      this.joinSatellites(lineSize.width, thumbSize.width, vertical)
     }
   }
   

@@ -43,7 +43,7 @@ class View implements IView {
     
     this.options.satellite ? this.initSatellite(this.line.returnAsHTML()): ''
     this.options.progress ? this.initProgress(this.line.returnAsHTML()) : ''
-    this.initInput()
+    this.initPrimary()
     this.options.scale ? this.initScale(this.line.returnAsHTML(), scaleElements): ''
   
     
@@ -105,7 +105,7 @@ class View implements IView {
     this.satellite = new Satellite(initElement)
     
     if (this.options.double){
-      this.satellite.initExtraElement(initElement)
+      this.satellite.initExtra(initElement)
     }
   }
   
@@ -129,12 +129,12 @@ class View implements IView {
     
   }
 
-  private initInput = (): void => {
+  private initPrimary = (): void => {
     this.input = new Input(this.initElement)
     this.input.bindChangedState(this.currentChanged)
     
     if (this.options.double){
-      this.input.initInputExtra()
+      this.input.initExtra()
       this.input.bindExtraChangedState(this.extraCurrentChanged)
     }
   }
