@@ -28,7 +28,7 @@ class Scale extends SubView{
       const element = document.createElement('div')
       this.scale.append(element)
       element.classList.add('range-slider__scale-number')
-      Object.assign(this.scaleElements, {[part]: element}) 
+      this.scaleElements = { ...this.scaleElements, [part]: element}
     }
   } 
 

@@ -73,7 +73,7 @@ class Model implements IModel{
   }
 
   public countScaleElements = (): { [key: string]: string } => {
-    const scaleElements: { [key: string]: string } = {}
+    let scaleElements: { [key: string]: string } = {}
     const step = this.options.step
     const min = this.options.min
     const max = this.options.max
@@ -82,15 +82,15 @@ class Model implements IModel{
     const half = (max - min) / 2 + min
     const threeQuarter = (max - min) / 4 * 3 + min 
     
-    Object.assign(scaleElements, {0: String(min)})
-    Object.assign(scaleElements, {1: String(max)})
+    scaleElements = {...scaleElements, 0: String(min)}
+    scaleElements = {...scaleElements, 1: String(max)}
 
     if (((max - min) / step) > 3){
-      Object.assign(scaleElements, {0.25: String(quarter)})
-      Object.assign(scaleElements, {0.75: String(threeQuarter)})
+      scaleElements = {...scaleElements, 0.25: String(quarter)}
+      scaleElements = {...scaleElements, 0.75: String(threeQuarter)}
     } 
     if (((max - min) / step) > 1) {
-      Object.assign(scaleElements, {0.5: String(half)})
+      scaleElements = {...scaleElements, 0.5: String(half)}
     }
     
     for (const part in scaleElements){
