@@ -37,16 +37,16 @@ class Input extends SubView{
     
   }
 
-  private printValue = (element: HTMLInputElement, result: number): void => {
-    element.value = result + ''
+  private printValue = (element: HTMLInputElement, current: number): void => {
+    element.value = String(current)
   }
 
-  public update = (result: number, element = 'primary'): void => {
+  public update = (current: number, element = 'primary'): void => {
     let targetElement = this.input
     if ( element === 'extra'){
       targetElement = this.inputExtra
     } 
-    this.printValue(targetElement, result)
+    this.printValue(targetElement, current)
   }
 }
 

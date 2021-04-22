@@ -30,7 +30,7 @@ class Scale extends SubView{
       element.classList.add('range-slider__scale-number')
       this.scaleElements = { ...this.scaleElements, [part]: element}
     }
-  } 
+  }
 
   private printScaleValues = (scaleValues: { [key: string]: string }): void => {
     for (const part in this.scaleElements) {

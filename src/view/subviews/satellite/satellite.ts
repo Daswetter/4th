@@ -24,7 +24,7 @@ class Satellite extends SubView {
   }
 
   private defineInnerText = (element: HTMLElement, current: number | string): void => {
-    element.innerText = current + ''
+    element.innerText = String(current)
   }
   
   private setPosition = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, thumbSize: {width: number, height: number}, vertical: boolean ): void => {

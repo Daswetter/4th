@@ -94,7 +94,7 @@ class Model implements IModel{
     }
     
     for (const part in scaleElements){
-      scaleElements[part] = this.roundToDecimal(scaleElements[part], this.convertStepToDecimal(step)) + ''
+      scaleElements[part] = String(this.roundToDecimal(scaleElements[part], this.convertStepToDecimal(step)))
     }
 
     return scaleElements
