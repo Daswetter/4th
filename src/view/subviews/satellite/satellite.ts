@@ -22,19 +22,39 @@ class Satellite extends SubView {
     this.extra = this.init(initElement, this.extra, 'satellite')
   }
 
-  private defineInnerText = (element: HTMLElement, current: number | string): void => {
+  private printInnerText = (element: HTMLElement, current: number | string): void => {
     element.innerText = String(current)
   }
+
+  private setRightToVertical = (element: HTMLElement, lineWidth: number, thumbWidth: number): void => {
+    element.style.right = lineWidth + thumbWidth / 3 + 'px'
+  }
+
+  private setTopToHorizontal = (element: HTMLElement, thumbHeight: number): void => {
+    element.style.top =  - element.offsetHeight - thumbHeight / 2 + 'px'
+  }
   
-  private setPosition = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, thumbSize: {width: number, height: number}, vertical: boolean ): void => {
+  public setInitialPosition = (lineWidth: number, thumbSize: {width: number, height: number }, vertical: boolean, extra = false): void => {
+    if (vertical) {
+      this.setRightToVertical(this.primary, lineWidth, thumbSize.width)
+      if (extra) {
+        this.setRightToVertical(this.extra, lineWidth, thumbSize.width)
+      }
+    } else {
+      this.setTopToHorizontal(this.primary, thumbSize.height)
+      if (extra) {
+        this.setTopToHorizontal(this.extra, thumbSize.height)
+      }
+    }
+  }
+
+  private setPosition = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, vertical: boolean ): void => {
 
     if (vertical){
-      element.style.top = lineSize.height - part * lineSize.height - element.offsetHeight / 2 + 'px'    
-      element.style.left = - element.offsetWidth - thumbSize.width / 2 + 'px'
+      element.style.top = lineSize.height - part * lineSize.height - element.offsetHeight / 2 + 'px'  
       
     } else {
       element.style.left = part * lineSize.width - element.offsetWidth / 2 + 'px'
-      element.style.top =  - element.offsetHeight - thumbSize.height / 2 + 'px'
     }
   }
 
@@ -66,13 +86,13 @@ class Satellite extends SubView {
 
   defineContent = (vertical: boolean): void => {
     if (this.current === this.currentExtra){
-      this.defineInnerText(this.united, this.current)
+      this.printInnerText(this.united, this.current)
     } else {
       if (vertical) {
         this.united.style.textAlign = 'center'
-        this.defineInnerText(this.united, Math.max(this.current, this.currentExtra) + ' — '+ Math.min(this.current, this.currentExtra))
+        this.printInnerText(this.united, Math.max(this.current, this.currentExtra) + ' — '+ Math.min(this.current, this.currentExtra))
       } else {
-        this.defineInnerText(this.united, Math.min(this.current, this.currentExtra) + ' — '+ Math.max(this.current, this.currentExtra))
+        this.printInnerText(this.united, Math.min(this.current, this.currentExtra) + ' — '+ Math.max(this.current, this.currentExtra))
       }
     }
   }
@@ -128,11 +148,27 @@ class Satellite extends SubView {
       this.current = current
     }
     
-    this.defineInnerText(element, current)
-    this.setPosition(element, part, lineSize, thumbSize, vertical)
+    this.printInnerText(element, current)
+    this.setPosition(element, part, lineSize, vertical)
 
     if (double){
       this.joinSatellites(lineSize.width, thumbSize.width, vertical)
+    }
+  }
+
+  public returnPrimaryParameters = (): { width: number, left: number, top: number } => {
+    return {
+      width: this.primary.offsetWidth,
+      left: this.primary.offsetLeft,
+      top: this.primary.offsetTop,
+    }
+  }
+
+  public returnExtraParameters = (): { width: number, left: number, top: number } => {
+    return {
+      width: this.extra.offsetWidth,
+      left: this.extra.offsetLeft,
+      top: this.extra.offsetTop,
     }
   }
   
