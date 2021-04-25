@@ -8,6 +8,7 @@ import { Input } from './subviews/input/input'
 
 import { IOptions } from './../interface/IOptions'
 import { IView } from './IView'
+import { BoundaryLabels } from './subviews/boundaryLabels/boundaruLabels'
 
 class View implements IView { 
   public wrapper!: Wrapper
@@ -17,6 +18,7 @@ class View implements IView {
   public scale!: Scale 
   public satellite!: Satellite
   public input!: Input
+  public boundaryLabels!: BoundaryLabels
 
   public part!: number
   public partExtra!: number
@@ -43,8 +45,9 @@ class View implements IView {
     
     this.options.satellite ? this.initSatellite(this.line.returnAsHTML()): ''
     this.options.progress ? this.initProgress(this.line.returnAsHTML()) : ''
-    this.initPrimary()
+    this.initInput()
     this.options.scale ? this.initScale(this.line.returnAsHTML(), scaleElements): ''
+    this.initBoundaryLabels(this.line.returnAsHTML())
   
     
     this.currentChanged(this.options.from)
@@ -103,9 +106,11 @@ class View implements IView {
 
   private initSatellite = (initElement: HTMLElement): void => {
     this.satellite = new Satellite(initElement)
-    
+    this.satellite.setInitialSettingsToPrimary(this.line.size().width, this.thumb.size(), this.options.vertical, this.options.min)
+
     if (this.options.double){
       this.satellite.initExtra(initElement)
+      this.satellite.setInitialSettingsToExtra(this.line.size().width, this.thumb.size(), this.options.vertical, this.options.max)
     }
   }
   
@@ -129,7 +134,7 @@ class View implements IView {
     
   }
 
-  private initPrimary = (): void => {
+  private initInput = (): void => {
     this.input = new Input(this.initElement)
     this.input.bindChangedState(this.currentChanged)
     
@@ -137,6 +142,11 @@ class View implements IView {
       this.input.initExtra()
       this.input.bindExtraChangedState(this.extraCurrentChanged)
     }
+  }
+
+  private initBoundaryLabels = (initElement: HTMLElement): void => {
+    this.boundaryLabels = new BoundaryLabels(initElement)
+    this.boundaryLabels.setInitialSettings(this.options.min, this.options.max, this.satellite.returnPrimaryParameters().top, this.line.size().width, this.thumb.size().width, this.options.vertical)
   }
 
   public clearAllView = (): void => {
@@ -157,6 +167,14 @@ class View implements IView {
     this.input.update(current, extra)
     this.options.progress ? this.progress.update(part, this.line.size(), this.options.vertical, extra) : ''
     this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.thumb.size(), this.options.vertical, this.options.double, extra) : ''
+
+    if (this.options.double) {
+      this.boundaryLabels.update(this.satellite.returnPrimaryParameters(), this.options.vertical, this.satellite.returnExtraParameters())
+    } else {
+      this.boundaryLabels.update(this.satellite.returnPrimaryParameters(), this.options.vertical)
+    }
+    
+    
   }
 
   public notifyPrimaryElement(current: number, part: number): void{
@@ -166,6 +184,7 @@ class View implements IView {
   public notifyExtraElement(current: number, part: number): void{
     const extra = true
     this.notify(current, part, extra)
+    
   }
 
   private countDistance = (part: number, element: string): number => {
