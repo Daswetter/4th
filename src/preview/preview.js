@@ -5,15 +5,16 @@ import './preview.scss'
 
 $(".js-slider1").customRangeSlider({
   min: 0,
-  max: 10,
+  max: 7,
   from: 0,
   to: 2,
-  step: 1,
+  step: 2,
   progress: true,
   satellite: true,
   scale: true,
+  numberOfScaleElements: 4,
   vertical: false,
-  double: true,
+  double: false,
 })
 new configPanel('.js-slider1')
 
@@ -42,6 +43,7 @@ $(".js-slider3").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
+  numberOfScaleElements: 7,
   double: false,
   vertical: false,
 })
@@ -54,7 +56,8 @@ $(".js-slider4").customRangeSlider({
   step: 3,
   progress: true,
   satellite: true,
-  scale: false,
+  scale: true,
+  numberOfScaleElements: 7,
   double: false,
 })
 new configPanel('.js-slider4')

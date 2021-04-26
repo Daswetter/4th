@@ -1,8 +1,8 @@
 import { IOptions } from '../interface/IOptions'
 
 interface IModel {
-  setCurrent(element: string, part: number): void
-  setPart(element: string, current: number): void
+  setCurrent(part: number, extra?: boolean): void
+  setPart(current: number, extra?: boolean): void
 
   countScaleElements(): { [key: string]: string }
   update (options: IOptions): void

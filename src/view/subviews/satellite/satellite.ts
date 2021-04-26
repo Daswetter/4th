@@ -34,19 +34,25 @@ class Satellite extends SubView {
     element.style.top =  - element.offsetHeight - thumbHeight / 2 + 'px'
   }
   
-  public setInitialPosition = (lineWidth: number, thumbSize: {width: number, height: number }, vertical: boolean, extra = false): void => {
+  public setInitialSettingsToPrimary = (lineWidth: number, thumbSize: {width: number, height: number }, vertical: boolean, min: number ): void => {
+    this.printInnerText(this.primary, min)
     if (vertical) {
       this.setRightToVertical(this.primary, lineWidth, thumbSize.width)
-      if (extra) {
-        this.setRightToVertical(this.extra, lineWidth, thumbSize.width)
-      }
     } else {
       this.setTopToHorizontal(this.primary, thumbSize.height)
-      if (extra) {
-        this.setTopToHorizontal(this.extra, thumbSize.height)
-      }
     }
   }
+
+  public setInitialSettingsToExtra = (lineWidth: number, thumbSize: {width: number, height: number }, vertical: boolean, max: number): void => {
+    this.printInnerText(this.extra, max)
+    if (vertical) {
+      this.setRightToVertical(this.extra, lineWidth, thumbSize.width)
+    } else {
+      this.setTopToHorizontal(this.extra, thumbSize.height)
+    }
+  }
+
+
 
   private setPosition = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, vertical: boolean ): void => {
 
@@ -62,6 +68,7 @@ class Satellite extends SubView {
     const element = document.createElement('div')
     element.classList.add('range-slider__satellite')
     this.primary.after(element)
+    element.style.opacity = '0'
     return element
   }
 
@@ -156,17 +163,19 @@ class Satellite extends SubView {
     }
   }
 
-  public returnPrimaryParameters = (): { width: number, left: number, top: number } => {
+  public returnPrimaryParameters = (): { width: number, height: number, left: number, top: number } => {
     return {
       width: this.primary.offsetWidth,
+      height: this.primary.offsetHeight,
       left: this.primary.offsetLeft,
       top: this.primary.offsetTop,
     }
   }
 
-  public returnExtraParameters = (): { width: number, left: number, top: number } => {
+  public returnExtraParameters = (): { width: number, height: number, left: number, top: number } => {
     return {
       width: this.extra.offsetWidth,
+      height: this.extra.offsetHeight,
       left: this.extra.offsetLeft,
       top: this.extra.offsetTop,
     }

@@ -11,27 +11,75 @@ class Model implements IModel{
     this.options = options
   }
 
-  private countCurrent(part: number): number {
+  // private countCurrent(part: number): number {
+  //   let current 
+
+  //   const min = this.options.min
+  //   const max = this.options.max
+  //   const step = this.options.step
+
+  //   current = +((max - min) * part) + min
+  //   // current = +(Math.round((max - min) / step * part) * step + min)
+
+  //   if (!this.isInteger(step)) {
+  //     current = +current.toFixed(this.convertStepToDecimal(step))
+  //   } 
+
+  //   if (!this.isInteger(Math.abs(max - min))) {
+  //     current = +current.toFixed(this.countNumberOfDecimals(Math.abs(min - max)))
+  //   }
+
+  //   if (!this.isInteger(Math.abs(this.options.max - this.options.min) / this.options.step)) {
+  //     current = this.countExoticCurrent(current, part)
+  //   }
+  //   return current
+  // }
+
+
+  
+
+  private getNumberOfSections = (): number => {
+    return Math.floor(Math.abs(this.options.max - this.options.min) / this.options.step)
+  }
+
+  private countExoticCurrent = (current: number, part: number): number => {
     const min = this.options.min
     const max = this.options.max
     const step = this.options.step
-    let current = +(Math.round((max - min) / step * part) * step + min)
+    const isValueGreaterThanScale = ((max - min) * part + min) > Math.floor(this.getNumberOfSections()) * step + min
     
-    if(!this.isInteger(step)){
-      current = +current.toFixed(this.convertStepToDecimal(step))
-    } 
-
+    if (isValueGreaterThanScale){
+      return max
+    }
     return current
   }
 
-  public setCurrent(element: string, part: number): void {
-    const current = this.countCurrent(part)
+  countCurrentTest = (part: number): Array<number> => {
+    const stepAsPart = this.options.step / Math.abs(this.options.max - this.options.min)
+    const rest = part - stepAsPart * Math.trunc(part / stepAsPart)
+    
+    let newPart: number
+    if (rest < stepAsPart / 2) {
+      newPart = part - rest
+    } else {
+      newPart = part + (stepAsPart - rest)
+    } 
 
-    if (element === 'primary'){
-      this.valuesWereChanged(current, part)
-    }
-    if (element === 'extra'){
+    let current = (this.options.max - this.options.min) * newPart + this.options.min
+    current = this.roundValueTo(current, this.options.step)
+    return [ current, newPart ]
+  }
+
+  public setCurrent(part: number, extra = false): void {
+    const [current, newPart] = this.countCurrentTest(part)
+    this.dataWereChanged(current, newPart, extra)
+  }
+
+  private dataWereChanged = (current: number, part: number, extra: boolean): void => {
+    if (extra){
       this.extraValuesWereChanged(current, part)
+    } else {
+      this.valuesWereChanged(current, part)
     }
   }
   
@@ -43,78 +91,67 @@ class Model implements IModel{
 
     if (current > max){
       part = 1
+      current =  max
     } else if (current < min){
       part = 0
+      current = min
     }
     return part
   }
-
-  private filterCurrent = (current: number): number => {
-    const min = this.options.min
-    const max = this.options.max
-    if (current < min){
-      return min
-    } else if (current > max) {
-      return max
-    }
-    return current
-  }
   
-  public setPart(element: string, current: number): void {
+  public setPart(current: number, extra = false): void {
     const part = this.countPart(current)
-    current = this.filterCurrent(current)
-
-    if (element === 'primary'){
-      this.valuesWereChanged(current, part)
-    }
-    if (element === 'extra'){
-      this.extraValuesWereChanged(current, part)
-    }
+    this.dataWereChanged(current, part, extra)
   }
+
+  
 
   public countScaleElements = (): { [key: string]: string } => {
     let scaleElements: { [key: string]: string } = {}
+    let scaleValue: number
+    const numberOfScaleElements = this.options.numberOfScaleElements
+    const numberOfScaleSections = numberOfScaleElements as number - 1
+    const scaleStep = 1 / numberOfScaleSections
     const step = this.options.step
     const min = this.options.min
     const max = this.options.max
 
-    const quarter = (max - min) / 4 + min 
-    const half = (max - min) / 2 + min
-    const threeQuarter = (max - min) / 4 * 3 + min 
-    
-    scaleElements = {...scaleElements, 0: String(min)}
-    scaleElements = {...scaleElements, 1: String(max)}
-
-    if (((max - min) / step) > 3){
-      scaleElements = {...scaleElements, 0.25: String(quarter)}
-      scaleElements = {...scaleElements, 0.75: String(threeQuarter)}
-    } 
-    if (((max - min) / step) > 1) {
-      scaleElements = {...scaleElements, 0.5: String(half)}
+    if (numberOfScaleElements as number > 20){
+      throw new Error('number of scale elements is too big')
     }
     
-    for (const part in scaleElements){
-      scaleElements[part] = String(this.roundToDecimal(scaleElements[part], this.convertStepToDecimal(step)))
+    for (let i = 0; i <= numberOfScaleSections; i++){
+      if (this.isInteger(Math.abs(this.options.max - this.options.min) / this.options.step)) {
+        scaleValue = (max - min) * scaleStep * i + min
+        const roundScaleValues = String(this.roundValueTo(scaleValue, step))
+        scaleElements = {...scaleElements, [i / numberOfScaleSections]: String(roundScaleValues)}
+      } else {
+        const newMax = this.getNumberOfSections() * step + min
+        scaleValue = (newMax - min) * scaleStep * i + min
+        // ! 
+        scaleValue = Number(this.roundValueTo(scaleValue, Math.abs(max - min)))
+        scaleElements = {...scaleElements, [i / numberOfScaleSections * (1 - (Math.abs(max - min) - step * this.getNumberOfSections()) / Math.abs(max - min))
+        ]: String(scaleValue)}
+      }
     }
-
     return scaleElements
   }
 
-  private convertStepToDecimal = (step: number) : number => {
-    const digits = step.toString().split('')
+  
+
+  private roundValueTo = (value: number, roundTo: number): number => {
     let decimal: number
-    if ( step > 0 && step < 1){
-      decimal =   digits.length - 2
-      return decimal
-    } else { 
-      decimal = - (digits.length - 1)
-      return decimal
+    const dividedRoundTo = roundTo.toString().split(".")
+    if (!dividedRoundTo[1]){
+      decimal = - dividedRoundTo[0].length + 1
+    } else {
+      decimal = dividedRoundTo[1].length
     }
+    
+    return (Math.round( value * Math.pow(10, decimal) ) / Math.pow(10, decimal))
+    
   }
 
-  private roundToDecimal = (value: string, decimal: number): number => {
-    return (Math.round( +value * Math.pow(10, decimal) ) / Math.pow(10, decimal))
-  }
 
   private isInteger = (num: number) : boolean => {
     return (num ^ 0) === num

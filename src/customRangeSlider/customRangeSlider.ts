@@ -27,6 +27,7 @@ import { IView } from '../view/IView'
         double: false,
         satellite: true,
         scale: true,
+        numberOfScaleElements: 5,
         progress: true,
       }, setOptions)
       this.options = options

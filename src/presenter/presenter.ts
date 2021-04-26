@@ -48,17 +48,19 @@ class Presenter{
   
 
   private sendCurrentToModel = (part: number) : void => {   
-    this.Model.setCurrent('primary', part)
+    this.Model.setCurrent(part)
   }
-  private sendExtraToModel = (part: number) : void => {   
-    this.Model.setCurrent('extra', part)
+  private sendExtraToModel = (part: number) : void => {  
+    const extra = true 
+    this.Model.setCurrent(part, extra)
   }
 
   private sendPartToModel = (part: number) : void => { 
-    this.Model.setPart('primary', part)
+    this.Model.setPart(part)
   }
-  private sendExtraPartToModel = (part: number) : void => {   
-    this.Model.setPart('extra', part)
+  private sendExtraPartToModel = (part: number) : void => {
+    const extra = true    
+    this.Model.setPart(part, extra)
   }
 
   public update = (options: IOptions): void => {
