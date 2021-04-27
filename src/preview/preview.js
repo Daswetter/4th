@@ -6,7 +6,7 @@ import './preview.scss'
 $(".js-slider1").customRangeSlider({
   min: 0,
   max: 7,
-  from: 0,
+  from: 0.5,
   to: 2,
   step: 2,
   progress: true,
@@ -43,7 +43,7 @@ $(".js-slider3").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
-  numberOfScaleElements: 7,
+  numberOfScaleElements: 10,
   double: false,
   vertical: false,
 })

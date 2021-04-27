@@ -1,4 +1,4 @@
-import { BoundaryLabels } from "./boundaruLabels"
+import { BoundaryLabels } from "./boundaryLabels"
 
 describe('BoundaryLabels', () => {
   let _: BoundaryLabels

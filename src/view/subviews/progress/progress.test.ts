@@ -15,12 +15,6 @@ describe('Progress', () => {
     })
   })
 
-  describe('returnAsHTML', () => {
-    test('should return progress as HTMLElement', () => {
-      expect(_.returnAsHTML()).toEqual(_.progress)
-    })
-  })
-
   describe('setVertical', () => {
     test('should set correct width and height to progress', () => {
       Object.defineProperty(_.progress, 'offsetHeight', {

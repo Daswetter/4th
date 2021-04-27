@@ -1,4 +1,4 @@
-import { SubView } from './../SubView'
+import { SubView } from '../SubView'
 class Thumb extends SubView{
   public thumb!: HTMLElement
   public thumbExtra!: HTMLElement
@@ -10,20 +10,12 @@ class Thumb extends SubView{
     this.initPrimaryElement(initElement)
   }
   
-
   initPrimaryElement = (initElement: HTMLElement): void => {
     this.thumb = this.init(initElement, this.thumb, 'thumb')
   }
 
   public initExtraElement = (initElement: HTMLElement): void => {
     this.thumbExtra = this.init(initElement, this.thumbExtra, 'thumb')
-  }
-
-  public returnAsHTML = (): HTMLElement =>  {
-    return this.thumb
-  }
-  public returnExtraAsHTML = (): HTMLElement =>  {
-    return this.thumbExtra
   }
 
   private getOrientationParams = (vertical: boolean, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number} => {

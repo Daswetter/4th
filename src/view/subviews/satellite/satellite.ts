@@ -60,7 +60,7 @@ class Satellite extends SubView {
       element.style.top = lineSize.height - part * lineSize.height - element.offsetHeight / 2 + 'px'  
       
     } else {
-      element.style.left = part * lineSize.width - element.offsetWidth / 2 + 'px'
+      element.style.left = Math.round(part * lineSize.width - element.offsetWidth / 2) + 'px'
     }
   }
 

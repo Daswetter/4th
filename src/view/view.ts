@@ -1,15 +1,14 @@
-import { Wrapper } from './subviews/wrapper/wrapper'
-import { Line } from './subviews/line/line'
-import { Thumb } from './subviews/thumb/thumb'
-import { Progress } from './subviews/progress/progress'
-import { Scale } from './subviews/scale/scale'
-import { Satellite } from './subviews/satellite/satellite'
-import { Input } from './subviews/input/input'
+import { Wrapper } from './subViews/wrapper/wrapper'
+import { Line } from './subViews/line/line'
+import { Thumb } from './subViews/thumb/thumb'
+import { Progress } from './subViews/progress/progress'
+import { Scale } from './subViews/scale/scale'
+import { Satellite } from './subViews/satellite/satellite'
+import { Input } from './subViews/input/input'
 
 import { IOptions } from './../interface/IOptions'
 import { IView } from './IView'
-import { BoundaryLabels } from './subviews/boundaryLabels/boundaruLabels'
-
+import { BoundaryLabels } from './subViews/boundaryLabels/boundaryLabels'
 class View implements IView { 
   public wrapper!: Wrapper
   public line!: Line
@@ -243,4 +242,4 @@ class View implements IView {
   }
 }
 
-export {View}
+export { View }

@@ -16,12 +16,6 @@ describe('Scale', () => {
     })
   })
 
-  describe('returnAsHTML', () => {
-    test('should return scale as HTMLElement', () => {
-      expect(_.returnAsHTML()).toEqual(_.scale)
-    })
-  })
-
   describe('initScale', () => {
     let callback: jest.Mock
     const scaleValues = {

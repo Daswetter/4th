@@ -11,11 +11,7 @@ class Scale extends SubView{
   initPrimaryElement = (initElement: HTMLElement): void => {
     this.scale = this.init(initElement, this.scale, 'scale')
   }
-
-  public returnAsHTML = (): HTMLElement => {
-    return this.scale
-  }
-
+  
   public initScale = (scaleValues: { [key: string]: string }, lineSize: { width: number; height: number}, vertical: boolean): void => {
     this.createScaleElements(scaleValues)
     this.printScaleValues(scaleValues)

@@ -16,11 +16,6 @@ describe('Thumb', () =>{
     })
   })
 
-  describe('returnAsHTML', () => {
-    test('should return thumb', () => {
-      expect(_.returnAsHTML()).toBe(_.thumb)
-    })
-  })
 
   describe('initExtraElement', () => {
     beforeEach(() => {
