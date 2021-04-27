@@ -24,6 +24,8 @@ describe('Model', () => {
     callbackExtra = jest.fn()
   })
 
+  
+
   describe('setCurrent', () => {
     beforeEach(() => {
       _.bindChangedValues(callback)
@@ -108,16 +110,32 @@ describe('Model', () => {
       options.numberOfScaleElements = 2
       expect(_.countScaleElements()).toEqual({"0": "0", "0.8": "4"})
     })
-    test('should throw error if number of scale elements is too big', () => {
-      options.numberOfScaleElements = 100
-      expect(_.countScaleElements).toThrow('number of scale elements is too big')
-    })
   })
 
   describe('update', () => {
-    test('should call callback', () => {
-      const callback = jest.fn()
+    let callback: jest.Mock
+    beforeEach(() => {
+      callback = jest.fn()
       _.bindChangedOptions(callback)
+    })
+    test('should call callback', () => {
+      
+      _.update(options)
+      expect(callback).toHaveBeenCalled()
+    })
+    test('should filter options', () => {
+      options.step = -200
+      options.min = -1
+      options.max = -10
+      options.numberOfScaleElements = 21
+      _.update(options)
+      expect(callback).toHaveBeenCalled()
+    })
+    test('should filter options', () => {
+      options.step = -200
+      options.min = -1
+      options.max = -1
+      options.numberOfScaleElements = 21
       _.update(options)
       expect(callback).toHaveBeenCalled()
     })

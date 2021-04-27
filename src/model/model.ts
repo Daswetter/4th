@@ -8,7 +8,7 @@ class Model implements IModel{
   private optionsWereChanged!: (scaleElements: { [key: string]: string }, options: IOptions) => void
   
   constructor(private options: IOptions){
-    this.options = options
+    this.options = this.filterOptions(options)
   }
 
   private getNumberOfSections = (): number => {
@@ -54,6 +54,27 @@ class Model implements IModel{
     return [ current, newPart ]
   }
 
+  private filterOptions = (options: IOptions): IOptions => {
+    if (options.step <= 0) {
+      options.step = Math.abs(options.step)
+    }
+    if(options.step > Math.abs(options.max) + Math.abs(options.min)) {
+      options.step = Math.abs(options.max) + Math.abs(options.min)
+    }
+
+    if (options.max < options.min) {
+      [options.min, options.max] = [options.max, options.min]
+    } else if (options.max === options.min) {
+      options.max = options.min + options.step
+    }
+
+    if (options.numberOfScaleElements as number > 20 ) {
+      options.numberOfScaleElements = 20
+    }
+
+    return options
+  }
+
   public setCurrent(part: number, extra = false): void {
     const [current, newPart] = this.countCurrent(part)
     this.dataWereChanged(current, newPart, extra)
@@ -81,12 +102,6 @@ class Model implements IModel{
     part = this.filterPart(part)
     const [newCurrent, newPart] = this.countCurrent(part)
     this.dataWereChanged(newCurrent, newPart, extra)
-  }
-
-  private filterScaleElements = (): void => {
-    if (this.options.numberOfScaleElements as number > 20){
-      throw new Error('number of scale elements is too big')
-    }
   }
   
   private createFullSizeScale = (): { [key: string]: string } => {
@@ -128,7 +143,6 @@ class Model implements IModel{
 
 
   public countScaleElements = (): { [key: string]: string } => {
-    this.filterScaleElements()
 
     if (this.isScaleFullSize()) {
       return this.createFullSizeScale()
@@ -156,7 +170,7 @@ class Model implements IModel{
   } 
 
   public update = (options: IOptions): void => {
-    this.options = options
+    this.options = this.filterOptions(options)
 
     const scaleElements = this.countScaleElements()
     this.optionsWereChanged(scaleElements, options)
