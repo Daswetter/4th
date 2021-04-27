@@ -3,6 +3,7 @@ import { Model } from './model'
 
 describe('Model', () => {
   let callback: jest.Mock
+  let callbackExtra: jest.Mock
   let _: Model
   let options: IOptions
   beforeEach(() => {
@@ -20,85 +21,96 @@ describe('Model', () => {
     }
     _ = new Model(options)
     callback = jest.fn()
+    callbackExtra = jest.fn()
   })
 
   describe('setCurrent', () => {
     beforeEach(() => {
       _.bindChangedValues(callback)
+      _.bindChangedExtraValues(callbackExtra)
     })
     test('call mock', () => {
-      _.setCurrent('primary', 0.1)
+      _.setCurrent(0.1)
       expect(callback).toHaveBeenCalled()
     })
     test('should round currentValue according to step period nd call mock with correct parameters', () => {
       options.step = 0.2
-      _.setCurrent('primary', 0.1)
+      _.setCurrent( 0.1)
       expect(callback).toHaveBeenCalledWith(-1600, 0.1)
     })
+    test('should set correct current if scale is not full size', () => {
+      options.min = 0
+      options.max = 21
+      options.step = 2
+      _.setCurrent(1)
+      expect(callback).toHaveBeenCalledWith(21, 1)
+    })
+    test('should set correct current if scale is not full size', () => {
+      options.min = 0
+      options.max = 80
+      options.step = 50
+      _.setCurrent(0.8)
+      expect(callback).toHaveBeenCalledWith(50, 0.625)
+    })
+    test('should call callback for extra', () => {
+      _.setCurrent(0.8, true)
+      expect(callbackExtra).toHaveBeenCalled()
+    })
+
   })
 
-  describe('setCurrentValueForExtra', () => {
-    beforeEach(() => {
-      _.bindChangedExtraValues(callback)
-    })
-    test('should call mock with max', () => {
-      _.setCurrent('extra', 1)
-      expect(callback).toHaveBeenCalledWith(200, 1)
-    })
-  })
 
 
 
   describe('setPart', () => {
     beforeEach(() => {
-      _.bindChangedValues(callback)
-    })
-    test('should call mock', () => {
-      _.setPart('primary', 1)
-      expect(callback).toHaveBeenCalled()
-    })
-    test('should call mock with right params', () => {
-      _.setPart('primary', 1)
-      expect(callback).toHaveBeenCalledWith(1, 0.9005)
-    })
-    test('should filter too big params and call mock', () => {
       options.min = 10
       options.max = 110
-      _.setPart('primary', 200)
+      options.step = 10
+      _.bindChangedValues(callback)
+    })
+    test('should call mock with right params', () => {
+      _.setPart(21)
+      expect(callback).toHaveBeenCalledWith(20, 0.1)
+    })
+    test('should filter too big params and call mock', () => {
+      _.setPart(200)
       expect(callback).toHaveBeenCalledWith(110, 1)
     })
     test('should filter too small params and call mock', () => {
-      options.min = 10
-      options.max = 110
-      _.setPart('primary', -100)
+      _.setPart(-100)
       expect(callback).toHaveBeenCalledWith(10, 0)
     })
   })
 
-  describe('setPartForExtra', () => {
-    beforeEach(() => {
-      _.bindChangedExtraValues(callback)
-    })
-    test('should call mock with correct parameters', () => {
-      _.setPart('extra', 1)
-      expect(callback).toHaveBeenCalledWith(1, 0.9005)
-    })
-  })
 
 
 
   describe('countScaleElements', () => {
-    test('should return a correct array', () => {
+    test('should return a correct object', () => {
       options.min = 0
       options.max = 100
       options.step = 1
-      expect(_.countScaleElements()).toEqual({"0": "0", "0.25": "25", "0.5": "50", "0.75": "75", "1": "100"})
+      options.numberOfScaleElements = 2
+      expect(_.countScaleElements()).toEqual({"0": "0", "1": "100"})
     })
     test('should round correctly', () => {
       options.min = 0
       options.max = 50
       options.step = 1
+      options.numberOfScaleElements = 5
       expect(_.countScaleElements()).toEqual({"0": "0", "0.25": "13", "0.5": "25", "0.75": "38", "1": "50"})
+    })
+    test('should set correct part size scale', () => {
+      options.min = 0
+      options.max = 5
+      options.step = 2
+      options.numberOfScaleElements = 2
+      expect(_.countScaleElements()).toEqual({"0": "0", "0.8": "4"})
+    })
+    test('should throw error if number of scale elements is too big', () => {
+      options.numberOfScaleElements = 100
+      expect(_.countScaleElements).toThrow('number of scale elements is too big')
     })
   })
 

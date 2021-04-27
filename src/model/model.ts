@@ -3,138 +3,137 @@ import { IOptions } from './../interface/IOptions'
 import { IModel } from './IModel'
 
 class Model implements IModel{
-  private valuesWereChanged!: (current: number, part: number) => void
-  private extraValuesWereChanged!: (current: number, part: number) => void
+  private currentWereChanged!: (current: number, part: number) => void
+  private extraCurrentWereChanged!: (current: number, part: number) => void
   private optionsWereChanged!: (scaleElements: { [key: string]: string }, options: IOptions) => void
   
   constructor(private options: IOptions){
     this.options = options
   }
 
-  // private countCurrent(part: number): number {
-  //   let current 
-
-  //   const min = this.options.min
-  //   const max = this.options.max
-  //   const step = this.options.step
-
-  //   current = +((max - min) * part) + min
-  //   // current = +(Math.round((max - min) / step * part) * step + min)
-
-  //   if (!this.isInteger(step)) {
-  //     current = +current.toFixed(this.convertStepToDecimal(step))
-  //   } 
-
-  //   if (!this.isInteger(Math.abs(max - min))) {
-  //     current = +current.toFixed(this.countNumberOfDecimals(Math.abs(min - max)))
-  //   }
-
-  //   if (!this.isInteger(Math.abs(this.options.max - this.options.min) / this.options.step)) {
-  //     current = this.countExoticCurrent(current, part)
-  //   }
-  //   return current
-  // }
-
-
-  
-
   private getNumberOfSections = (): number => {
     return Math.floor(Math.abs(this.options.max - this.options.min) / this.options.step)
   }
 
-  private countExoticCurrent = (current: number, part: number): number => {
-    const min = this.options.min
-    const max = this.options.max
-    const step = this.options.step
-    const isValueGreaterThanScale = ((max - min) * part + min) > Math.floor(this.getNumberOfSections()) * step + min
+  private countRestCurrent = (current: number, part: number, rest: number, stepAsPart: number): number[] => {
+    const restAtTheEnd = 1 - stepAsPart * Math.trunc(1 / stepAsPart)
     
-    if (isValueGreaterThanScale){
-      return max
-    }
-    return current
+    if (rest > restAtTheEnd / 2) {
+      current = this.options.max
+      return [current, 1]
+    } 
+    return [current, part]
   }
 
-  countCurrentTest = (part: number): Array<number> => {
+  private isScaleFullSize = (): boolean => {
+    return this.isInteger(Math.abs(this.options.max - this.options.min) / this.options.step)
+  }
+
+  private countCurrent = (part: number): Array<number> => {
     const stepAsPart = this.options.step / Math.abs(this.options.max - this.options.min)
     const rest = part - stepAsPart * Math.trunc(part / stepAsPart)
-    
     let newPart: number
+
     if (rest < stepAsPart / 2) {
       newPart = part - rest
     } else {
       newPart = part + (stepAsPart - rest)
     } 
 
-    let current = (this.options.max - this.options.min) * newPart + this.options.min
+    let current = Math.abs(this.options.max - this.options.min) * newPart + this.options.min
+
+
+    const isCurrentGreaterThanScale = Math.abs(this.options.max - this.options.min) * part > this.getNumberOfSections() * this.options.step
+
+    if (!this.isScaleFullSize() && isCurrentGreaterThanScale) {
+      [current, newPart] = this.countRestCurrent(current, newPart, rest, stepAsPart)
+    }
+
     current = this.roundValueTo(current, this.options.step)
+    
     return [ current, newPart ]
   }
 
   public setCurrent(part: number, extra = false): void {
-    const [current, newPart] = this.countCurrentTest(part)
+    const [current, newPart] = this.countCurrent(part)
     this.dataWereChanged(current, newPart, extra)
   }
 
   private dataWereChanged = (current: number, part: number, extra: boolean): void => {
     if (extra){
-      this.extraValuesWereChanged(current, part)
+      this.extraCurrentWereChanged(current, part)
     } else {
-      this.valuesWereChanged(current, part)
+      this.currentWereChanged(current, part)
     }
   }
-  
-  private countPart(current: number): number {
-    const min = this.options.min
-    const max = this.options.max
-    
-    let part = (current - min) / (max - min)
 
-    if (current > max){
-      part = 1
-      current =  max
-    } else if (current < min){
-      part = 0
-      current = min
-    }
+  private filterPart = (part: number): number => {
+    if (part > 1) {
+      return 1
+    } else if (part < 0) {
+      return 0
+    } 
     return part
   }
   
   public setPart(current: number, extra = false): void {
-    const part = this.countPart(current)
-    this.dataWereChanged(current, part, extra)
+    let part = (current - this.options.min) / (this.options.max - this.options.min)
+    part = this.filterPart(part)
+    const [newCurrent, newPart] = this.countCurrent(part)
+    this.dataWereChanged(newCurrent, newPart, extra)
   }
 
+  private filterScaleElements = (): void => {
+    if (this.options.numberOfScaleElements as number > 20){
+      throw new Error('number of scale elements is too big')
+    }
+  }
   
-
-  public countScaleElements = (): { [key: string]: string } => {
-    let scaleElements: { [key: string]: string } = {}
+  private createFullSizeScale = (): { [key: string]: string } => {
     let scaleValue: number
-    const numberOfScaleElements = this.options.numberOfScaleElements
-    const numberOfScaleSections = numberOfScaleElements as number - 1
+    let scaleElements: { [key: string]: string } = {}
+
+    const numberOfScaleSections = this.options.numberOfScaleElements as number - 1
+    const scaleStep = 1 / numberOfScaleSections
+
+    for (let i = 0; i <= numberOfScaleSections; i++){
+      scaleValue = (this.options.max - this.options.min) * scaleStep * i + this.options.min
+      const roundScaleValues = String(this.roundValueTo(scaleValue, this.options.step))
+      scaleElements = {...scaleElements, [i / numberOfScaleSections]: String(roundScaleValues)}
+    }
+
+    return scaleElements
+  }
+  
+  private createPartSizeScale = (): { [key: string]: string } => {
+    let scaleValue: number
+    let scaleElements: { [key: string]: string } = {}
+
+    const numberOfScaleSections = this.options.numberOfScaleElements as number - 1
     const scaleStep = 1 / numberOfScaleSections
     const step = this.options.step
     const min = this.options.min
     const max = this.options.max
 
-    if (numberOfScaleElements as number > 20){
-      throw new Error('number of scale elements is too big')
-    }
-    
     for (let i = 0; i <= numberOfScaleSections; i++){
-      if (this.isInteger(Math.abs(this.options.max - this.options.min) / this.options.step)) {
-        scaleValue = (max - min) * scaleStep * i + min
-        const roundScaleValues = String(this.roundValueTo(scaleValue, step))
-        scaleElements = {...scaleElements, [i / numberOfScaleSections]: String(roundScaleValues)}
-      } else {
-        const newMax = this.getNumberOfSections() * step + min
-        scaleValue = (newMax - min) * scaleStep * i + min
-        // ! 
-        scaleValue = Number(this.roundValueTo(scaleValue, Math.abs(max - min)))
-        scaleElements = {...scaleElements, [i / numberOfScaleSections * (1 - (Math.abs(max - min) - step * this.getNumberOfSections()) / Math.abs(max - min))
-        ]: String(scaleValue)}
-      }
+      const newMax = this.getNumberOfSections() * step + min
+      scaleValue = (newMax - min) * scaleStep * i + min
+      scaleValue = this.roundValueTo(scaleValue, step)
+      scaleElements = {...scaleElements, [i / numberOfScaleSections * (1 - (Math.abs(max - min) - step * this.getNumberOfSections()) / Math.abs(max - min))]: String(scaleValue)}
     }
+
     return scaleElements
+  }
+
+
+
+  public countScaleElements = (): { [key: string]: string } => {
+    this.filterScaleElements()
+
+    if (this.isScaleFullSize()) {
+      return this.createFullSizeScale()
+    }
+    return this.createPartSizeScale()     
   }
 
   
@@ -148,8 +147,7 @@ class Model implements IModel{
       decimal = dividedRoundTo[1].length
     }
     
-    return (Math.round( value * Math.pow(10, decimal) ) / Math.pow(10, decimal))
-    
+    return (Math.round( value * Math.pow(10, decimal) ) / Math.pow(10, decimal))  
   }
 
 
@@ -166,12 +164,11 @@ class Model implements IModel{
 
 
   public bindChangedValues(callback: (current: number, part: number) => void): void {
-    this.valuesWereChanged = callback;
+    this.currentWereChanged = callback;
   }
   public bindChangedExtraValues( callback: (current: number, part: number) => void): void {
-    this.extraValuesWereChanged = callback;
+    this.extraCurrentWereChanged = callback;
   }
-
   public bindChangedOptions(callback: (scaleElements: { [key: string]: string }, options: IOptions) => void): void {
     this.optionsWereChanged = callback;
   }
