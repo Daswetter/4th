@@ -157,7 +157,7 @@ class Thumb extends SubView{
   }
 
 
-  public size = (): {width: number, height: number} => {
+  public returnSize = (): {width: number, height: number} => {
     return {
       width: this.primary.offsetWidth,
       height: this.primary.offsetHeight,
