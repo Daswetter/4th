@@ -6,8 +6,8 @@ interface IView {
   
   initView(scaleElements: { [key: string]: string }): void
 
-  notifyPrimaryElement(current: number, part: number): void
-  notifyExtraElement(current: number, part: number): void
+  notifyPrimary(current: number, part: number): void
+  notifyExtra(current: number, part: number): void
 
   clearAllView(): void,
   update(options: IOptions): void

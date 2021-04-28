@@ -87,6 +87,16 @@ describe('View', () => {
       window.dispatchEvent(onResize)
       expect(spyThumb).toHaveBeenCalledTimes(2)
     })
+    
+    test('should not call scale setPosition if window was resized', () => {
+      options.scale = false
+      _.initView({'0': '0'})
+      const spyScale = jest.spyOn(_.scale, 'setPosition')
+      const onResize = new Event('resize')
+      window.dispatchEvent(onResize)
+      expect(spyScale).not.toHaveBeenCalled()
+    })
+
     test('should call mock for extra in initElementsForResized if window was resized', () => {
       
       options.double = false
@@ -116,29 +126,63 @@ describe('View', () => {
       expect(_.satellite).toBeTruthy()
     })
 
-    test('should call mock if line was clicked', () => {
-      options.double = true
-      _.initView(scaleElements)
-      const event = new MouseEvent('click')
-      _.line.returnAsHTML().dispatchEvent(event)
-      expect(callbackPart).toHaveBeenCalled()
-    })
-    test('should call mock for extra if line was clicked near extra thumb', () => {
-      options.double = true
-      options.vertical = false
-      options.step = 1
-      _.initView(scaleElements)
-      _.notifyPrimaryElement(-1700, 0.05)
-      _.notifyExtraElement(100, 0.95)
-      Object.defineProperty(_.line, 'offsetWidth', {
-        value: 500
+    describe('should call mock if line was clicked', () => {
+      beforeEach(() => {
+        options.double = true
+        options.vertical = true
+        options.step = 1
+        
+        _.initView(scaleElements)
+        _.line.returnAsHTML().getBoundingClientRect = jest.fn(() => ({
+          x: 0,
+          y: 10,
+          width: 300,
+          height: 10,
+          top: 50,
+          right: 730,
+          bottom: 100,
+          left: 50,
+          toJSON: jest.fn(),
+        }))
+        Object.defineProperty(_.line, 'offsetHeight', {
+          value: 500
+        })
+        
+        Object.defineProperty(_.line, 'offsetWidth', {
+          value: 500
+        })
+        
       })
-      const event = new MouseEvent('click', {
-        clientX: 500,
+
+      test('should call mock for extra if line was clicked near extra thumb', () => {
+        _.notifyPrimary(-1700, 0.05)
+        _.notifyExtra(100, 0.95)
+        const event = new MouseEvent('click', {
+          clientX: 500,
+        })
+        Object.defineProperty(event, 'pageX', {
+          value: 0
+        })
+        _.line.returnAsHTML().dispatchEvent(event)
+        expect(callbackExtraPart).toHaveBeenCalled()
       })
-      _.line.returnAsHTML().dispatchEvent(event)
-      expect(callbackExtraPart).toHaveBeenCalled()
+
+      test('should call mock for primary if line was clicked near primary thumb', () => {
+        _.notifyExtra(-1700, 0.05)
+        _.notifyPrimary(100, 0.95)
+        const event = new MouseEvent('click', {
+          clientX: 500,
+        })
+        Object.defineProperty(event, 'pageX', {
+          value: 0
+        })
+        _.line.returnAsHTML().dispatchEvent(event)
+        expect(callbackPart).toHaveBeenCalled()
+      })
     })
+    
+
+
     test('should not create scale', () => {
       options.scale = false
       _.initView(scaleElements)
@@ -181,7 +225,7 @@ describe('View', () => {
   })
   
 
-  describe('notifyPrimaryElement', () => {
+  describe('notifyPrimary', () => {
     let scaleElements: { [key: string]: string }
     beforeEach(() => {
       scaleElements = {
@@ -195,12 +239,12 @@ describe('View', () => {
     })
     test('should call thumb"s method update', () => {
       const spyThumb = jest.spyOn(_.thumb, 'update');
-      _.notifyPrimaryElement(1, 1)
+      _.notifyPrimary(1, 1)
       expect(spyThumb).toHaveBeenCalled();
     })
   })
 
-  describe('notifyExtraElement', () => {
+  describe('notifyExtra', () => {
     let scaleElements: { [key: string]: string }
     beforeEach(() => {
       scaleElements = {
@@ -213,23 +257,33 @@ describe('View', () => {
       _.initView(scaleElements)
     })
     test('write part to part extra if element is extra', () => {
-      _.notifyExtraElement(100, 0.11)
+      _.notifyExtra(100, 0.11)
       expect(_.partExtra).toEqual(0.11);
     })
     test('should not call update for progress if progress is false', () => {
       options.progress = false
       _.initView(scaleElements)
       const spyProgress = jest.spyOn(_.progress, 'update')
-      _.notifyExtraElement(100, 0.11)
+      _.notifyExtra(100, 0.11)
       expect(spyProgress).not.toHaveBeenCalled()
     })
     test('should call update for satellite if it is true', () => {
       options.satellite = true
       _.initView(scaleElements)
       const spySatellite = jest.spyOn(_.satellite, 'update')
-      _.notifyExtraElement(100, 0.11)
+      _.notifyExtra(100, 0.11)
       expect(spySatellite).toHaveBeenCalled()
     })
+    test('should call update for boundary labels if single', () => {
+      options.double = false
+      options.satellite = true
+      
+      _.initView(scaleElements)
+      const spyLabels = jest.spyOn(_.boundaryLabels, 'update')
+      _.notifyPrimary(100, 0.11)
+      expect(spyLabels).toHaveBeenCalled()
+    })
+    
   })
 
   describe('update', () => {

@@ -61,7 +61,17 @@ describe('Line', () => {
       test('should set click to line ', () => {
         const click = new MouseEvent('click', {
           clientX: 250,
+          clientY: 60
         });
+        Object.defineProperty(_.line, 'offsetTop', {
+          value: 50
+        })
+        Object.defineProperty(_.line, 'offsetHeight', {
+          value: 10
+        })
+        Object.defineProperty(click, 'pageY', {
+          value: 60
+        })
         _.line.dispatchEvent(click);
         expect(callback).toBeCalledWith(0.25);
       });
@@ -70,6 +80,9 @@ describe('Line', () => {
         const click = new MouseEvent('click', {
           clientX: -250,
         });
+        Object.defineProperty(click, 'pageY', {
+          value: 0
+        })
         _.line.dispatchEvent(click);
         expect(callback).toBeCalledWith(0);
       });
@@ -78,6 +91,9 @@ describe('Line', () => {
         const click = new MouseEvent('click', {
           clientX: 1000,
         });
+        Object.defineProperty(click, 'pageY', {
+          value: 0
+        })
         _.line.dispatchEvent(click);
         expect(callback).toBeCalledWith(1);
       });
@@ -90,6 +106,9 @@ describe('Line', () => {
           clientX: 1000,
           clientY: 900,
         });
+        Object.defineProperty(click, 'pageY', {
+          value: 60
+        })
         _.line.dispatchEvent(click);
         expect(callback).not.toHaveBeenCalled()
       });
@@ -129,6 +148,9 @@ describe('Line', () => {
         const click = new MouseEvent('click', {
           clientY: 250,
         });
+        Object.defineProperty(click, 'pageX', {
+          value: 0
+        })
         _.line.dispatchEvent(click);
         expect(callback).toBeCalledWith(0);
       });
@@ -137,6 +159,9 @@ describe('Line', () => {
         const click = new MouseEvent('click', {
           clientY: -500,
         });
+        Object.defineProperty(click, 'pageX', {
+          value: 0
+        })
         _.line.dispatchEvent(click);
         expect(callback).toBeCalledWith(1);
       });
@@ -144,7 +169,11 @@ describe('Line', () => {
       test('should set click to line and call subscriber with 0.2', () => {
         const click = new MouseEvent('click', {
           clientY: 0,
+          clientX: 1000
         });
+        Object.defineProperty(click, 'pageX', {
+          value: 0
+        })
         _.line.dispatchEvent(click);
         expect(callback).toBeCalledWith(0.2);
       });
@@ -154,6 +183,9 @@ describe('Line', () => {
           clientX: 1000,
           clientY: 900,
         });
+        Object.defineProperty(click, 'pageX', {
+          value: 60
+        })
         _.line.dispatchEvent(click);
         expect(callback).not.toHaveBeenCalled()
       });
@@ -178,6 +210,9 @@ describe('Line', () => {
       const click = new MouseEvent('click', {
         clientY: 250,
       });
+      Object.defineProperty(click, 'pageX', {
+        value: 0
+      })
       _.line.dispatchEvent(click);
       expect(callback).not.toBeCalled();
     })
@@ -186,7 +221,7 @@ describe('Line', () => {
   })
   
 
-  describe('size', () => {
+  describe('returnSize', () => {
     test('should return line.offsetWidth and line.offsetHeight', () => {
       Object.defineProperty(_.line, 'offsetWidth', {
         value: 50,
@@ -194,14 +229,14 @@ describe('Line', () => {
       Object.defineProperty(_.line, 'offsetHeight', {
         value: 5,
       })
-      expect(_.size()).toEqual({
+      expect(_.returnSize()).toEqual({
         width: 50,
         height: 5
       })
     })
   })
 
-  describe('side', () => {
+  describe('returnSide', () => {
     test('should return line"s left and line"s bottom', () => {
       Object.defineProperty(_.line, 'offsetLeft', {
         value: 50,
@@ -212,7 +247,7 @@ describe('Line', () => {
       Object.defineProperty(_.line, 'offsetTop', {
         value: 5,
       })
-      expect(_.side()).toEqual({
+      expect(_.returnSide()).toEqual({
         left: 50,
         bottom: 105 
       })

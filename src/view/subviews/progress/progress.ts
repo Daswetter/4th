@@ -13,10 +13,6 @@ class Progress extends SubView{
   initPrimary = (initElement: HTMLElement): void => {
     this.progress = this.init(initElement, this.progress, 'progress')
   }
-
-  public returnAsHTML = (): HTMLElement => {
-    return this.progress
-  }
   
   public setVertical = (): void => {
     this.progress.style.width = this.progress.offsetHeight + 'px'

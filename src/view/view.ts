@@ -84,15 +84,15 @@ class View implements IView {
   private initThumb = (initElement: HTMLElement) : void => {
     this.thumb = new Thumb(initElement) 
     
-    this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical)
-    this.thumb.setInitialSettings(this.line.size(), this.options.vertical)
+    this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical)
+    this.thumb.setInitialSettings(this.line.returnSize(), this.options.vertical)
     this.thumb.bindChangedState(this.partChanged)
 
     if (this.options.double){
       const extra = true
       this.thumb.initExtra(initElement)
-      this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, extra)
-      this.thumb.setInitialSettings(this.line.size(), this.options.vertical, extra)
+      this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
+      this.thumb.setInitialSettings(this.line.returnSize(), this.options.vertical, extra)
       this.thumb.bindExtraChangedState(this.extraPartChanged)
     }    
     
@@ -100,24 +100,23 @@ class View implements IView {
 
   private initSatellite = (initElement: HTMLElement): void => {
     this.satellite = new Satellite(initElement)
-    this.satellite.setInitialSettings(this.line.size().width, this.thumb.size(), this.options.vertical, this.options.min)
+    this.satellite.setInitialSettings(this.line.returnSize().width, this.thumb.size(), this.options.vertical, this.options.min)
 
     if (this.options.double){
       const extra = true
       this.satellite.initExtra(initElement)
-      this.satellite.setInitialSettings(this.line.size().width, this.thumb.size(), this.options.vertical, this.options.max, extra)
+      this.satellite.setInitialSettings(this.line.returnSize().width, this.thumb.size(), this.options.vertical, this.options.max, extra)
     }
   }
   
   private initScale = (initElement: HTMLElement, scaleElements: { [key: string]: string }): void => {
     this.scale = new Scale(initElement)
-    this.scale.bindChangedState(this.partChanged)
-    this.scale.initScale(scaleElements, this.line.size(), this.options.vertical)
-
     if (this.options.double){
       this.scale.bindChangedState(this.changePositionForTheNearest)
+    } else {
+      this.scale.bindChangedState(this.partChanged)
     }
-    
+    this.scale.initScale(scaleElements, this.line.returnSize(), this.options.vertical)
   }
 
   private initProgress = (initElement: HTMLElement): void => {
@@ -125,8 +124,7 @@ class View implements IView {
     if (this.options.vertical){
       this.progress.setVertical()
     }
-    this.progress.setInitialSettings(this.line.size(), this.options.vertical)
-    
+    this.progress.setInitialSettings(this.line.returnSize(), this.options.vertical)
   }
 
   private initInput = (): void => {
@@ -141,7 +139,7 @@ class View implements IView {
 
   private initBoundaryLabels = (initElement: HTMLElement): void => {
     this.boundaryLabels = new BoundaryLabels(initElement)
-    this.boundaryLabels.setInitialSettings(this.options.min, this.options.max, this.line.size().width, this.thumb.size(), this.options.vertical)
+    this.boundaryLabels.setInitialSettings(this.options.min, this.options.max, this.line.returnSize().width, this.thumb.size(), this.options.vertical)
   }
 
   public clearAllView = (): void => {
@@ -158,29 +156,28 @@ class View implements IView {
       this.current = current
     }
 
-    this.thumb.update(part, this.line.size(), this.options.vertical, extra)
+    this.thumb.update(part, this.line.returnSize(), this.options.vertical, extra)
     this.input.update(current, extra)
-    this.options.progress ? this.progress.update(part, this.line.size(), this.options.vertical, extra) : ''
+    this.options.progress ? this.progress.update(part, this.line.returnSize(), this.options.vertical, extra) : ''
 
     if (this.options.satellite) {
-      this.satellite.update(part, current, this.line.size(), this.thumb.size(), this.options.vertical, this.options.double, extra)
+      this.satellite.update(part, current, this.line.returnSize(), this.thumb.size(), this.options.vertical, this.options.double, extra)
 
       if (this.options.double) {
-      this.boundaryLabels.update(this.satellite.returnPrimaryParameters(), this.options.vertical, this.satellite.returnExtraParameters())
+        this.boundaryLabels.update(this.satellite.returnPrimaryParameters(), this.options.vertical, this.satellite.returnExtraParameters())
       } else {
         this.boundaryLabels.update(this.satellite.returnPrimaryParameters(), this.options.vertical)
       }
     }
   }
 
-  public notifyPrimaryElement(current: number, part: number): void{
+  public notifyPrimary(current: number, part: number): void{
     this.notify(current, part)
   }
 
-  public notifyExtraElement(current: number, part: number): void{
+  public notifyExtra(current: number, part: number): void{
     const extra = true
     this.notify(current, part, extra)
-    
   }
 
   private countDistance = (part: number, extra = false): number => {
@@ -196,6 +193,7 @@ class View implements IView {
     const distFromActionToPrimary = this.countDistance(part)
     const extra = true
     const distFromActionToExtra = this.countDistance(part, extra)
+    
 
     if (distFromActionToPrimary > distFromActionToExtra){
       this.extraPartChanged(part)
@@ -208,14 +206,14 @@ class View implements IView {
 
   private initElementsForResized = (): void => {
     this.partChanged(this.part)
-    this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical)
-    this.options.scale ? this.scale.setPosition(this.line.size(), this.options.vertical) : ''
+    this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical)
+    this.options.scale ? this.scale.setPosition(this.line.returnSize(), this.options.vertical) : ''
 
 
     if (this.options.double){
       const extra = true
       this.extraPartChanged(this.partExtra)
-      this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, extra)
+      this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
     }
 
     

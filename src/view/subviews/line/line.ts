@@ -39,18 +39,20 @@ class Line extends SubView{
     this.line.onmousedown = this.onMouseDown.bind(null, vertical)
     this.line.onmouseup = this.onMouseUp.bind(null, vertical)
     
+    
+    
     this.line.addEventListener('click', this.setClickListener.bind(null, vertical))
   }
   
 
-  public size = (): {width: number, height: number} => {
+  public returnSize = (): {width: number, height: number} => {
     return {
       width: this.line.offsetWidth,
       height: this.line.offsetHeight,
     }
   }
 
-  public side = (): {left: number, bottom: number} => { 
+  public returnSide = (): {left: number, bottom: number} => { 
     return {
       left: this.line.offsetLeft,
       bottom: this.line.offsetTop + this.line.offsetHeight
@@ -70,9 +72,9 @@ class Line extends SubView{
       if (vertical){
         this.onClickVertical.call(null, event)
       } else {
+        
         this.onClickHorizontal.call(null, event)
       }
-      
     }
   }
 
@@ -86,8 +88,9 @@ class Line extends SubView{
     } else if (distFromBeginToClick > this.line.offsetWidth) {
       part = 1
     }
-
-    if (event.pageY <= this.line.offsetTop + this.line.offsetHeight){
+    const isOnlyLineClicked = event.pageY <= this.line.offsetTop + this.line.offsetHeight && event.pageY >= this.line.offsetTop
+    
+    if (isOnlyLineClicked) { 
       this.onChanged(part)
     }
   }
@@ -103,7 +106,9 @@ class Line extends SubView{
       part = 1
     }
     
-    if (event.pageX <= this.line.offsetLeft + this.line.offsetWidth){
+    const isOnlyLineClicked = event.pageX <= this.line.offsetLeft + this.line.offsetWidth && event.pageX >= this.line.offsetLeft
+
+    if (isOnlyLineClicked){
       this.onChanged(part)
     }
   }

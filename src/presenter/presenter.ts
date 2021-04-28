@@ -39,10 +39,10 @@ class Presenter{
 
   
   private sendCurrentToView = (current: number, part: number): void => {
-    this.View.notifyPrimaryElement(current, part)
+    this.View.notifyPrimary(current, part)
   }
   private sendExtraToView = (current: number, part: number): void => {
-    this.View.notifyExtraElement(current, part)
+    this.View.notifyExtra(current, part)
   }
 
   
@@ -68,7 +68,7 @@ class Presenter{
     this.View.update(options)
   }
 
-  public returnCurrentValues(): Array<number> {
+  public returnCurrentValues = (): Array<number> => {
     return [this.View.current, this.View.currentExtra]
   }
 

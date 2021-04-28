@@ -60,10 +60,10 @@ describe('Presenter', () => {
       expect(concreteView.bindChangedExtraCurrent).toHaveBeenCalled()
     })
 
-    test('should call notifyPrimaryElement', () => {
-      concreteView.notifyPrimaryElement = jest.fn()
+    test('should call notifyPrimary', () => {
+      concreteView.notifyPrimary = jest.fn()
       _ = new Presenter(concreteView, concreteModel)
-      expect(concreteView.notifyPrimaryElement).toHaveBeenCalled()
+      expect(concreteView.notifyPrimary).toHaveBeenCalled()
     })
 
     test('should call bindChangedValues', () => {
@@ -97,6 +97,22 @@ describe('Presenter', () => {
       _ = new Presenter(concreteView, concreteModel)
       expect(concreteModel.setCurrent).toHaveBeenCalled()
     }) 
+  })
+
+  describe('update', () => {
+    test('should call model"s and view"s methods', () => {
+      const modelUpdate = jest.spyOn(concreteModel, 'update')
+      const viewUpdate = jest.spyOn(concreteView, 'update')
+      _.update(options)
+      expect(modelUpdate).toHaveBeenCalledWith(options)
+      expect(viewUpdate).toHaveBeenCalledWith(options)
+    })
+  })
+
+  describe('returnCurrentValues', () => {
+    test('should return array with current from view', () => {
+      expect(_.returnCurrentValues()).toHaveLength(2)
+    })
   })
 
   
