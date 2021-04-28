@@ -9,10 +9,10 @@ describe('Thumb', () =>{
 
   describe('constructor', () => {
     test('should create div', () => {
-      expect(_.thumb.nodeName).toBe('DIV')
+      expect(_.primary.nodeName).toBe('DIV')
     })
     test('should add correct class', () => {
-      expect(_.thumb.className).toBe('range-slider__thumb')
+      expect(_.primary.className).toBe('range-slider__thumb')
     })
   })
 
@@ -23,10 +23,10 @@ describe('Thumb', () =>{
       _.initExtra(initElement)
     })
     test('should create div', () => {
-      expect(_.thumbExtra.nodeName).toBe('DIV')
+      expect(_.extra.nodeName).toBe('DIV')
     })
     test('should add correct class', () => {
-      expect(_.thumbExtra.classList).toContain('range-slider__thumb')
+      expect(_.extra.classList).toContain('range-slider__thumb')
     })
   })
 
@@ -48,10 +48,10 @@ describe('Thumb', () =>{
       Object.defineProperty(mouseDown, 'pageX', {
         value: 380
       })
-      Object.defineProperty(_.thumb, 'offsetLeft', {
+      Object.defineProperty(_.primary, 'offsetLeft', {
         value: 360,
       })
-      Object.defineProperty(_.thumb, 'offsetWidth', {
+      Object.defineProperty(_.primary, 'offsetWidth', {
         value: 10,
       })
       
@@ -61,7 +61,7 @@ describe('Thumb', () =>{
       })
 
 
-      _.thumb.dispatchEvent(mouseDown);
+      _.primary.dispatchEvent(mouseDown);
       document.dispatchEvent(mouseMove);
 
       expect(callback).toBeCalledWith(1)
@@ -87,10 +87,10 @@ describe('Thumb', () =>{
       Object.defineProperty(mouseDown, 'pageY', {
         value: 380
       })
-      Object.defineProperty(_.thumbExtra, 'offsetTop', {
+      Object.defineProperty(_.extra, 'offsetTop', {
         value: 360,
       })
-      Object.defineProperty(_.thumbExtra, 'offsetHeight', {
+      Object.defineProperty(_.extra, 'offsetHeight', {
         value: 10,
       })
 
@@ -100,7 +100,7 @@ describe('Thumb', () =>{
         value: 250
       })
 
-      _.thumbExtra.dispatchEvent(mouseDown);
+      _.extra.dispatchEvent(mouseDown);
       document.dispatchEvent(mouseMove);
 
       expect(callback).toBeCalled()
@@ -116,21 +116,21 @@ describe('Thumb', () =>{
     })
 
     describe('update', () => {
-      test('should set correct style.left to thumb and horizontal', () => {
+      test('should set correct style.left to primary and horizontal', () => {
         const vertical = false
         const extra = false
         const lineSize = {
           width: 50,
           height: 10
         }
-        Object.defineProperty(_.thumb, 'offsetWidth', {
+        Object.defineProperty(_.primary, 'offsetWidth', {
           value: '10'
         })
         _.update(0.6, lineSize, vertical, extra)
-        expect(_.thumb.style.left).toBe('25px')
+        expect(_.primary.style.left).toBe('25px')
       })
 
-      test('should set correct style.left to thumbExtra and horizontal', () => {
+      test('should set correct style.left to extra and horizontal', () => {
         const vertical = false
         const extra = true
         const initElement = document.createElement('div')
@@ -139,28 +139,28 @@ describe('Thumb', () =>{
           width: 300,
           height: 20
         }
-        Object.defineProperty(_.thumbExtra, 'offsetWidth', {
+        Object.defineProperty(_.extra, 'offsetWidth', {
           value: '15'
         }) 
         _.update(0.8, lineSize, vertical, extra)
-        expect(_.thumbExtra.style.left).toBe('232.5px')
+        expect(_.extra.style.left).toBe('232.5px')
       })
 
-      test('should set correct style.left to thumb and vertical', () => {
+      test('should set correct style.left to primary and vertical', () => {
         const vertical = true
         const extra = false
         const lineSize = {
           width: 5,
           height: 100
         }
-        Object.defineProperty(_.thumb, 'offsetHeight', {
+        Object.defineProperty(_.primary, 'offsetHeight', {
           value: '10'
         })
         _.update(1, lineSize, vertical, extra)
-        expect(_.thumb.style.bottom).toBe('95px')
+        expect(_.primary.style.bottom).toBe('95px')
       })
 
-      test('should set correct style.left to thumbExtra and vertical', () => {
+      test('should set correct style.left to extra and vertical', () => {
         const vertical = true
         const extra = true
         const initElement = document.createElement('div')
@@ -169,30 +169,30 @@ describe('Thumb', () =>{
           width: 50,
           height: 1000
         }
-        Object.defineProperty(_.thumbExtra, 'offsetHeight', {
+        Object.defineProperty(_.extra, 'offsetHeight', {
           value: '5'
         })
         _.update(0.6, lineSize, vertical, extra)
-        expect(_.thumbExtra.style.bottom).toBe('597.5px')
+        expect(_.extra.style.bottom).toBe('597.5px')
       })
       
     })
   })
 
   describe('setInitialSetting', () => {
-    test('should set style top for thumb and horizontal mod', () => {
+    test('should set style top for primary and horizontal mod', () => {
       const lineSize = {
         width: 120,
         height: 12
       }
-      Object.defineProperty(_.thumb, 'offsetHeight', {
+      Object.defineProperty(_.primary, 'offsetHeight', {
         value: 15
       })
       _.setInitialSettings(lineSize)
-      expect(_.thumb.style.top).toBe('-1.5px')
+      expect(_.primary.style.top).toBe('-1.5px')
     })
 
-    test('should set style top for thumbExtra and horizontal mod', () => {
+    test('should set style top for extra and horizontal mod', () => {
       const vertical = false
       const initElement = document.createElement('div')
       _.initExtra(initElement)
@@ -200,28 +200,28 @@ describe('Thumb', () =>{
         width: 256,
         height: 12
       }
-      Object.defineProperty(_.thumbExtra, 'offsetHeight', {
+      Object.defineProperty(_.extra, 'offsetHeight', {
         value: 5
       })
       _.setInitialSettings(lineSize, vertical, true)
-      expect(_.thumbExtra.style.top).toBe('3.5px')
+      expect(_.extra.style.top).toBe('3.5px')
     })
 
-    test('should set style top for thumb and vertical mod', () => {
+    test('should set style top for primary and vertical mod', () => {
       const vertical = true
       const lineSize = {
         width: 500,
         height: 4
       }
-      Object.defineProperty(_.thumb, 'offsetWidth', {
+      Object.defineProperty(_.primary, 'offsetWidth', {
         value: 10
       })
       _.setInitialSettings(lineSize, vertical)
-      expect(_.thumb.style.top).toBe('')
-      expect(_.thumb.style.left).toBe('245px')
+      expect(_.primary.style.top).toBe('')
+      expect(_.primary.style.left).toBe('245px')
     })
 
-    test('should set style top for thumbExtra and vertical mod', () => {
+    test('should set style top for extra and vertical mod', () => {
       const vertical = true
       const initElement = document.createElement('div')
       _.initExtra(initElement)
@@ -229,21 +229,21 @@ describe('Thumb', () =>{
         width: 1200,
         height: 2
       }
-      Object.defineProperty(_.thumbExtra, 'offsetWidth', {
+      Object.defineProperty(_.extra, 'offsetWidth', {
         value: 5
       })
       _.setInitialSettings(lineSize, vertical, true)
-      expect(_.thumbExtra.style.top).toBe('')
-      expect(_.thumbExtra.style.left).toBe('597.5px')
+      expect(_.extra.style.top).toBe('')
+      expect(_.extra.style.left).toBe('597.5px')
     })
   })
 
   describe('size', () => {
-    test('should return an object with thumb size', () => {
-      Object.defineProperty(_.thumb, 'offsetWidth', {
+    test('should return an object with primary size', () => {
+      Object.defineProperty(_.primary, 'offsetWidth', {
         value: 150
       })
-      Object.defineProperty(_.thumb, 'offsetHeight', {
+      Object.defineProperty(_.primary, 'offsetHeight', {
         value: 50
       })
       expect(_.size()).toEqual({
