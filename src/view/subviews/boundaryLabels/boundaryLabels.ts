@@ -18,8 +18,8 @@ class BoundaryLabels extends SubView {
     element.innerText = String(text)
   }
 
-  private setPositionToHorizontal = (element: HTMLElement, satelliteTop: number): void => {
-    element.style.top = satelliteTop + 'px'
+  private setPositionToHorizontal = (element: HTMLElement, thumbHeight: number): void => {
+    element.style.top = - element.offsetHeight - thumbHeight / 2 + 'px'
     const side = - element.offsetWidth / 2 + 'px'
 
     if (element === this.min){
@@ -40,16 +40,16 @@ class BoundaryLabels extends SubView {
     }
   }
 
-  public setInitialSettings = (min: number, max: number, satelliteTop: number, lineWidth: number, thumbWidth: number, vertical = false): void => {
+  public setInitialSettings = (min: number, max: number, lineWidth: number, thumbSize: { width: number, height: number}, vertical = false): void => {
     this.printInnerText(this.min, min)
     this.printInnerText(this.max, max)
 
     if (vertical) {
-      this.setPositionToVertical(this.min, lineWidth, thumbWidth)
-      this.setPositionToVertical(this.max, lineWidth, thumbWidth)
+      this.setPositionToVertical(this.min, lineWidth, thumbSize.width)
+      this.setPositionToVertical(this.max, lineWidth, thumbSize.width)
     } else {
-      this.setPositionToHorizontal(this.min, satelliteTop)
-      this.setPositionToHorizontal(this.max, satelliteTop)
+      this.setPositionToHorizontal(this.min, thumbSize.height)
+      this.setPositionToHorizontal(this.max, thumbSize.height)
     }
     
   }

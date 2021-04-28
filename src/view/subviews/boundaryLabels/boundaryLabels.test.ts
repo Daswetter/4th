@@ -17,16 +17,20 @@ describe('BoundaryLabels', () => {
   describe('setInitialSettings', () => {
     let min: number
     let max: number
-    let satelliteTop: number
     let lineWidth: number
-    let thumbWidth: number
+    let thumbSize: {
+      width: number,
+      height: number
+    }
     beforeEach(() => {
       min = 100
       max = 200
-      satelliteTop = 150
       lineWidth = 500
-      thumbWidth = 500
-      _.setInitialSettings(min, max, satelliteTop,lineWidth, thumbWidth)
+      thumbSize = {
+        width: 500,
+        height: 10
+      }
+      _.setInitialSettings(min, max, lineWidth, thumbSize)
     })
     test('should set correct style.bottom for min', () => {
       expect(_.min.innerText).toBe(String(min))
@@ -36,7 +40,7 @@ describe('BoundaryLabels', () => {
       Object.defineProperty(_.min, 'offsetHeight', {
         value: 50
       })
-      _.setInitialSettings(min, max, satelliteTop,lineWidth, thumbWidth, vertical)
+      _.setInitialSettings(min, max,lineWidth, thumbSize, vertical)
       
       expect(_.min.style.bottom).toBe('-25px')
     })
@@ -79,7 +83,7 @@ describe('BoundaryLabels', () => {
       _.update(satelliteParams, vertical)
       expect(_.max.style.opacity).toBe('1')
     })
-    test('', () => {
+    test('should set correct min opacity', () => {
       vertical = false
       Object.defineProperty(_.min, 'offsetLeft', {
         value: 500

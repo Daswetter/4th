@@ -1,3 +1,5 @@
+import { IOptions } from './../interface/IOptions'
+
 import { Wrapper } from './subViews/wrapper/wrapper'
 import { Line } from './subViews/line/line'
 import { Thumb } from './subViews/thumb/thumb'
@@ -5,10 +7,10 @@ import { Progress } from './subViews/progress/progress'
 import { Scale } from './subViews/scale/scale'
 import { Satellite } from './subViews/satellite/satellite'
 import { Input } from './subViews/input/input'
-
-import { IOptions } from './../interface/IOptions'
-import { IView } from './IView'
 import { BoundaryLabels } from './subViews/boundaryLabels/boundaryLabels'
+
+import { IView } from './IView'
+
 class View implements IView { 
   public wrapper!: Wrapper
   public line!: Line
@@ -41,26 +43,22 @@ class View implements IView {
     this.initWrapper(this.initElement)
     this.initLine(this.wrapper.returnAsHTML())
     this.initThumb(this.line.returnAsHTML())
-    
+    this.initBoundaryLabels(this.line.returnAsHTML())
+    // ? What if input doest exist
+    this.initInput()
+
     this.options.satellite ? this.initSatellite(this.line.returnAsHTML()): ''
     this.options.progress ? this.initProgress(this.line.returnAsHTML()) : ''
-    this.initInput()
     this.options.scale ? this.initScale(this.line.returnAsHTML(), scaleElements): ''
-    this.initBoundaryLabels(this.line.returnAsHTML())
-  
     
     this.currentChanged(this.options.from)
-    if (this.options.double){
-      this.extraCurrentChanged(this.options.to as number)
-    }
-
-    window.addEventListener('resize', this.initElementsForResized)
+    this.options.double ? this.extraCurrentChanged(this.options.to as number): ''
     
+    window.addEventListener('resize', this.initElementsForResized)
   }
 
   private initWrapper = (initElement: HTMLElement): void => {
     this.wrapper = new Wrapper(initElement)
-    
     this.initElement.append(this.wrapper.returnAsHTML())
     if (this.options.vertical){
       this.wrapper.setVertical()
@@ -69,15 +67,14 @@ class View implements IView {
 
   private initLine = (initElement: HTMLElement) : void => {
     this.line = new Line(initElement)
-    
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
     if (this.options.vertical){
       this.line.setVertical()
     }
+
     this.line.setEventListener(this.options.vertical)
     this.line.bindChangedState(this.partChanged)
 
-    
     if (this.options.double){
       this.line.bindChangedState(this.changePositionForTheNearest)
     }
@@ -85,19 +82,18 @@ class View implements IView {
   }
 
   private initThumb = (initElement: HTMLElement) : void => {
-    let elementName = 'primary'
     this.thumb = new Thumb(initElement) 
     
     
-    this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, elementName)
+    this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical)
     this.thumb.setInitialSettings(this.line.size(), this.options.vertical)
     this.thumb.bindChangedState(this.partChanged)
 
     if (this.options.double){
-      elementName = 'extra'
+      const extra = true
       this.thumb.initExtraElement(initElement)
-      this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, elementName)
-      this.thumb.setInitialSettings(this.line.size(), this.options.vertical, elementName)
+      this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, extra)
+      this.thumb.setInitialSettings(this.line.size(), this.options.vertical, extra)
       this.thumb.bindExtraChangedState(this.extraPartChanged)
     }    
     
@@ -145,7 +141,7 @@ class View implements IView {
 
   private initBoundaryLabels = (initElement: HTMLElement): void => {
     this.boundaryLabels = new BoundaryLabels(initElement)
-    this.boundaryLabels.setInitialSettings(this.options.min, this.options.max, this.satellite.returnPrimaryParameters().top, this.line.size().width, this.thumb.size().width, this.options.vertical)
+    this.boundaryLabels.setInitialSettings(this.options.min, this.options.max, this.line.size().width, this.thumb.size(), this.options.vertical)
   }
 
   public clearAllView = (): void => {
@@ -165,15 +161,16 @@ class View implements IView {
     this.thumb.update(part, this.line.size(), this.options.vertical, extra)
     this.input.update(current, extra)
     this.options.progress ? this.progress.update(part, this.line.size(), this.options.vertical, extra) : ''
-    this.options.satellite ? this.satellite.update(part, current, this.line.size(), this.thumb.size(), this.options.vertical, this.options.double, extra) : ''
 
-    if (this.options.double) {
+    if (this.options.satellite) {
+      this.satellite.update(part, current, this.line.size(), this.thumb.size(), this.options.vertical, this.options.double, extra)
+
+      if (this.options.double) {
       this.boundaryLabels.update(this.satellite.returnPrimaryParameters(), this.options.vertical, this.satellite.returnExtraParameters())
-    } else {
-      this.boundaryLabels.update(this.satellite.returnPrimaryParameters(), this.options.vertical)
+      } else {
+        this.boundaryLabels.update(this.satellite.returnPrimaryParameters(), this.options.vertical)
+      }
     }
-    
-    
   }
 
   public notifyPrimaryElement(current: number, part: number): void{
@@ -186,9 +183,9 @@ class View implements IView {
     
   }
 
-  private countDistance = (part: number, element: string): number => {
+  private countDistance = (part: number, extra = false): number => {
     let currentPart = this.part
-    if (element === 'extra'){
+    if (extra){
       currentPart = this.partExtra
     }
     const dist = Math.abs(currentPart - part)
@@ -196,8 +193,9 @@ class View implements IView {
   }
 
   private changePositionForTheNearest = (part: number): void => {
-    const distFromActionToPrimary = this.countDistance(part, 'primary')
-    const distFromActionToExtra = this.countDistance(part, 'extra')
+    const distFromActionToPrimary = this.countDistance(part)
+    const extra = true
+    const distFromActionToExtra = this.countDistance(part, extra)
 
     if (distFromActionToPrimary > distFromActionToExtra){
       this.extraPartChanged(part)
@@ -209,16 +207,15 @@ class View implements IView {
 
 
   private initElementsForResized = (): void => {
-    let element = 'primary'
     this.partChanged(this.part)
-    this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, element)
+    this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical)
     this.options.scale ? this.scale.setPosition(this.line.size(), this.options.vertical) : ''
 
 
     if (this.options.double){
-      element = 'extra'
+      const extra = true
       this.extraPartChanged(this.partExtra)
-      this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, element)
+      this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, extra)
     }
 
     

@@ -98,6 +98,7 @@ describe('View', () => {
     })
   })
 
+
   describe('initView', () => {
     let scaleElements: { [key: string]: string }
     beforeEach(() => {
@@ -125,6 +126,7 @@ describe('View', () => {
     test('should call mock for extra if line was clicked near extra thumb', () => {
       options.double = true
       options.vertical = false
+      options.step = 1
       _.initView(scaleElements)
       _.notifyPrimaryElement(-1700, 0.05)
       _.notifyExtraElement(100, 0.95)
@@ -158,7 +160,6 @@ describe('View', () => {
       _.initView(scaleElements)
       expect(_.satellite.extra).not.toBeTruthy()
     })
-    
   })
   
   describe('clearAllView', () => {
@@ -214,12 +215,6 @@ describe('View', () => {
     test('write part to part extra if element is extra', () => {
       _.notifyExtraElement(100, 0.11)
       expect(_.partExtra).toEqual(0.11);
-    })
-    test('should not call update for input if input is false', () => {
-      _.initView(scaleElements)
-      const spyInput = jest.spyOn(_.input, 'update')
-      _.notifyExtraElement(100, 0.11)
-      expect(spyInput).not.toHaveBeenCalled()
     })
     test('should not call update for progress if progress is false', () => {
       options.progress = false

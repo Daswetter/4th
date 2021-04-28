@@ -44,11 +44,11 @@ class Thumb extends SubView{
     element.onmousedown = this.onMouseDown.bind(null, element, params)   
   }
 
-  public setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical = false, elementName = 'primary'): void => {
+  public setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical = false, extra = false): void => {
     const params = this.getOrientationParams(vertical, lineSize, lineSide)
     let element = this.thumb
 
-    if (elementName === 'extra'){
+    if (extra){
       element = this.thumbExtra
     }
     this.setOnMouseDown(element, params)
@@ -133,13 +133,13 @@ class Thumb extends SubView{
     return initParameter
   }
   
-  public setInitialSettings = (lineSize: {width: number, height: number}, vertical = false, elementName = 'primary'): void => {
+  public setInitialSettings = (lineSize: {width: number, height: number}, vertical = false, extra = false): void => {
     let lineSizeParam = lineSize.height
     let element = this.thumb
     let thumbSizeName = 'offsetHeight' as keyof HTMLElement
 
     if (!vertical){
-      if (elementName === 'extra'){
+      if (extra){
         element = this.thumbExtra
       }
       element.style.top = this.countInitialParameter(element, lineSizeParam, thumbSizeName)
@@ -148,7 +148,7 @@ class Thumb extends SubView{
     if (vertical){
       lineSizeParam = lineSize.width
       thumbSizeName = 'offsetWidth'
-      if (elementName === 'extra'){
+      if (extra){
         element = this.thumbExtra
       }
       element.style.top = ''
