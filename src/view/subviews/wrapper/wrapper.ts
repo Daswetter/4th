@@ -8,7 +8,7 @@ class Wrapper extends SubView{
     this.initPrimaryElement(initElement)
   }
   
-  initPrimaryElement = (initElement: HTMLElement): void => {
+  private initPrimaryElement = (initElement: HTMLElement): void => {
     this.wrapper = this.init(initElement, this.wrapper, 'wrapper')
   }
 
@@ -17,8 +17,7 @@ class Wrapper extends SubView{
   }
 
   public setVertical = (): void => {
-    this.wrapper.style.flexDirection = 'row'
-    this.wrapper.style.alignItems = 'flex-start'
+    this.wrapper.classList.add('.range-slider__wrapper_vertical')
   }
 
 }

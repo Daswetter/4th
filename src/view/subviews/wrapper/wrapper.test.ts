@@ -25,8 +25,7 @@ describe('Wrapper', () => {
   describe('setVertical', () => {
     test('should add new styles', () => {
       _.setVertical()
-      expect(_.wrapper.style.flexDirection).toEqual('row')
-      expect(_.wrapper.style.alignItems).toEqual('flex-start')
+      expect(_.wrapper.className).toContain('range-slider__wrapper_vertical')
     })
   })
   

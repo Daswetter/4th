@@ -11,6 +11,10 @@ html {
   display: flex;
   flex-direction: column;
 }
+.range-slider__wrapper_vertical{
+  flex-direction: row;
+  align-items: flex-start;
+}
 .range-slider__line{
   position: relative;
   cursor: pointer;
