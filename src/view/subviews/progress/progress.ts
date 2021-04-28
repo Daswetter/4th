@@ -7,10 +7,10 @@ class Progress extends SubView{
 
   constructor(initElement: HTMLElement){
     super()
-    this.initPrimaryElement(initElement)
+    this.initPrimary(initElement)
   }
 
-  initPrimaryElement = (initElement: HTMLElement): void => {
+  initPrimary = (initElement: HTMLElement): void => {
     this.progress = this.init(initElement, this.progress, 'progress')
   }
 

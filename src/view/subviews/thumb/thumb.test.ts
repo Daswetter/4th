@@ -20,7 +20,7 @@ describe('Thumb', () =>{
   describe('initExtraElement', () => {
     beforeEach(() => {
       const initElement = document.createElement('div')
-      _.initExtraElement(initElement)
+      _.initExtra(initElement)
     })
     test('should create div', () => {
       expect(_.thumbExtra.nodeName).toBe('DIV')
@@ -72,7 +72,7 @@ describe('Thumb', () =>{
       const callback = jest.fn()
       _.bindExtraChangedState(callback)
       const initElement = document.createElement('div')
-      _.initExtraElement(initElement)
+      _.initExtra(initElement)
       const lineSize ={
         width: 50,
         height: 6
@@ -81,7 +81,7 @@ describe('Thumb', () =>{
         left: 60,
         bottom: 100
       }
-      _.setEventListener(lineSize, lineSide, vertical, 'extra')
+      _.setEventListener(lineSize, lineSide, vertical, true)
 
       const mouseDown = new MouseEvent('mousedown');
       Object.defineProperty(mouseDown, 'pageY', {
@@ -134,7 +134,7 @@ describe('Thumb', () =>{
         const vertical = false
         const extra = true
         const initElement = document.createElement('div')
-        _.initExtraElement(initElement)
+        _.initExtra(initElement)
         const lineSize = {
           width: 300,
           height: 20
@@ -164,7 +164,7 @@ describe('Thumb', () =>{
         const vertical = true
         const extra = true
         const initElement = document.createElement('div')
-        _.initExtraElement(initElement)
+        _.initExtra(initElement)
         const lineSize = {
           width: 50,
           height: 1000
@@ -195,7 +195,7 @@ describe('Thumb', () =>{
     test('should set style top for thumbExtra and horizontal mod', () => {
       const vertical = false
       const initElement = document.createElement('div')
-      _.initExtraElement(initElement)
+      _.initExtra(initElement)
       const lineSize = {
         width: 256,
         height: 12
@@ -203,7 +203,7 @@ describe('Thumb', () =>{
       Object.defineProperty(_.thumbExtra, 'offsetHeight', {
         value: 5
       })
-      _.setInitialSettings(lineSize, vertical, 'extra')
+      _.setInitialSettings(lineSize, vertical, true)
       expect(_.thumbExtra.style.top).toBe('3.5px')
     })
 
@@ -224,7 +224,7 @@ describe('Thumb', () =>{
     test('should set style top for thumbExtra and vertical mod', () => {
       const vertical = true
       const initElement = document.createElement('div')
-      _.initExtraElement(initElement)
+      _.initExtra(initElement)
       const lineSize = {
         width: 1200,
         height: 2
@@ -232,7 +232,7 @@ describe('Thumb', () =>{
       Object.defineProperty(_.thumbExtra, 'offsetWidth', {
         value: 5
       })
-      _.setInitialSettings(lineSize, vertical, 'extra')
+      _.setInitialSettings(lineSize, vertical, true)
       expect(_.thumbExtra.style.top).toBe('')
       expect(_.thumbExtra.style.left).toBe('597.5px')
     })

@@ -14,7 +14,7 @@ class Satellite extends SubView {
     this.united = this.initUnited()
   }
 
-  initPrimary = (initElement: HTMLElement): void => {
+  private initPrimary = (initElement: HTMLElement): void => {
     this.primary = this.init(initElement, this.primary, 'satellite')
   }
 
@@ -34,25 +34,21 @@ class Satellite extends SubView {
     element.style.top =  - element.offsetHeight - thumbHeight / 2 + 'px'
   }
   
-  public setInitialSettingsToPrimary = (lineWidth: number, thumbSize: {width: number, height: number }, vertical: boolean, min: number ): void => {
-    this.printInnerText(this.primary, min)
-    if (vertical) {
-      this.setRightToVertical(this.primary, lineWidth, thumbSize.width)
+  public setInitialSettings = (lineWidth: number, thumbSize: {width: number, height: number }, vertical: boolean, value: number, extra = false ): void => {
+    let element: HTMLElement
+    if (extra){
+      element = this.extra
     } else {
-      this.setTopToHorizontal(this.primary, thumbSize.height)
+      element = this.primary
+    }
+    this.printInnerText(element, value)
+
+    if (vertical) {
+      this.setRightToVertical(element, lineWidth, thumbSize.width)
+    } else {
+      this.setTopToHorizontal(element, thumbSize.height)
     }
   }
-
-  public setInitialSettingsToExtra = (lineWidth: number, thumbSize: {width: number, height: number }, vertical: boolean, max: number): void => {
-    this.printInnerText(this.extra, max)
-    if (vertical) {
-      this.setRightToVertical(this.extra, lineWidth, thumbSize.width)
-    } else {
-      this.setTopToHorizontal(this.extra, thumbSize.height)
-    }
-  }
-
-
 
   private setPosition = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, vertical: boolean ): void => {
 
@@ -111,17 +107,13 @@ class Satellite extends SubView {
     if (vertical){
       stickTogether = this.primary.offsetTop <= this.extra.offsetTop + this.extra.offsetHeight && this.primary.offsetTop + this.primary.offsetHeight >= this.extra.offsetTop
     } 
-
-    if (stickTogether){
-      this.switchOpacity(this.united, true)
-      this.switchOpacity(this.primary, false)
-      this.switchOpacity(this.extra, false)
-    } else {
-      this.switchOpacity(this.united, false)
-      this.switchOpacity(this.primary, true)
-      this.switchOpacity(this.extra, true)
-    } 
     
+    const unitedIsOn = true
+    if (stickTogether){      
+      this.switchOpacity(unitedIsOn)
+    } else {
+      this.switchOpacity()
+    } 
   }
 
   private setPositionToUnited = (lineWidth: number, thumbWidth: number, vertical: boolean): void => {
@@ -137,12 +129,16 @@ class Satellite extends SubView {
     } 
   }
 
-  private switchOpacity = (element: HTMLElement, on: boolean): void => {
-    let opacity = '0'
-    if (on){
-      opacity = '1' 
+  private switchOpacity = (unitedIsOn = false): void => {
+    if (unitedIsOn){
+      this.united.style.opacity = '1'
+      this.primary.style.opacity = '0'
+      this.extra.style.opacity = '0'
+    } else {
+      this.united.style.opacity = '0'
+      this.primary.style.opacity = '1'
+      this.extra.style.opacity = '1'
     }
-    element.style.opacity = opacity
   }
 
   public update = (part: number, current: number, lineSize: {width: number, height: number}, thumbSize: {width: number, height: number}, vertical: boolean, double: boolean, extra: boolean): void => {

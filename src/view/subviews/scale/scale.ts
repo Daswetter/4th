@@ -1,14 +1,14 @@
-import { SubView } from "../SubView";
+import { SubView } from '../SubView';
 
 class Scale extends SubView{
   public scale!: HTMLElement 
   scaleElements:{ [key: string]: HTMLElement } = {}
   constructor(initElement: HTMLElement){
     super()
-    this.initPrimaryElement(initElement)
+    this.initPrimary(initElement)
   }
 
-  initPrimaryElement = (initElement: HTMLElement): void => {
+  private initPrimary = (initElement: HTMLElement): void => {
     this.scale = this.init(initElement, this.scale, 'scale')
   }
   
@@ -34,8 +34,6 @@ class Scale extends SubView{
     }
   }
   
-
-
   public setPosition = (lineSize: { width: number; height: number }, vertical: boolean): void => {
     for (const part in this.scaleElements){
       this.scaleElements[part].style.left = (+part) * lineSize.width - this.scaleElements[part].offsetWidth / 2 + 'px'

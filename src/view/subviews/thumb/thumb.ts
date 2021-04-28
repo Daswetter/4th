@@ -7,14 +7,14 @@ class Thumb extends SubView{
 
   constructor(initElement: HTMLElement){
     super()
-    this.initPrimaryElement(initElement)
+    this.initPrimary(initElement)
   }
   
-  initPrimaryElement = (initElement: HTMLElement): void => {
+  private initPrimary = (initElement: HTMLElement): void => {
     this.thumb = this.init(initElement, this.thumb, 'thumb')
   }
 
-  public initExtraElement = (initElement: HTMLElement): void => {
+  public initExtra = (initElement: HTMLElement): void => {
     this.thumbExtra = this.init(initElement, this.thumbExtra, 'thumb')
   }
 

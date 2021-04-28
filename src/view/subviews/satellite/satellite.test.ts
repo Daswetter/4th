@@ -70,6 +70,7 @@ describe('Satellite', () => {
         width: 150,
         height: 20
       }
+      _.setInitialSettings(lineSize.width, thumbSize, vertical, 500, extra)
       _.update(0.5, 500, lineSize, thumbSize, vertical, double, extra)
       expect(_.extra.innerText).toBe('500')
       expect(_.extra.style.left).toBe('60px')
@@ -80,17 +81,19 @@ describe('Satellite', () => {
       const vertical = true
       const double = true
       const extra = false
+
       lineSize = {
         width: 10,
         height: 300,
       }
       thumbSize = {
-        width: 20,
+        width: 21,
         height: 20,
       }
+      _.setInitialSettings(lineSize.width, thumbSize, vertical, 100)
       _.update(1, 125, lineSize, thumbSize, vertical, double, extra)
       expect(_.primary.innerText).toBe('125')
-      expect(_.primary.style.left).toBe('-40px')
+      expect(_.primary.style.right).toBe('17px')
       expect(_.primary.style.top).toBe('-10px')
     })
 
@@ -111,11 +114,71 @@ describe('Satellite', () => {
 
     test('should set inner text to primary', () => {
       const vertical = false
+      const double = true
+      const extra = false
+      Object.defineProperty(_.primary, 'offsetLeft', {
+        value: 1000
+      })
+      
+      _.update(1, 10, lineSize, thumbSize, vertical, double, extra)
+      expect(_.primary.innerText).toBe('10')
+    })
+
+    test('should set inner text to primary if single', () => {
+      const vertical = false
       const double = false
       const extra = false
       
       _.update(1, 10, lineSize, thumbSize, vertical, double, extra)
       expect(_.primary.innerText).toBe('10')
+    })
+  })
+
+  describe('returnPrimaryParameters', () => {
+    test('should return correct object', () => {
+      Object.defineProperty(_.primary, 'offsetWidth', {
+        value: 10
+      })
+      Object.defineProperty(_.primary, 'offsetHeight', {
+        value: 20
+      })
+      Object.defineProperty(_.primary, 'offsetLeft', {
+        value: 30
+      })
+      Object.defineProperty(_.primary, 'offsetTop', {
+        value: 40
+      })
+      expect(_.returnPrimaryParameters()).toEqual({
+        width: 10,
+        height: 20,
+        left: 30,
+        top: 40,
+      })
+    })
+  })
+
+  describe('returnExtraParameters', () => {
+    test('should return correct object', () => {
+      const initElement = document.createElement('div')
+      _.initExtra(initElement)
+      Object.defineProperty(_.extra, 'offsetWidth', {
+        value: 10
+      })
+      Object.defineProperty(_.extra, 'offsetHeight', {
+        value: 20
+      })
+      Object.defineProperty(_.extra, 'offsetLeft', {
+        value: 30
+      })
+      Object.defineProperty(_.extra, 'offsetTop', {
+        value: 40
+      })
+      expect(_.returnExtraParameters()).toEqual({
+        width: 10,
+        height: 20,
+        left: 30,
+        top: 40,
+      })
     })
   })
 })

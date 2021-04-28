@@ -5,10 +5,10 @@ class Wrapper extends SubView{
 
   constructor(initElement: HTMLElement){
     super()
-    this.initPrimaryElement(initElement)
+    this.initPrimary(initElement)
   }
   
-  private initPrimaryElement = (initElement: HTMLElement): void => {
+  private initPrimary = (initElement: HTMLElement): void => {
     this.wrapper = this.init(initElement, this.wrapper, 'wrapper')
   }
 

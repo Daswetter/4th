@@ -84,14 +84,13 @@ class View implements IView {
   private initThumb = (initElement: HTMLElement) : void => {
     this.thumb = new Thumb(initElement) 
     
-    
     this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical)
     this.thumb.setInitialSettings(this.line.size(), this.options.vertical)
     this.thumb.bindChangedState(this.partChanged)
 
     if (this.options.double){
       const extra = true
-      this.thumb.initExtraElement(initElement)
+      this.thumb.initExtra(initElement)
       this.thumb.setEventListener(this.line.size(), this.line.side(), this.options.vertical, extra)
       this.thumb.setInitialSettings(this.line.size(), this.options.vertical, extra)
       this.thumb.bindExtraChangedState(this.extraPartChanged)
@@ -101,11 +100,12 @@ class View implements IView {
 
   private initSatellite = (initElement: HTMLElement): void => {
     this.satellite = new Satellite(initElement)
-    this.satellite.setInitialSettingsToPrimary(this.line.size().width, this.thumb.size(), this.options.vertical, this.options.min)
+    this.satellite.setInitialSettings(this.line.size().width, this.thumb.size(), this.options.vertical, this.options.min)
 
     if (this.options.double){
+      const extra = true
       this.satellite.initExtra(initElement)
-      this.satellite.setInitialSettingsToExtra(this.line.size().width, this.thumb.size(), this.options.vertical, this.options.max)
+      this.satellite.setInitialSettings(this.line.size().width, this.thumb.size(), this.options.vertical, this.options.max, extra)
     }
   }
   
