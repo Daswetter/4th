@@ -2,7 +2,7 @@ import { SubView } from '../SubView';
 
 class Scale extends SubView{
   public scale!: HTMLElement 
-  private scaleElements:{ [key: string]: HTMLElement } = {}
+  public scaleElements:{ [key: string]: HTMLElement } = {}
 
   constructor(initElement: HTMLElement){
     super()

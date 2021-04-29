@@ -12,6 +12,7 @@ class Line extends SubView{
 
   private initPrimary = (initElement: HTMLElement): void => {
     this.line = this.init(initElement, this.line, 'line')
+    this.line.classList.add('range-slider__line_horizontal')
   }
 
   public returnAsHTML = (): HTMLElement => {
@@ -35,16 +36,12 @@ class Line extends SubView{
   }
 
   public setEventListener = (vertical: boolean): void => {
-
     this.line.onmousedown = this.onMouseDown.bind(null, vertical)
     this.line.onmouseup = this.onMouseUp.bind(null, vertical)
-    
-    
-    
+
     this.line.addEventListener('click', this.setClickListener.bind(null, vertical))
   }
   
-
   public returnSize = (): {width: number, height: number} => {
     return {
       width: this.line.offsetWidth,
@@ -59,13 +56,13 @@ class Line extends SubView{
     }
   }
 
-  public setVertical = (): void => {
-    const width = this.line.offsetWidth
-    const height = this.line.offsetHeight
-    this.line.style.width = height + 'px'
-    this.line.style.height = width + 'px'
+  public setInitialSettings = (vertical: boolean): void => {
+    if (vertical) {
+      this.line.classList.add('range-slider__line_vertical')
+    } else {
+      this.line.classList.add('range-slider__line_horizontal')
+    }
   }
-
 
   private setClickListener = (vertical: boolean, event: MouseEvent) : void => {
     if ( this.mouseDownValue === this.mouseUpValue){

@@ -13,17 +13,14 @@ class Progress extends SubView{
   private initPrimary = (initElement: HTMLElement): void => {
     this.progress = this.init(initElement, this.progress, 'progress')
   }
-  
-  public setVertical = (): void => {
-    this.progress.style.width = this.progress.offsetHeight + 'px'
-    this.progress.style.height = 'auto'
-  }
 
   public setInitialSettings = (lineSize: {width: number, height: number}, vertical = false): void => {
 
     this.progress.style.top = (lineSize.height - this.progress.offsetHeight) / 2 + 'px'
+    this.progress.classList.add('range-slider__progress_horizontal')
 
     if (vertical){
+      this.progress.classList.add('range-slider__progress_vertical')
       this.progress.style.top = ''
       this.progress.style.left = (lineSize.width - this.progress.offsetWidth) / 2 + 'px'
     }

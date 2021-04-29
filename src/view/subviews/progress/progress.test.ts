@@ -15,18 +15,6 @@ describe('Progress', () => {
     })
   })
 
-  describe('setVertical', () => {
-    test('should set correct width and height to progress', () => {
-      Object.defineProperty(_.progress, 'offsetHeight', {
-        value: 15
-      })
-      _.setVertical()
-      expect(_.progress.style.width).toBe('15px');
-      expect(_.progress.style.height).toBe('auto');
-      
-    })
-  })
-
   describe('setInitialSettings', () => {
     test('set right style.top for horizontal', () => {
       const lineSize = {

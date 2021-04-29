@@ -254,20 +254,22 @@ describe('Line', () => {
     })
   })
 
-  describe('setVertical', () => {
+  describe('setInitialSettings', () => {
     test('should set correct width and height', () => {
-      
-      Object.defineProperty(_.line, 'offsetWidth', {
-        value: 50,
-      })
-      Object.defineProperty(_.line, 'offsetHeight', {
-        value: 100,
-      })
+      const vertical = true
+      _.setInitialSettings(vertical)
 
-      _.setVertical()
+      expect(_.line.className).toContain('range-slider__line_vertical')
 
-      expect(_.line.style.width).toBe('100px')
-      expect(_.line.style.height).toBe('50px')
+    })
+  })
+
+  describe('setInitialSettings', () => {
+    test('should set correct width and height', () => {
+      const vertical = false
+      _.setInitialSettings(vertical)
+
+      expect(_.line.className).toContain('range-slider__line_horizontal')
 
     })
   })

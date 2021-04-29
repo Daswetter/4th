@@ -68,9 +68,7 @@ class View implements IView {
   private initLine = (initElement: HTMLElement) : void => {
     this.line = new Line(initElement)
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
-    if (this.options.vertical){
-      this.line.setVertical()
-    }
+    this.line.setInitialSettings(this.options.vertical)
 
     this.line.setEventListener(this.options.vertical)
     this.line.bindChangedState(this.partChanged)
@@ -120,10 +118,7 @@ class View implements IView {
   }
 
   private initProgress = (initElement: HTMLElement): void => {
-    this.progress = new Progress(initElement) 
-    if (this.options.vertical){
-      this.progress.setVertical()
-    }
+    this.progress = new Progress(initElement)
     this.progress.setInitialSettings(this.line.returnSize(), this.options.vertical)
   }
 

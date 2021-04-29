@@ -1,139 +1,27 @@
 
 .js-slider1{
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   margin: 50px 0;
-  .range-slider__wrapper{
-    width: 60%;
-    margin: 50px auto;
-  }
-  .range-slider__line{
-    width: 100%;
-    height: 10px;
-    border-radius: 5px;
-    background: #8fd9a8;
-  }
-  .range-slider__thumb{
-    width: 20px;
-    height: 20px;
-    background: #28b5b5;
-    border-radius: 50%;
-  }
-  .range-slider__progress{
-    height: 10px;
-    background: #4b778d;
-    border-radius: 5px;
-  }
-  .range-slider__scale{
-    margin: 10px 0;
-    background: lavender;
-  }
-  .range-slider__scale-number{
-    min-width: 30px;
-    max-width: 30px;
-    text-align: center;
-  }
-  
-  .range-slider__satellite{
-    height: 20px;
-    min-width: 20px;
-    background: #d2e69c;
-    border-radius: 5px;
-    text-align: center;
-    padding: 0 3px;
-  }
+  width: 100%;
 }
 
 
 .js-slider2 {
   display: flex;
-  justify-content: start;
+  justify-content: center;
   margin: 50px 0;
-  .range-slider__wrapper{
-    padding: 0 100px;
-  }
-  .range-slider__line{
-    width: 200px;
-    height: 20px;
-    background: #a3ddcb;
-  }
-  .range-slider__thumb{
-    width: 20px;
-    height: 20px;
-    background: #03506f;
-  }
-  .range-slider__progress{
-    height: 20px;
-    background: #0a043c;
-  }
-  .range-slider__scale{
-    margin: 20px;
-  }
-  .range-slider__scale-number{
-    text-align: center;
-  }
-  
-  .range-slider__satellite{
-    padding: 5px;
-    background: #ffe3de;
-  }
 }
 
 .js-slider3 {
   display: flex;
   justify-content: center;
   margin: 50px 0;
-
-  .range-slider__wrapper{ 
-    margin: 100px auto;
-    width: 60%;
-  }
-  .range-slider__line{
-    width: 100%;
-    height: 20px;
-    background: #a6f0c6;
-  }
-  .range-slider__thumb{
-    background: #4e3d53;
-    width: 30px;
-    height: 30px;
-  }
-  .range-slider__progress{
-    height: 25px;
-    background: #0f1123;
-  }
 } 
 
 .js-slider4 {
   display: flex;
   justify-content: center;
   margin: 50px 0;
-  .range-slider__wrapper{
-    margin: 50px;
-    width: 70%;
-  }
-  .range-slider__line{
-    height: 10px;
-    width: 100%;
-    background: #ff8e71;
-  }
-  .range-slider__thumb{
-    width: 10px;
-    height: 30px;
-    background: #9f5f80;
-  }
-  .range-slider__progress{
-    height: 10px;
-    background: #583d72;
-  }
-  .range-slider__scale{
-    margin: 5px;
-  }
-  
-  .range-slider__satellite{
-    min-width: 30px;
-    text-align: center;
-    background: #ffba93;
-  }
 }
 
