@@ -68,8 +68,8 @@ class Model implements IModel{
       options.max = options.min + options.step
     }
 
-    if (options.numberOfScaleElements as number > 20 ) {
-      options.numberOfScaleElements = 20
+    if (options.scaleSize as number > 20 ) {
+      options.scaleSize = 20
     }
 
     return options
@@ -108,7 +108,7 @@ class Model implements IModel{
     let scaleValue: number
     let scaleElements: { [key: string]: string } = {}
 
-    const numberOfScaleSections = this.options.numberOfScaleElements as number - 1
+    const numberOfScaleSections = this.options.scaleSize as number - 1
     const scaleStep = 1 / numberOfScaleSections
 
     for (let i = 0; i <= numberOfScaleSections; i++){
@@ -124,7 +124,7 @@ class Model implements IModel{
     let scaleValue: number
     let scaleElements: { [key: string]: string } = {}
 
-    const numberOfScaleSections = this.options.numberOfScaleElements as number - 1
+    const numberOfScaleSections = this.options.scaleSize as number - 1
     const scaleStep = 1 / numberOfScaleSections
     const step = this.options.step
     const min = this.options.min

@@ -9,13 +9,18 @@ html {
 
 .range-slider__wrapper{
   display: flex;
+}
+
+.range-slider__wrapper_horizontal{
   flex-direction: column;
-  margin: 50px;
   width: 60%;
+  margin: 50px 0;
 }
 .range-slider__wrapper_vertical{
   flex-direction: row;
-  align-items: flex-start;
+  justify-content: center;
+  width: auto; 
+  margin: 10px 100px;
 }
 .range-slider__line{
   position: relative;
@@ -32,7 +37,7 @@ html {
 }
 .range-slider__line_vertical { 
   width: 10px;
-  height: 200px;
+  height: 150px;
 }
 .range-slider__thumb{
   position: absolute;
@@ -72,12 +77,11 @@ html {
 .range-slider__satellite{
   position: absolute;
   font-family: Roboto, sans-serif;
-  height: 20px;
   min-width: 20px;
   background: #d2e69c;
   border-radius: 5px;
   text-align: center;
-  padding: 0 3px;
+  padding: 1px 3px;
 }
 
 .range-slider__boundary-labels_min,

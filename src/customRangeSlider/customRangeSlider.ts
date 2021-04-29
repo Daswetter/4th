@@ -29,7 +29,7 @@ import { IView } from '../view/IView'
         double: false,
         satellite: true,
         scale: true,
-        numberOfScaleElements: 5,
+        scaleSize: 5,
         progress: true,
       }, setOptions)
       this.options = options
@@ -56,7 +56,6 @@ import { IView } from '../view/IView'
     public returnCurrentState(): Array<number> {
       return this.Presenter.returnCurrentValues()
     }
-
   }
 
 

@@ -8,7 +8,7 @@ interface IOptions {
   double: boolean,
   satellite: boolean,
   scale: boolean,
-  numberOfScaleElements?: number
+  scaleSize: number
   progress: boolean,
 }
 

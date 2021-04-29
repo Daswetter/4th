@@ -12,7 +12,7 @@ $(".js-slider1").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
-  numberOfScaleElements: 4,
+  scaleSize: 4,
   vertical: false,
   double: false,
 })
@@ -32,6 +32,7 @@ $(".js-slider2").customRangeSlider({
   scale: true,
   double: true,
   vertical: true,
+  scaleSize: 4,
 })
 new configPanel('.js-slider2')
 
@@ -43,7 +44,7 @@ $(".js-slider3").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
-  numberOfScaleElements: 10,
+  scaleSize: 10,
   double: false,
   vertical: false,
 })
@@ -57,7 +58,7 @@ $(".js-slider4").customRangeSlider({
   progress: true,
   satellite: true,
   scale: true,
-  numberOfScaleElements: 7,
+  scaleSize: 7,
   double: false,
 })
 new configPanel('.js-slider4')

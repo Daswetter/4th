@@ -16,6 +16,7 @@ describe('Model', () => {
       progress: true,
       satellite: true,
       scale: true,
+      scaleSize: 5,
       vertical: true,
       double: true,
     }
@@ -93,21 +94,21 @@ describe('Model', () => {
       options.min = 0
       options.max = 100
       options.step = 1
-      options.numberOfScaleElements = 2
+      options.scaleSize = 2
       expect(_.countScaleElements()).toEqual({"0": "0", "1": "100"})
     })
     test('should round correctly', () => {
       options.min = 0
       options.max = 50
       options.step = 1
-      options.numberOfScaleElements = 5
+      options.scaleSize = 5
       expect(_.countScaleElements()).toEqual({"0": "0", "0.25": "13", "0.5": "25", "0.75": "38", "1": "50"})
     })
     test('should set correct part size scale', () => {
       options.min = 0
       options.max = 5
       options.step = 2
-      options.numberOfScaleElements = 2
+      options.scaleSize = 2
       expect(_.countScaleElements()).toEqual({"0": "0", "0.8": "4"})
     })
   })
@@ -127,7 +128,7 @@ describe('Model', () => {
       options.step = -200
       options.min = -1
       options.max = -10
-      options.numberOfScaleElements = 21
+      options.scaleSize = 21
       _.update(options)
       expect(callback).toHaveBeenCalled()
     })
@@ -135,7 +136,7 @@ describe('Model', () => {
       options.step = -200
       options.min = -1
       options.max = -1
-      options.numberOfScaleElements = 21
+      options.scaleSize = 21
       _.update(options)
       expect(callback).toHaveBeenCalled()
     })

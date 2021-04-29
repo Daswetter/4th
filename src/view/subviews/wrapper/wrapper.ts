@@ -16,10 +16,13 @@ class Wrapper extends SubView{
     return this.wrapper
   }
 
-  public setVertical = (): void => {
-    this.wrapper.classList.add('.range-slider__wrapper_vertical')
+  public setInitialSettings = (vertical: boolean): void => {
+    if (vertical) {
+      this.wrapper.classList.add('range-slider__wrapper_vertical')
+    } else {
+      this.wrapper.classList.add('range-slider__wrapper_horizontal')
+    }
   }
-
 }
 
 export { Wrapper }

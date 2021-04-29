@@ -1,7 +1,7 @@
 include ./components/toggle/toggle 
 include ./components/input/input
 
-mixin config-panel(color)
+mixin config-panel
   .config-panel__container
     .config-panel__inputs
       +input('min', 'js-config-panel__min')
@@ -9,10 +9,11 @@ mixin config-panel(color)
       +input('step', 'js-config-panel__step')
       +input('from', 'js-config-panel__from range-slider__input_from')
       +input('to', 'js-config-panel__to range-slider__input_to')
+      +input('scale size', 'js-config-panel__scaleSize range-slider__input_scale-size')
     
     .config-panel__toggles
-      +toggle('vertical', 'js-config-panel__vertical', color)
-      +toggle('double', 'js-config-panel__double', color)
-      +toggle('scale', 'js-config-panel__scale', color)
-      +toggle('progress', 'js-config-panel__progress', color)
-      +toggle('satellite', 'js-config-panel__satellite', color)
+      +toggle('vertical', 'js-config-panel__vertical')
+      +toggle('double', 'js-config-panel__double')
+      +toggle('scale', 'js-config-panel__scale')
+      +toggle('progress', 'js-config-panel__progress')
+      +toggle('satellite', 'js-config-panel__satellite')

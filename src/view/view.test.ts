@@ -24,6 +24,7 @@ describe('View', () => {
       progress: true,
       satellite: false,
       scale: true,
+      scaleSize: 5,
       vertical: true,
       double: true,
     }
@@ -297,6 +298,7 @@ describe('View', () => {
         progress: true,
         satellite: true,
         scale: true,
+        scaleSize: 5,
         vertical: true,
         double: true,
       }

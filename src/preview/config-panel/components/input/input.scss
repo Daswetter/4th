@@ -5,6 +5,7 @@
 }
 .input_title{
   min-width: 35px;
+  max-width: 35px;
   background: rgb(102, 93, 93);
   color: rgb(245, 247, 222);
   font-family: Roboto, sans-serif;
@@ -18,6 +19,7 @@
   min-width: 50px;
   max-width: 100px;
   font-family: Roboto, sans-serif;
+  padding: 5px;
   &:disabled{
     background: rgb(196, 193, 193);
   }

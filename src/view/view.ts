@@ -60,9 +60,7 @@ class View implements IView {
   private initWrapper = (initElement: HTMLElement): void => {
     this.wrapper = new Wrapper(initElement)
     this.initElement.append(this.wrapper.returnAsHTML())
-    if (this.options.vertical){
-      this.wrapper.setVertical()
-    }
+    this.wrapper.setInitialSettings(this.options.vertical)
   }
 
   private initLine = (initElement: HTMLElement) : void => {
