@@ -1,12 +1,12 @@
 import { SubView } from "../SubView"
 
 class Satellite extends SubView {
-  primary!: HTMLElement
-  extra!: HTMLElement
-  united!: HTMLElement
+  public primary!: HTMLElement
+  public extra!: HTMLElement
+  public united!: HTMLElement
 
-  current!: number
-  currentExtra!: number
+  private current!: number
+  private currentExtra!: number
 
   constructor(initElement: HTMLElement){
     super()
@@ -60,7 +60,7 @@ class Satellite extends SubView {
     }
   }
 
-  initUnited = (): HTMLElement => {
+  private initUnited = (): HTMLElement => {
     const element = document.createElement('div')
     element.classList.add('range-slider__satellite')
     this.primary.after(element)
@@ -87,7 +87,7 @@ class Satellite extends SubView {
     this.switchElements(vertical)
   }
 
-  defineContent = (vertical: boolean): void => {
+  private defineContent = (vertical: boolean): void => {
     if (this.current === this.currentExtra){
       this.printInnerText(this.united, this.current)
     } else {

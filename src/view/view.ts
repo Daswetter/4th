@@ -100,12 +100,12 @@ class View implements IView {
 
   private initSatellite = (initElement: HTMLElement): void => {
     this.satellite = new Satellite(initElement)
-    this.satellite.setInitialSettings(this.line.returnSize().width, this.thumb.size(), this.options.vertical, this.options.min)
+    this.satellite.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.min)
 
     if (this.options.double){
       const extra = true
       this.satellite.initExtra(initElement)
-      this.satellite.setInitialSettings(this.line.returnSize().width, this.thumb.size(), this.options.vertical, this.options.max, extra)
+      this.satellite.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.max, extra)
     }
   }
   
@@ -139,7 +139,7 @@ class View implements IView {
 
   private initBoundaryLabels = (initElement: HTMLElement): void => {
     this.boundaryLabels = new BoundaryLabels(initElement)
-    this.boundaryLabels.setInitialSettings(this.options.min, this.options.max, this.line.returnSize().width, this.thumb.size(), this.options.vertical)
+    this.boundaryLabels.setInitialSettings(this.options.min, this.options.max, this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical)
   }
 
   public clearAllView = (): void => {
@@ -161,7 +161,7 @@ class View implements IView {
     this.options.progress ? this.progress.update(part, this.line.returnSize(), this.options.vertical, extra) : ''
 
     if (this.options.satellite) {
-      this.satellite.update(part, current, this.line.returnSize(), this.thumb.size(), this.options.vertical, this.options.double, extra)
+      this.satellite.update(part, current, this.line.returnSize(), this.thumb.returnSize(), this.options.vertical, this.options.double, extra)
 
       if (this.options.double) {
         this.boundaryLabels.update(this.satellite.returnPrimaryParameters(), this.options.vertical, this.satellite.returnExtraParameters())
@@ -215,13 +215,11 @@ class View implements IView {
       this.extraPartChanged(this.partExtra)
       this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
     }
-
-    
   }
+
   public update = (options: IOptions): void => {
     this.options = options
   }
-
 
   public bindChangedPart = (callback: (part: number) => void):void  =>  {
     this.partChanged = callback

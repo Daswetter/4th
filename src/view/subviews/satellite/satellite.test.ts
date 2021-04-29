@@ -101,9 +101,17 @@ describe('Satellite', () => {
       const vertical = false
       const double = true
       const extra = true
+      const lineSize = {
+        width: 10,
+        height: 10
+      }
+      const thumbSize = {
+        width: 10,
+        height: 10
+      }
+      _.update(0.1, 100, lineSize, thumbSize, vertical, double, extra)
+      _.update(0.1, 100, lineSize, thumbSize, vertical, double, false)
       
-      _.current = 100
-      _.currentExtra = 100
       Object.defineProperty(_.united, 'offsetLeft', {
         value: 200
       })

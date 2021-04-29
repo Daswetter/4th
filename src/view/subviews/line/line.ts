@@ -10,7 +10,7 @@ class Line extends SubView{
     this.initPrimary(initElement)
   }
 
-  initPrimary = (initElement: HTMLElement): void => {
+  private initPrimary = (initElement: HTMLElement): void => {
     this.line = this.init(initElement, this.line, 'line')
   }
 

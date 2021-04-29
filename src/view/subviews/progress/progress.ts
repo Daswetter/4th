@@ -10,7 +10,7 @@ class Progress extends SubView{
     this.initPrimary(initElement)
   }
 
-  initPrimary = (initElement: HTMLElement): void => {
+  private initPrimary = (initElement: HTMLElement): void => {
     this.progress = this.init(initElement, this.progress, 'progress')
   }
   
