@@ -29,7 +29,7 @@ import { IView } from '../view/IView'
         double: false,
         satellite: true,
         scale: true,
-        scaleSize: 5,
+        scaleSize: 2,
         progress: true,
       }, setOptions)
       this.options = options

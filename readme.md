@@ -31,16 +31,16 @@ progress | true | boolean | Прогресс бар
 
 ## Пример слайдера с параметрами
 
-`$(".js-slider1").customRangeSlider({
-  min: 0,
-  max: 7,
-  from: 0.5,
-  to: 2,
-  step: 2,
-  progress: true,
-  satellite: true,
-  scale: true,
-  scaleSize: 4,
-  vertical: false,
-  double: false,
-})`
+`$(".js-slider1").customRangeSlider({  
+  min: 0,  
+  max: 7,  
+  from: 0.5,  
+  to: 2,  
+  step: 2,  
+  progress: true,  
+  satellite: true,  
+  scale: true,  
+  scaleSize: 4,  
+  vertical: false,  
+  double: false,  
+})`  
