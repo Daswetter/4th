@@ -103,10 +103,8 @@ describe('Presenter', () => {
   describe('update', () => {
     test('should call model"s and view"s methods', () => {
       const modelUpdate = jest.spyOn(concreteModel, 'update')
-      const viewUpdate = jest.spyOn(concreteView, 'update')
       _.update(options)
       expect(modelUpdate).toHaveBeenCalledWith(options)
-      expect(viewUpdate).toHaveBeenCalledWith(options)
     })
   })
 

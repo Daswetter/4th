@@ -286,24 +286,4 @@ describe('View', () => {
     })
     
   })
-
-  describe('update', () => {
-    test('should update options', () => {
-      options = {
-        min: -1800,
-        max: 200,
-        from: 0,
-        to: 100,
-        step: 100,
-        progress: true,
-        satellite: true,
-        scale: true,
-        scaleSize: 5,
-        vertical: true,
-        double: true,
-      }
-      _.update(options)
-      expect(_.options).toEqual(options)
-    })
-  })
 })

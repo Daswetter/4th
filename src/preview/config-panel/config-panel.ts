@@ -51,7 +51,7 @@ class configPanel{
     this.satellite = this.initCheckbox(this.satellite, 'satellite')
   }
 
-  private setEventListener = (element: HTMLInputElement, optionKey: string): void => {
+  private setEventListener = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
     element.addEventListener('change', this.sendElementValue.bind(null, element, optionKey))
   }
 
@@ -68,51 +68,55 @@ class configPanel{
       element.disabled = false
     } else {
       element.disabled = true
+      element.value = ''
     }
   }
 
   private initInput = (element: HTMLInputElement, optionKey: keyof IOptions): HTMLInputElement => {
     element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
-    this.setInitialSettings(element, optionKey)
+    this.displayCurrentState(element, optionKey)
     this.setEventListener(element, optionKey)
     return element
   }
 
-  private sendElementValue = (element: HTMLInputElement, optionKey: string): void => {
+  private sendElementValue = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
     this.rangeSlider.update({
       [optionKey]: Number(element.value)
     })
+    this.displayCurrentState(element, optionKey)
   }
 
-  private setInitialSettings = (element: HTMLInputElement, optionKey: keyof IOptions, checkbox = false): void => {
+  private displayCurrentState = (element: HTMLInputElement, optionKey: keyof IOptions, checkbox = false): void => {
     const currentState = $(this.initElementName).data("customRangeSlider").returnCurrentOptions();
     if (checkbox){
       element.checked = currentState[optionKey]
     } else {
       element.value = currentState[optionKey]
+      if (element === this.min) {
+        this.max.value = currentState.max
+      }
     }
     
   }
 
   private initCheckbox = (element: HTMLInputElement, optionKey: keyof IOptions): HTMLInputElement => {
     element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
-    this.setInitialSettings(element, optionKey, true)
+    this.displayCurrentState(element, optionKey, true)
     this.setEventListenerOnCheckbox(element, optionKey)
     return element
   }
 
   private sendState = (optionKey: keyof IOptions): void => {
-    const currentState = this.rangeSlider.returnCurrentOptions()[optionKey];
-
-    if (currentState){
-      this.rangeSlider.update({
-        [optionKey]: false
-      })
+    const isCurrentStateTrue = this.rangeSlider.returnCurrentOptions()[optionKey];
+    let newState: boolean
+    if (isCurrentStateTrue){
+      newState = false
     } else {
-      this.rangeSlider.update({
-        [optionKey]: true
-      })
+      newState = true
     }
+    this.rangeSlider.update({
+      [optionKey]: newState
+    })
   }
 }
 

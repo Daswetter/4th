@@ -65,7 +65,6 @@ class Presenter{
 
   public update = (options: IOptions): void => {
     this.Model.update(options)
-    this.View.update(options)
   }
 
   public returnCurrentValues = (): Array<number> => {

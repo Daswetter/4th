@@ -1,9 +1,5 @@
 import './view/view'
-import './view/subViews/thumb/thumb'
-import './view/subViews/line/line'
-import './view/subViews/satellite/satellite'
 import './view/view.scss'
-
 
 import './model/model'
 import './presenter/presenter'

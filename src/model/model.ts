@@ -55,18 +55,20 @@ class Model implements IModel{
   }
 
   private filterOptions = (options: IOptions): IOptions => {
-    if (options.step <= 0) {
+    if (options.step < 0) {
       options.step = Math.abs(options.step)
+    } else if (options.step === 0) {
+      options.step = 1
     }
-    if(options.step > Math.abs(options.max) + Math.abs(options.min)) {
+
+    if (options.step > Math.abs(options.max) + Math.abs(options.min)) {
       options.step = Math.abs(options.max) + Math.abs(options.min)
     }
 
-    if (options.max < options.min) {
-      [options.min, options.max] = [options.max, options.min]
-    } else if (options.max === options.min) {
+    if (options.max < options.min || options.max === options.min) {
       options.max = options.min + options.step
-    }
+    } 
+
 
     if (options.scaleSize as number > 20 ) {
       options.scaleSize = 20

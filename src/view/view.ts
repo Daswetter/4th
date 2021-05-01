@@ -210,10 +210,6 @@ class View implements IView {
     }
   }
 
-  public update = (options: IOptions): void => {
-    this.options = options
-  }
-
   public bindChangedPart = (callback: (part: number) => void):void  =>  {
     this.partChanged = callback
   }

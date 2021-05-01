@@ -1,5 +1,3 @@
-import { IOptions } from "../interface/IOptions";
-
 interface IView {
   current: number
   currentExtra: number
@@ -10,7 +8,6 @@ interface IView {
   notifyExtra(current: number, part: number): void
 
   clearAllView(): void,
-  update(options: IOptions): void
 
   bindChangedPart(callback: (arg0: number) => void): void
   bindChangedExtraPart(callback: (arg0: number) => void): void
