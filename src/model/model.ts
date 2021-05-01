@@ -70,6 +70,8 @@ class Model implements IModel{
 
     if (options.scaleSize as number > 20 ) {
       options.scaleSize = 20
+    } else if (options.scaleSize as number < 2) {
+      options.scaleSize = 2
     }
 
     return options
