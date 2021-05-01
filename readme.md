@@ -3,6 +3,9 @@
 Custom Range Slider - слайдер (бегунок), который позволяет перетягиванием задавать какое-либо числовое значение
 
 ![how to use range slider](https://i.imgur.com/nYnrDDj.gif)
+## Демо-страница 
+
+[demo](https://daswetter.github.io/4th/ "Демо-страница")
 
 ## Инициализация 
 Запуск проекта: `npm start`  
