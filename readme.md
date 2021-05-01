@@ -28,10 +28,9 @@ scale | true | boolean | Шкала значений
 scaleSize | true | number | Количество значений в шкале, от 2 до 20
 progress | true | boolean | Прогресс бар
 
-
 ## Пример слайдера с параметрами
 
-`$(".js-slider1").customRangeSlider({  
+`$(".js-slider").customRangeSlider({  
   min: 0,  
   max: 7,  
   from: 0.5,  
