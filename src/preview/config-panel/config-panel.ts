@@ -52,11 +52,11 @@ class configPanel{
   }
 
   private setEventListener = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
-    element.addEventListener('change', this.sendElementValue.bind(null, element, optionKey))
+    element.addEventListener('change', this.handleInputChange.bind(null, element, optionKey))
   }
 
   private setEventListenerOnCheckbox = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
-    element.addEventListener('change', this.sendState.bind(null, optionKey))
+    element.addEventListener('change', this.handleCheckboxInput.bind(null, optionKey))
   }
   private switchStateForTo = (element: HTMLInputElement): void => {
     this.isDisable(element)
@@ -79,7 +79,7 @@ class configPanel{
     return element
   }
 
-  private sendElementValue = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
+  private handleInputChange = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
     this.rangeSlider.update({
       [optionKey]: Number(element.value)
     })
@@ -106,7 +106,7 @@ class configPanel{
     return element
   }
 
-  private sendState = (optionKey: keyof IOptions): void => {
+  private handleCheckboxInput = (optionKey: keyof IOptions): void => {
     const isCurrentStateTrue = this.rangeSlider.returnCurrentOptions()[optionKey];
     let newState: boolean
     if (isCurrentStateTrue){

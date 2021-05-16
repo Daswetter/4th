@@ -54,7 +54,7 @@ class View implements IView {
     this.currentChanged(this.options.from)
     this.options.double ? this.extraCurrentChanged(this.options.to as number): ''
     
-    window.addEventListener('resize', this.initElementsForResized)
+    window.addEventListener('resize', this.handleWindowResizing)
   }
 
   private initWrapper = (initElement: HTMLElement): void => {
@@ -196,7 +196,7 @@ class View implements IView {
 
 
 
-  private initElementsForResized = (): void => {
+  private handleWindowResizing = (): void => {
     this.partChanged(this.part)
     this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical)
     this.options.scale ? this.scale.setPosition(this.line.returnSize(), this.options.vertical) : ''

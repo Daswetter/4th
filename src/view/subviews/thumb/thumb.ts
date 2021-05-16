@@ -41,7 +41,7 @@ class Thumb extends SubView{
   }
 
   private setOnMouseDown = (element: HTMLElement, params: {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSide: number, lineSize: number}): void => {
-    element.onmousedown = this.onMouseDown.bind(null, element, params)   
+    element.onmousedown = this.handleMouseDown.bind(null, element, params)   
   }
 
   public setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical = false, extra = false): void => {
@@ -54,7 +54,7 @@ class Thumb extends SubView{
     this.setOnMouseDown(element, params)
   }
 
-  private onMouseDown = (element: HTMLElement, params: {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number}, event: MouseEvent) : void => { 
+  private handleMouseDown = (element: HTMLElement, params: {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number}, event: MouseEvent) : void => { 
 
     event.preventDefault()
 
@@ -64,15 +64,15 @@ class Thumb extends SubView{
       shift = shift + params.lineSize
     }
    
-    this.boundOnMouseUp = this.onMouseUp.bind(this)
-    this.boundOnMouseMove = this.onMouseMove.bind(this, element, {...params, shift})
+    this.boundOnMouseUp = this.handleMouseUp.bind(this)
+    this.boundOnMouseMove = this.handleMouseMove.bind(this, element, {...params, shift})
     
     document.addEventListener('mousemove', this.boundOnMouseMove)
     document.addEventListener('mouseup', this.boundOnMouseUp)
   }
 
 
-  private onMouseMove = (element: HTMLElement, params: {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number, shift: number}, event: MouseEvent): void => {
+  private handleMouseMove = (element: HTMLElement, params: {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number, shift: number}, event: MouseEvent): void => {
     
     let part = (event[params.pageName] as number - params.lineSide - params.shift + (element[params.sizeName] as number) / 2) / params.lineSize    
 
@@ -95,7 +95,7 @@ class Thumb extends SubView{
   }
 
 
-  private onMouseUp = () : void => {
+  private handleMouseUp = () : void => {
     document.removeEventListener('mouseup', this.boundOnMouseUp)
     document.removeEventListener('mousemove', this.boundOnMouseMove)
   }
@@ -111,7 +111,7 @@ class Thumb extends SubView{
     if (!vertical && extra){
       element = this.extra
     }
-    
+
     let side = 'left'
     let elementSizeName = 'offsetWidth' as keyof HTMLElement
     let lineParameter = lineSize.width

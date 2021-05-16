@@ -20,14 +20,14 @@ class Input extends SubView{
   }
 
   private setEventListener = (element: HTMLInputElement): void => {
-    element.addEventListener('change', this.sendValue.bind(null, element))
+    element.addEventListener('change', this.handleChange.bind(null, element))
   }
 
   private getValue = (element: HTMLInputElement): number => {
     return Number(element.value)
   }
 
-  private sendValue = (element: HTMLInputElement): void => {
+  private handleChange = (element: HTMLInputElement): void => {
     const value = this.getValue(element)
     if (element === this.primary){
       this.onChanged(value)

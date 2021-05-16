@@ -19,7 +19,7 @@ class Line extends SubView{
     return this.line
   }
 
-  private onMouseDown = (vertical: boolean, event: MouseEvent): void => {
+  private handleMouseDown = (vertical: boolean, event: MouseEvent): void => {
     if (vertical){
       this.mouseDownValue = event.clientY
     } else {
@@ -27,7 +27,7 @@ class Line extends SubView{
     }
     
   }
-  private onMouseUp = (vertical: boolean, event: MouseEvent): void => {
+  private handleMouseUp = (vertical: boolean, event: MouseEvent): void => {
     if (vertical){
       this.mouseUpValue = event.clientY
     } else {
@@ -36,10 +36,10 @@ class Line extends SubView{
   }
 
   public setEventListener = (vertical: boolean): void => {
-    this.line.onmousedown = this.onMouseDown.bind(null, vertical)
-    this.line.onmouseup = this.onMouseUp.bind(null, vertical)
+    this.line.onmousedown = this.handleMouseDown.bind(null, vertical)
+    this.line.onmouseup = this.handleMouseUp.bind(null, vertical)
 
-    this.line.addEventListener('click', this.setClickListener.bind(null, vertical))
+    this.line.addEventListener('click', this.handleClick.bind(null, vertical))
   }
   
   public returnSize = (): {width: number, height: number} => {
@@ -64,12 +64,11 @@ class Line extends SubView{
     }
   }
 
-  private setClickListener = (vertical: boolean, event: MouseEvent) : void => {
+  private handleClick = (vertical: boolean, event: MouseEvent) : void => {
     if ( this.mouseDownValue === this.mouseUpValue){
       if (vertical){
         this.onClickVertical.call(null, event)
       } else {
-        
         this.onClickHorizontal.call(null, event)
       }
     }

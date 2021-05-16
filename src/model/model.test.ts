@@ -25,8 +25,6 @@ describe('Model', () => {
     callbackExtra = jest.fn()
   })
 
-  
-
   describe('setCurrent', () => {
     beforeEach(() => {
       _.bindChangedValues(callback)
@@ -125,10 +123,10 @@ describe('Model', () => {
       expect(callback).toHaveBeenCalled()
     })
     test('should filter options', () => {
-      options.step = -200
+      options.step = 0
       options.min = -1
       options.max = -10
-      options.scaleSize = 21
+      options.scaleSize = 1
       _.update(options)
       expect(callback).toHaveBeenCalled()
     })
