@@ -36,6 +36,7 @@ class Satellite extends SubView {
   
   public setInitialSettings = (lineWidth: number, thumbSize: {width: number, height: number }, vertical: boolean, value: number, extra = false ): void => {
     let element: HTMLElement
+
     if (extra){
       element = this.extra
     } else {
@@ -102,7 +103,6 @@ class Satellite extends SubView {
 
   private switchElements = (vertical: boolean) => {
     let stickTogether = this.primary.offsetLeft <= this.extra.offsetLeft + this.extra.offsetWidth && this.primary.offsetLeft + this.primary.offsetWidth >= this.extra.offsetLeft
-    
     
     if (vertical){
       stickTogether = this.primary.offsetTop <= this.extra.offsetTop + this.extra.offsetHeight && this.primary.offsetTop + this.primary.offsetHeight >= this.extra.offsetTop

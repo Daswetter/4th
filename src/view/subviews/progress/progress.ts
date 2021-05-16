@@ -27,10 +27,6 @@ class Progress extends SubView{
   }
   
   public update = (part: number, lineSize: {width: number, height: number}, vertical: boolean, extra: boolean) :void => {
-    let lineOneSize = lineSize.width
-    let generalSide = 'left'
-    let secondSide = 'right'
-
     if (!extra && !vertical){
       this.part = part
     } 
@@ -39,6 +35,10 @@ class Progress extends SubView{
       this.partExtra = part
     } 
     
+    let lineOneSize = lineSize.width
+    let generalSide = 'left'
+    let secondSide = 'right'
+
     if (!extra && vertical){
       this.part = part
       lineOneSize = lineSize.height

@@ -45,12 +45,12 @@ class Thumb extends SubView{
   }
 
   public setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical = false, extra = false): void => {
-    const params = this.getOrientationParams(vertical, lineSize, lineSide)
     let element = this.primary
 
     if (extra){
       element = this.extra
     }
+    const params = this.getOrientationParams(vertical, lineSize, lineSide)
     this.setOnMouseDown(element, params)
   }
 
@@ -107,13 +107,15 @@ class Thumb extends SubView{
 
   public update = (part: number, lineSize: { width: number, height: number}, vertical: boolean, extra: boolean): void => {
     let element = this.primary
-    let side = 'left'
-    let elementSizeName = 'offsetWidth' as keyof HTMLElement
-    let lineParameter = lineSize.width
   
     if (!vertical && extra){
       element = this.extra
     }
+    
+    let side = 'left'
+    let elementSizeName = 'offsetWidth' as keyof HTMLElement
+    let lineParameter = lineSize.width
+
     if (vertical && !extra){
       side = 'bottom'
       elementSizeName = 'offsetHeight'

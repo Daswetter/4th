@@ -76,9 +76,8 @@ class Line extends SubView{
   }
 
   private onClickHorizontal = (event: MouseEvent) : void => {
-    let part
     const distFromBeginToClick = event.clientX - this.line.getBoundingClientRect().left
-    part = distFromBeginToClick / this.line.offsetWidth
+    let part = distFromBeginToClick / this.line.offsetWidth
 
     if (distFromBeginToClick < 0){
       part = 0
@@ -93,9 +92,8 @@ class Line extends SubView{
   }
 
   private onClickVertical = (event: MouseEvent) : void => {
-    let part
     const distFromBeginToClick = - event.clientY + this.line.getBoundingClientRect().bottom
-    part = distFromBeginToClick / this.line.offsetHeight
+    let part = distFromBeginToClick / this.line.offsetHeight
 
     if (distFromBeginToClick < 0){
       part = 0

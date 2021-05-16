@@ -85,8 +85,8 @@ class View implements IView {
     this.thumb.bindChangedState(this.partChanged)
 
     if (this.options.double){
-      const extra = true
       this.thumb.initExtra(initElement)
+      const extra = true
       this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
       this.thumb.setInitialSettings(this.line.returnSize(), this.options.vertical, extra)
       this.thumb.bindExtraChangedState(this.extraPartChanged)
@@ -99,8 +99,8 @@ class View implements IView {
     this.satellite.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.min)
 
     if (this.options.double){
-      const extra = true
       this.satellite.initExtra(initElement)
+      const extra = true
       this.satellite.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.max, extra)
     }
   }
@@ -186,7 +186,6 @@ class View implements IView {
     const distFromActionToPrimary = this.countDistance(part)
     const extra = true
     const distFromActionToExtra = this.countDistance(part, extra)
-    
 
     if (distFromActionToPrimary > distFromActionToExtra){
       this.extraPartChanged(part)
@@ -204,8 +203,8 @@ class View implements IView {
 
 
     if (this.options.double){
-      const extra = true
       this.extraPartChanged(this.partExtra)
+      const extra = true
       this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
     }
   }

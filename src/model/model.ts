@@ -40,11 +40,9 @@ class Model implements IModel{
       newPart = part + (stepAsPart - rest)
     } 
 
-    let current = Math.abs(this.options.max - this.options.min) * newPart + this.options.min
-
-
     const isCurrentGreaterThanScale = Math.abs(this.options.max - this.options.min) * part > this.getNumberOfSections() * this.options.step
 
+    let current = Math.abs(this.options.max - this.options.min) * newPart + this.options.min
     if (!this.isScaleFullSize() && isCurrentGreaterThanScale) {
       [current, newPart] = this.countRestCurrent(current, newPart, rest, stepAsPart)
     }
@@ -109,14 +107,12 @@ class Model implements IModel{
   }
   
   private createFullSizeScale = (): { [key: string]: string } => {
-    let scaleValue: number
+    const numberOfScaleSections = this.options.scaleSize as number - 1
     let scaleElements: { [key: string]: string } = {}
 
-    const numberOfScaleSections = this.options.scaleSize as number - 1
-    const scaleStep = 1 / numberOfScaleSections
-
     for (let i = 0; i <= numberOfScaleSections; i++){
-      scaleValue = (this.options.max - this.options.min) * scaleStep * i + this.options.min
+      const scaleStep = 1 / numberOfScaleSections
+      const scaleValue = (this.options.max - this.options.min) * scaleStep * i + this.options.min
       const roundScaleValues = String(this.roundValueTo(scaleValue, this.options.step))
       scaleElements = {...scaleElements, [i / numberOfScaleSections]: String(roundScaleValues)}
     }
@@ -125,19 +121,20 @@ class Model implements IModel{
   }
   
   private createPartSizeScale = (): { [key: string]: string } => {
-    let scaleValue: number
+    const numberOfScaleSections = this.options.scaleSize as number - 1
     let scaleElements: { [key: string]: string } = {}
 
-    const numberOfScaleSections = this.options.scaleSize as number - 1
-    const scaleStep = 1 / numberOfScaleSections
-    const step = this.options.step
-    const min = this.options.min
-    const max = this.options.max
-
     for (let i = 0; i <= numberOfScaleSections; i++){
+      const step = this.options.step
+      const min = this.options.min
       const newMax = this.getNumberOfSections() * step + min
+      const scaleStep = 1 / numberOfScaleSections
+
+      let scaleValue: number
       scaleValue = (newMax - min) * scaleStep * i + min
       scaleValue = this.roundValueTo(scaleValue, step)
+
+      const max = this.options.max
       scaleElements = {...scaleElements, [i / numberOfScaleSections * (1 - (Math.abs(max - min) - step * this.getNumberOfSections()) / Math.abs(max - min))]: String(scaleValue)}
     }
 
@@ -157,8 +154,9 @@ class Model implements IModel{
   
 
   private roundValueTo = (value: number, roundTo: number): number => {
-    let decimal: number
     const dividedRoundTo = roundTo.toString().split(".")
+    let decimal: number
+    
     if (!dividedRoundTo[1]){
       decimal = - dividedRoundTo[0].length + 1
     } else {
