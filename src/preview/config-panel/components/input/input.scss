@@ -1,26 +1,27 @@
-.input_container{
-  display: flex;
-  position: relative;
-  margin: 5px;
-}
-.input_title{
-  min-width: 35px;
-  max-width: 35px;
-  background: rgb(102, 93, 93);
-  color: rgb(245, 247, 222);
-  font-family: Roboto, sans-serif;
-  padding: 5px;
-  
-}
-.input_field{
-  -webkit-appearance: none;
-  outline: none;
-  border: 2px solid rgb(102, 93, 93);
-  min-width: 50px;
-  max-width: 100px;
-  font-family: Roboto, sans-serif;
-  padding: 5px;
-  &:disabled{
-    background: rgb(196, 193, 193);
+.input{
+  &_container{
+    display: flex;
+    position: relative;
+    margin: 0.3125rem;
   }
+  &__title{
+    width: 2.1875rem;
+    background: rgb(102, 93, 93);
+    color: rgb(245, 247, 222);
+    font-family: Roboto, sans-serif;
+    padding: 0.3125rem;
+  }  
+  &__field{
+    -webkit-appearance: none;
+    outline: none;
+    border: 0.125rem solid rgb(102, 93, 93);
+    min-width: 3.125rem;
+    max-width: 6.25rem;
+    font-family: Roboto, sans-serif;
+    padding: 0.3125rem;
+    &:disabled{
+      background: rgb(196, 193, 193);
+    }
+  } 
 }
+
