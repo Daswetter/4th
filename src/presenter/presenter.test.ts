@@ -1,9 +1,9 @@
-import { Presenter } from './presenter'
 import { IModel } from '../model/IModel';
 import { Model } from '../model/model';
 import { IView } from '../view/IView';
 import { View } from '../view/view';
 import { IOptions } from '../interface/IOptions';
+import { Presenter } from './presenter'
 
 describe('Presenter', () => {
   let _: Presenter

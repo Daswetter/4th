@@ -1,15 +1,11 @@
 import jQuery from 'jquery'
 
 import { View } from '../view/view'
-import { Model } from '../model/model'
-import { Presenter } from '../presenter/presenter'
-
-
-import { IOptions } from '../interface/IOptions'
-import { IModel } from '../model/IModel'
 import { IView } from '../view/IView'
-
-
+import { Model } from '../model/model'
+import { IModel } from '../model/IModel'
+import { Presenter } from '../presenter/presenter'
+import { IOptions } from '../interface/IOptions'
 
 (function($){
   class customRangeSlider {

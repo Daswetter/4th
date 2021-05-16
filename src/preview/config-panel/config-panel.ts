@@ -1,10 +1,11 @@
 import $ from 'jquery'
-import './components/toggle/toggle'
-import './components/input/input'
 
-import './config-panel.scss'
 import { IRangeSlider } from '../../interface/IRangeSlider'
 import { IOptions } from '../../interface/IOptions'
+import './components/toggle/toggle'
+import './components/input/input'
+import './config-panel.scss'
+
 
 class configPanel{
   private initElement!: HTMLElement
