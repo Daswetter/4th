@@ -18,6 +18,7 @@ module.exports = {
     open: true
   },
   plugins: [
+    new webpack.ProgressPlugin(),
     new HTMLWebpackPlugin({
       template:'./preview/preview.pug',
     }),
