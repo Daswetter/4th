@@ -1,5 +1,5 @@
 .input{
-  &_container{
+  &__container{
     display: flex;
     position: relative;
     margin: 0.3125rem;
@@ -15,6 +15,7 @@
     -webkit-appearance: none;
     outline: none;
     border: 0.125rem solid rgb(102, 93, 93);
+    width: 100%;
     min-width: 3.125rem;
     max-width: 6.25rem;
     font-family: Roboto, sans-serif;

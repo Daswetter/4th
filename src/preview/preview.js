@@ -18,9 +18,6 @@ $(".js-slider1").customRangeSlider({
 })
 new configPanel('.js-slider1')
 
-
-
-
 $(".js-slider2").customRangeSlider({
   min: -18.1,
   max: 0.9,
