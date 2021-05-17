@@ -1,6 +1,6 @@
-import { SubView } from "../SubView"
+import { Subview } from "../Subview"
 
-class Line extends SubView{
+class Line extends Subview{
   public line!: HTMLElement
   private mouseDownValue!: number 
   private mouseUpValue!: number 

@@ -1,6 +1,6 @@
-import { SubView } from "../SubView"
+import { Subview } from "../Subview"
 
-class Progress extends SubView{
+class Progress extends Subview{
   public progress!: HTMLElement 
   private partExtra = 0
   private part = 0

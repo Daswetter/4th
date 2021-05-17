@@ -1,4 +1,4 @@
-abstract class SubView {
+abstract class Subview {
   protected onChanged!: (part: number) => void;
   protected onExtraChanged!: (part: number) => void
 
@@ -17,5 +17,5 @@ abstract class SubView {
   }
 }
 
-export { SubView }
+export { Subview }
 

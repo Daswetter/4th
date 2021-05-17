@@ -1,6 +1,6 @@
-import { SubView } from "../SubView"
+import { Subview } from "../Subview"
 
-class Satellite extends SubView {
+class Satellite extends Subview {
   public primary!: HTMLElement
   public extra!: HTMLElement
   public united!: HTMLElement

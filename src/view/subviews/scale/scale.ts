@@ -1,6 +1,6 @@
-import { SubView } from '../SubView';
+import { Subview } from '../Subview';
 
-class Scale extends SubView{
+class Scale extends Subview{
   public scale!: HTMLElement 
   public scaleElements:{ [key: string]: HTMLElement } = {}
 

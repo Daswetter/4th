@@ -1,6 +1,6 @@
-import { SubView } from "../SubView"
+import { Subview } from "../Subview"
 
-class Input extends SubView{
+class Input extends Subview{
   public primary!: HTMLInputElement
   public extra!: HTMLInputElement
 

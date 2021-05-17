@@ -1,5 +1,5 @@
-import { SubView } from '../SubView'
-class Thumb extends SubView{
+import { Subview } from '../Subview'
+class Thumb extends Subview{
   public primary!: HTMLElement
   public extra!: HTMLElement
   private boundOnMouseMove!: (event: MouseEvent) => void

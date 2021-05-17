@@ -1,6 +1,6 @@
-import { SubView } from '../SubView'
+import { Subview } from '../Subview'
 
-class BoundaryLabels extends SubView {
+class BoundaryLabels extends Subview {
   public min!: HTMLElement
   public max!: HTMLElement
 
