@@ -28,11 +28,11 @@ describe('Presenter', () => {
     }
     const inputFrom = document.createElement('input')
     initElement.append(inputFrom)
-    inputFrom.classList.add('range-slider__input_from')
+    inputFrom.classList.add('dwSlider__input_from')
 
     const inputTo = document.createElement('input')
     initElement.append(inputTo)
-    inputTo.classList.add('range-slider__input_to')
+    inputTo.classList.add('dwSlider__input_to')
     concreteView = new View(initElement, options)
     concreteModel = new Model(options)
     _ = new Presenter(concreteView, concreteModel)

@@ -12,7 +12,7 @@ describe('Thumb', () =>{
       expect(_.primary.nodeName).toBe('DIV')
     })
     test('should add correct class', () => {
-      expect(_.primary.className).toBe('range-slider__thumb')
+      expect(_.primary.className).toBe('dwSlider__thumb')
     })
   })
 
@@ -26,7 +26,7 @@ describe('Thumb', () =>{
       expect(_.extra.nodeName).toBe('DIV')
     })
     test('should add correct class', () => {
-      expect(_.extra.classList).toContain('range-slider__thumb')
+      expect(_.extra.classList).toContain('dwSlider__thumb')
     })
   })
 

@@ -18,9 +18,9 @@ class Wrapper extends SubView{
 
   public setInitialSettings = (vertical: boolean): void => {
     if (vertical) {
-      this.wrapper.classList.add('range-slider__wrapper_vertical')
+      this.wrapper.classList.add('dwSlider__wrapper_vertical')
     } else {
-      this.wrapper.classList.add('range-slider__wrapper_horizontal')
+      this.wrapper.classList.add('dwSlider__wrapper_horizontal')
     }
   }
 }

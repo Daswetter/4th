@@ -12,7 +12,7 @@ describe('Line', () => {
       expect(_.line.nodeName).toEqual('DIV')
     });
     test('should set correct class', () => {
-      expect(_.line.classList).toContain('range-slider__line')
+      expect(_.line.classList).toContain('dwSlider__line')
     });
   })
 
@@ -259,7 +259,7 @@ describe('Line', () => {
       const vertical = true
       _.setInitialSettings(vertical)
 
-      expect(_.line.className).toContain('range-slider__line_vertical')
+      expect(_.line.className).toContain('dwSlider__line_vertical')
 
     })
   })
@@ -269,7 +269,7 @@ describe('Line', () => {
       const vertical = false
       _.setInitialSettings(vertical)
 
-      expect(_.line.className).toContain('range-slider__line_horizontal')
+      expect(_.line.className).toContain('dwSlider__line_horizontal')
 
     })
   })

@@ -58,7 +58,7 @@ describe('View', () => {
     test('should not fail if extra input do not exist', () => {
       const input = document.createElement('input')
       initElement.append(input)
-      input.classList.add('range-slider__input_from')
+      input.classList.add('dwSlider__input_from')
       options.double = true
       const scaleElements = {
         '0': '0',
@@ -241,7 +241,7 @@ describe('View', () => {
     test('all view should be destroyed', () => {
       _.initView(scaleElements)
       _.clearAllView()
-      expect(document.querySelector('.range-slider__wrapper')).not.toBeTruthy()
+      expect(document.querySelector('.dwSlider__wrapper')).not.toBeTruthy()
     })
   })
   

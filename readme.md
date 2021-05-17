@@ -1,9 +1,9 @@
-# Custom Range Slider
+# dwSlider
 ## Fourth task
 
-Custom Range Slider - слайдер (бегунок), который позволяет перетягиванием задавать какое-либо числовое значение
+dwSlider - слайдер (бегунок), который позволяет перетягиванием задавать какое-либо числовое значение
 
-![how to use range slider](https://i.imgur.com/nYnrDDj.gif)
+![how to use dwSlider](https://i.imgur.com/nYnrDDj.gif)
 
 ## Демо-страница
 
@@ -16,12 +16,12 @@ Custom Range Slider - слайдер (бегунок), который позво
 
 Инициализировать плагин с параметрами по умолчанию можно на пустом `div` элементе  
 `<div class = "js-slider"></div>`  
-`$(".js-slider").customRangeSlider()`
+`$(".js-slider").dwSlider()`
 
 ### Пример слайдера с параметрами
 
 ```typescript
-$(".js-slider").customRangeSlider({  
+$(".js-slider").dwSlider({  
   min: 0,  
   max: 10,  
   from: 2,  
@@ -69,7 +69,7 @@ progress | true | boolean | Прогресс бар
 ## Публичные методы
 
 ```typescript
-$(".js-slider").customRangeSlider({
+$(".js-slider").dwSlider({
   max: 100,
   min: 10,
   from: 10,
@@ -77,7 +77,7 @@ $(".js-slider").customRangeSlider({
 })
 ```
 
-`let slider = $(".js-slider").data("customRangeSlider")`
+`let slider = $(".js-slider").data("dwSlider")`
 
 В приложении три публичных метода:
 

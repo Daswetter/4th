@@ -5,10 +5,10 @@ describe('Input', () => {
   beforeEach(() => {
     const initElement = document.createElement('input')
     const inputFrom = document.createElement('input')
-    inputFrom.classList.add('range-slider__input_from')
+    inputFrom.classList.add('dwSlider__input_from')
     initElement.append(inputFrom)
     const inputTo = document.createElement('div')
-    inputTo.classList.add('range-slider__input_to')
+    inputTo.classList.add('dwSlider__input_to')
     initElement.append(inputTo)
     _ = new Input(initElement)
   })

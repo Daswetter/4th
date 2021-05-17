@@ -1,10 +1,10 @@
 import { IOptions } from "./IOptions";
 import { reducedIOptions } from "./reducedIOptions";
 
-interface IRangeSlider {
+interface IdwSlider {
   update(options: reducedIOptions): void,
   returnCurrentOptions(): IOptions
   returnCurrentState(): Array<number>
 }
 
-export { IRangeSlider }
+export { IdwSlider }

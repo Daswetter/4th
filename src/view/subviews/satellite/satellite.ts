@@ -63,7 +63,7 @@ class Satellite extends SubView {
 
   private initUnited = (): HTMLElement => {
     const element = document.createElement('div')
-    element.classList.add('range-slider__satellite')
+    element.classList.add('dwSlider__satellite')
     this.primary.after(element)
     element.style.opacity = '0'
     return element

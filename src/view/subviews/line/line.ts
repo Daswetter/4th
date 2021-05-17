@@ -12,7 +12,7 @@ class Line extends SubView{
 
   private initPrimary = (initElement: HTMLElement): void => {
     this.line = this.init(initElement, this.line, 'line')
-    this.line.classList.add('range-slider__line_horizontal')
+    this.line.classList.add('dwSlider__line_horizontal')
   }
 
   public returnAsHTML = (): HTMLElement => {
@@ -58,9 +58,9 @@ class Line extends SubView{
 
   public setInitialSettings = (vertical: boolean): void => {
     if (vertical) {
-      this.line.classList.add('range-slider__line_vertical')
+      this.line.classList.add('dwSlider__line_vertical')
     } else {
-      this.line.classList.add('range-slider__line_horizontal')
+      this.line.classList.add('dwSlider__line_horizontal')
     }
   }
 

@@ -12,7 +12,7 @@ describe('Scale', () => {
       expect(_.scale.nodeName).toBe('DIV')
     })
     test('should add correct class', () => {
-      expect(_.scale.className).toBe('range-slider__scale')
+      expect(_.scale.className).toBe('dwSlider__scale')
     })
   })
 

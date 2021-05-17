@@ -11,7 +11,7 @@ describe('Satellite', () => {
       expect(_.primary.nodeName).toBe('DIV')
     })
     test('should create correct class', () => {
-      expect(_.primary.className).toBe('range-slider__satellite')
+      expect(_.primary.className).toBe('dwSlider__satellite')
     })
   })
 
@@ -24,7 +24,7 @@ describe('Satellite', () => {
       expect(_.extra.nodeName).toBe('DIV')
     })
     test('should create correct class', () => {
-      expect(_.extra.className).toBe('range-slider__satellite')
+      expect(_.extra.className).toBe('dwSlider__satellite')
     })
   })
 

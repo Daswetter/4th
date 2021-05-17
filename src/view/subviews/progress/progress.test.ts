@@ -11,7 +11,7 @@ describe('Progress', () => {
       expect(_.progress.nodeName).toBe('DIV')
     })
     test('should add class', () => {
-      expect(_.progress.className).toBe('range-slider__progress')
+      expect(_.progress.className).toBe('dwSlider__progress')
     })
   })
 

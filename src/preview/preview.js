@@ -3,7 +3,7 @@ import { configPanel } from './config-panel/config-panel.ts'
 import './preview.scss'
 
 
-$(".js-slider1").customRangeSlider({
+$(".js-slider1").dwSlider({
   min: 0,
   max: 7,
   from: 0.5,
@@ -18,7 +18,7 @@ $(".js-slider1").customRangeSlider({
 })
 new configPanel('.js-slider1')
 
-$(".js-slider2").customRangeSlider({
+$(".js-slider2").dwSlider({
   min: -18.1,
   max: 0.9,
   from: -16,
@@ -33,7 +33,7 @@ $(".js-slider2").customRangeSlider({
 })
 new configPanel('.js-slider2')
 
-$(".js-slider3").customRangeSlider({
+$(".js-slider3").dwSlider({
   min: -108.8,
   max: 0.9,
   from: -50,
@@ -47,7 +47,7 @@ $(".js-slider3").customRangeSlider({
 })
 new configPanel('.js-slider3')
 
-$(".js-slider4").customRangeSlider({
+$(".js-slider4").dwSlider({
   min: -10,
   max: 9,
   from: 5,

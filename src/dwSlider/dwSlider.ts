@@ -8,7 +8,7 @@ import { Presenter } from '../presenter/presenter'
 import { IOptions } from '../interface/IOptions'
 
 (function($){
-  class customRangeSlider {
+  class dwSlider {
     private options: IOptions
     private Model!: IModel
     private View!: IView
@@ -55,10 +55,10 @@ import { IOptions } from '../interface/IOptions'
   }
 
 
-  $.fn.customRangeSlider = function(options: IOptions): JQuery<HTMLElement> {
+  $.fn.dwSlider = function(options: IOptions): JQuery<HTMLElement> {
     return this.each(function () {
-      if (!$.data(this, 'customRangeSlider')) {
-        $.data(this, 'customRangeSlider', new customRangeSlider(this, options));
+      if (!$.data(this, 'dwSlider')) {
+        $.data(this, 'dwSlider', new dwSlider(this, options));
       }
     });
   }

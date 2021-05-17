@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import { IRangeSlider } from '../../interface/IRangeSlider'
+import { IdwSlider } from '../../interface/IdwSlider'
 import { IOptions } from '../../interface/IOptions'
 import './components/toggle/toggle'
 import './components/input/input'
@@ -10,7 +10,7 @@ import './config-panel.scss'
 class configPanel{
   private initElement!: HTMLElement
   private initElementName!: string
-  private rangeSlider!: IRangeSlider
+  private dwSlider!: IdwSlider
   private min!: HTMLInputElement
   private max!: HTMLInputElement
   private step!: HTMLInputElement
@@ -32,7 +32,7 @@ class configPanel{
   private defineInitElement = (initElementName: string): void => {
     this.initElementName = initElementName
     this.initElement = document.querySelector(initElementName) as HTMLElement
-    this.rangeSlider = $(initElementName).data("customRangeSlider");
+    this.dwSlider = $(initElementName).data("dwSlider");
   }
 
   
@@ -65,7 +65,7 @@ class configPanel{
   }
 
   private isDisable = (element: HTMLInputElement): void => {
-    if (this.rangeSlider.returnCurrentOptions().double){
+    if (this.dwSlider.returnCurrentOptions().double){
       element.disabled = false
     } else {
       element.disabled = true
@@ -81,14 +81,14 @@ class configPanel{
   }
 
   private handleInputChange = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
-    this.rangeSlider.update({
+    this.dwSlider.update({
       [optionKey]: Number(element.value)
     })
     this.displayCurrentState(element, optionKey)
   }
 
   private displayCurrentState = (element: HTMLInputElement, optionKey: keyof IOptions, checkbox = false): void => {
-    const currentState = $(this.initElementName).data("customRangeSlider").returnCurrentOptions();
+    const currentState = $(this.initElementName).data("dwSlider").returnCurrentOptions();
     if (checkbox){
       element.checked = currentState[optionKey]
     } else {
@@ -108,14 +108,14 @@ class configPanel{
   }
 
   private handleCheckboxInput = (optionKey: keyof IOptions): void => {
-    const isCurrentStateTrue = this.rangeSlider.returnCurrentOptions()[optionKey];
+    const isCurrentStateTrue = this.dwSlider.returnCurrentOptions()[optionKey];
     let newState: boolean
     if (isCurrentStateTrue){
       newState = false
     } else {
       newState = true
     }
-    this.rangeSlider.update({
+    this.dwSlider.update({
       [optionKey]: newState
     })
   }
