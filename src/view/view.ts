@@ -44,8 +44,7 @@ class View implements IView {
     this.initLine(this.wrapper.returnAsHTML())
     this.initThumb(this.line.returnAsHTML())
     this.initBoundaryLabels(this.line.returnAsHTML())
-    // ? What if input doest exist
-    this.initInput()
+    this.doesInputExist() ? this.initInput() : ''
 
     this.options.satellite ? this.initSatellite(this.line.returnAsHTML()): ''
     this.options.progress ? this.initProgress(this.line.returnAsHTML()) : ''
@@ -120,11 +119,24 @@ class View implements IView {
     this.progress.setInitialSettings(this.line.returnSize(), this.options.vertical)
   }
 
+  private doesInputExist = (extra = false): boolean => {
+    let inputClass = '.range-slider__input_from'
+    if (extra) {
+      inputClass = '.range-slider__input_to'
+    }
+    const input: HTMLInputElement | null = this.initElement.querySelector(inputClass)
+    if (input) {
+      return true
+    } 
+    return false
+  }
+
   private initInput = (): void => {
     this.input = new Input(this.initElement)
     this.input.bindChangedState(this.currentChanged)
     
-    if (this.options.double){
+    const extra = true
+    if (this.options.double && this.doesInputExist(extra)){
       this.input.initExtra()
       this.input.bindExtraChangedState(this.extraCurrentChanged)
     }
@@ -150,7 +162,11 @@ class View implements IView {
     }
 
     this.thumb.update(part, this.line.returnSize(), this.options.vertical, extra)
-    this.input.update(current, extra)
+
+    const doesInputsExist = (extra && this.doesInputExist(extra)) || (!extra && this.doesInputExist())
+
+    doesInputsExist ? this.input.update(current, extra): ''
+    
     this.options.progress ? this.progress.update(part, this.line.returnSize(), this.options.vertical, extra) : ''
 
     if (this.options.satellite) {

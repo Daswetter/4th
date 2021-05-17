@@ -43,7 +43,34 @@ describe('View', () => {
     
   })
 
-
+  describe('initView', () => {
+    test('should not fail if primary input do not exist', () => {
+      const scaleElements = {
+        '0': '0',
+        '0.25': '0.25',
+        '0.5': '0.5',
+        '0.75': '0.75',
+        '1': '1',
+      }
+      _.initView(scaleElements)
+      expect(_.input).not.toBeTruthy()
+    })
+    test('should not fail if extra input do not exist', () => {
+      const input = document.createElement('input')
+      initElement.append(input)
+      input.classList.add('range-slider__input_from')
+      options.double = true
+      const scaleElements = {
+        '0': '0',
+        '0.25': '0.25',
+        '0.5': '0.5',
+        '0.75': '0.75',
+        '1': '1',
+      }
+      _.initView(scaleElements)
+      expect(_.input).toBeTruthy()
+    })
+  })
   describe('initView', () => {
     let scaleElements: { [key: string]: string }
     beforeEach(() => {
@@ -54,13 +81,6 @@ describe('View', () => {
         '0.75': '0.75',
         '1': '1',
       }
-      const input = document.createElement('input')
-      initElement.append(input)
-      input.classList.add('range-slider__input_from')
-
-      const inputExtra = document.createElement('input')
-      initElement.append(inputExtra)
-      inputExtra.classList.add('range-slider__input_to')
       _.initView(scaleElements)
     })
     test('should create wrapper', () => {
@@ -243,6 +263,15 @@ describe('View', () => {
       _.notifyPrimary(1, 1)
       expect(spyThumb).toHaveBeenCalled();
     })
+    test('should call update for boundary labels if single', () => {
+      options.double = false
+      options.satellite = true
+      
+      _.initView(scaleElements)
+      const spyLabels = jest.spyOn(_.boundaryLabels, 'update')
+      _.notifyPrimary(100, 0.11)
+      expect(spyLabels).toHaveBeenCalled()
+    })
   })
 
   describe('notifyExtra', () => {
@@ -275,14 +304,11 @@ describe('View', () => {
       _.notifyExtra(100, 0.11)
       expect(spySatellite).toHaveBeenCalled()
     })
-    test('should call update for boundary labels if single', () => {
-      options.double = false
-      options.satellite = true
-      
+    test('should not call update for input if input does not exist', () => {      
       _.initView(scaleElements)
-      const spyLabels = jest.spyOn(_.boundaryLabels, 'update')
-      _.notifyPrimary(100, 0.11)
-      expect(spyLabels).toHaveBeenCalled()
+      const spyInputs = jest.spyOn(_.input, 'update')
+      _.notifyExtra(100, 0.11)
+      expect(spyInputs).not.toHaveBeenCalled()
     })
     
   })

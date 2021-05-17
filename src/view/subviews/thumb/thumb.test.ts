@@ -108,8 +108,6 @@ describe('Thumb', () =>{
 
       const mouseUp = new MouseEvent('mouseup')
 
-      // *check if mouseUp works
-
       document.dispatchEvent(mouseUp)
       document.dispatchEvent(mouseMove);
       expect(callback).toBeCalledTimes(1)
