@@ -64,7 +64,7 @@ progress | true | boolean | Прогресс бар
 
 ### Диаграмма
 
-![diagram](https://github.com/Daswetter/4th/blob/ts-branch/slider.svg "Здесь диаграмма")
+![diagram](https://github.com/Daswetter/4th/blob/ts-branch/dwSlider.svg "Здесь диаграмма")
 
 ## Публичные методы
 
