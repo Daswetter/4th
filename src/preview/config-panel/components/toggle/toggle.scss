@@ -5,7 +5,6 @@
   width: 2.5rem;
   height: 1.25rem;
   -webkit-appearance: none;
-  outline: none;
   border: 0.125rem solid rgb(102, 93, 93);
   cursor: pointer;
   &::before {
@@ -18,7 +17,7 @@
   &:checked {
     border: 0.125rem solid #8fd9a8;
     &::before{
-      margin-left: 18px;
+      margin-left: 1.125rem;
       background: #8fd9a8;
     }
   }
