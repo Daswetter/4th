@@ -1,4 +1,4 @@
-mixin input(title, className)
-  .input__container 
-    .input__title=title
-    input(class="input__field", type = "number", class!=className)
+mixin input(options)
+  .input 
+    .input__title=options.title
+    input(class="input__field", type = "number", class!=options.className)

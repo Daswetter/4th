@@ -1,9 +1,8 @@
 .input{
-  &__container{
-    display: flex;
-    position: relative;
-    margin: 0.3125rem;
-  }
+  display: flex;
+  position: relative;
+  margin: 0.3125rem;
+  
   &__title{
     width: 2.1875rem;
     background: rgb(102, 93, 93);
