@@ -47,6 +47,7 @@
     "pug-loader": "^2.4.0",
     "scss-loader": "0.0.1",
     "source-map-loader": "^1.1.0",
-    "style-loader": "^2.0.0"
+    "style-loader": "^2.0.0",
+    "ts-node": "^10.0.0"
   }
 }

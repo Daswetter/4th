@@ -2,8 +2,8 @@ import $ from 'jquery'
 
 import { IdwSlider } from '../../interface/IdwSlider'
 import { IOptions } from '../../interface/IOptions'
-import './components/toggle/toggle'
-import './components/input/input'
+import './components/toggle/toggle.ts'
+import './components/input/input.ts'
 import './config-panel.scss'
 
 

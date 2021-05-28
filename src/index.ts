@@ -5,6 +5,6 @@ import './model/model'
 import './presenter/presenter'
 
 import './dwSlider/dwSlider.ts'
-import './preview/preview'
+import './preview/preview.ts'
 
 import './preview/config-panel/config-panel.ts'
