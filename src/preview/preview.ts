@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import { configPanel } from './config-panel/config-panel.ts'
+import { configPanel } from './config-panel/config-panel'
 import './preview.scss'
 
 

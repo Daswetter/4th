@@ -8,3 +8,4 @@ import './dwSlider/dwSlider.ts'
 import './preview/preview.ts'
 
 import './preview/config-panel/config-panel.ts'
+import './preview/config-panel/components/favicons/favicons'

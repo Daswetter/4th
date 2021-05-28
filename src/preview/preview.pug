@@ -1,12 +1,14 @@
-include ./config-panel/config-panel.pug
-
+include ./config-panel/config-panel
+include ./config-panel/components/favicons/favicons
 doctype html
 html(lang="en")
   head
-    meta(charset="UTF-8")
+    meta(charset='utf-8')
+    meta(name="keywords" content="slider, plugin")
+    meta(name="description" content="dwSlider is a plugin for picking numbers")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title dwSlider
-    
+    +favicons
   body
     .js-slider1
       +config-panel
