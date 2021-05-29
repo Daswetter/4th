@@ -4,6 +4,9 @@ html {
 .dwSlider {
   &__wrapper{
     display: flex;
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    user-select: none;
     &_horizontal{
       flex-direction: column;
       width: 60%;
