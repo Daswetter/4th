@@ -23,7 +23,7 @@ import { IOptions } from '../interface/IOptions'
         step: 1,
         vertical: false,
         double: false,
-        satellite: true,
+        tip: true,
         scale: true,
         scaleSize: 2,
         progress: true,

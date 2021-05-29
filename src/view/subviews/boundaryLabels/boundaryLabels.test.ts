@@ -48,29 +48,29 @@ describe('BoundaryLabels', () => {
 
   describe('update', () => {
     let vertical: boolean
-    type satelliteParamsType = {
+    type tipParamsType = {
       width: number,
       height: number,
       left: number,
       top: number,
     }
-    let satelliteParams: satelliteParamsType
-    let satelliteExtraParams: satelliteParamsType
+    let tipParams: tipParamsType
+    let tipExtraParams: tipParamsType
     beforeEach(() => {
-      satelliteParams = {
+      tipParams = {
         width: 100,
         height: 50,
         left: 10,
         top: -10,
       }
-      satelliteExtraParams = {
+      tipExtraParams = {
         width: 80,
         height: 120,
         left: -10,
         top: 2,
       }
       vertical = true
-      _.update(satelliteParams, vertical, satelliteExtraParams)
+      _.update(tipParams, vertical, tipExtraParams)
     })
     test('should set correct min opacity', () => {
       expect(_.min.style.opacity).toBe('0')
@@ -80,7 +80,7 @@ describe('BoundaryLabels', () => {
       Object.defineProperty(_.max, 'offsetLeft', {
         value: 500
       })
-      _.update(satelliteParams, vertical)
+      _.update(tipParams, vertical)
       expect(_.max.style.opacity).toBe('1')
     })
     test('should set correct min opacity', () => {
@@ -88,7 +88,7 @@ describe('BoundaryLabels', () => {
       Object.defineProperty(_.min, 'offsetLeft', {
         value: 500
       })
-      _.update(satelliteParams, vertical, satelliteExtraParams)
+      _.update(tipParams, vertical, tipExtraParams)
       expect(_.min.style.opacity).toBe('0')
     })
   })

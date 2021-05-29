@@ -20,7 +20,7 @@ describe('Presenter', () => {
       to: 0.5,
       step: 0.01,
       progress: true,
-      satellite: true,
+      tip: true,
       scale: true,
       scaleSize: 5,
       vertical: false,

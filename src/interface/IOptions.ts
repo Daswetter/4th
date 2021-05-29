@@ -6,7 +6,7 @@ interface IOptions {
   step: number,
   vertical: boolean,
   double: boolean,
-  satellite: boolean,
+  tip: boolean,
   scale: boolean,
   scaleSize: number
   progress: boolean,

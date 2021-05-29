@@ -1,6 +1,6 @@
 import { Subview } from "../Subview"
 
-class Satellite extends Subview {
+class Tip extends Subview {
   public primary!: HTMLElement
   public extra!: HTMLElement
   public united!: HTMLElement
@@ -15,11 +15,11 @@ class Satellite extends Subview {
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
-    this.primary = this.init(initElement, this.primary, 'satellite')
+    this.primary = this.init(initElement, this.primary, 'tip')
   }
 
   public initExtra = (initElement: HTMLElement): void => {
-    this.extra = this.init(initElement, this.extra, 'satellite')
+    this.extra = this.init(initElement, this.extra, 'tip')
   }
 
   private printInnerText = (element: HTMLElement, current: number | string): void => {
@@ -63,13 +63,13 @@ class Satellite extends Subview {
 
   private initUnited = (): HTMLElement => {
     const element = document.createElement('div')
-    element.classList.add('dwSlider__satellite')
+    element.classList.add('dwSlider__tip')
     this.primary.after(element)
     element.style.opacity = '0'
     return element
   }
 
-  private joinSatellites = (lineWidth: number, thumbWidth: number,  vertical: boolean): void => {
+  private joinTips = (lineWidth: number, thumbWidth: number,  vertical: boolean): void => {
     this.defineContent(vertical)
 
     this.setPositionToUnited(lineWidth, thumbWidth, vertical)
@@ -155,7 +155,7 @@ class Satellite extends Subview {
     this.setPosition(element, part, lineSize, vertical)
 
     if (double){
-      this.joinSatellites(lineSize.width, thumbSize.width, vertical)
+      this.joinTips(lineSize.width, thumbSize.width, vertical)
     }
   }
 
@@ -179,4 +179,4 @@ class Satellite extends Subview {
   
 }
 
-export { Satellite }
+export { Tip }

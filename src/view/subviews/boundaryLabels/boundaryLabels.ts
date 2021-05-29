@@ -64,61 +64,61 @@ class BoundaryLabels extends Subview {
     element.style.opacity = opacity
   }
 
-  private isPrimaryTouchingMin = (satelliteParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
+  private isPrimaryTouchingMin = (tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
     if (vertical) {
-      return satelliteParams.top + satelliteParams.height >= this.min.offsetTop
+      return tipParams.top + tipParams.height >= this.min.offsetTop
     }
-    return satelliteParams.left <= (this.min.offsetLeft + this.min.offsetWidth)
+    return tipParams.left <= (this.min.offsetLeft + this.min.offsetWidth)
   }
 
-  private isPrimaryTouchingMax = (satelliteParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
+  private isPrimaryTouchingMax = (tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
     if (vertical) {
-      return satelliteParams.top <= (this.max.offsetTop + this.max.offsetHeight)
+      return tipParams.top <= (this.max.offsetTop + this.max.offsetHeight)
     }
-    return satelliteParams.left + satelliteParams.width >= this.max.offsetLeft
+    return tipParams.left + tipParams.width >= this.max.offsetLeft
   }
   
-  private isExtraTouchingMin = (satelliteExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
+  private isExtraTouchingMin = (tipExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
     if (vertical) {
-      return satelliteExtraParams.top + satelliteExtraParams.height >= this.min.offsetTop
+      return tipExtraParams.top + tipExtraParams.height >= this.min.offsetTop
     }
-    return satelliteExtraParams.left <= (this.min.offsetLeft + this.min.offsetWidth)
+    return tipExtraParams.left <= (this.min.offsetLeft + this.min.offsetWidth)
   }
 
-  private isExtraTouchingMax = (satelliteExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
+  private isExtraTouchingMax = (tipExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
     if (vertical) {
-      return satelliteExtraParams.top <= (this.max.offsetTop + this.max.offsetHeight)
+      return tipExtraParams.top <= (this.max.offsetTop + this.max.offsetHeight)
     }
-    return satelliteExtraParams.left + satelliteExtraParams.width >= this.max.offsetLeft
+    return tipExtraParams.left + tipExtraParams.width >= this.max.offsetLeft
   }
 
 
 
-  private setOpacityToDouble = (satelliteParams: { width: number, height: number, left: number, top: number }, satelliteExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean): void => {
-    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(satelliteParams, vertical)
-    const isExtraTouchingMin = this.isExtraTouchingMin(satelliteExtraParams, vertical)
+  private setOpacityToDouble = (tipParams: { width: number, height: number, left: number, top: number }, tipExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean): void => {
+    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, vertical)
+    const isExtraTouchingMin = this.isExtraTouchingMin(tipExtraParams, vertical)
     this.switchOpacity(this.min, isPrimaryTouchingMin, isExtraTouchingMin)
 
-    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(satelliteParams, vertical)
-    const isExtraTouchingMax = this.isExtraTouchingMax(satelliteExtraParams, vertical)
+    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(tipParams, vertical)
+    const isExtraTouchingMax = this.isExtraTouchingMax(tipExtraParams, vertical)
     this.switchOpacity(this.max, isPrimaryTouchingMax, isExtraTouchingMax)
   }
 
 
-  private setOpacityToSingle = (satelliteParams: { width: number, height: number, left: number, top: number }, vertical: boolean): void => {
-    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(satelliteParams, vertical)
+  private setOpacityToSingle = (tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean): void => {
+    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, vertical)
     this.switchOpacity(this.min, isPrimaryTouchingMin)
 
-    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(satelliteParams, vertical)
+    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(tipParams, vertical)
     this.switchOpacity(this.max, isPrimaryTouchingMax)
   }
   
-  public update = (satelliteParams: { width: number, height: number, left: number, top: number }, vertical: boolean, satelliteExtraParams?: { width: number, height: number, left: number, top: number }): void => {
+  public update = (tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean, tipExtraParams?: { width: number, height: number, left: number, top: number }): void => {
     
-    if (satelliteExtraParams) {
-      this.setOpacityToDouble(satelliteParams, satelliteExtraParams, vertical)
+    if (tipExtraParams) {
+      this.setOpacityToDouble(tipParams, tipExtraParams, vertical)
     } else {
-      this.setOpacityToSingle(satelliteParams, vertical)
+      this.setOpacityToSingle(tipParams, vertical)
     }
   }
 }

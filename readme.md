@@ -37,7 +37,7 @@ $(".js-slider").dwSlider({
   to: 8,  
   step: 1,  
   progress: true,  
-  satellite: true,  
+  tip: true,  
   scale: true,  
   scaleSize: 6,  
   vertical: false,  
@@ -56,7 +56,7 @@ to | 0 | number | Начальное значение для второго бе
 step | 1 | number | Размер шага, может быть дробным, всегда > 0
 vertical | false | boolean | Вертикальный или горизонтальный вид
 double | false | boolean | Одиночное значение или интервал
-satellite | true | boolean | Элемент над бегунком, который показывает значение
+tip | true | boolean | Элемент над бегунком, который показывает значение
 scale | true | boolean | Шкала значений
 scaleSize | true | number | Количество значений в шкале, от 2 до 20
 progress | true | boolean | Прогресс бар

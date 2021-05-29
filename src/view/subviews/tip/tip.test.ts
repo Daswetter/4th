@@ -1,21 +1,21 @@
-import { Satellite } from "./satellite"
+import { Tip } from "./tip"
 
-describe('Satellite', () => {
-  let _: Satellite
+describe('Tip', () => {
+  let _: Tip
   beforeEach(() => {
     const initElement = document.createElement('div')
-    _ = new Satellite(initElement)
+    _ = new Tip(initElement)
   })
   describe('constructor', () => {
     test('should create div', () => {
       expect(_.primary.nodeName).toBe('DIV')
     })
     test('should create correct class', () => {
-      expect(_.primary.className).toBe('dwSlider__satellite')
+      expect(_.primary.className).toBe('dwSlider__tip')
     })
   })
 
-  describe('initSatelliteExtra', () => {
+  describe('initTipExtra', () => {
     beforeEach(() => {
       const initElement = document.createElement('div')
       _.initExtra(initElement)
@@ -24,7 +24,7 @@ describe('Satellite', () => {
       expect(_.extra.nodeName).toBe('DIV')
     })
     test('should create correct class', () => {
-      expect(_.extra.className).toBe('dwSlider__satellite')
+      expect(_.extra.className).toBe('dwSlider__tip')
     })
   })
 

@@ -22,7 +22,7 @@ class configPanel{
   private double!: HTMLInputElement
   private scale!: HTMLInputElement
   private progress!: HTMLInputElement
-  private satellite!: HTMLInputElement
+  private tip!: HTMLInputElement
 
   constructor(initElementName: string){
     this.defineInitElement(initElementName)
@@ -49,7 +49,7 @@ class configPanel{
     this.switchStateForTo(this.to)
     this.scale = this.initCheckbox(this.scale, 'scale')
     this.progress = this.initCheckbox(this.progress, 'progress')
-    this.satellite = this.initCheckbox(this.satellite, 'satellite')
+    this.tip = this.initCheckbox(this.tip, 'tip')
   }
 
   private setEventListener = (element: HTMLInputElement, optionKey: keyof IOptions): void => {

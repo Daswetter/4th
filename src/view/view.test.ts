@@ -22,7 +22,7 @@ describe('View', () => {
       to: 100,
       step: 100,
       progress: true,
-      satellite: false,
+      tip: false,
       scale: true,
       scaleSize: 5,
       vertical: true,
@@ -92,8 +92,8 @@ describe('View', () => {
     test('should create thumb', () => {
       expect(_.thumb).toBeTruthy()
     })
-    test('should not create satellite', () => {
-      expect(_.satellite).not.toBeTruthy()
+    test('should not create tip', () => {
+      expect(_.tip).not.toBeTruthy()
     })
     test('should create scale', () => {
       expect(_.scale).toBeTruthy()
@@ -141,10 +141,10 @@ describe('View', () => {
         '1': '1',
       }
     })
-    test('should create satellite', () => {
-      options.satellite = true
+    test('should create tip', () => {
+      options.tip = true
       _.initView(scaleElements)
-      expect(_.satellite).toBeTruthy()
+      expect(_.tip).toBeTruthy()
     })
 
     describe('should call mock if line was clicked', () => {
@@ -221,9 +221,9 @@ describe('View', () => {
     })
     test('should not call initExtraElement for single', () => {
       options.double = false
-      options.satellite = true
+      options.tip = true
       _.initView(scaleElements)
-      expect(_.satellite.extra).not.toBeTruthy()
+      expect(_.tip.extra).not.toBeTruthy()
     })
   })
   
@@ -265,7 +265,7 @@ describe('View', () => {
     })
     test('should call update for boundary labels if single', () => {
       options.double = false
-      options.satellite = true
+      options.tip = true
       
       _.initView(scaleElements)
       const spyLabels = jest.spyOn(_.boundaryLabels, 'update')
@@ -297,12 +297,12 @@ describe('View', () => {
       _.notifyExtra(100, 0.11)
       expect(spyProgress).not.toHaveBeenCalled()
     })
-    test('should call update for satellite if it is true', () => {
-      options.satellite = true
+    test('should call update for tip if it is true', () => {
+      options.tip = true
       _.initView(scaleElements)
-      const spySatellite = jest.spyOn(_.satellite, 'update')
+      const spyTip = jest.spyOn(_.tip, 'update')
       _.notifyExtra(100, 0.11)
-      expect(spySatellite).toHaveBeenCalled()
+      expect(spyTip).toHaveBeenCalled()
     })
     test('should not call update for input if input does not exist', () => {      
       _.initView(scaleElements)

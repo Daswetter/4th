@@ -14,7 +14,7 @@ describe('Model', () => {
       to: 100,
       step: 100,
       progress: true,
-      satellite: true,
+      tip: true,
       scale: true,
       scaleSize: 5,
       vertical: true,

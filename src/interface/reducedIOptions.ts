@@ -6,7 +6,7 @@ interface reducedIOptions {
   step?: number,
   vertical?: boolean,
   double?: boolean,
-  satellite?: boolean,
+  tip?: boolean,
   scale?: boolean,
   progress?: boolean,
   input?: boolean

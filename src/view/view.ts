@@ -5,7 +5,7 @@ import { Line } from './subviews/line/line'
 import { Thumb } from './subviews/thumb/thumb'
 import { Progress } from './subviews/progress/progress'
 import { Scale } from './subviews/scale/scale'
-import { Satellite } from './subviews/satellite/satellite'
+import { Tip } from './subviews/tip/tip'
 import { Input } from './subviews/input/input'
 import { BoundaryLabels } from './subviews/boundaryLabels/boundaryLabels'
 
@@ -17,7 +17,7 @@ class View implements IView {
   public thumb!: Thumb 
   public progress!: Progress
   public scale!: Scale 
-  public satellite!: Satellite
+  public tip!: Tip
   public input!: Input
   public boundaryLabels!: BoundaryLabels
 
@@ -46,7 +46,7 @@ class View implements IView {
     this.initBoundaryLabels(this.line.returnAsHTML())
     this.doesInputExist() ? this.initInput() : ''
 
-    this.options.satellite ? this.initSatellite(this.line.returnAsHTML()): ''
+    this.options.tip ? this.initTip(this.line.returnAsHTML()): ''
     this.options.progress ? this.initProgress(this.line.returnAsHTML()) : ''
     this.options.scale ? this.initScale(this.line.returnAsHTML(), scaleElements): ''
     
@@ -93,14 +93,14 @@ class View implements IView {
     
   }
 
-  private initSatellite = (initElement: HTMLElement): void => {
-    this.satellite = new Satellite(initElement)
-    this.satellite.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.min)
+  private initTip = (initElement: HTMLElement): void => {
+    this.tip = new Tip(initElement)
+    this.tip.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.min)
 
     if (this.options.double){
-      this.satellite.initExtra(initElement)
+      this.tip.initExtra(initElement)
       const extra = true
-      this.satellite.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.max, extra)
+      this.tip.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.max, extra)
     }
   }
   
@@ -169,13 +169,13 @@ class View implements IView {
     
     this.options.progress ? this.progress.update(part, this.line.returnSize(), this.options.vertical, extra) : ''
 
-    if (this.options.satellite) {
-      this.satellite.update(part, current, this.line.returnSize(), this.thumb.returnSize(), this.options.vertical, this.options.double, extra)
+    if (this.options.tip) {
+      this.tip.update(part, current, this.line.returnSize(), this.thumb.returnSize(), this.options.vertical, this.options.double, extra)
 
       if (this.options.double) {
-        this.boundaryLabels.update(this.satellite.returnPrimaryParameters(), this.options.vertical, this.satellite.returnExtraParameters())
+        this.boundaryLabels.update(this.tip.returnPrimaryParameters(), this.options.vertical, this.tip.returnExtraParameters())
       } else {
-        this.boundaryLabels.update(this.satellite.returnPrimaryParameters(), this.options.vertical)
+        this.boundaryLabels.update(this.tip.returnPrimaryParameters(), this.options.vertical)
       }
     }
   }
