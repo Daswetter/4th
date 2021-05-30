@@ -1,5 +1,6 @@
 import { Subview } from "../Subview"
 
+
 class Input extends Subview{
   public primary!: HTMLInputElement
   public extra!: HTMLInputElement
@@ -8,33 +9,30 @@ class Input extends Subview{
     super()
     this.initPrimary(initElement)
     this.setEventListener(this.primary)
+
+    this.subscribeEvent<HTMLInputElement>('input: changed', element => this.handleChange(element));
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
     this.primary = initElement.querySelector('.dwSlider__input_from') as HTMLInputElement
     this.extra = initElement.querySelector('.dwSlider__input_to') as HTMLInputElement
-
   }
+  
   public initExtra = (): void => {
     this.setEventListener(this.extra)
   }
 
   private setEventListener = (element: HTMLInputElement): void => {
-    element.addEventListener('change', this.handleChange.bind(null, element))
-  }
-
-  private getValue = (element: HTMLInputElement): number => {
-    return Number(element.value)
+    element.addEventListener('change', () => this.emitEvent<HTMLInputElement>('input: changed', element))
   }
 
   private handleChange = (element: HTMLInputElement): void => {
-    const value = this.getValue(element)
+    const value = Number(element.value)
     if (element === this.primary){
       this.onChanged(value)
     } else {
       this.onExtraChanged(value)
     }
-    
   }
 
   private printValue = (element: HTMLInputElement, current: number): void => {
