@@ -1,7 +1,6 @@
 import $ from 'jquery'
 
-import { IdwSlider } from '../../interface/IdwSlider'
-import { IOptions } from '../../interface/IOptions'
+import { IdwSlider, IOptions } from '../../types'
 import './components/toggle/toggle.ts'
 import './components/input/input.ts'
 import './config-panel.scss'

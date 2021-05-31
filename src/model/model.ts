@@ -1,6 +1,4 @@
-import './../interface/IOptions'
-import { IOptions } from './../interface/IOptions'
-import { IModel } from './IModel'
+import { IOptions, IModel } from './../types'
 
 class Model implements IModel{
   private currentWereChanged!: (current: number, part: number) => void

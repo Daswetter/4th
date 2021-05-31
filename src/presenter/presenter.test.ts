@@ -1,8 +1,6 @@
-import { IModel } from '../model/IModel';
+import { IModel, IView, IOptions } from '../types';
 import { Model } from '../model/model';
-import { IView } from '../view/IView';
 import { View } from '../view/view';
-import { IOptions } from '../interface/IOptions';
 import { Presenter } from './presenter'
 
 describe('Presenter', () => {

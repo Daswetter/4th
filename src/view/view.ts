@@ -1,4 +1,4 @@
-import { IOptions } from './../interface/IOptions'
+import { IOptions, IView } from './../types'
 
 import { Wrapper } from './subviews/wrapper/wrapper'
 import { Line } from './subviews/line/line'
@@ -8,8 +8,6 @@ import { Scale } from './subviews/scale/scale'
 import { Tip } from './subviews/tip/tip'
 import { Input } from './subviews/input/input'
 import { BoundaryLabels } from './subviews/boundaryLabels/boundaryLabels'
-
-import { IView } from './IView'
 
 class View implements IView { 
   public wrapper!: Wrapper

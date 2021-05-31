@@ -8,7 +8,7 @@ $(".js-slider1").dwSlider({
   max: 7,
   from: 0.5,
   to: 2,
-  step: 2,
+  step: 0.1,
   progress: true,
   tip: true,
   scale: true,

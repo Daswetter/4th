@@ -1,11 +1,9 @@
 import jQuery from 'jquery'
 
 import { View } from '../view/view'
-import { IView } from '../view/IView'
+import { IView, IModel, IOptions } from '../types'
 import { Model } from '../model/model'
-import { IModel } from '../model/IModel'
 import { Presenter } from '../presenter/presenter'
-import { IOptions } from '../interface/IOptions'
 
 (function($){
   class dwSlider {

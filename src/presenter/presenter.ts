@@ -1,9 +1,5 @@
 
-import { IModel } from '../model/IModel'
-import { IView } from '../view/IView'
-import './../interface/IOptions'
-import { IOptions } from './../interface/IOptions'
-
+import { IModel, IView, IOptions } from '../types'
 
 class Presenter{
   constructor(private View: IView, private Model: IModel) {
