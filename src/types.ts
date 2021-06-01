@@ -62,4 +62,12 @@ interface reducedIOptions {
   input?: boolean
 }
 
-export { reducedIOptions, IOptions, IdwSlider, IModel, IView }
+type paramsType = {
+  pageName: keyof MouseEvent,
+  sideName: keyof HTMLElement,
+  sizeName: keyof HTMLElement,
+  lineSize: number, 
+  lineSide: number,
+}
+
+export { reducedIOptions, IOptions, IdwSlider, IModel, IView, paramsType}

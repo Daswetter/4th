@@ -1,4 +1,5 @@
 import { Subview } from "../Subview"
+import { paramsType } from '../../../types'
 
 class Tip extends Subview {
   public primary!: HTMLElement
@@ -7,11 +8,15 @@ class Tip extends Subview {
 
   private current!: number
   private currentExtra!: number
+  private unsubscribeMove!: () => void
+  private unsubscribeUp!: () => void
 
   constructor(initElement: HTMLElement){
     super()
     this.initPrimary(initElement)
     this.united = this.initUnited()
+
+    this.subscribeEvent<{element: HTMLElement, params: paramsType, event: MouseEvent}>('thumb: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))    
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
@@ -50,6 +55,86 @@ class Tip extends Subview {
       this.setTopToHorizontal(element, thumbSize.height)
     }
   }
+
+  public setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical = false, extra = false): void => {
+    let element = this.primary
+
+    if (extra){
+      element = this.extra
+    }
+    const params = this.getOrientationParams(vertical, lineSize, lineSide)
+    
+    element.addEventListener('mousedown', (event) => this.emitEvent('thumb: mouseDown', {element, params, event}))
+  }
+
+  private handleMouseDown = (element: HTMLElement, params: paramsType, event: MouseEvent) : void => { 
+    event.preventDefault()
+
+    let shift = (event[params.pageName] as number) - (element[params.sideName] as number) - params.lineSide
+    
+    if (params.pageName === 'pageY'){
+      shift = shift + params.lineSize
+    }
+    
+    
+    this.unsubscribeMove = this.subscribeEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
+
+    this.unsubscribeUp = this.subscribeEvent<null>('thumb: mouseUp', () => this.handleMouseUp())
+
+    document.addEventListener('mousemove', (event) => this.emitEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', {element, params, shift, event}))
+
+    document.addEventListener('mouseup', () => this.emitEvent<null>('thumb: mouseUp', null))
+  }
+
+
+  private handleMouseMove = (data: {element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}): void => {
+    let part = (data.event[data.params.pageName] as number - data.params.lineSide - data.shift + (data.element[data.params.sizeName] as number) / 2) / data.params.lineSize    
+
+    if (data.params.pageName === 'pageY'){
+      part = - part 
+    }
+    
+    if (part < 0){
+      part = 0;
+    } else if (part > 1){
+      part = 1
+    }
+
+    console.log(this.onChanged);
+    
+    if (data.element === this.primary){
+      this.onChanged(part)
+    }
+    if (data.element === this.extra){
+      this.onExtraChanged(part)
+    }
+  }
+
+  private handleMouseUp = () : void => {
+    this.unsubscribeMove()
+    this.unsubscribeUp()
+  }
+
+  private getOrientationParams = (vertical: boolean, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): paramsType => {
+    let params: paramsType = {
+      pageName: 'pageX',
+      sideName: 'offsetLeft',
+      sizeName: 'offsetWidth',
+      lineSize: lineSize.width, 
+      lineSide: lineSide.left, 
+    }
+    if (vertical){
+      params = {
+        pageName: 'pageY',
+        sideName: 'offsetTop',
+        sizeName:'offsetHeight',
+        lineSize: lineSize.height, 
+        lineSide: lineSide.bottom, 
+      }
+    }
+    return params
+  }
+  
 
   private setPosition = (element: HTMLElement, part: number, lineSize: {width: number, height: number}, vertical: boolean ): void => {
 

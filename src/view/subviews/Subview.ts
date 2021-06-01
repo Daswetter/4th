@@ -33,6 +33,12 @@ abstract class Subview {
     }
   }
 
+  protected unsubscribe<T>(eventName: keyof IEvent<T>, fn: (data: T) => void ) {
+    this.events[eventName] = this.events[eventName].filter(eventCallback => console.log(fn === eventCallback));
+
+    console.log( )
+  }
+
   public bindChangedState(callback: (arg0: number) => void ): void {
     this.onChanged = callback;
   }

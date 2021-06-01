@@ -94,11 +94,15 @@ class View implements IView {
   private initTip = (initElement: HTMLElement): void => {
     this.tip = new Tip(initElement)
     this.tip.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.min)
+    this.tip.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical)
+    this.tip.bindChangedState(this.partChanged)
 
     if (this.options.double){
       this.tip.initExtra(initElement)
       const extra = true
       this.tip.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.max, extra)
+      this.tip.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
+      this.tip.bindExtraChangedState(this.extraPartChanged)
     }
   }
   

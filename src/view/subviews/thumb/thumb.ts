@@ -1,13 +1,16 @@
 import { Subview } from '../Subview'
+import { paramsType } from '../../../types'
 class Thumb extends Subview{
   public primary!: HTMLElement
   public extra!: HTMLElement
-  private boundOnMouseMove!: (event: MouseEvent) => void
-  private boundOnMouseUp!: () => void
+  private unsubscribeMove!: () => void
+  private unsubscribeUp!: () => void
 
   constructor(initElement: HTMLElement){
     super()
     this.initPrimary(initElement)
+
+    this.subscribeEvent<{element: HTMLElement, params: paramsType, event: MouseEvent}>('thumb: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))    
   }
   
   private initPrimary = (initElement: HTMLElement): void => {
@@ -18,31 +21,26 @@ class Thumb extends Subview{
     this.extra = this.init(initElement, this.extra, 'thumb')
   }
 
-  private getOrientationParams = (vertical: boolean, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number} => {
-    let params = {
-      pageName: 'pageX' as keyof MouseEvent,
-      sideName: 'offsetLeft' as keyof HTMLElement,
-      sizeName: 'offsetWidth' as keyof HTMLElement,
+  private getOrientationParams = (vertical: boolean, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): paramsType => {
+    let params: paramsType = {
+      pageName: 'pageX',
+      sideName: 'offsetLeft',
+      sizeName: 'offsetWidth',
       lineSize: lineSize.width, 
       lineSide: lineSide.left, 
     }
     if (vertical){
       params = {
-        pageName: 'pageY' as keyof MouseEvent,
-        sideName: 'offsetTop' as keyof HTMLElement,
-        sizeName:'offsetHeight' as keyof HTMLElement,
+        pageName: 'pageY',
+        sideName: 'offsetTop',
+        sizeName:'offsetHeight',
         lineSize: lineSize.height, 
         lineSide: lineSide.bottom, 
       }
-      
     }
-    
     return params
   }
 
-  private setOnMouseDown = (element: HTMLElement, params: {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSide: number, lineSize: number}): void => {
-    element.onmousedown = this.handleMouseDown.bind(null, element, params)   
-  }
 
   public setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical = false, extra = false): void => {
     let element = this.primary
@@ -51,11 +49,11 @@ class Thumb extends Subview{
       element = this.extra
     }
     const params = this.getOrientationParams(vertical, lineSize, lineSide)
-    this.setOnMouseDown(element, params)
+    
+    element.addEventListener('mousedown', (event) => this.emitEvent('thumb: mouseDown', {element, params, event}))
   }
 
-  private handleMouseDown = (element: HTMLElement, params: {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number}, event: MouseEvent) : void => { 
-
+  private handleMouseDown = (element: HTMLElement, params: paramsType, event: MouseEvent) : void => { 
     event.preventDefault()
 
     let shift = (event[params.pageName] as number) - (element[params.sideName] as number) - params.lineSide
@@ -63,20 +61,22 @@ class Thumb extends Subview{
     if (params.pageName === 'pageY'){
       shift = shift + params.lineSize
     }
-   
-    this.boundOnMouseUp = this.handleMouseUp.bind(this)
-    this.boundOnMouseMove = this.handleMouseMove.bind(this, element, {...params, shift})
     
-    document.addEventListener('mousemove', this.boundOnMouseMove)
-    document.addEventListener('mouseup', this.boundOnMouseUp)
+    
+    this.unsubscribeMove = this.subscribeEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
+
+    this.unsubscribeUp = this.subscribeEvent<null>('thumb: mouseUp', () => this.handleMouseUp())
+
+    document.addEventListener('mousemove', (event) => this.emitEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', {element, params, shift, event}))
+
+    document.addEventListener('mouseup', () => this.emitEvent<null>('thumb: mouseUp', null))
   }
 
 
-  private handleMouseMove = (element: HTMLElement, params: {pageName: keyof MouseEvent, sideName: keyof HTMLElement, sizeName: keyof HTMLElement, lineSize: number, lineSide: number, shift: number}, event: MouseEvent): void => {
-    
-    let part = (event[params.pageName] as number - params.lineSide - params.shift + (element[params.sizeName] as number) / 2) / params.lineSize    
+  private handleMouseMove = (data: {element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}): void => {
+    let part = (data.event[data.params.pageName] as number - data.params.lineSide - data.shift + (data.element[data.params.sizeName] as number) / 2) / data.params.lineSize    
 
-    if (params.pageName === 'pageY'){
+    if (data.params.pageName === 'pageY'){
       part = - part 
     }
     
@@ -86,18 +86,18 @@ class Thumb extends Subview{
       part = 1
     }
 
-    if (element === this.primary){
+    if (data.element === this.primary){
       this.onChanged(part)
     }
-    if (element === this.extra){
+    if (data.element === this.extra){
       this.onExtraChanged(part)
     }
   }
 
 
   private handleMouseUp = () : void => {
-    document.removeEventListener('mouseup', this.boundOnMouseUp)
-    document.removeEventListener('mousemove', this.boundOnMouseMove)
+    this.unsubscribeMove()
+    this.unsubscribeUp()
   }
 
   private changeElementPosition = (element: HTMLElement, sideName: string, part: number, lineSize: number, elementSizeName: keyof HTMLElement): void => {

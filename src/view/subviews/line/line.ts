@@ -8,6 +8,12 @@ class Line extends Subview{
   constructor(initElement: HTMLElement){
     super()
     this.initPrimary(initElement)
+    
+    this.subscribeEvent<{vertical: boolean, event: MouseEvent}>('line: clicked', ({vertical, event}) => this.handleClick(vertical, event))
+
+    this.subscribeEvent<{vertical: boolean, event: MouseEvent}>('line: mouseDown', ({vertical, event}) => this.handleMouseDown(vertical, event))
+
+    this.subscribeEvent<{vertical: boolean, event: MouseEvent}>('line: mouseUp', ({vertical, event}) => this.handleMouseUp(vertical, event))
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
@@ -20,6 +26,8 @@ class Line extends Subview{
   }
 
   private handleMouseDown = (vertical: boolean, event: MouseEvent): void => {
+    console.log('down');
+    
     if (vertical){
       this.mouseDownValue = event.clientY
     } else {
@@ -28,6 +36,8 @@ class Line extends Subview{
     
   }
   private handleMouseUp = (vertical: boolean, event: MouseEvent): void => {
+    console.log('up');
+    
     if (vertical){
       this.mouseUpValue = event.clientY
     } else {
@@ -36,10 +46,9 @@ class Line extends Subview{
   }
 
   public setEventListener = (vertical: boolean): void => {
-    this.line.onmousedown = this.handleMouseDown.bind(null, vertical)
-    this.line.onmouseup = this.handleMouseUp.bind(null, vertical)
-
-    this.line.addEventListener('click', this.handleClick.bind(null, vertical))
+    this.line.addEventListener('mousedown', (event) => this.emitEvent('line: mouseDown', {vertical, event}))
+    this.line.addEventListener('mouseup', (event) => this.emitEvent('line: mouseUp', {vertical, event}))
+    this.line.addEventListener('click', (event) => this.emitEvent('line: clicked', {vertical, event}))
   }
   
   public returnSize = (): {width: number, height: number} => {
@@ -65,6 +74,10 @@ class Line extends Subview{
   }
 
   private handleClick = (vertical: boolean, event: MouseEvent) : void => {
+    console.log('clicked');
+    console.log(this.mouseDownValue);
+    console.log(this.mouseUpValue);
+    
     if ( this.mouseDownValue === this.mouseUpValue){
       if (vertical){
         this.onClickVertical.call(null, event)
