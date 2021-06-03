@@ -8,20 +8,12 @@ import './config-panel.scss'
 
 class configPanel{
   private initElement!: HTMLElement
-  private initElementName!: string
   private dwSlider!: IdwSlider
-  private min!: HTMLInputElement
-  private max!: HTMLInputElement
-  private step!: HTMLInputElement
-  private from!: HTMLInputElement
-  private to!: HTMLInputElement
-  private scaleSize!: HTMLInputElement
 
-  private vertical!: HTMLInputElement
-  private double!: HTMLInputElement
-  private scale!: HTMLInputElement
-  private progress!: HTMLInputElement
-  private tip!: HTMLInputElement
+  private inputs!: { [key: string]: HTMLInputElement }
+  private checkboxes!: { [key: string]: HTMLInputElement }
+
+  private events: { [eventName: string]: Array<(arg0: any) => void> } = {};
 
   constructor(initElementName: string){
     this.defineInitElement(initElementName)
@@ -29,41 +21,40 @@ class configPanel{
   }
 
   private defineInitElement = (initElementName: string): void => {
-    this.initElementName = initElementName
     this.initElement = document.querySelector(initElementName) as HTMLElement
     this.dwSlider = $(initElementName).data("dwSlider");
   }
 
   
   private init = (): void => {
-    this.min = this.initInput(this.min, 'min')
-    this.max = this.initInput(this.max, 'max')
-    this.step = this.initInput(this.step, 'step')
-    this.from = this.initInput(this.from, 'from')
-    this.to = this.initInput(this.to, 'to')    
-    this.scaleSize = this.initInput(this.scaleSize, 'scaleSize')    
+    const inputTitles = ['min', 'max', 'step', 'from', 'to', 'scaleSize']
 
-    this.vertical = this.initCheckbox(this.vertical, 'vertical')
-    this.double = this.initCheckbox(this.double, 'double')
-    this.switchStateForTo(this.to)
-    this.scale = this.initCheckbox(this.scale, 'scale')
-    this.progress = this.initCheckbox(this.progress, 'progress')
-    this.tip = this.initCheckbox(this.tip, 'tip')
+    inputTitles.forEach(title => this.inputs = { ...this.inputs, [title]: this.initInput(title as keyof IOptions)})   
+    
+    const checkboxTitles = ['vertical', 'double', 'scale', 'progress', 'tip']
+
+    checkboxTitles.forEach(title => this.checkboxes = { ...this.inputs, [title]: this.initCheckbox(title as keyof IOptions)})
+
+    this.updateCurrentState()
+
+    this.subscribeOnEvent<{element: HTMLInputElement, optionKey: keyof IOptions}>('input: changed', ({element, optionKey}) => this.handleInputChange({element, optionKey}));
+
+    this.subscribeOnEvent<{optionKey: keyof IOptions}>('checkbox: changed', ({optionKey}) => this.handleCheckboxChange({optionKey}));
+
+    this.subscribeOnEvent<null>('checkbox: changed', () => this.isDisable())
+
   }
 
   private setEventListener = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
-    element.addEventListener('change', this.handleInputChange.bind(null, element, optionKey))
+    element.addEventListener('change', () => this.emitEvent<{element: HTMLInputElement, optionKey: keyof IOptions}>('input: changed', {element, optionKey}))
   }
 
   private setEventListenerOnCheckbox = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
-    element.addEventListener('change', this.handleCheckboxInput.bind(null, optionKey))
-  }
-  private switchStateForTo = (element: HTMLInputElement): void => {
-    this.isDisable(element)
-    this.double.addEventListener('change', this.isDisable.bind(null, element))
+    element.addEventListener('change', () => this.emitEvent<{element: HTMLInputElement, optionKey: keyof IOptions}>('checkbox: changed', {element, optionKey}))
   }
 
-  private isDisable = (element: HTMLInputElement): void => {
+  private isDisable = (): void => {
+    const element = this.inputs.to
     if (this.dwSlider.returnCurrentOptions().double){
       element.disabled = false
     } else {
@@ -72,42 +63,49 @@ class configPanel{
     }
   }
 
-  private initInput = (element: HTMLInputElement, optionKey: keyof IOptions): HTMLInputElement => {
-    element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
-    this.displayCurrentState(element, optionKey)
+  private initInput = (optionKey: keyof IOptions): HTMLInputElement => {
+    const element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
+    this.displayInputValue(element, optionKey)
     this.setEventListener(element, optionKey)
     return element
   }
 
-  private handleInputChange = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
+  private displayInputValue = (element: HTMLInputElement, optionKey: keyof IOptions) => {
+    element.value = String(this.dwSlider.returnCurrentOptions()[optionKey])
+  }
+
+  private displayCheckboxState = (element: HTMLInputElement, optionKey: keyof IOptions) => {
+    element.checked = this.dwSlider.returnCurrentOptions()[optionKey] as boolean
+  }
+
+  private handleInputChange = (params: {element: HTMLInputElement, optionKey: keyof IOptions}): void => {
     this.dwSlider.update({
-      [optionKey]: Number(element.value)
+      [params.optionKey]: Number(params.element.value)
     })
-    this.displayCurrentState(element, optionKey)
+    this.updateCurrentState()
   }
 
-  private displayCurrentState = (element: HTMLInputElement, optionKey: keyof IOptions, checkbox = false): void => {
-    const currentState = $(this.initElementName).data("dwSlider").returnCurrentOptions();
-    if (checkbox){
-      element.checked = currentState[optionKey]
-    } else {
-      element.value = currentState[optionKey]
-      if (element === this.min) {
-        this.max.value = currentState.max
-      }
+  private updateCurrentState = (): void => {
+    for (let key in this.inputs) {
+      this.displayInputValue(this.inputs[key], key as keyof IOptions)
     }
-    
+
+    for (let key in this.checkboxes) {
+      this.displayCheckboxState(this.checkboxes[key], key as keyof IOptions)
+    }
+
+    this.isDisable()
   }
 
-  private initCheckbox = (element: HTMLInputElement, optionKey: keyof IOptions): HTMLInputElement => {
-    element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
-    this.displayCurrentState(element, optionKey, true)
+  private initCheckbox = ( optionKey: keyof IOptions): HTMLInputElement => {
+    const element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
     this.setEventListenerOnCheckbox(element, optionKey)
+    this.displayCheckboxState(element, optionKey)
     return element
   }
 
-  private handleCheckboxInput = (optionKey: keyof IOptions): void => {
-    const isCurrentStateTrue = this.dwSlider.returnCurrentOptions()[optionKey];
+  private handleCheckboxChange = (params: { optionKey: keyof IOptions }): void => {
+    const isCurrentStateTrue = this.dwSlider.returnCurrentOptions()[params.optionKey];
     let newState: boolean
     if (isCurrentStateTrue){
       newState = false
@@ -115,8 +113,27 @@ class configPanel{
       newState = true
     }
     this.dwSlider.update({
-      [optionKey]: newState
+      [params.optionKey]: newState
     })
+  }
+
+  protected emitEvent<T>(eventName: string, data: T): void{
+    const event = this.events[eventName];
+    if (event) {
+      event.forEach(fn => {
+        fn.call(null, data);
+      });
+    }
+  }
+
+  protected subscribeOnEvent<T>(eventName: string, fn: (data: T) => void) {
+    if(!this.events[eventName]) {
+      this.events[eventName] = [];
+    }
+    this.events[eventName].push(fn);
+    return () => {
+      this.events[eventName] = this.events[eventName].filter(eventFn => fn !== eventFn);
+    }
   }
 }
 
