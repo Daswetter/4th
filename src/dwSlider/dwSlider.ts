@@ -1,16 +1,16 @@
 import jQuery from 'jquery'
 
-import { View } from './View/View'
 import { IView, IModel, IOptions } from '../types'
+import { View } from './View/View'
 import { Model } from './Model/Model'
 import { Presenter } from './Presenter/Presenter'
 
 (function($){
   class dwSlider {
     private options: IOptions
-    private Model!: IModel
-    private View!: IView
-    private Presenter!: Presenter
+    private model!: IModel
+    private view!: IView
+    private presenter!: Presenter
 
     constructor(private initElement: HTMLElement, setOptions: IOptions) {
       const options = $.extend({}, {
@@ -33,22 +33,22 @@ import { Presenter } from './Presenter/Presenter'
 
     private init(initElement: HTMLElement, options: IOptions): void {
       this.initElement = initElement
-      this.Model = new Model(options)
-      this.View = new View(initElement, options)
-      this.Presenter = new Presenter(this.View, this.Model)
+      this.model = new Model(options)
+      this.view = new View(initElement, options)
+      this.presenter = new Presenter(this.view, this.model)
     }
 
     public update(updatedOptions: IOptions): void {
       this.options = $.extend(this.returnCurrentOptions(), updatedOptions)
-      this.Presenter.update(this.options)
+      this.presenter.update(this.options)
     }
     
     public returnCurrentOptions(): IOptions {
-      return this.Presenter.returnOptions()
+      return this.presenter.returnOptions()
     }
 
     public returnCurrentState(): Array<number> {
-      return this.Presenter.returnCurrentValues()
+      return this.presenter.returnCurrentValues()
     }
   }
 
