@@ -20,7 +20,7 @@ module.exports = {
   plugins: [
     new webpack.ProgressPlugin(),
     new HTMLWebpackPlugin({
-      template:'./preview/preview.pug',
+      template:'./demo/demo.pug',
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',
