@@ -22,6 +22,7 @@ interface IView {
 }
 
 interface IModel {
+  options: IOptions
   setCurrent(part: number, extra?: boolean): void
   setPart(current: number, extra?: boolean): void
 
@@ -62,6 +63,10 @@ interface reducedIOptions {
   input?: boolean
 }
 
+interface IEvent<T> {
+  [eventName: string]: Array<(arg0: T) => void>
+}
+
 type paramsType = {
   pageName: keyof MouseEvent,
   sideName: keyof HTMLElement,
@@ -70,4 +75,4 @@ type paramsType = {
   lineSide: number,
 }
 
-export { reducedIOptions, IOptions, IdwSlider, IModel, IView, paramsType}
+export { reducedIOptions, IOptions, IdwSlider, IModel, IView, IEvent, paramsType }
