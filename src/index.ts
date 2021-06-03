@@ -1,11 +1,11 @@
-import './view/view'
-import './view/view.scss'
+import './dwSlider/View/View'
+import './dwSlider/View/view.scss'
 
-import './model/model'
-import './presenter/presenter'
+import './dwSlider/Model/Model'
+import './dwSlider/Presenter/Presenter'
 
 import './dwSlider/dwSlider.ts'
-import './preview/preview.ts'
+import './demo/demo.ts'
 
-import './preview/config-panel/config-panel.ts'
-import './preview/config-panel/components/favicons/favicons'
+import './demo/config-panel/config-panel.ts'
+import './favicons/favicons'
