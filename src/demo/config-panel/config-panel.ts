@@ -64,7 +64,7 @@ class configPanel{
   }
 
   private initInput = (optionKey: keyof IOptions): HTMLInputElement => {
-    const element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
+    const element = this.initElement.querySelector(`.js-input__${optionKey}`) as HTMLInputElement
     this.displayInputValue(element, optionKey)
     this.setEventListener(element, optionKey)
     return element
@@ -98,7 +98,7 @@ class configPanel{
   }
 
   private initCheckbox = ( optionKey: keyof IOptions): HTMLInputElement => {
-    const element = this.initElement.querySelector(`.js-config-panel__${optionKey}`) as HTMLInputElement
+    const element = this.initElement.querySelector(`.js-toggle__${optionKey}`) as HTMLInputElement
     this.setEventListenerOnCheckbox(element, optionKey)
     this.displayCheckboxState(element, optionKey)
     return element

@@ -1,4 +1,4 @@
 mixin input(options)
   .input 
     .input__title=options.title
-    input(class="input__field", type = "number", class!=options.className)
+    input(class="input__field", type = "number", class!=`js-input__${options.title}` class!=options.className)

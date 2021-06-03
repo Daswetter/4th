@@ -4,16 +4,16 @@ include ./components/input/input
 mixin config-panel
   form.config-panel
     .config-panel__inputs
-      +input({title: "min", className: "js-config-panel__min"})
-      +input({title: "max", className: "js-config-panel__max"})
-      +input({title: "step", className: "js-config-panel__step"})
-      +input({title: "from", className: "js-config-panel__from dwSlider__input_from"})
-      +input({title: "to", className: "js-config-panel__to dwSlider__input_to"})
-      +input({title: "scale size", className: "js-config-panel__scaleSize dwSlider__input_scale-size"})
+      +input({title: "min"})
+      +input({title: "max"})
+      +input({title: "step"})
+      +input({title: "from", className: "dwSlider__input_from"})
+      +input({title: "to", className: "dwSlider__input_to"})
+      +input({title: "scaleSize"})
     
     .config-panel__toggles
-      +toggle({title: "vertical", className: "js-config-panel__vertical"})
-      +toggle({title: "double", className: "js-config-panel__double"})
-      +toggle({title: "scale", className: "js-config-panel__scale"})
-      +toggle({title: "progress", className: "js-config-panel__progress"})
-      +toggle({title: "tip", className: "js-config-panel__tip"})
+      +toggle({title: "vertical"})
+      +toggle({title: "double"})
+      +toggle({title: "scale"})
+      +toggle({title: "progress"})
+      +toggle({title: "tip"})

@@ -21,29 +21,18 @@ $(".js-slider2").dwSlider({
 })
 new configPanel('.js-slider2')
 
-$(".js-slider3").dwSlider({
-  min: -108.8,
-  max: 0.9,
-  from: -50,
-  step: 0.2,
-  progress: true,
-  tip: true,
-  scale: true,
-  scaleSize: 10,
-  double: false,
-  vertical: false,
-})
+$(".js-slider3").dwSlider()
 new configPanel('.js-slider3')
 
 $(".js-slider4").dwSlider({
-  min: -10,
-  max: 9,
-  from: 5,
-  step: 3,
+  min: 10,
+  max: -9,
+  from: 50,
+  step: 30,
   progress: true,
   tip: true,
   scale: true,
-  scaleSize: 7,
+  scaleSize: -1,
   double: false,
 })
 new configPanel('.js-slider4')

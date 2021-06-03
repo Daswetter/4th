@@ -1,6 +1,6 @@
 mixin toggle(options)
   label(class="toggle__label")
     span.toggle__title= options.title
-    input(class="toggle", class!=options.className, class!="toggle_color" type="checkbox")
+    input(class="toggle", class!=`js-toggle__${options.title}`, class!="toggle_color" type="checkbox")
 
 

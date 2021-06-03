@@ -7,6 +7,7 @@ class Model implements IModel{
   
   constructor(public options: IOptions){
     this.options = this.filterOptions(options)
+    
   }
 
   private getNumberOfSections = (): number => {
@@ -54,8 +55,8 @@ class Model implements IModel{
 
   private filterOptions = (options: IOptions): IOptions => {
     let filteredOptions = options
-    if (options.step > Math.abs(options.max) + Math.abs(options.min)) {
-      filteredOptions.step = Math.abs(options.max) + Math.abs(options.min)
+    if (Math.abs(options.step) > Math.abs(options.max) + Math.abs(options.min)) {
+      filteredOptions.step = Math.abs(options.max - options.min)
     }
 
     if (options.step < 0) {

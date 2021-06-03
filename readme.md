@@ -47,19 +47,19 @@ $(".js-slider").dwSlider({
 
 ## Параметры
 
-Параметр | По умолчанию | Тип | Описание
---- | --- | --- | ---
-min | 0 | number | Минимальное значение
-max | 100 | number | Максимальное значение
-from | 50 | number | Начальное значение для первого бегунка
-to | 0 | number | Начальное значение для второго бегунка
-step | 1 | number | Размер шага, может быть дробным, всегда > 0
-vertical | false | boolean | Вертикальный или горизонтальный вид
-double | false | boolean | Одиночное значение или интервал
-tip | true | boolean | Элемент над бегунком, который показывает значение
-scale | true | boolean | Шкала значений
-scaleSize | true | number | Количество значений в шкале, от 2 до 20
-progress | true | boolean | Прогресс бар
+Параметр | Аттрибут data-* | По умолчанию | Тип | Описание
+--- | --- | --- | --- | ---
+min | data-min | 0 | number | Минимальное значение
+max | data-max | 100 | number | Максимальное значение
+from | data-from | 50 | number | Начальное значение для первого бегунка
+to | data-to | 0 | number | Начальное значение для второго бегунка
+step | data-step | 1 | number | Размер шага, может быть дробным, всегда > 0
+vertical | data-vertical | false | boolean | Вертикальный или горизонтальный вид
+double | data-double | false | boolean | Одиночное значение или интервал
+tip | data-tip | true | boolean | Элемент над бегунком, который показывает значение
+scale | data-scale | true | boolean | Шкала значений
+scaleSize | data-scaleSize | true | number | Количество значений в шкале, от 2 до 20
+progress | data-progress | true | boolean | Прогресс бар
 
 ## Описание архитектуры
 
