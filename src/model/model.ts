@@ -5,7 +5,7 @@ class Model implements IModel{
   private extraCurrentWereChanged!: (current: number, part: number) => void
   private optionsWereChanged!: (scaleElements: { [key: string]: string }, options: IOptions) => void
   
-  constructor(private options: IOptions){
+  constructor(public options: IOptions){
     this.options = this.filterOptions(options)
   }
 
@@ -30,8 +30,8 @@ class Model implements IModel{
   private countCurrent = (part: number): Array<number> => {
     const stepAsPart = this.options.step / Math.abs(this.options.max - this.options.min)
     const rest = part - stepAsPart * Math.trunc(part / stepAsPart)
-    let newPart: number
 
+    let newPart: number
     if (rest < stepAsPart / 2) {
       newPart = part - rest
     } else {
@@ -41,38 +41,40 @@ class Model implements IModel{
     const isCurrentGreaterThanScale = Math.abs(this.options.max - this.options.min) * part > this.getNumberOfSections() * this.options.step
 
     let current = Math.abs(this.options.max - this.options.min) * newPart + this.options.min
+    
+    
     if (!this.isScaleFullSize() && isCurrentGreaterThanScale) {
       [current, newPart] = this.countRestCurrent(current, newPart, rest, stepAsPart)
     }
-
+    
     current = this.roundValueTo(current, this.options.step)
     
     return [ current, newPart ]
   }
 
   private filterOptions = (options: IOptions): IOptions => {
-    if (options.step < 0) {
-      options.step = Math.abs(options.step)
-    } else if (options.step === 0) {
-      options.step = 1
-    }
-
+    let filteredOptions = options
     if (options.step > Math.abs(options.max) + Math.abs(options.min)) {
-      options.step = Math.abs(options.max) + Math.abs(options.min)
+      filteredOptions.step = Math.abs(options.max) + Math.abs(options.min)
     }
 
+    if (options.step < 0) {
+      filteredOptions.step = Math.abs(options.step)
+    } else if (options.step === 0) {
+      filteredOptions.step = 1
+    }
+    
     if (options.max < options.min || options.max === options.min) {
-      options.max = options.min + options.step
+      filteredOptions.max = options.min + options.step
     } 
 
-
     if (options.scaleSize as number > 20 ) {
-      options.scaleSize = 20
+      filteredOptions.scaleSize = 20
     } else if (options.scaleSize as number < 2) {
-      options.scaleSize = 2
+      filteredOptions.scaleSize = 2
     }
 
-    return options
+    return filteredOptions
   }
 
   public setCurrent(part: number, extra = false): void {
@@ -152,13 +154,18 @@ class Model implements IModel{
   
 
   private roundValueTo = (value: number, roundTo: number): number => {
-    const dividedRoundTo = roundTo.toString().split(".")
-    let decimal: number
     
-    if (!dividedRoundTo[1]){
-      decimal = - dividedRoundTo[0].length + 1
-    } else {
-      decimal = dividedRoundTo[1].length
+    const dividedRoundTo = roundTo.toString().split('.')
+
+    let decimal: number
+    if (dividedRoundTo[0] === '0')
+      if (!dividedRoundTo[1]){
+        decimal = - dividedRoundTo[0].length + 1
+      } else {
+        decimal = dividedRoundTo[1].length
+      }
+    else {
+      decimal = dividedRoundTo[0].length
     }
     
     return (Math.round( value * Math.pow(10, decimal) ) / Math.pow(10, decimal))  
@@ -171,7 +178,7 @@ class Model implements IModel{
 
   public update = (options: IOptions): void => {
     this.options = this.filterOptions(options)
-
+    console.log(this.options)
     const scaleElements = this.countScaleElements()
     this.optionsWereChanged(scaleElements, options)
   }

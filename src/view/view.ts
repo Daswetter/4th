@@ -158,9 +158,11 @@ class View implements IView {
     if (extra) {
       this.partExtra = part
       this.currentExtra = current
+      this.options.to = current
     } else {
       this.part = part
       this.current = current
+      this.options.from = current
     }
 
     this.thumb.update(part, this.line.returnSize(), this.options.vertical, extra)

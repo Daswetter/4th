@@ -39,12 +39,12 @@ import { Presenter } from '../presenter/presenter'
     }
 
     public update(updatedOptions: IOptions): void {
-      this.options = $.extend(this.options, updatedOptions)
+      this.options = $.extend(this.returnCurrentOptions(), updatedOptions)
       this.Presenter.update(this.options)
     }
     
     public returnCurrentOptions(): IOptions {
-      return this.options
+      return this.Presenter.returnOptions()
     }
 
     public returnCurrentState(): Array<number> {

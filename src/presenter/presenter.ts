@@ -59,12 +59,17 @@ class Presenter{
     this.Model.setPart(part, extra)
   }
 
+  
+
   public update = (options: IOptions): void => {
     this.Model.update(options)
   }
 
   public returnCurrentValues = (): Array<number> => {
     return [this.View.current, this.View.currentExtra]
+  }
+  public returnOptions = (): IOptions => {
+    return this.Model.options
   }
 
 }
