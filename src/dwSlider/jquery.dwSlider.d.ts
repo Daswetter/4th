@@ -1,3 +1,3 @@
 interface JQuery{
-  dwSlider(options: IOptions): JQuery<HTMLElement>
+  dwSlider(options?: IOptions): JQuery<HTMLElement>
 }

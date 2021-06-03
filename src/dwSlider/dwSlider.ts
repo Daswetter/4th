@@ -23,7 +23,7 @@ import { Presenter } from '../presenter/presenter'
         double: false,
         tip: true,
         scale: true,
-        scaleSize: 2,
+        scaleSize: 5,
         progress: true,
       }, setOptions)
       this.options = options

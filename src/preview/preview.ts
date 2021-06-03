@@ -3,19 +3,7 @@ import { configPanel } from './config-panel/config-panel'
 import './preview.scss'
 
 
-$(".js-slider1").dwSlider({
-  min: 0,
-  max: 7,
-  from: 0.5,
-  to: 2,
-  step: 0.1,
-  progress: true,
-  tip: true,
-  scale: true,
-  scaleSize: 4,
-  vertical: false,
-  double: false,
-})
+$(".js-slider1").dwSlider()
 new configPanel('.js-slider1')
 
 $(".js-slider2").dwSlider({
