@@ -1,11 +1,8 @@
-// type T = number
-interface IEvent<T> {
-  [eventName: string]: Array<(arg0: T) => void>
-}
+import { IEvent } from './../../types'
 abstract class Subview {
   protected onChanged!: (part: number) => void;
   protected onExtraChanged!: (part: number) => void;
-  protected events: IEvent<any> = {};
+  protected events: IEvent<any> = {}
 
   protected init = (initElement: HTMLElement, element: HTMLElement, styleName: string): HTMLElement => {
     element = document.createElement('div')
@@ -23,7 +20,7 @@ abstract class Subview {
     }
   }
 
-  protected subscribeEvent<T>(eventName: keyof IEvent<T>, fn: (data: T) => void) {
+  protected subscribeOnEvent<T>(eventName: keyof IEvent<T>, fn: (data: T) => void) {
     if(!this.events[eventName]) {
       this.events[eventName] = [];
     }
@@ -33,11 +30,6 @@ abstract class Subview {
     }
   }
 
-  protected unsubscribe<T>(eventName: keyof IEvent<T>, fn: (data: T) => void ) {
-    this.events[eventName] = this.events[eventName].filter(eventCallback => console.log(fn === eventCallback));
-
-    console.log( )
-  }
 
   public bindChangedState(callback: (arg0: number) => void ): void {
     this.onChanged = callback;

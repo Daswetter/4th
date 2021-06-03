@@ -10,7 +10,7 @@ class Thumb extends Subview{
     super()
     this.initPrimary(initElement)
 
-    this.subscribeEvent<{element: HTMLElement, params: paramsType, event: MouseEvent}>('thumb: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))    
+    this.subscribeOnEvent<{element: HTMLElement, params: paramsType, event: MouseEvent}>('thumb: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))    
   }
   
   private initPrimary = (initElement: HTMLElement): void => {
@@ -63,9 +63,9 @@ class Thumb extends Subview{
     }
     
     
-    this.unsubscribeMove = this.subscribeEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
+    this.unsubscribeMove = this.subscribeOnEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
 
-    this.unsubscribeUp = this.subscribeEvent<null>('thumb: mouseUp', () => this.handleMouseUp())
+    this.unsubscribeUp = this.subscribeOnEvent<null>('thumb: mouseUp', () => this.handleMouseUp())
 
     document.addEventListener('mousemove', (event) => this.emitEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', {element, params, shift, event}))
 
