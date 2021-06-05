@@ -11,7 +11,7 @@ abstract class Subview {
     return element
   }
 
-  protected emitEvent<T>(eventName: string, data: T): void{
+  protected emit<T>(eventName: string, data: T): void{
     const event = this.events[eventName];
     if (event) {
       event.forEach(fn => {
@@ -20,7 +20,7 @@ abstract class Subview {
     }
   }
 
-  protected subscribeOnEvent<T>(eventName: keyof IEvent<T>, fn: (data: T) => void) {
+  protected subscribe<T>(eventName: keyof IEvent<T>, fn: (data: T) => void) {
     if(!this.events[eventName]) {
       this.events[eventName] = [];
     }

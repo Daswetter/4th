@@ -37,20 +37,20 @@ class configPanel{
 
     this.updateCurrentState()
 
-    this.subscribeOnEvent<{element: HTMLInputElement, optionKey: keyof IOptions}>('input: changed', ({element, optionKey}) => this.handleInputChange({element, optionKey}));
+    this.subscribe<{element: HTMLInputElement, optionKey: keyof IOptions}>('input: changed', ({element, optionKey}) => this.handleInputChange({element, optionKey}));
 
-    this.subscribeOnEvent<{optionKey: keyof IOptions}>('checkbox: changed', ({optionKey}) => this.handleCheckboxChange({optionKey}));
+    this.subscribe<{optionKey: keyof IOptions}>('checkbox: changed', ({optionKey}) => this.handleCheckboxChange({optionKey}));
 
-    this.subscribeOnEvent<null>('checkbox: changed', () => this.isDisable())
+    this.subscribe<null>('checkbox: changed', () => this.isDisable())
 
   }
 
   private setEventListener = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
-    element.addEventListener('change', () => this.emitEvent<{element: HTMLInputElement, optionKey: keyof IOptions}>('input: changed', {element, optionKey}))
+    element.addEventListener('change', () => this.emit<{element: HTMLInputElement, optionKey: keyof IOptions}>('input: changed', {element, optionKey}))
   }
 
   private setEventListenerOnCheckbox = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
-    element.addEventListener('change', () => this.emitEvent<{element: HTMLInputElement, optionKey: keyof IOptions}>('checkbox: changed', {element, optionKey}))
+    element.addEventListener('change', () => this.emit<{element: HTMLInputElement, optionKey: keyof IOptions}>('checkbox: changed', {element, optionKey}))
   }
 
   private isDisable = (): void => {
@@ -117,7 +117,7 @@ class configPanel{
     })
   }
 
-  protected emitEvent<T>(eventName: string, data: T): void{
+  protected emit<T>(eventName: string, data: T): void{
     const event = this.events[eventName];
     if (event) {
       event.forEach(fn => {
@@ -126,7 +126,7 @@ class configPanel{
     }
   }
 
-  protected subscribeOnEvent<T>(eventName: string, fn: (data: T) => void) {
+  protected subscribe<T>(eventName: string, fn: (data: T) => void) {
     if(!this.events[eventName]) {
       this.events[eventName] = [];
     }

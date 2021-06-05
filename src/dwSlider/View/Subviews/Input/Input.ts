@@ -10,7 +10,7 @@ class Input extends Subview{
     this.initPrimary(initElement)
     this.setEventListener(this.primary)
 
-    this.subscribeOnEvent<HTMLInputElement>('input: changed', element => this.handleChange(element));
+    this.subscribe<HTMLInputElement>('input: changed', element => this.handleChange(element));
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
@@ -23,7 +23,7 @@ class Input extends Subview{
   }
 
   private setEventListener = (element: HTMLInputElement): void => {
-    element.addEventListener('change', () => this.emitEvent<HTMLInputElement>('input: changed', element))
+    element.addEventListener('change', () => this.emit<HTMLInputElement>('input: changed', element))
   }
 
   private handleChange = (element: HTMLInputElement): void => {

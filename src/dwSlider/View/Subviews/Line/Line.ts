@@ -9,11 +9,11 @@ class Line extends Subview{
     super()
     this.initPrimary(initElement)
     
-    this.subscribeOnEvent<{vertical: boolean, event: MouseEvent}>('line: clicked', ({vertical, event}) => this.handleClick(vertical, event))
+    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: clicked', ({vertical, event}) => this.handleClick(vertical, event))
 
-    this.subscribeOnEvent<{vertical: boolean, event: MouseEvent}>('line: mouseDown', ({vertical, event}) => this.handleMouseDown(vertical, event))
+    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: mouseDown', ({vertical, event}) => this.handleMouseDown(vertical, event))
 
-    this.subscribeOnEvent<{vertical: boolean, event: MouseEvent}>('line: mouseUp', ({vertical, event}) => this.handleMouseUp(vertical, event))
+    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: mouseUp', ({vertical, event}) => this.handleMouseUp(vertical, event))
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
@@ -42,9 +42,9 @@ class Line extends Subview{
   }
 
   public setEventListener = (vertical: boolean): void => {
-    this.line.addEventListener('mousedown', (event) => this.emitEvent('line: mouseDown', {vertical, event}))
-    this.line.addEventListener('mouseup', (event) => this.emitEvent('line: mouseUp', {vertical, event}))
-    this.line.addEventListener('click', (event) => this.emitEvent('line: clicked', {vertical, event}))
+    this.line.addEventListener('mousedown', (event) => this.emit('line: mouseDown', {vertical, event}))
+    this.line.addEventListener('mouseup', (event) => this.emit('line: mouseUp', {vertical, event}))
+    this.line.addEventListener('click', (event) => this.emit('line: clicked', {vertical, event}))
   }
   
   public returnSize = (): {width: number, height: number} => {

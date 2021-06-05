@@ -17,7 +17,7 @@ class Scale extends Subview{
     this.createScaleElements(scaleValues)
     this.printScaleValues(scaleValues)
     this.setPosition(lineSize, vertical)
-    this.subscribeOnEvent<number>('scale: clicked', part => this.onChanged(part));
+    this.subscribe<number>('scale: clicked', part => this.onChanged(part));
     this.setScaleListener()
   }
   
@@ -50,7 +50,7 @@ class Scale extends Subview{
 
   private setScaleListener = (): void => {
     for (const part in this.scaleElements){
-      this.scaleElements[part].addEventListener('click', () => this.emitEvent<number>('scale: clicked', Number(part)))
+      this.scaleElements[part].addEventListener('click', () => this.emit<number>('scale: clicked', Number(part)))
     }
   }
 }
