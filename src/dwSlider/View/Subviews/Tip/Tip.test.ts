@@ -142,6 +142,156 @@ describe('Tip', () => {
     })
   })
 
+  describe('setEventListenerForUnited', () => {
+    const callback = jest.fn()
+    const callbackExtra = jest.fn()
+    let lineSize: {
+      width: number,
+      height: number
+    }
+    let lineSide: {
+      left: number,
+      bottom: number
+    }
+    let vertical: boolean
+    beforeEach(() => {
+      lineSize = {
+        width: 0,
+        height: 0
+      }
+      lineSide = {
+        left: 0,
+        bottom: 0
+      }
+      vertical = false
+      const initElement = document.createElement('div')
+      _.initExtra(initElement)
+      _.bindChangedState(callback)
+      _.bindExtraChangedState(callbackExtra)
+    })
+    test('should call onChanged for primary', () => {
+      _.setEventListenerForUnited(lineSize, lineSide, vertical)
+      Object.defineProperty(_.extra, 'offsetLeft', {
+        value: 600
+      })
+      const mouseDown = new MouseEvent('mousedown');
+      _.united.dispatchEvent(mouseDown);
+      
+      const mouseMove = new MouseEvent('mousemove');
+      document.dispatchEvent(mouseMove);
+      const mouseUp = new MouseEvent('mouseup');
+      document.dispatchEvent(mouseUp);
+
+      expect(callback).toBeCalled()
+    })
+    test('should call onChanged for primary', () => {
+      _.setEventListenerForUnited(lineSize, lineSide, vertical)
+      Object.defineProperty(_.extra, 'offsetLeft', {
+        value: 600
+      })
+      
+      const mouseDown = new MouseEvent('mousedown');
+      Object.defineProperty(mouseDown, 'pageX', {
+        value: 600
+      })
+      _.united.dispatchEvent(mouseDown);
+      
+      const mouseMove = new MouseEvent('mousemove');
+      document.dispatchEvent(mouseMove);
+      const mouseUp = new MouseEvent('mouseup');
+      document.dispatchEvent(mouseUp);
+
+      expect(callback).toBeCalled()
+    })
+    test('should call onChanged for primary', () => {
+      _.setEventListenerForUnited(lineSize, lineSide, vertical)
+      const mouseDown = new MouseEvent('mousedown');
+      Object.defineProperty(mouseDown, 'pageX', {
+        value: 0
+      })
+      _.united.dispatchEvent(mouseDown);
+      
+      const mouseMove = new MouseEvent('mousemove');
+      document.dispatchEvent(mouseMove);
+      const mouseUp = new MouseEvent('mouseup');
+      document.dispatchEvent(mouseUp);
+
+      expect(callback).toBeCalled()
+    })
+    test('should call onChanged for extra (vertical)', () => {
+      vertical = true
+      Object.defineProperty(_.extra, 'offsetTop', {
+        value: 600
+      })
+      _.setEventListenerForUnited(lineSize, lineSide, vertical)
+      const mouseDown = new MouseEvent('mousedown', {
+        clientX: 500,
+      });
+      Object.defineProperty(mouseDown, 'pageY', {
+        value: 600
+      })
+      _.united.dispatchEvent(mouseDown);
+      
+      const mouseMove = new MouseEvent('mousemove');
+      document.dispatchEvent(mouseMove);
+      const mouseUp = new MouseEvent('mouseup');
+      document.dispatchEvent(mouseUp);
+      
+      expect(callbackExtra).toBeCalled()
+    })
+    test('should call onChanged for extra with part = 1', () => {
+      vertical = true
+      Object.defineProperty(_.extra, 'offsetTop', {
+        value: -60000
+      })
+      _.setEventListenerForUnited(lineSize, lineSide, vertical)
+      const mouseDown = new MouseEvent('mousedown', {
+        clientX: 500,
+      });
+      Object.defineProperty(mouseDown, 'pageY', {
+        value: 600
+      })
+      _.united.dispatchEvent(mouseDown);
+      
+      const mouseMove = new MouseEvent('mousemove');
+      Object.defineProperty(mouseMove, 'pageY', {
+        value: 0
+      })
+      document.dispatchEvent(mouseMove);
+      const mouseUp = new MouseEvent('mouseup');
+      document.dispatchEvent(mouseUp);
+      
+      expect(callbackExtra).toBeCalled()
+    })
+    test('should call onChanged for extra with part = 0', () => {
+      vertical = true
+      Object.defineProperty(_.primary, 'offsetTop', {
+        value: 60000
+      })
+      Object.defineProperty(_.united, 'offsetTop', {
+        value: 60000
+      })
+      _.setEventListenerForUnited(lineSize, lineSide, vertical)
+      const mouseDown = new MouseEvent('mousedown', {
+        clientX: 500,
+      });
+      Object.defineProperty(mouseDown, 'pageY', {
+        value: 600
+      })
+      _.united.dispatchEvent(mouseDown);
+      
+      const mouseMove = new MouseEvent('mousemove');
+      Object.defineProperty(mouseMove, 'pageY', {
+        value: 100000
+      })
+      document.dispatchEvent(mouseMove);
+      const mouseUp = new MouseEvent('mouseup');
+      document.dispatchEvent(mouseUp);
+      
+      expect(callbackExtra).toBeCalled()
+    })
+  })
+
   describe('returnPrimaryParameters', () => {
     test('should return correct object', () => {
       Object.defineProperty(_.primary, 'offsetWidth', {

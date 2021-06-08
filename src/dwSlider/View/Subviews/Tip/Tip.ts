@@ -8,15 +8,27 @@ class Tip extends Subview {
 
   private current!: number
   private currentExtra!: number
-  private unsubscribeMove!: () => void
-  private unsubscribeUp!: () => void
+
+  private mouseMove!: (event: MouseEvent) => void
+  private mouseUp!: () => void
 
   constructor(initElement: HTMLElement){
     super()
     this.initPrimary(initElement)
     this.united = this.initUnited()
+    
+    this.subscribeToEvents()
+  }
 
-    this.subscribeOnEvent<{element: HTMLElement, params: paramsType, event: MouseEvent}>('tip: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))    
+  private subscribeToEvents = (): void => {
+    
+    this.subscribe<{element: HTMLElement, params: paramsType, event: MouseEvent}>('tip: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))  
+    
+    this.subscribe<{event: MouseEvent, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical: boolean}>('unitedTip: mouseDown', ({event, lineSize, lineSide, vertical}) => this.handleMouseDownForUnited(event, lineSize, lineSide, vertical))   
+    
+    this.subscribe<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('tip: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
+
+    this.subscribe<null>('tip: mouseUp', () => this.handleMouseUp())
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
@@ -46,9 +58,9 @@ class Tip extends Subview {
       element = this.extra
     } else {
       element = this.primary
+      
     }
     this.printInnerText(element, value)
-
     if (vertical) {
       this.setRightToVertical(element, lineWidth, thumbSize.width)
     } else {
@@ -56,44 +68,65 @@ class Tip extends Subview {
     }
   }
 
-  public setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical = false, extra = false): void => {
+  public setEventListener = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical: boolean, extra: boolean): void => {
     let element = this.primary
 
     if (extra){
       element = this.extra
     }
     const params = this.getOrientationParams(vertical, lineSize, lineSide)
+    element.addEventListener('mousedown', (event) => this.emit('tip: mouseDown', {element, params, event}))
+  }
+
+  public setEventListenerForUnited = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical: boolean): void => {
+    this.united.addEventListener('mousedown', (event) => this.emit('unitedTip: mouseDown', {event, lineSize, lineSide, vertical}))
+  }
+
+  private handleMouseDownForUnited = (event: MouseEvent, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical: boolean): void => {
+    const params = this.getOrientationParams(vertical, lineSize, lineSide)
+    let element = this.primary
+    let isExtra
+    let unitedMiddle
+    if (vertical) {
+      unitedMiddle = this.united.offsetTop + lineSide.bottom - lineSize.height + this.united.offsetHeight / 2
+      isExtra = (event.pageY > unitedMiddle && this.primary.offsetTop < this.extra.offsetTop) || (event.pageY <= unitedMiddle && this.primary.offsetTop >= this.extra.offsetTop)
+      
+    } else {
+      unitedMiddle = this.united.offsetLeft + lineSide.left + this.united.offsetWidth / 2
+      isExtra = (event.pageX > unitedMiddle && this.primary.offsetLeft < this.extra.offsetLeft) || (event.pageX <= unitedMiddle && this.primary.offsetLeft >= this.extra.offsetLeft)
+    }
+    if (isExtra) {
+      element = this.extra
+    }
     
-    element.addEventListener('mousedown', (event) => this.emitEvent('tip: mouseDown', {element, params, event}))
+    this.handleMouseDown(element, params, event)
   }
 
   private handleMouseDown = (element: HTMLElement, params: paramsType, event: MouseEvent) : void => { 
     event.preventDefault()
-
+    
     let shift = (event[params.pageName] as number) - (element[params.sideName] as number) - params.lineSide
     
     if (params.pageName === 'pageY'){
       shift = shift + params.lineSize
     }
-    
-    
-    this.unsubscribeMove = this.subscribeOnEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('tip: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
 
-    this.unsubscribeUp = this.subscribeOnEvent<null>('tip: mouseUp', () => this.handleMouseUp())
+    this.mouseMove = (event: MouseEvent) => 
+    this.emit<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('tip: mouseMove', {element, params, shift, event})
 
-    document.addEventListener('mousemove', (event) => this.emitEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('tip: mouseMove', {element, params, shift, event}))
+    this.mouseUp = () => this.emit<null>('tip: mouseUp', null)
 
-    document.addEventListener('mouseup', () => this.emitEvent<null>('tip: mouseUp', null))
+    document.addEventListener('mousemove', this.mouseMove)
+    document.addEventListener('mouseup', this.mouseUp)
   }
 
 
   private handleMouseMove = (data: {element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}): void => {
-    let part = (data.event[data.params.pageName] as number - data.params.lineSide - data.shift + (data.element[data.params.sizeName] as number) / 2) / data.params.lineSize    
+    let part = (data.event[data.params.pageName] as number - data.params.lineSide - data.shift + (data.element[data.params.sizeName] as number) / 2) / data.params.lineSize  
 
     if (data.params.pageName === 'pageY'){
       part = - part 
     }
-    
     if (part < 0){
       part = 0;
     } else if (part > 1){
@@ -102,15 +135,14 @@ class Tip extends Subview {
     
     if (data.element === this.primary){
       this.onChanged(part)
-    }
-    if (data.element === this.extra){
+    } else {
       this.onExtraChanged(part)
     }
   }
 
   private handleMouseUp = () : void => {
-    this.unsubscribeMove()
-    this.unsubscribeUp()
+    document.removeEventListener('mousemove', this.mouseMove)
+    document.removeEventListener('mouseup', this.mouseUp)
   }
 
   private getOrientationParams = (vertical: boolean, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): paramsType => {
@@ -148,7 +180,8 @@ class Tip extends Subview {
     const element = document.createElement('div')
     element.classList.add('dwSlider__tip')
     this.primary.after(element)
-    element.style.opacity = '0'
+    element.style.zIndex = '3'
+    element.style.display = 'none'
     return element
   }
 
@@ -177,7 +210,7 @@ class Tip extends Subview {
     } else {
       if (vertical) {
         this.united.style.textAlign = 'center'
-        this.printInnerText(this.united, Math.max(this.current, this.currentExtra) + ' — '+ Math.min(this.current, this.currentExtra))
+        this.printInnerText(this.united, Math.max(this.current, this.currentExtra) + ' — ' + Math.min(this.current, this.currentExtra))
       } else {
         this.printInnerText(this.united, Math.min(this.current, this.currentExtra) + ' — '+ Math.max(this.current, this.currentExtra))
       }
@@ -189,14 +222,8 @@ class Tip extends Subview {
     
     if (vertical){
       stickTogether = this.primary.offsetTop <= this.extra.offsetTop + this.extra.offsetHeight && this.primary.offsetTop + this.primary.offsetHeight >= this.extra.offsetTop
-    } 
-    
-    const unitedIsOn = true
-    if (stickTogether){      
-      this.switchOpacity(unitedIsOn)
-    } else {
-      this.switchOpacity()
-    } 
+    }     
+    this.switchOpacity(stickTogether)
   }
 
   private setPositionToUnited = (lineWidth: number, thumbWidth: number, vertical: boolean): void => {
@@ -212,16 +239,16 @@ class Tip extends Subview {
     } 
   }
 
-  private switchOpacity = (unitedIsOn = false): void => {
+  private switchOpacity = (unitedIsOn: boolean): void => {
+    let displayProperty = 'none'
+    let opacity = '1'
     if (unitedIsOn){
-      this.united.style.opacity = '1'
-      this.primary.style.opacity = '0'
-      this.extra.style.opacity = '0'
-    } else {
-      this.united.style.opacity = '0'
-      this.primary.style.opacity = '1'
-      this.extra.style.opacity = '1'
+      displayProperty = 'block'
+      opacity = '0'
     }
+    this.united.style.display = displayProperty
+    this.primary.style.opacity = opacity
+    this.extra.style.opacity = opacity
   }
 
   public update = (part: number, current: number, lineSize: {width: number, height: number}, thumbSize: {width: number, height: number}, vertical: boolean, double: boolean, extra: boolean): void => {
