@@ -39,8 +39,8 @@ class configPanel{
 
     this.subscribe<{optionKey: keyof IOptions}>('checkbox: changed', ({optionKey}) => this.handleCheckboxChange({optionKey}));
 
-    this.subscribe<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.dwSlider.returnCurrentOptions().double))
-    this.subscribe<null>('checkbox: changed', () => this.isDisable(this.inputs.scaleSize, this.dwSlider.returnCurrentOptions().scale))
+    this.subscribe<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.dwSlider.returnCurrentOptions().double, this.dwSlider.returnCurrentOptions().to as number))
+    this.subscribe<null>('checkbox: changed', () => this.isDisable(this.inputs.scaleSize, this.dwSlider.returnCurrentOptions().scale, this.dwSlider.returnCurrentOptions().scaleSize))
   }
   
   private setEventListener = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
@@ -51,9 +51,10 @@ class configPanel{
     element.addEventListener('change', () => this.emit<{element: HTMLInputElement, optionKey: keyof IOptions}>('checkbox: changed', {element, optionKey}))
   }
 
-  private isDisable = (element: HTMLInputElement, condition: boolean): void => {
+  private isDisable = (element: HTMLInputElement, condition: boolean, relatedValue: number): void => {
     if (condition){
       element.disabled = false
+      element.value = String(relatedValue)
     } else {
       element.disabled = true
       element.value = ''
@@ -92,8 +93,8 @@ class configPanel{
       this.displayCheckboxState(this.checkboxes[key], key as keyof IOptions)
     }
 
-    this.isDisable(this.inputs.to, this.dwSlider.returnCurrentOptions().double)
-    this.isDisable(this.inputs.scaleSize, this.dwSlider.returnCurrentOptions().scale)
+    this.isDisable(this.inputs.to, this.dwSlider.returnCurrentOptions().double, this.dwSlider.returnCurrentOptions().to as number)
+    this.isDisable(this.inputs.scaleSize, this.dwSlider.returnCurrentOptions().scale,  this.dwSlider.returnCurrentOptions().scaleSize)
   }
 
   private initCheckbox = ( optionKey: keyof IOptions): HTMLInputElement => {

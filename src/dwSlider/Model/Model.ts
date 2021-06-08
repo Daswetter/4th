@@ -142,7 +142,6 @@ class Model implements IModel{
       scaleValue = (newMax - min) * scaleStep * i + min
       scaleValue = this.roundValueTo(scaleValue, step)
 
-      const max = this.options.max
       const newPart = this.countPart(scaleValue)
       scaleElements = {...scaleElements, [newPart]: String(scaleValue)}
     }
