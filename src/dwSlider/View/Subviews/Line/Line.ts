@@ -9,11 +9,7 @@ class Line extends Subview{
     super()
     this.initPrimary(initElement)
     
-    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: clicked', ({vertical, event}) => this.handleClick(vertical, event))
-
-    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: mouseDown', ({vertical, event}) => this.handleMouseDown(vertical, event))
-
-    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: mouseUp', ({vertical, event}) => this.handleMouseUp(vertical, event))
+    this.subscribeToEvents()
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
@@ -24,6 +20,15 @@ class Line extends Subview{
   public returnAsHTML = (): HTMLElement => {
     return this.line
   }
+
+  subscribeToEvents = (): void => {
+    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: clicked', ({vertical, event}) => this.handleClick(vertical, event))
+
+    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: mouseDown', ({vertical, event}) => this.handleMouseDown(vertical, event))
+
+    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: mouseUp', ({vertical, event}) => this.handleMouseUp(vertical, event))
+  }
+  
 
   private handleMouseDown = (vertical: boolean, event: MouseEvent): void => {
     if (vertical){

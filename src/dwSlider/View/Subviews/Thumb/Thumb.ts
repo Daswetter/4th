@@ -3,14 +3,15 @@ import { paramsType } from '../../../../types'
 class Thumb extends Subview{
   public primary!: HTMLElement
   public extra!: HTMLElement
-  private unsubscribeMove!: () => void
-  private unsubscribeUp!: () => void
+
+  private mouseMoveEvent!: (event: MouseEvent) => void
+  private mouseUpEvent!: (event: MouseEvent) => void
 
   constructor(initElement: HTMLElement){
     super()
     this.initPrimary(initElement)
 
-    this.subscribeOnEvent<{element: HTMLElement, params: paramsType, event: MouseEvent}>('thumb: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))    
+    this.subscribeToEvents()
   }
   
   private initPrimary = (initElement: HTMLElement): void => {
@@ -19,6 +20,14 @@ class Thumb extends Subview{
 
   public initExtra = (initElement: HTMLElement): void => {
     this.extra = this.init(initElement, this.extra, 'thumb')
+  }
+
+  private subscribeToEvents = (): void => {
+    this.subscribe<{element: HTMLElement, params: paramsType, event: MouseEvent}>('thumb: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))   
+    
+    this.subscribe<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
+
+    this.subscribe<null>('thumb: mouseUp', () => this.handleMouseUp())
   }
 
   private getOrientationParams = (vertical: boolean, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): paramsType => {
@@ -50,7 +59,7 @@ class Thumb extends Subview{
     }
     const params = this.getOrientationParams(vertical, lineSize, lineSide)
     
-    element.addEventListener('mousedown', (event) => this.emitEvent('thumb: mouseDown', {element, params, event}))
+    element.addEventListener('mousedown', (event) => this.emit('thumb: mouseDown', {element, params, event}))
   }
 
   private handleMouseDown = (element: HTMLElement, params: paramsType, event: MouseEvent) : void => { 
@@ -61,15 +70,14 @@ class Thumb extends Subview{
     if (params.pageName === 'pageY'){
       shift = shift + params.lineSize
     }
-    
-    
-    this.unsubscribeMove = this.subscribeOnEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
 
-    this.unsubscribeUp = this.subscribeOnEvent<null>('thumb: mouseUp', () => this.handleMouseUp())
+    this.mouseMoveEvent = (event: MouseEvent) => 
+    this.emit<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', {element, params, shift, event})
 
-    document.addEventListener('mousemove', (event) => this.emitEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', {element, params, shift, event}))
+    this.mouseUpEvent = () => this.emit<null>('thumb: mouseUp', null)
 
-    document.addEventListener('mouseup', () => this.emitEvent<null>('thumb: mouseUp', null))
+    document.addEventListener('mousemove', this.mouseMoveEvent)
+    document.addEventListener('mouseup', this.mouseUpEvent)
   }
 
 
@@ -96,8 +104,8 @@ class Thumb extends Subview{
 
 
   private handleMouseUp = () : void => {
-    this.unsubscribeMove()
-    this.unsubscribeUp()
+    document.removeEventListener('mousemove', this.mouseMoveEvent)
+    document.removeEventListener('mouseup', this.mouseUpEvent)
   }
 
   private changeElementPosition = (element: HTMLElement, sideName: string, part: number, lineSize: number, elementSizeName: keyof HTMLElement): void => {
