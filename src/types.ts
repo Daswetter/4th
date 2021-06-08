@@ -15,9 +15,9 @@ interface IView {
 
   clearAllView(): void,
 
-  bindChangedPart(callback: (arg0: number) => void): void
+  bindChangedPrimaryPart(callback: (arg0: number) => void): void
   bindChangedExtraPart(callback: (arg0: number) => void): void
-  bindChangedCurrent(callback: (arg0: number) => void): void
+  bindChangedPrimaryCurrent(callback: (arg0: number) => void): void
   bindChangedExtraCurrent(callback: (arg0: number) => void): void
 }
 
@@ -29,7 +29,7 @@ interface IModel {
   countScaleElements(): { [key: string]: string }
   update (options: IOptions): void
 
-  bindChangedValues(callback: (current: number, part: number) => void): void
+  bindChangedPrimaryValues(callback: (current: number, part: number) => void): void
   bindChangedExtraValues(callback: (current: number, part: number) => void): void
 
   bindChangedOptions(callback: (scaleElements: { [key: string]: string }, options: IOptions) => void): void

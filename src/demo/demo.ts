@@ -26,14 +26,15 @@ new configPanel('.js-slider3')
 
 $(".js-slider4").dwSlider({
   min: 10,
-  max: -9,
-  from: 50,
-  step: 30,
+  max: 20,
+  from: 12.2,
+  to: 12.4,
+  step: 0.000001,
   progress: true,
   tip: true,
   scale: true,
   scaleSize: -1,
-  double: false,
+  double: true,
 })
 new configPanel('.js-slider4')
 

@@ -27,7 +27,7 @@ describe('Model', () => {
 
   describe('setCurrent', () => {
     beforeEach(() => {
-      _.bindChangedValues(callback)
+      _.bindChangedPrimaryValues(callback)
       _.bindChangedExtraValues(callbackExtra)
     })
     test('call mock', () => {
@@ -68,7 +68,7 @@ describe('Model', () => {
       options.min = 10
       options.max = 110
       options.step = 10
-      _.bindChangedValues(callback)
+      _.bindChangedPrimaryValues(callback)
     })
     test('should call mock with right params', () => {
       _.setPart(21)
@@ -100,7 +100,7 @@ describe('Model', () => {
       options.max = 50
       options.step = 1
       options.scaleSize = 5
-      expect(_.countScaleElements()).toEqual({"0": "0", "0.25": "13", "0.5": "25", "0.75": "38", "1": "50"})
+      expect(_.countScaleElements()).toEqual({"0": "0", "0.26": "13", "0.5": "25", "0.76": "38", "1": "50"})
     })
     test('should set correct part size scale', () => {
       options.min = 0

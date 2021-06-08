@@ -41,10 +41,10 @@ class configPanel{
 
     this.subscribe<{optionKey: keyof IOptions}>('checkbox: changed', ({optionKey}) => this.handleCheckboxChange({optionKey}));
 
-    this.subscribe<null>('checkbox: changed', () => this.isDisable())
-
+    this.subscribe<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.dwSlider.returnCurrentOptions().double))
+    this.subscribe<null>('checkbox: changed', () => this.isDisable(this.inputs.scaleSize, this.dwSlider.returnCurrentOptions().scale))
   }
-
+  
   private setEventListener = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
     element.addEventListener('change', () => this.emit<{element: HTMLInputElement, optionKey: keyof IOptions}>('input: changed', {element, optionKey}))
   }
@@ -53,15 +53,15 @@ class configPanel{
     element.addEventListener('change', () => this.emit<{element: HTMLInputElement, optionKey: keyof IOptions}>('checkbox: changed', {element, optionKey}))
   }
 
-  private isDisable = (): void => {
-    const element = this.inputs.to
-    if (this.dwSlider.returnCurrentOptions().double){
+  private isDisable = (element: HTMLInputElement, condition: boolean): void => {
+    if (condition){
       element.disabled = false
     } else {
       element.disabled = true
       element.value = ''
     }
   }
+
 
   private initInput = (optionKey: keyof IOptions): HTMLInputElement => {
     const element = this.initElement.querySelector(`.js-input__${optionKey}`) as HTMLInputElement
@@ -94,7 +94,8 @@ class configPanel{
       this.displayCheckboxState(this.checkboxes[key], key as keyof IOptions)
     }
 
-    this.isDisable()
+    this.isDisable(this.inputs.to, this.dwSlider.returnCurrentOptions().double)
+    this.isDisable(this.inputs.scaleSize, this.dwSlider.returnCurrentOptions().scale)
   }
 
   private initCheckbox = ( optionKey: keyof IOptions): HTMLInputElement => {

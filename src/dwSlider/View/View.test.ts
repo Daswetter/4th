@@ -30,10 +30,10 @@ describe('View', () => {
     }
 
     _ = new View(initElement, options)
-    _.bindChangedCurrent(callbackCurrent)
+    _.bindChangedPrimaryCurrent(callbackCurrent)
     _.bindChangedExtraCurrent(callbackExtraCurrent)
 
-    _.bindChangedPart(callbackPart)
+    _.bindChangedPrimaryPart(callbackPart)
     _.bindChangedExtraPart(callbackExtraPart)
     
     callbackCurrent.mockClear()
@@ -100,32 +100,6 @@ describe('View', () => {
     })
     test('should create progress', () => {
       expect(_.progress).toBeTruthy()
-    })
-    
-    test('should call mock in initElementsForResized if window was resized', () => {
-      const spyThumb = jest.spyOn(_.thumb, 'setEventListener')
-      const onResize = new Event('resize')
-      window.dispatchEvent(onResize)
-      expect(spyThumb).toHaveBeenCalledTimes(2)
-    })
-    
-    test('should not call scale setPosition if window was resized', () => {
-      options.scale = false
-      _.initView({'0': '0'})
-      const spyScale = jest.spyOn(_.scale, 'setPosition')
-      const onResize = new Event('resize')
-      window.dispatchEvent(onResize)
-      expect(spyScale).not.toHaveBeenCalled()
-    })
-
-    test('should call mock for extra in initElementsForResized if window was resized', () => {
-      
-      options.double = false
-      _.initView(scaleElements)
-      const spyThumb = jest.spyOn(_.thumb, 'setEventListener')
-      const onResize = new Event('resize')
-      window.dispatchEvent(onResize)
-      expect(spyThumb).toHaveBeenCalledTimes(1)
     })
   })
 

@@ -26,7 +26,7 @@ import { Presenter } from './Presenter/Presenter'
         scaleSize: this.toNumber(initElement.dataset.scaleSize),
         progress: this.toBoolean(initElement.dataset.progress),
       }
-
+      
       const options = $.extend({}, {
         min: 0,
         max: 100,
@@ -50,6 +50,8 @@ import { Presenter } from './Presenter/Presenter'
       this.view = new View(initElement, options)
       this.presenter = new Presenter(this.view, this.model)
       this.options = this.returnCurrentOptions()
+
+      window.addEventListener('resize', this.handleWindowResizing)
     }
 
     private toNumber = (option: string | undefined): number | undefined => {
@@ -70,7 +72,11 @@ import { Presenter } from './Presenter/Presenter'
       }
     }
 
-    public update(updatedOptions: IOptions): void {
+    private handleWindowResizing = (): void => {
+      this.update()
+    }
+
+    public update(updatedOptions?: IOptions): void {
       this.options = $.extend(this.returnCurrentOptions(), updatedOptions)
       this.presenter.update(this.options)
     }

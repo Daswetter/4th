@@ -50,8 +50,6 @@ class View implements IView {
     
     this.currentChanged(this.options.from)
     this.options.double ? this.extraCurrentChanged(this.options.to as number): ''
-    
-    window.addEventListener('resize', this.handleWindowResizing)
   }
 
   private initWrapper = (initElement: HTMLElement): void => {
@@ -92,16 +90,22 @@ class View implements IView {
   }
 
   private initTip = (initElement: HTMLElement): void => {
+    
     this.tip = new Tip(initElement)
+    
     this.tip.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.min)
-    this.tip.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical)
+    
+    const extra = false
+    this.tip.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
     this.tip.bindChangedState(this.partChanged)
 
     if (this.options.double){
+      
       this.tip.initExtra(initElement)
       const extra = true
       this.tip.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.max, extra)
       this.tip.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
+      this.tip.setEventListenerForUnited(this.line.returnSize(), this.line.returnSide(), this.options.vertical)
       this.tip.bindExtraChangedState(this.extraPartChanged)
     }
   }
@@ -214,28 +218,13 @@ class View implements IView {
     }
   }
 
-
-
-  private handleWindowResizing = (): void => {
-    this.partChanged(this.part)
-    this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical)
-    this.options.scale ? this.scale.setPosition(this.line.returnSize(), this.options.vertical) : ''
-
-
-    if (this.options.double){
-      this.extraPartChanged(this.partExtra)
-      const extra = true
-      this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
-    }
-  }
-
-  public bindChangedPart = (callback: (part: number) => void):void  =>  {
+  public bindChangedPrimaryPart = (callback: (part: number) => void):void  =>  {
     this.partChanged = callback
   }
   public bindChangedExtraPart = (callback: (partExtra: number) => void):void  =>  {
     this.extraPartChanged = callback
   }
-  public bindChangedCurrent = (callback: (current: number) => void):void  =>  {
+  public bindChangedPrimaryCurrent = (callback: (current: number) => void):void  =>  {
     this.currentChanged = callback
   }
   public bindChangedExtraCurrent = (callback: (currentExtra: number) => void):void  =>  {

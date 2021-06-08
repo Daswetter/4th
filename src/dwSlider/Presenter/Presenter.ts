@@ -1,8 +1,8 @@
 
 import { IModel, IView, IOptions } from '../../types'
 
-class Presenter{
-  constructor(private View: IView, private Model: IModel) {
+class Presenter {
+  constructor(public view: IView, public model: IModel) {
     this.bindView()
     this.bindModel()
 
@@ -10,68 +10,63 @@ class Presenter{
   }
 
   private bindView = (): void => {
-    this.View.bindChangedPart(this.sendCurrentToModel)
-    this.View.bindChangedExtraPart(this.sendExtraToModel)
+    this.view.bindChangedPrimaryPart(this.sendPrimaryCurrentToModel)
+    this.view.bindChangedExtraPart(this.sendExtraCurrentToModel)
 
-    this.View.bindChangedCurrent(this.sendPartToModel)
-    this.View.bindChangedExtraCurrent(this.sendExtraPartToModel)
+    this.view.bindChangedPrimaryCurrent(this.sendPrimaryPartToModel)
+    this.view.bindChangedExtraCurrent(this.sendExtraPartToModel)
   }
 
   private bindModel = (): void => {
-    this.Model.bindChangedValues(this.sendCurrentToView)
-    this.Model.bindChangedExtraValues(this.sendExtraToView)
+    this.model.bindChangedPrimaryValues(this.sendPrimaryCurrentToView)
+    this.model.bindChangedExtraValues(this.sendExtraCurrentToView)
 
-    this.Model.bindChangedOptions(this.initNewView)
+    this.model.bindChangedOptions(this.initNewView)
   }
 
   private initView = (): void => {
-    this.View.initView(this.Model.countScaleElements())
+    this.view.initView(this.model.countScaleElements())
   }
   
   private initNewView = (): void => {
-    this.View.clearAllView()
-    this.View.initView(this.Model.countScaleElements())
+    this.view.clearAllView()
+    this.view.initView(this.model.countScaleElements())
   }
 
   
-  private sendCurrentToView = (current: number, part: number): void => {
-    this.View.notifyPrimary(current, part)
+  private sendPrimaryCurrentToView = (current: number, part: number): void => {
+    this.view.notifyPrimary(current, part)
   }
-  private sendExtraToView = (current: number, part: number): void => {
-    this.View.notifyExtra(current, part)
+  private sendExtraCurrentToView = (current: number, part: number): void => {
+    this.view.notifyExtra(current, part)
   }
 
-  
-
-  private sendCurrentToModel = (part: number) : void => {   
-    this.Model.setCurrent(part)
+  private sendPrimaryCurrentToModel = (part: number) : void => {  
+    this.model.setCurrent(part)
   }
-  private sendExtraToModel = (part: number) : void => {  
+  private sendExtraCurrentToModel = (part: number) : void => {  
     const extra = true 
-    this.Model.setCurrent(part, extra)
+    this.model.setCurrent(part, extra)
   }
 
-  private sendPartToModel = (part: number) : void => { 
-    this.Model.setPart(part)
+  private sendPrimaryPartToModel = (part: number) : void => { 
+    this.model.setPart(part)
   }
   private sendExtraPartToModel = (part: number) : void => {
     const extra = true    
-    this.Model.setPart(part, extra)
+    this.model.setPart(part, extra)
   }
 
-  
-
   public update = (options: IOptions): void => {
-    this.Model.update(options)
+    this.model.update(options)
   }
 
   public returnCurrentValues = (): Array<number> => {
-    return [this.View.current, this.View.currentExtra]
+    return [this.view.current, this.view.currentExtra]
   }
   public returnOptions = (): IOptions => {
-    return this.Model.options
+    return this.model.options
   }
-
 }
 
 export { Presenter }
