@@ -4,8 +4,9 @@
   margin: 0.3125rem;
   
   &__title{
-    min-width: 2.1875rem;
-    max-width: 6.25rem;
+    width: 100%;
+    min-width: 70px;
+    max-width: 120px;
     background: rgb(102, 93, 93);
     color: rgb(245, 247, 222);
     font-family: Roboto, sans-serif;
