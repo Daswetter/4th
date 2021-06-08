@@ -12,8 +12,8 @@ class Input extends Subview{
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
-    this.primary = initElement.querySelector('.dwSlider__input_from') as HTMLInputElement
-    this.extra = initElement.querySelector('.dwSlider__input_to') as HTMLInputElement
+    this.primary = initElement.querySelector('.js-dwSlider__input_from') as HTMLInputElement
+    this.extra = initElement.querySelector('.js-dwSlider__input_to') as HTMLInputElement
   }
   
   public initExtra = (): void => {

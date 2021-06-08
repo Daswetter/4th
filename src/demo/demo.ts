@@ -3,10 +3,10 @@ import { configPanel } from './config-panel/config-panel'
 import '../dwSlider/dwSlider.ts'
 import './demo.scss'
 
-$(".js-slider1").dwSlider()
-new configPanel('.js-slider1')
+$('.js-dwSlider1').dwSlider()
+new configPanel('.js-dwSlider1')
 
-$(".js-slider2").dwSlider({
+$('.js-dwSlider2').dwSlider({
   min: -18.1,
   max: 0.9,
   from: -16,
@@ -19,12 +19,12 @@ $(".js-slider2").dwSlider({
   vertical: true,
   scaleSize: 4,
 })
-new configPanel('.js-slider2')
+new configPanel('.js-dwSlider2')
 
-$(".js-slider3").dwSlider()
-new configPanel('.js-slider3')
+$('.js-dwSlider3').dwSlider()
+new configPanel('.js-dwSlider3')
 
-$(".js-slider4").dwSlider({
+$('.js-dwSlider4').dwSlider({
   min: 10,
   max: 20,
   from: 12.2,
@@ -36,5 +36,5 @@ $(".js-slider4").dwSlider({
   scaleSize: -1,
   double: true,
 })
-new configPanel('.js-slider4')
+new configPanel('.js-dwSlider4')
 

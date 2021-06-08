@@ -5,7 +5,6 @@ import './components/toggle/toggle.ts'
 import './components/input/input.ts'
 import './config-panel.scss'
 
-
 class configPanel{
   private initElement!: HTMLElement
   private dwSlider!: IdwSlider
@@ -25,7 +24,6 @@ class configPanel{
     this.dwSlider = $(initElementName).data("dwSlider");
   }
 
-  
   private init = (): void => {
     const inputTitles = ['min', 'max', 'step', 'from', 'to', 'scaleSize']
 
@@ -64,7 +62,7 @@ class configPanel{
 
 
   private initInput = (optionKey: keyof IOptions): HTMLInputElement => {
-    const element = this.initElement.querySelector(`.js-input__${optionKey}`) as HTMLInputElement
+    const element = this.initElement.querySelector(`.js-input__field_type_${optionKey}`) as HTMLInputElement
     this.displayInputValue(element, optionKey)
     this.setEventListener(element, optionKey)
     return element
@@ -99,7 +97,7 @@ class configPanel{
   }
 
   private initCheckbox = ( optionKey: keyof IOptions): HTMLInputElement => {
-    const element = this.initElement.querySelector(`.js-toggle__${optionKey}`) as HTMLInputElement
+    const element = this.initElement.querySelector(`.js-toggle__input_type_${optionKey}`) as HTMLInputElement
     this.setEventListenerOnCheckbox(element, optionKey)
     this.displayCheckboxState(element, optionKey)
     return element

@@ -126,9 +126,9 @@ class View implements IView {
   }
 
   private doesInputExist = (extra = false): boolean => {
-    let inputClass = '.dwSlider__input_from'
+    let inputClass = '.js-dwSlider__input_from'
     if (extra) {
-      inputClass = '.dwSlider__input_to'
+      inputClass = '.js-dwSlider__input_to'
     }
     const input: HTMLInputElement | null = this.initElement.querySelector(inputClass)
     if (input) {
