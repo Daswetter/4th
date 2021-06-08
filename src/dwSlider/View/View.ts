@@ -1,5 +1,5 @@
 import { IOptions, IView } from '../../types'
-
+import './view.scss'
 import { Wrapper } from './Subviews/Wrapper/Wrapper'
 import { Line } from './Subviews/Line/Line'
 import { Thumb } from './Subviews/Thumb/Thumb'

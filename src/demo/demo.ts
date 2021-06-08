@@ -1,7 +1,7 @@
 import $ from 'jquery'
 import { configPanel } from './config-panel/config-panel'
+import '../dwSlider/dwSlider.ts'
 import './demo.scss'
-
 
 $(".js-slider1").dwSlider()
 new configPanel('.js-slider1')
