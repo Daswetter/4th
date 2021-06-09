@@ -134,9 +134,9 @@ class Tip extends Subview {
     }
     
     if (data.element === this.primary){
-      this.onChanged(part)
+      this.mediator.notify({value: part, current: false, extra: false, nearest: false})
     } else {
-      this.onExtraChanged(part)
+      this.mediator.notify({value: part, current: false, extra: true, nearest: false})
     }
   }
 

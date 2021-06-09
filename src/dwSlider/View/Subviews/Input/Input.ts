@@ -28,9 +28,9 @@ class Input extends Subview{
   private handleChange = (element: HTMLInputElement): void => {
     const value = Number(element.value)
     if (element === this.primary){
-      this.onChanged(value)
+      this.mediator.notify({value: value, current: true, extra: false, nearest: false})
     } else {
-      this.onExtraChanged(value)
+      this.mediator.notify({value: value, current: true, extra: true, nearest: false})
     }
   }
 

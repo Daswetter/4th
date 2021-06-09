@@ -1,13 +1,14 @@
-import { IOptions, IModel } from '../../types'
+import { IOptions, IModel, Mediator } from '../../types'
 
 class Model implements IModel{
-  private currentWereChanged!: (current: number, part: number) => void
-  private extraCurrentWereChanged!: (current: number, part: number) => void
-  private optionsWereChanged!: (scaleElements: { [key: string]: string }, options: IOptions) => void
+  protected mediator!: Mediator
   
   constructor(public options: IOptions){
-    this.options = this.filterOptions(options)
-    
+    this.options = this.filterOptions(options)    
+  }
+
+  public setMediator(mediator: Mediator): void {
+    this.mediator = mediator;
   }
 
   private getNumberOfSections = (): number => {
@@ -85,11 +86,7 @@ class Model implements IModel{
   }
 
   private dataWereChanged = (current: number, part: number, extra: boolean): void => {
-    if (extra){
-      this.extraCurrentWereChanged(current, part)
-    } else {
-      this.currentWereChanged(current, part)
-    }
+    this.mediator.notify({current, part, extra}, 'current and part were sent from Model')
   }
 
   private filterPart = (part: number): number => {
@@ -184,18 +181,7 @@ class Model implements IModel{
   public update = (options: IOptions): void => {
     this.options = this.filterOptions(options)
     const scaleElements = this.countScaleElements()
-    this.optionsWereChanged(scaleElements, options)
-  }
-
-
-  public bindChangedPrimaryValues(callback: (current: number, part: number) => void): void {
-    this.currentWereChanged = callback;
-  }
-  public bindChangedExtraValues( callback: (current: number, part: number) => void): void {
-    this.extraCurrentWereChanged = callback;
-  }
-  public bindChangedOptions(callback: (scaleElements: { [key: string]: string }, options: IOptions) => void): void {
-    this.optionsWereChanged = callback;
+    this.mediator.notify({scaleElements}, 'options were sent from Model')
   }
 }
 

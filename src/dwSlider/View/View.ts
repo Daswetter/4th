@@ -1,4 +1,4 @@
-import { IOptions, IView } from '../../types'
+import { IOptions, IView, Mediator } from '../../types'
 import './view.scss'
 import { Wrapper } from './Subviews/Wrapper/Wrapper'
 import { Line } from './Subviews/Line/Line'
@@ -10,6 +10,7 @@ import { Input } from './Subviews/Input/Input'
 import { BoundaryLabels } from './Subviews/BoundaryLabels/BoundaryLabels'
 
 class View implements IView { 
+  protected mediator!: Mediator
   public wrapper!: Wrapper
   public line!: Line
   public thumb!: Thumb 
@@ -24,15 +25,13 @@ class View implements IView {
   public current!: number
   public currentExtra!: number
 
-  private partChanged!: (part: number) => void
-  private extraPartChanged!: (partExtra: number) => void
-
-  private currentChanged!: (current: number) => void
-  private extraCurrentChanged!: (currentExtra: number) => void
-
   constructor(private initElement: HTMLElement, public options: IOptions) {
     this.options = options
     this.initElement = initElement
+  }
+
+  public setMediator(mediator: Mediator): void {
+    this.mediator = mediator;
   }
 
   public initView = (scaleElements: { [key: string]: string }, options = this.options): void => {
@@ -48,8 +47,8 @@ class View implements IView {
     this.options.progress ? this.initProgress(this.line.returnAsHTML()) : ''
     this.options.scale ? this.initScale(this.line.returnAsHTML(), scaleElements): ''
     
-    this.currentChanged(this.options.from)
-    this.options.double ? this.extraCurrentChanged(this.options.to as number): ''
+    this.mediator.notify({value: this.options.from, current: true, extra: false}, 'data were sent from View')
+    this.options.double ? this.mediator.notify({value: this.options.to as number, current: true, extra: true}, 'data were sent from View') : ''
   }
 
   private initWrapper = (initElement: HTMLElement): void => {
@@ -64,11 +63,7 @@ class View implements IView {
     this.line.setInitialSettings(this.options.vertical)
 
     this.line.setEventListener(this.options.vertical)
-    this.line.bindChangedState(this.partChanged)
-
-    if (this.options.double){
-      this.line.bindChangedState(this.changePositionForTheNearest)
-    }
+    this.line.setMediator(this)
     
   }
 
@@ -77,14 +72,13 @@ class View implements IView {
     
     this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical)
     this.thumb.setInitialSettings(this.line.returnSize(), this.options.vertical)
-    this.thumb.bindChangedState(this.partChanged)
+    this.thumb.setMediator(this)
 
     if (this.options.double){
       this.thumb.initExtra(initElement)
       const extra = true
       this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
       this.thumb.setInitialSettings(this.line.returnSize(), this.options.vertical, extra)
-      this.thumb.bindExtraChangedState(this.extraPartChanged)
     }    
     
   }
@@ -97,7 +91,7 @@ class View implements IView {
     
     const extra = false
     this.tip.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
-    this.tip.bindChangedState(this.partChanged)
+    this.tip.setMediator(this)
 
     if (this.options.double){
       
@@ -106,17 +100,12 @@ class View implements IView {
       this.tip.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.max, extra)
       this.tip.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
       this.tip.setEventListenerForUnited(this.line.returnSize(), this.line.returnSide(), this.options.vertical)
-      this.tip.bindExtraChangedState(this.extraPartChanged)
     }
   }
   
   private initScale = (initElement: HTMLElement, scaleElements: { [key: string]: string }): void => {
     this.scale = new Scale(initElement)
-    if (this.options.double){
-      this.scale.bindChangedState(this.changePositionForTheNearest)
-    } else {
-      this.scale.bindChangedState(this.partChanged)
-    }
+    this.line.setMediator(this)
     this.scale.initScale(scaleElements, this.line.returnSize(), this.options.vertical)
   }
 
@@ -139,12 +128,10 @@ class View implements IView {
 
   private initInput = (): void => {
     this.input = new Input(this.initElement)
-    this.input.bindChangedState(this.currentChanged)
-    
+    this.line.setMediator(this)
     const extra = true
     if (this.options.double && this.doesInputExist(extra)){
       this.input.initExtra()
-      this.input.bindExtraChangedState(this.extraCurrentChanged)
     }
   }
 
@@ -157,7 +144,7 @@ class View implements IView {
     this.wrapper.returnAsHTML().remove()
   }
 
-  private notify = (current: number, part: number, extra = false): void => {
+  public sendDataToSubviews = (current: number, part: number, extra = false): void => {
     
     if (extra) {
       this.partExtra = part
@@ -188,14 +175,6 @@ class View implements IView {
     }
   }
 
-  public notifyPrimary(current: number, part: number): void{
-    this.notify(current, part)
-  }
-
-  public notifyExtra(current: number, part: number): void{
-    const extra = true
-    this.notify(current, part, extra)
-  }
 
   private countDistance = (part: number, extra = false): number => {
     let currentPart = this.part
@@ -212,23 +191,18 @@ class View implements IView {
     const distFromActionToExtra = this.countDistance(part, extra)
 
     if (distFromActionToPrimary > distFromActionToExtra){
-      this.extraPartChanged(part)
+      this.mediator.notify({ value: part, current: false, extra: true }, 'data were sent from View')
     } else {
-      this.partChanged(part)
+      this.mediator.notify({ value: part, current: false, extra: false }, 'data were sent from View')
     }
   }
 
-  public bindChangedPrimaryPart = (callback: (part: number) => void):void  =>  {
-    this.partChanged = callback
-  }
-  public bindChangedExtraPart = (callback: (partExtra: number) => void):void  =>  {
-    this.extraPartChanged = callback
-  }
-  public bindChangedPrimaryCurrent = (callback: (current: number) => void):void  =>  {
-    this.currentChanged = callback
-  }
-  public bindChangedExtraCurrent = (callback: (currentExtra: number) => void):void  =>  {
-    this.extraCurrentChanged = callback
+  public notify = (data: {value: number, current: boolean, extra: boolean, nearest: boolean}): void => {
+    if (data.nearest) {
+      this.changePositionForTheNearest(data.value)
+    } else {
+      this.mediator.notify({ value: data.value, current: false, extra: data.extra }, 'data were sent from View')
+    }
   }
 }
 

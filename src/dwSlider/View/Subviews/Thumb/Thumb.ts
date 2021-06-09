@@ -95,10 +95,10 @@ class Thumb extends Subview{
     }
 
     if (data.element === this.primary){
-      this.onChanged(part)
+      this.mediator.notify({value: part, current: false, extra: false, nearest: false})
     }
     if (data.element === this.extra){
-      this.onExtraChanged(part)
+      this.mediator.notify({value: part, current: false, extra: true, nearest: false})
     }
   }
 

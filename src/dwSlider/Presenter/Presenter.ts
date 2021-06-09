@@ -1,61 +1,32 @@
 
-import { IModel, IView, IOptions } from '../../types'
+import { IModel, IView, IOptions, Mediator} from '../../types'
 
-class Presenter {
+class Presenter implements Mediator{
   constructor(public view: IView, public model: IModel) {
-    this.bindView()
-    this.bindModel()
+    this.view.setMediator(this)
+    this.model.setMediator(this)
 
-    this.initView()
-  }
-
-  private bindView = (): void => {
-    this.view.bindChangedPrimaryPart(this.sendPrimaryCurrentToModel)
-    this.view.bindChangedExtraPart(this.sendExtraCurrentToModel)
-
-    this.view.bindChangedPrimaryCurrent(this.sendPrimaryPartToModel)
-    this.view.bindChangedExtraCurrent(this.sendExtraPartToModel)
-  }
-
-  private bindModel = (): void => {
-    this.model.bindChangedPrimaryValues(this.sendPrimaryCurrentToView)
-    this.model.bindChangedExtraValues(this.sendExtraCurrentToView)
-
-    this.model.bindChangedOptions(this.initNewView)
-  }
-
-  private initView = (): void => {
-    this.view.initView(this.model.countScaleElements())
-  }
-  
-  private initNewView = (): void => {
-    this.view.clearAllView()
     this.view.initView(this.model.countScaleElements())
   }
 
-  
-  private sendPrimaryCurrentToView = (current: number, part: number): void => {
-    this.view.notifyPrimary(current, part)
-  }
-  private sendExtraCurrentToView = (current: number, part: number): void => {
-    this.view.notifyExtra(current, part)
-  }
+  public notify = (data: any, event: string): void => {
+    if (event === 'current and part were sent from Model' ) {
+      this.view.sendDataToSubviews(data.current, data.part, data.extra)
+    }
 
-  private sendPrimaryCurrentToModel = (part: number) : void => {  
-    this.model.setCurrent(part)
-  }
-  private sendExtraCurrentToModel = (part: number) : void => {  
-    const extra = true 
-    this.model.setCurrent(part, extra)
-  }
+    if (event === 'options were sent from Model') {
+      this.view.clearAllView()
+      this.view.initView(data.scaleElements)
+    }
 
-  private sendPrimaryPartToModel = (part: number) : void => { 
-    this.model.setPart(part)
-  }
-  private sendExtraPartToModel = (part: number) : void => {
-    const extra = true    
-    this.model.setPart(part, extra)
-  }
+    if (event === 'data were sent from View') {
+      if (data.current) {
+        this.model.setPart(data.value, data.extra)
+      } else {
+        this.model.setCurrent(data.value, data.extra)
+      }
+    }
+  } 
 
   public update = (options: IOptions): void => {
     this.model.update(options)

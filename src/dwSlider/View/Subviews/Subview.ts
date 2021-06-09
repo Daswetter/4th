@@ -1,9 +1,8 @@
-import { IEvent } from '../../../types'
+import { IEvent, IView } from '../../../types'
 abstract class Subview {
-  protected onChanged!: (part: number) => void;
-  protected onExtraChanged!: (part: number) => void;
+  protected mediator!: IView
   protected events: IEvent<any> = {}
-
+  
   protected init = (initElement: HTMLElement, element: HTMLElement, styleName: string): HTMLElement => {
     element = document.createElement('div')
     element.classList.add(`dwSlider__${styleName}`)
@@ -27,12 +26,8 @@ abstract class Subview {
     this.events[eventName].push(fn);
   }
 
-
-  public bindChangedState(callback: (arg0: number) => void ): void {
-    this.onChanged = callback;
-  }
-  public bindExtraChangedState(callback: (arg0: number) => void ): void {
-    this.onExtraChanged = callback;
+  public setMediator(mediator: IView): void {
+    this.mediator = mediator;
   }
 }
 

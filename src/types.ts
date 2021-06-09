@@ -4,35 +4,30 @@ interface IdwSlider {
   returnCurrentState(): Array<number>
 }
 
+interface Mediator {
+  notify(data: any, event: string): void,
+}
 interface IView {
   current: number
   currentExtra: number
   
+  setMediator(mediator: Mediator): void
   initView(scaleElements: { [key: string]: string }): void
 
-  notifyPrimary(current: number, part: number): void
-  notifyExtra(current: number, part: number): void
+  sendDataToSubviews(current: number, part: number, extra: boolean): void
 
   clearAllView(): void,
-
-  bindChangedPrimaryPart(callback: (arg0: number) => void): void
-  bindChangedExtraPart(callback: (arg0: number) => void): void
-  bindChangedPrimaryCurrent(callback: (arg0: number) => void): void
-  bindChangedExtraCurrent(callback: (arg0: number) => void): void
+  notify(data: {value: number, current: boolean, extra: boolean, nearest: boolean}): void
 }
 
 interface IModel {
   options: IOptions
+  setMediator(mediator: Mediator): void
   setCurrent(part: number, extra?: boolean): void
   setPart(current: number, extra?: boolean): void
 
   countScaleElements(): { [key: string]: string }
   update (options: IOptions): void
-
-  bindChangedPrimaryValues(callback: (current: number, part: number) => void): void
-  bindChangedExtraValues(callback: (current: number, part: number) => void): void
-
-  bindChangedOptions(callback: (scaleElements: { [key: string]: string }, options: IOptions) => void): void
 }
 
 interface IOptions {
@@ -75,4 +70,5 @@ type paramsType = {
   lineSide: number,
 }
 
-export { reducedIOptions, IOptions, IdwSlider, IModel, IView, IEvent, paramsType }
+
+export { Mediator, reducedIOptions, IOptions, IdwSlider, IModel, IView, IEvent, paramsType }

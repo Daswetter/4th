@@ -96,7 +96,7 @@ class Line extends Subview{
     const isOnlyLineClicked = event.pageY <= this.line.offsetTop + this.line.offsetHeight && event.pageY >= this.line.offsetTop
     
     if (isOnlyLineClicked) { 
-      this.onChanged(part)
+      this.mediator.notify({value: part, current: false, extra: false, nearest: false})
     }
   }
 
@@ -113,7 +113,7 @@ class Line extends Subview{
     const isOnlyLineClicked = event.pageX <= this.line.offsetLeft + this.line.offsetWidth && event.pageX >= this.line.offsetLeft
 
     if (isOnlyLineClicked){
-      this.onChanged(part)
+      this.mediator.notify({value: part, current: false, extra: false, nearest: false})
     }
   }
 }
