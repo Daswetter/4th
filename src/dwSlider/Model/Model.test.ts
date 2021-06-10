@@ -1,12 +1,11 @@
-import { IOptions } from '../../types'
+import { IOptions, Mediator } from '../../types'
 import { Model } from './Model'
 
 describe('Model', () => {
-  let callback: jest.Mock
-  let callbackExtra: jest.Mock
   let _: Model
   let options: IOptions
   beforeEach(() => {
+    
     options = {
       min: -1800,
       max: 200,
@@ -21,71 +20,129 @@ describe('Model', () => {
       double: true,
     }
     _ = new Model(options)
-    callback = jest.fn()
-    callbackExtra = jest.fn()
+    _.mediator = {
+      notify: jest.fn()
+    }
+  })
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  describe('setMediator', () => {
+    test('should add mediator', () => {
+      const testMediator = {
+        notify: jest.fn()
+      }
+      _.setMediator(testMediator)
+      expect(_.mediator).toEqual(testMediator)
+    })
   })
 
   describe('setCurrent', () => {
-    beforeEach(() => {
-      _.bindChangedPrimaryValues(callback)
-      _.bindChangedExtraValues(callbackExtra)
-    })
     test('call mock', () => {
       _.setCurrent(0.1)
-      expect(callback).toHaveBeenCalled()
+      expect(_.mediator.notify).toHaveBeenCalled()
     })
-    test('should round currentValue according to step period nd call mock with correct parameters', () => {
-      options.step = 0.2
-      _.setCurrent( 0.1)
-      expect(callback).toHaveBeenCalledWith(-1600, 0.1)
+    test('call mock', () => {
+      options = {
+        min: 0.1,
+        max: 0.9,
+        from: 0.5,
+        to: 0.1,
+        step: 0.1123,
+        progress: true,
+        tip: true,
+        scale: true,
+        scaleSize: 5,
+        vertical: true,
+        double: true,
+      }
+      _ = new Model(options)
+      _.mediator = {
+        notify: jest.fn()
+      }
+      _.setCurrent(0.1)
+      expect(_.mediator.notify).toHaveBeenCalled()
     })
-    test('should set correct current if scale is not full size', () => {
-      options.min = 0
-      options.max = 21
-      options.step = 2
+    test('should work for part size scale', () => {
+      options = {
+        min: 0,
+        max: 120,
+        from: 118,
+        to: 120,
+        step: 50,
+        progress: true,
+        tip: true,
+        scale: true,
+        scaleSize: 5,
+        vertical: true,
+        double: true,
+      }
+      _ = new Model(options)
+      _.mediator = {
+        notify: jest.fn()
+      }
+      _.setCurrent(120)
+      expect(_.mediator.notify).toHaveBeenCalledTimes(1)
+    })
+    test('should work for part size scale', () => {
+      options = {
+        min: 0,
+        max: 130,
+        from: 118,
+        to: 120,
+        step: 33,
+        progress: true,
+        tip: true,
+        scale: true,
+        scaleSize: 5,
+        vertical: true,
+        double: true,
+      }
+      _ = new Model(options)
+      _.mediator = {
+        notify: jest.fn()
+      }
       _.setCurrent(1)
-      expect(callback).toHaveBeenCalledWith(21, 1)
+      expect(_.mediator.notify).toHaveBeenCalledTimes(1)
     })
-    test('should set correct current if scale is not full size', () => {
-      options.min = 0
-      options.max = 80
-      options.step = 50
-      _.setCurrent(0.8)
-      expect(callback).toHaveBeenCalledWith(50, 0.625)
-    })
-    test('should call callback for extra', () => {
-      _.setCurrent(0.8, true)
-      expect(callbackExtra).toHaveBeenCalled()
-    })
-
   })
-
-
-
 
   describe('setPart', () => {
-    beforeEach(() => {
-      options.min = 10
-      options.max = 110
-      options.step = 10
-      _.bindChangedPrimaryValues(callback)
-    })
-    test('should call mock with right params', () => {
+    test('should call mock', () => {
       _.setPart(21)
-      expect(callback).toHaveBeenCalledWith(20, 0.1)
+      expect(_.mediator.notify).toHaveBeenCalled()
     })
-    test('should filter too big params and call mock', () => {
-      _.setPart(200)
-      expect(callback).toHaveBeenCalledWith(110, 1)
+    test('should call mock 1 time', () => {
+      options = {
+        min: 0,
+        max: 120,
+        from: 118,
+        to: 120,
+        step: 50,
+        progress: true,
+        tip: true,
+        scale: true,
+        scaleSize: 5,
+        vertical: true,
+        double: true,
+      }
+      _ = new Model(options)
+      _.mediator = {
+        notify: jest.fn()
+      }
+      _.setPart(120)
+      expect(_.mediator.notify).toHaveBeenCalledTimes(1)
     })
-    test('should filter too small params and call mock', () => {
-      _.setPart(-100)
-      expect(callback).toHaveBeenCalledWith(10, 0)
+    test('should filter big part correctly ', () => {
+      _.setPart(1200, false)
+      expect(_.mediator.notify).toHaveBeenCalledWith({current: 200, part: 1, extra: false}, 'current and part were sent from Model')
+    })
+    test('should filter small part correctly', () => {
+      _.setPart(-10000, false)
+      expect(_.mediator.notify).toHaveBeenCalledWith({current: -1800, part: 0, extra: false}, 'current and part were sent from Model')
     })
   })
-
-
-
 
   describe('countScaleElements', () => {
     test('should return a correct object', () => {
@@ -112,15 +169,9 @@ describe('Model', () => {
   })
 
   describe('update', () => {
-    let callback: jest.Mock
-    beforeEach(() => {
-      callback = jest.fn()
-      _.bindChangedOptions(callback)
-    })
     test('should call callback', () => {
-      
       _.update(options)
-      expect(callback).toHaveBeenCalled()
+      expect(_.mediator.notify).toHaveBeenCalled()
     })
     test('should filter options', () => {
       options.step = 0
@@ -128,7 +179,7 @@ describe('Model', () => {
       options.max = -10
       options.scaleSize = 1
       _.update(options)
-      expect(callback).toHaveBeenCalled()
+      expect(_.mediator.notify).toHaveBeenCalled()
     })
     test('should filter options', () => {
       options.step = -200
@@ -136,7 +187,7 @@ describe('Model', () => {
       options.max = -1
       options.scaleSize = 21
       _.update(options)
-      expect(callback).toHaveBeenCalled()
+      expect(_.mediator.notify).toHaveBeenCalled()
     })
   })
 })
