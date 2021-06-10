@@ -1,5 +1,4 @@
 import { IOptions, IView, Mediator } from '../../types'
-import './view.scss'
 import { Wrapper } from './Subviews/Wrapper/Wrapper'
 import { Line } from './Subviews/Line/Line'
 import { Thumb } from './Subviews/Thumb/Thumb'
@@ -10,7 +9,7 @@ import { Input } from './Subviews/Input/Input'
 import { BoundaryLabels } from './Subviews/BoundaryLabels/BoundaryLabels'
 
 class View implements IView { 
-  protected mediator!: Mediator
+  public mediator!: Mediator
   public wrapper!: Wrapper
   public line!: Line
   public thumb!: Thumb 
@@ -25,7 +24,7 @@ class View implements IView {
   public current!: number
   public currentExtra!: number
 
-  constructor(private initElement: HTMLElement, public options: IOptions) {
+  constructor(public initElement: HTMLElement, public options: IOptions) {
     this.options = options
     this.initElement = initElement
   }
@@ -104,8 +103,8 @@ class View implements IView {
   }
   
   private initScale = (initElement: HTMLElement, scaleElements: { [key: string]: string }): void => {
-    this.scale = new Scale(initElement)
-    this.line.setMediator(this)
+    this.scale = new Scale(initElement, this)
+    this.scale.setMediator(this)
     this.scale.initScale(scaleElements, this.line.returnSize(), this.options.vertical)
   }
 
@@ -128,7 +127,7 @@ class View implements IView {
 
   private initInput = (): void => {
     this.input = new Input(this.initElement)
-    this.line.setMediator(this)
+    this.input.setMediator(this)
     const extra = true
     if (this.options.double && this.doesInputExist(extra)){
       this.input.initExtra()
@@ -158,8 +157,8 @@ class View implements IView {
 
     this.thumb.update(part, this.line.returnSize(), this.options.vertical, extra)
 
-    const doesInputsExist = (extra && this.doesInputExist(extra)) || (!extra && this.doesInputExist())
-
+    let doesInputsExist = (extra && this.doesInputExist(extra)) || (!extra && this.doesInputExist())
+    
     doesInputsExist ? this.input.update(current, extra): ''
     
     this.options.progress ? this.progress.update(part, this.line.returnSize(), this.options.vertical, extra) : ''
@@ -201,7 +200,7 @@ class View implements IView {
     if (data.nearest) {
       this.changePositionForTheNearest(data.value)
     } else {
-      this.mediator.notify({ value: data.value, current: false, extra: data.extra }, 'data were sent from View')
+      this.mediator.notify({ value: data.value, current: data.current, extra: data.extra }, 'data were sent from View')
     }
   }
 }

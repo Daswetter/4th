@@ -5,7 +5,6 @@ describe('Model', () => {
   let _: Model
   let options: IOptions
   beforeEach(() => {
-    
     options = {
       min: -1800,
       max: 200,

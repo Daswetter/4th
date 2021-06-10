@@ -1,6 +1,6 @@
 import { IEvent, IView } from '../../../types'
 abstract class Subview {
-  protected mediator!: IView
+  public mediator!: IView
   protected events: IEvent<any> = {}
   
   protected init = (initElement: HTMLElement, element: HTMLElement, styleName: string): HTMLElement => {

@@ -1,7 +1,7 @@
 import { IOptions, IModel, Mediator } from '../../types'
 
 class Model implements IModel{
-  protected mediator!: Mediator
+  public mediator!: Mediator
   
   constructor(public options: IOptions){
     this.options = this.filterOptions(options)    

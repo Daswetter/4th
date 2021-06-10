@@ -21,6 +21,7 @@ interface IView {
 }
 
 interface IModel {
+  mediator: Mediator
   options: IOptions
   setMediator(mediator: Mediator): void
   setCurrent(part: number, extra?: boolean): void

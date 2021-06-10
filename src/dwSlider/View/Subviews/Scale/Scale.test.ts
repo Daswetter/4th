@@ -4,7 +4,16 @@ describe('Scale', () => {
   let _: Scale
   beforeEach(() => {
     const initElement = document.createElement('div')
-    _ = new Scale(initElement)
+    const mediator = {
+      current: 1,
+      currentExtra: 1,
+      setMediator: jest.fn(),
+      initView: jest.fn(),
+      sendDataToSubviews: jest.fn(),
+      clearAllView: jest.fn(),
+      notify: jest.fn()
+    }
+    _ = new Scale(initElement, mediator)
   })
 
   describe('constructor', () => {
@@ -14,41 +23,6 @@ describe('Scale', () => {
     test('should add correct class', () => {
       expect(_.scale.className).toBe('dwSlider__scale')
     })
-  })
-
-  describe('initScale', () => {
-    let callback: jest.Mock
-    const scaleValues = {
-        '0': '0',
-        '0.25': '0.25',
-        '0.5': '0.5',
-        '0.75': '0.75',
-        '1': '1',
-      }
-    beforeEach(() => {
-      callback = jest.fn()
-      _.bindChangedState(callback)
-      
-      const lineSize = {
-        width: 100,
-        height: 10
-      }
-      const vertical = true
-
-      _.initScale(scaleValues, lineSize, vertical)
-    })
-    
-    test('should create at least one div', () => {
-        expect(_.scale.childNodes[0].nodeName).toBe('DIV')
-      }
-    )
-
-    test('should call event listener', () => {
-      const click = new MouseEvent('click');
-      _.scale.childNodes[0].dispatchEvent(click);
-      expect(callback).toBeCalled()
-      }
-    )
   })
 
   describe('setPosition', () => {
@@ -73,6 +47,18 @@ describe('Scale', () => {
       }
       _.setPosition(lineSize, false)
       expect(_.scaleElements[1].style.top).toBe('0.2px')
+    })
+  })
+
+  describe('initScale', () => {
+    test('should call mediator.notify', () => {
+      const scaleElement1 = document.createElement('div')
+      const scaleElement2 = document.createElement('div')
+      _.scaleElements = {'0': scaleElement1, '1': scaleElement2}
+      _.initScale({'0': '0', '1': '1'}, {width: 1, height: 5}, true)
+      const click = new MouseEvent('click')
+      _.scaleElements[0].dispatchEvent(click)
+      expect(_.mediator.notify).toBeCalled()
     })
   })
 })

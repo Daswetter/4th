@@ -5,6 +5,15 @@ describe('Thumb', () =>{
   beforeEach(() => {
     const initElement = document.createElement('div')
     _ = new Thumb(initElement)
+    _.mediator = {
+      current: 1,
+      currentExtra: 1,
+      setMediator: jest.fn(),
+      initView: jest.fn(),
+      sendDataToSubviews: jest.fn(),
+      clearAllView: jest.fn(),
+      notify: jest.fn()
+    }
   })
 
   describe('constructor', () => {
@@ -32,8 +41,6 @@ describe('Thumb', () =>{
 
   describe('setEventListener', () => {
     test('should set mouse down and mouse move for horizontal and primary', () => {
-      const callback = jest.fn()
-      _.bindChangedState(callback)
       const lineSize ={
         width: 600,
         height: 6
@@ -64,13 +71,11 @@ describe('Thumb', () =>{
       _.primary.dispatchEvent(mouseDown);
       document.dispatchEvent(mouseMove);
 
-      expect(callback).toBeCalledWith(1)
+      expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 1})
     })
 
     test('should set mouse down and mouse move for vertical and extra', () => {
       const vertical = true
-      const callback = jest.fn()
-      _.bindExtraChangedState(callback)
       const initElement = document.createElement('div')
       _.initExtra(initElement)
       const lineSize ={
@@ -103,14 +108,14 @@ describe('Thumb', () =>{
       _.extra.dispatchEvent(mouseDown);
       document.dispatchEvent(mouseMove);
 
-      expect(callback).toBeCalled()
-      expect(callback).toBeCalledWith(0)
+      expect(_.mediator.notify).toBeCalled()
+      expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": true, "nearest": false, "value": 0})
 
       const mouseUp = new MouseEvent('mouseup')
 
       document.dispatchEvent(mouseUp)
       document.dispatchEvent(mouseMove);
-      expect(callback).toBeCalledTimes(1)
+      expect(_.mediator.notify).toBeCalledTimes(1)
     })
 
     describe('update', () => {

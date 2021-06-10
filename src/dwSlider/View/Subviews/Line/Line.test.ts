@@ -5,6 +5,15 @@ describe('Line', () => {
   beforeEach(() => {
     const initElement = document.createElement('div')
     _ = new Line(initElement)
+    _.mediator = {
+      current: 1,
+      currentExtra: 1,
+      setMediator: jest.fn(),
+      initView: jest.fn(),
+      sendDataToSubviews: jest.fn(),
+      clearAllView: jest.fn(),
+      notify: jest.fn()
+    }
   })
 
   describe('constructor', () => {
@@ -23,12 +32,6 @@ describe('Line', () => {
   })
 
   describe('setEventListener', () => {
-    let callback: jest.Mock
-    beforeEach(() => {
-      callback = jest.fn();
-      _.bindChangedState(callback)
-    })
-
     describe('horizontal', () => {
       beforeEach(() => {
         const vertical = false
@@ -73,10 +76,10 @@ describe('Line', () => {
           value: 60
         })
         _.line.dispatchEvent(click);
-        expect(callback).toBeCalledWith(0.25);
+        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 0.25});
       });
   
-      test('should set click to line and call callback with 0', () => {
+      test('should set click to line and call _.mediator.notify with 0', () => {
         const click = new MouseEvent('click', {
           clientX: -250,
         });
@@ -84,10 +87,10 @@ describe('Line', () => {
           value: 0
         })
         _.line.dispatchEvent(click);
-        expect(callback).toBeCalledWith(0);
+        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 0});
       });
   
-      test('should set click to horizontal line and call callback with 1', () => {
+      test('should set click to horizontal line and call _.mediator.notify with 1', () => {
         const click = new MouseEvent('click', {
           clientX: 1000,
         });
@@ -95,10 +98,10 @@ describe('Line', () => {
           value: 0
         })
         _.line.dispatchEvent(click);
-        expect(callback).toBeCalledWith(1);
+        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 1});
       });
 
-      test('should not call callback if scale were clicked', () => {
+      test('should not call _.mediator.notify if scale were clicked', () => {
         Object.defineProperty(_.line, 'offsetTop', {
           value: 800
         })
@@ -110,7 +113,7 @@ describe('Line', () => {
           value: 60
         })
         _.line.dispatchEvent(click);
-        expect(callback).not.toHaveBeenCalled()
+        expect(_.mediator.notify).not.toHaveBeenCalled()
       });
     })
 
@@ -152,7 +155,7 @@ describe('Line', () => {
           value: 0
         })
         _.line.dispatchEvent(click);
-        expect(callback).toBeCalledWith(0);
+        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 0});
       });
 
       test('should set click to line and call subscriber with 1', () => {
@@ -163,7 +166,7 @@ describe('Line', () => {
           value: 0
         })
         _.line.dispatchEvent(click);
-        expect(callback).toBeCalledWith(1);
+        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 1});
       });
 
       test('should set click to line and call subscriber with 0.2', () => {
@@ -175,10 +178,10 @@ describe('Line', () => {
           value: 0
         })
         _.line.dispatchEvent(click);
-        expect(callback).toBeCalledWith(0.2);
+        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 0.2});
       });
 
-      test('should not call callback if scale were clicked', () => {
+      test('should not call _.mediator.notify if scale were clicked', () => {
         const click = new MouseEvent('click', {
           clientX: 1000,
           clientY: 900,
@@ -187,11 +190,11 @@ describe('Line', () => {
           value: 60
         })
         _.line.dispatchEvent(click);
-        expect(callback).not.toHaveBeenCalled()
+        expect(_.mediator.notify).not.toHaveBeenCalled()
       });
     })
 
-    test('should not call callback if onMouseDown value is not equal to onMouseUp', () => {
+    test('should not call _.mediator.notify if onMouseDown value is not equal to onMouseUp', () => {
       
       const vertical = true
       _.setEventListener(vertical)
@@ -214,7 +217,7 @@ describe('Line', () => {
         value: 0
       })
       _.line.dispatchEvent(click);
-      expect(callback).not.toBeCalled();
+      expect(_.mediator.notify).not.toBeCalled();
     })
   
       

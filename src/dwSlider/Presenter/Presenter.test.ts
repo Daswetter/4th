@@ -40,53 +40,16 @@ describe('Presenter', () => {
   describe('constructor', () => {
 
     test('should call bindChangedPrimaryPart', () => {
-      view.bindChangedPrimaryPart = jest.fn()
+      view.setMediator = jest.fn()
       _ = new Presenter(view, model)
-      expect(view.bindChangedPrimaryPart).toHaveBeenCalled()
-    })
-    test('should call bindChangedExtraPart', () => {
-      view.bindChangedExtraPart = jest.fn()
-      _ = new Presenter(view, model)
-      expect(view.bindChangedExtraPart).toHaveBeenCalled()
-    })
-    test('should call bindChangedCurrent', () => {
-      view.bindChangedPrimaryCurrent = jest.fn()
-      _ = new Presenter(view, model)
-      expect(view.bindChangedPrimaryCurrent).toHaveBeenCalled()
-    })
-    test('should call bindChangedExtraCurrent', () => {
-      view.bindChangedExtraCurrent = jest.fn()
-      _ = new Presenter(view, model)
-      expect(view.bindChangedExtraCurrent).toHaveBeenCalled()
-    })
-
-    test('should call notifyPrimary', () => {
-      view.notifyPrimary = jest.fn()
-      _ = new Presenter(view, model)
-      expect(view.notifyPrimary).toHaveBeenCalled()
+      expect(view.setMediator).toHaveBeenCalled()
     })
 
     test('should call bindChangedPrimaryValues', () => {
-      model.bindChangedPrimaryValues = jest.fn()
+      model.setMediator = jest.fn()
       _ = new Presenter(view, model)
-      expect(model.bindChangedPrimaryValues).toHaveBeenCalled()
+      expect(model.setMediator).toHaveBeenCalledWith(_)
     })
-    test('should call bindChangedExtraValues', () => {
-      model.bindChangedExtraValues = jest.fn()
-      _ = new Presenter(view, model)
-      expect(model.bindChangedExtraValues).toHaveBeenCalled()
-    })
-    test('should call bindChangedOptions', () => {
-      model.bindChangedOptions = jest.fn()
-      _ = new Presenter(view, model)
-      expect(model.bindChangedOptions).toHaveBeenCalled()
-    }) 
-
-    test('should call initView', () => {
-      view.initView = jest.fn()
-      _ = new Presenter(view, model)
-      expect(view.initView).toHaveBeenCalledTimes(1)
-    }) 
   })
 
   describe('update', () => {
@@ -104,8 +67,15 @@ describe('Presenter', () => {
   })
   describe('returnOptions', () => {
     test('should return array with current from view', () => {
-      _.returnOptions()
       expect(_.returnOptions()).toEqual(options)
+    })
+  })
+
+  describe('notify', () => {
+    test('should call setCurrent', () => {
+      const modelUpdate = jest.spyOn(model, 'setCurrent')
+      _.notify({value: 1, current: false, extra: false}, 'data were sent from View')
+      expect(modelUpdate).toBeCalledWith(1, false)
     })
   })
 })

@@ -1,12 +1,14 @@
+import { IView } from '../../../../types';
 import { Subview } from '../Subview';
 
 class Scale extends Subview{
   public scale!: HTMLElement 
   public scaleElements:{ [key: string]: HTMLElement } = {}
 
-  constructor(initElement: HTMLElement){
+  constructor(private initElement: HTMLElement, public mediator: IView){
     super()
     this.initPrimary(initElement)
+    this.mediator = mediator
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
@@ -17,7 +19,7 @@ class Scale extends Subview{
     this.createScaleElements(scaleValues)
     this.printScaleValues(scaleValues)
     this.setPosition(lineSize, vertical)
-    this.subscribe<number>('scale: clicked', part => this.mediator.notify({value: part, current: false, extra: false, nearest: false}));
+    this.subscribe<number>('scale: clicked', part => this.mediator.notify({value: part, current: false, extra: false, nearest: true}));
     this.setScaleListener()
   }
   
