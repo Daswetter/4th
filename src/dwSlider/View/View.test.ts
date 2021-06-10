@@ -1,17 +1,9 @@
 import { IOptions } from '../../types'
 import { View } from './View'
 
-
 describe('View', () => {
   let _: View
   let options: IOptions
-  
-  const callbackCurrent = jest.fn()
-  const callbackExtraCurrent = jest.fn()
-
-  const callbackPart = jest.fn()
-  const callbackExtraPart = jest.fn()
-  
   const initElement: HTMLElement = document.createElement('div')
 
   beforeEach(() => {
@@ -28,19 +20,13 @@ describe('View', () => {
       vertical: true,
       double: true,
     }
-
     _ = new View(initElement, options)
-    _.bindChangedPrimaryCurrent(callbackCurrent)
-    _.bindChangedExtraCurrent(callbackExtraCurrent)
-
-    _.bindChangedPrimaryPart(callbackPart)
-    _.bindChangedExtraPart(callbackExtraPart)
-    
-    callbackCurrent.mockClear()
-    callbackExtraCurrent.mockClear()
-    callbackPart.mockClear()
-    callbackExtraPart.mockClear()
-    
+    _.mediator = {
+      notify: jest.fn()
+    }
+  })
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('initView', () => {
@@ -55,22 +41,8 @@ describe('View', () => {
       _.initView(scaleElements)
       expect(_.input).not.toBeTruthy()
     })
-    test('should not fail if extra input do not exist', () => {
-      const input = document.createElement('input')
-      initElement.append(input)
-      input.classList.add('dwSlider__input_from')
-      options.double = true
-      const scaleElements = {
-        '0': '0',
-        '0.25': '0.25',
-        '0.5': '0.5',
-        '0.75': '0.75',
-        '1': '1',
-      }
-      _.initView(scaleElements)
-      expect(_.input).toBeTruthy()
-    })
   })
+
   describe('initView', () => {
     let scaleElements: { [key: string]: string }
     beforeEach(() => {
@@ -82,6 +54,9 @@ describe('View', () => {
         '1': '1',
       }
       _.initView(scaleElements)
+    })
+    afterEach(() => {
+      _.initElement.innerHTML = ''
     })
     test('should create wrapper', () => {
       expect(_.wrapper).toBeTruthy()
@@ -101,98 +76,30 @@ describe('View', () => {
     test('should create progress', () => {
       expect(_.progress).toBeTruthy()
     })
-  })
-
-
-  describe('initView', () => {
-    let scaleElements: { [key: string]: string }
-    beforeEach(() => {
-      scaleElements = {
-        '0': '0',
-        '0.25': '0.25',
-        '0.5': '0.5',
-        '0.75': '0.75',
-        '1': '1',
-      }
-    })
     test('should create tip', () => {
       options.tip = true
+      options.scale = false
       _.initView(scaleElements)
       expect(_.tip).toBeTruthy()
     })
 
-    describe('should call mock if line was clicked', () => {
-      beforeEach(() => {
-        options.double = true
-        options.vertical = true
-        options.step = 1
-        
-        _.initView(scaleElements)
-        _.line.returnAsHTML().getBoundingClientRect = jest.fn(() => ({
-          x: 0,
-          y: 10,
-          width: 300,
-          height: 10,
-          top: 50,
-          right: 730,
-          bottom: 100,
-          left: 50,
-          toJSON: jest.fn(),
-        }))
-        Object.defineProperty(_.line, 'offsetHeight', {
-          value: 500
-        })
-        
-        Object.defineProperty(_.line, 'offsetWidth', {
-          value: 500
-        })
-        
-      })
-
-      test('should call mock for extra if line was clicked near extra thumb', () => {
-        _.notifyPrimary(-1700, 0.05)
-        _.notifyExtra(100, 0.95)
-        const event = new MouseEvent('click', {
-          clientX: 500,
-        })
-        Object.defineProperty(event, 'pageX', {
-          value: 0
-        })
-        _.line.returnAsHTML().dispatchEvent(event)
-        expect(callbackExtraPart).toHaveBeenCalled()
-      })
-
-      test('should call mock for primary if line was clicked near primary thumb', () => {
-        _.notifyExtra(-1700, 0.05)
-        _.notifyPrimary(100, 0.95)
-        const event = new MouseEvent('click', {
-          clientX: 500,
-        })
-        Object.defineProperty(event, 'pageX', {
-          value: 0
-        })
-        _.line.returnAsHTML().dispatchEvent(event)
-        expect(callbackPart).toHaveBeenCalled()
-      })
-    })
-    
-
-
-    test('should not create scale', () => {
-      options.scale = false
-      _.initView(scaleElements)
-      expect(_.scale).not.toBeTruthy()
-    })
-    test('should not create progress', () => {
-      options.progress = false
-      _.initView(scaleElements)
-      expect(_.progress).not.toBeTruthy()
-    })
-    test('should not call mock for extra if thumbType is single', () => {
+    test('should find input', () => {
       options.double = false
+      const input = document.createElement('input')
+      input.classList.add('js-dwSlider__input_from')
+      _.initElement.append(input)
       _.initView(scaleElements)
-      expect(callbackExtraCurrent).not.toHaveBeenCalled()
+      expect(_.input).toBeTruthy()
     })
+    test('should find extra input', () => {
+      const input = document.createElement('input')
+      input.classList.add('js-dwSlider__input_from')
+      input.classList.add('js-dwSlider__input_to')
+      _.initElement.append(input)
+      _.initView(scaleElements)
+      expect(_.input).toBeTruthy()
+    })
+
     test('should not call initExtraElement for single', () => {
       options.double = false
       options.tip = true
@@ -218,72 +125,63 @@ describe('View', () => {
       expect(document.querySelector('.dwSlider__wrapper')).not.toBeTruthy()
     })
   })
-  
 
-  describe('notifyPrimary', () => {
-    let scaleElements: { [key: string]: string }
-    beforeEach(() => {
-      scaleElements = {
-        '0': '0',
-        '0.25': '0.25',
-        '0.5': '0.5',
-        '0.75': '0.75',
-        '1': '1',
-      }
-      _.initView(scaleElements)
+  describe('sendDataToSubviews', () => {
+    afterEach(() => {
+      _.initElement.innerHTML = ''
     })
-    test('should call thumb"s method update', () => {
-      const spyThumb = jest.spyOn(_.thumb, 'update');
-      _.notifyPrimary(1, 1)
-      expect(spyThumb).toHaveBeenCalled();
+    test('should send data to progress', () => {
+      _.initView({'0': '0', '1': '1'})
+      const spyOnProgress = jest.spyOn(_.progress, 'update')
+      _.sendDataToSubviews(1, 1)
+      expect(spyOnProgress).toHaveBeenCalled()
     })
-    test('should call update for boundary labels if single', () => {
-      options.double = false
+    test('should send data to tip', () => {
+      const input = document.createElement('input')
+      input.classList.add('js-dwSlider__input_from')
+      input.classList.add('js-dwSlider__input_to')
+      _.initElement.append(input)
       options.tip = true
-      
-      _.initView(scaleElements)
-      const spyLabels = jest.spyOn(_.boundaryLabels, 'update')
-      _.notifyPrimary(100, 0.11)
-      expect(spyLabels).toHaveBeenCalled()
+      _.initView({'0': '0', '1': '1'})
+      const spyOnTip = jest.spyOn(_.tip, 'update')
+      _.sendDataToSubviews(1, 1, true)
+      expect(spyOnTip).toHaveBeenCalled()
+    })
+    test('should send data to tip', () => {
+      options.progress = false
+      options.tip = true
+      options.double = false
+      _.initView({'0': '0', '1': '1'})
+      const spyOnTip = jest.spyOn(_.tip, 'update')
+      _.sendDataToSubviews(1, 1)
+      expect(spyOnTip).toHaveBeenCalled()
     })
   })
 
-  describe('notifyExtra', () => {
-    let scaleElements: { [key: string]: string }
-    beforeEach(() => {
-      scaleElements = {
-        '0': '0',
-        '0.25': '0.25',
-        '0.5': '0.5',
-        '0.75': '0.75',
-        '1': '1',
+  describe('notify', () => {
+    test('should call notify mediator for extra', () => {
+      _.notify({value: 1, current: true, extra: true, nearest: true})
+      expect(_.mediator.notify).toHaveBeenCalled()
+    })
+    test('should call notify mediator for primary', () => {
+      _.part = 0
+      _.partExtra = 0.1
+      _.notify({value: 1, current: false, extra: false, nearest: true})
+      expect(_.mediator.notify).toHaveBeenCalled()
+    })
+    test('should call notify in mediator', () => {
+      _.notify({value: 1, current: true, extra: true, nearest: false})
+      expect(_.mediator.notify).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('setMediator', () => {
+    test('should add mediator', () => {
+      const testMediator = {
+        notify: jest.fn()
       }
-      _.initView(scaleElements)
+      _.setMediator(testMediator)
+      expect(_.mediator).toEqual(testMediator)
     })
-    test('write part to part extra if element is extra', () => {
-      _.notifyExtra(100, 0.11)
-      expect(_.partExtra).toEqual(0.11);
-    })
-    test('should not call update for progress if progress is false', () => {
-      options.progress = false
-      _.initView(scaleElements)
-      const spyProgress = jest.spyOn(_.progress, 'update')
-      _.notifyExtra(100, 0.11)
-      expect(spyProgress).not.toHaveBeenCalled()
-    })
-    test('should call update for tip if it is true', () => {
-      options.tip = true
-      _.initView(scaleElements)
-      const spyTip = jest.spyOn(_.tip, 'update')
-      _.notifyExtra(100, 0.11)
-      expect(spyTip).toHaveBeenCalled()
-    })
-    test('should not call update for input if input does not exist', () => {      
-      _.initView(scaleElements)
-      const spyInputs = jest.spyOn(_.input, 'update')
-      _.notifyExtra(100, 0.11)
-      expect(spyInputs).not.toHaveBeenCalled()
-    })
-    
   })
 })
