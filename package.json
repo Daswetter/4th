@@ -2,7 +2,7 @@
   "name": "4th",
   "version": "1.0.0",
   "description": "range slider",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "jest --collect-coverage",
     "build": "webpack",
