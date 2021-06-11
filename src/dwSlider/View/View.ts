@@ -63,7 +63,6 @@ class View implements IView {
 
     this.line.setEventListener(this.options.vertical)
     this.line.setMediator(this)
-    
   }
 
   private initThumb = (initElement: HTMLElement) : void => {
@@ -173,7 +172,6 @@ class View implements IView {
       }
     }
   }
-
 
   private countDistance = (part: number, extra = false): number => {
     let currentPart = this.part
