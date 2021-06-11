@@ -5,7 +5,7 @@ class Line extends Subview{
   private mouseDownValue!: number 
   private mouseUpValue!: number 
 
-  constructor(initElement: HTMLElement){
+  constructor(public initElement: HTMLElement){
     super()
     this.initPrimary(initElement)
     
@@ -21,7 +21,7 @@ class Line extends Subview{
     return this.line
   }
 
-  subscribeToEvents = (): void => {
+  private subscribeToEvents = (): void => {
     this.subscribe<{vertical: boolean, event: MouseEvent}>('line: clicked', ({vertical, event}) => this.handleClick(vertical, event))
 
     this.subscribe<{vertical: boolean, event: MouseEvent}>('line: mouseDown', ({vertical, event}) => this.handleMouseDown(vertical, event))

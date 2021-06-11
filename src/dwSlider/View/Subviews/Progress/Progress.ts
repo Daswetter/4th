@@ -5,7 +5,7 @@ class Progress extends Subview{
   private partExtra = 0
   private part = 0
 
-  constructor(initElement: HTMLElement){
+  constructor(public initElement: HTMLElement){
     super()
     this.initPrimary(initElement)
   }

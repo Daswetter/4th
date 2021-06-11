@@ -4,7 +4,7 @@ class BoundaryLabels extends Subview {
   public min!: HTMLElement
   public max!: HTMLElement
 
-  constructor(initElement: HTMLElement){
+  constructor(public initElement: HTMLElement){
     super()
     this.initElements(initElement)
   }

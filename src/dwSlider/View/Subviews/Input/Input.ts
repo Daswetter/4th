@@ -5,7 +5,7 @@ class Input extends Subview{
   public primary!: HTMLInputElement
   public extra!: HTMLInputElement
 
-  constructor(initElement: HTMLElement){
+  constructor(public initElement: HTMLElement){
     super()
     this.initPrimary(initElement)
     this.setEventListener(this.primary)

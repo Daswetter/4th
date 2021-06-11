@@ -12,7 +12,7 @@ class Tip extends Subview {
   private mouseMove!: (event: MouseEvent) => void
   private mouseUp!: () => void
 
-  constructor(initElement: HTMLElement){
+  constructor(public initElement: HTMLElement){
     super()
     this.initPrimary(initElement)
     this.united = this.initUnited()

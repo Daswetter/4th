@@ -7,7 +7,7 @@ class Thumb extends Subview{
   private mouseMoveEvent!: (event: MouseEvent) => void
   private mouseUpEvent!: (event: MouseEvent) => void
 
-  constructor(initElement: HTMLElement){
+  constructor(public initElement: HTMLElement){
     super()
     this.initPrimary(initElement)
 

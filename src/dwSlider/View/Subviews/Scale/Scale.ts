@@ -5,7 +5,7 @@ class Scale extends Subview{
   public scale!: HTMLElement 
   public scaleElements:{ [key: string]: HTMLElement } = {}
 
-  constructor(private initElement: HTMLElement, public mediator: IView){
+  constructor(public initElement: HTMLElement, public mediator: IView){
     super()
     this.initPrimary(initElement)
     this.mediator = mediator
