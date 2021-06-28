@@ -4,16 +4,12 @@ include ./components/input/input
 mixin config-panel
   form.config-panel
     .config-panel__inputs
-      +input({title: "min"})
-      +input({title: "max"})
-      +input({title: "step"})
+      each item in ["min", "max", "step", "scaleSize"]
+        +input({title: item})
       +input({title: "from", className: "js-dwSlider__input_from"})
       +input({title: "to", className: "js-dwSlider__input_to"})
-      +input({title: "scaleSize"})
+      
     
     .config-panel__toggles
-      +toggle({title: "vertical"})
-      +toggle({title: "double"})
-      +toggle({title: "scale"})
-      +toggle({title: "progress"})
-      +toggle({title: "tip"})
+      each item in ["vertical", "double", "scale", "progress", "tip"]
+        +toggle({title: item})
