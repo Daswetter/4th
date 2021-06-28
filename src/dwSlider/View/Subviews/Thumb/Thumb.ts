@@ -15,11 +15,11 @@ class Thumb extends Subview{
   }
   
   private initPrimary = (initElement: HTMLElement): void => {
-    this.primary = this.init(initElement, this.primary, 'thumb')
+    this.primary = this.init(initElement, this.primary, '__thumb')
   }
 
   public initExtra = (initElement: HTMLElement): void => {
-    this.extra = this.init(initElement, this.extra, 'thumb')
+    this.extra = this.init(initElement, this.extra, '__thumb')
   }
 
   private subscribeToEvents = (): void => {

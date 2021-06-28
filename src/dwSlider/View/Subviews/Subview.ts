@@ -5,7 +5,7 @@ abstract class Subview {
   
   protected init = (initElement: HTMLElement, element: HTMLElement, styleName: string): HTMLElement => {
     element = document.createElement('div')
-    element.classList.add(`dwSlider__${styleName}`)
+    element.classList.add(`dwSlider${styleName}`)
     initElement.append(element)
     return element
   }

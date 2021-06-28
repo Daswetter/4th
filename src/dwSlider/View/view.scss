@@ -3,22 +3,20 @@ html {
   overflow-y: scroll; 
 }
 .dwSlider {
-  &__wrapper{
-    display: flex;
-    -webkit-user-select: none; 
-    -moz-user-select: none;
-    user-select: none;
-    &_horizontal{
-      flex-direction: column;
-      width: 60%;
-      margin: 3.125rem;
-    }
-    &_vertical{
-      flex-direction: row;
-      justify-content: center;
-      width: auto; 
-      margin: 0.625rem 6.25rem;
-    }
+  display: flex;
+  -webkit-user-select: none; 
+  -moz-user-select: none;
+  user-select: none;
+  &_horizontal{
+    flex-direction: column;
+    width: 60%;
+    margin: 3.125rem;
+  }
+  &_vertical{
+    flex-direction: row;
+    justify-content: center;
+    width: auto; 
+    margin: 0.625rem 6.25rem;
   }
   &__line{
     position: relative;

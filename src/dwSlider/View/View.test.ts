@@ -122,7 +122,7 @@ describe('View', () => {
     test('all view should be destroyed', () => {
       _.initView(scaleElements)
       _.clearAllView()
-      expect(document.querySelector('.dwSlider__wrapper')).not.toBeTruthy()
+      expect(document.querySelector('.dwSlider')).not.toBeTruthy()
     })
   })
 

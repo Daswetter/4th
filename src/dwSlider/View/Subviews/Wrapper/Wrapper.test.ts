@@ -12,7 +12,7 @@ describe('Wrapper', () => {
       expect(_.wrapper.nodeName).toBe('DIV')
     })
     test('should set class', () => {
-      expect(_.wrapper.className).toBe('dwSlider__wrapper')
+      expect(_.wrapper.className).toBe('dwSlider')
     })
   })
 
@@ -25,11 +25,11 @@ describe('Wrapper', () => {
   describe('setInitialSettings', () => {
     test('should add class for vertical', () => {
       _.setInitialSettings(true)
-      expect(_.wrapper.className).toContain('dwSlider__wrapper_vertical')
+      expect(_.wrapper.className).toContain('dwSlider_vertical')
     })
     test('should add class for horizontal', () => {
       _.setInitialSettings(false)
-      expect(_.wrapper.className).toContain('dwSlider__wrapper_horizontal')
+      expect(_.wrapper.className).toContain('dwSlider_horizontal')
     })
   })
 })

@@ -32,11 +32,11 @@ class Tip extends Subview {
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
-    this.primary = this.init(initElement, this.primary, 'tip')
+    this.primary = this.init(initElement, this.primary, '__tip')
   }
 
   public initExtra = (initElement: HTMLElement): void => {
-    this.extra = this.init(initElement, this.extra, 'tip')
+    this.extra = this.init(initElement, this.extra, '__tip')
   }
 
   private printInnerText = (element: HTMLElement, current: number | string): void => {

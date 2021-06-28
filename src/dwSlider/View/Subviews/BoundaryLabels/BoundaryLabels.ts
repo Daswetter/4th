@@ -10,8 +10,8 @@ class BoundaryLabels extends Subview {
   }
 
   private initElements = (initElement: HTMLElement): void => {
-    this.min = this.init(initElement, this.min, 'boundary-labels_min')
-    this.max = this.init(initElement, this.min, 'boundary-labels_max')
+    this.min = this.init(initElement, this.min, '__boundary-labels_min')
+    this.max = this.init(initElement, this.min, '__boundary-labels_max')
   }
 
   private printInnerText = (element: HTMLElement, text: number): void => {
