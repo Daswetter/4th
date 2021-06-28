@@ -58,7 +58,7 @@ vertical | data-vertical | false | boolean | Вертикальный или г�
 double | data-double | false | boolean | Одиночное значение или интервал
 tip | data-tip | true | boolean | Элемент над бегунком, который показывает значение
 scale | data-scale | true | boolean | Шкала значений
-scaleSize | data-scaleSize | true | number | Количество значений в шкале, от 2 до 20
+scaleSize | data-scaleSize | 5 | number | Количество значений в шкале, от 2 до 20
 progress | data-progress | true | boolean | Прогресс бар
 
 ## Описание архитектуры
