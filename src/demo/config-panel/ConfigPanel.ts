@@ -5,7 +5,7 @@ import './components/toggle/toggle.ts'
 import './components/input/input.ts'
 import './config-panel.scss'
 
-class configPanel{
+class ConfigPanel{
   private initElement!: HTMLElement
   private dwSlider!: IdwSlider
 
@@ -137,4 +137,4 @@ class configPanel{
   }
 }
 
-export { configPanel }
+export default ConfigPanel
