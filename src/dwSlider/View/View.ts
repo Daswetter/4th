@@ -1,4 +1,4 @@
-import { IOptions, IView, Mediator } from '../../types'
+import { IOptions, Publisher, Observer } from '../../types'
 import { Wrapper } from './Subviews/Wrapper/Wrapper'
 import { Line } from './Subviews/Line/Line'
 import { Thumb } from './Subviews/Thumb/Thumb'
@@ -8,8 +8,7 @@ import { Tip } from './Subviews/Tip/Tip'
 import { Input } from './Subviews/Input/Input'
 import { BoundaryLabels } from './Subviews/BoundaryLabels/BoundaryLabels'
 
-class View implements IView { 
-  public mediator!: Mediator
+class View extends Publisher implements Observer { 
   public wrapper!: Wrapper
   public line!: Line
   public thumb!: Thumb 
@@ -25,13 +24,11 @@ class View implements IView {
   public currentExtra!: number
 
   constructor(public initElement: HTMLElement, public options: IOptions) {
+    super()
     this.options = options
     this.initElement = initElement
   }
 
-  public setMediator(mediator: Mediator): void {
-    this.mediator = mediator;
-  }
 
   public initView = (scaleElements: { [key: string]: string }, options = this.options): void => {
     this.options = options
@@ -46,31 +43,31 @@ class View implements IView {
     this.options.progress ? this.initProgress(this.line.returnAsHTML()) : ''
     this.options.scale ? this.initScale(this.line.returnAsHTML(), scaleElements): ''
     
-    this.mediator.notify({value: this.options.from, current: true, extra: false}, 'data were sent from View')
-    this.options.double ? this.mediator.notify({value: this.options.to as number, current: true, extra: true}, 'data were sent from View') : ''
+    this.notify({value: this.options.from, current: true, extra: false}, 'data were sent from View')
+    this.options.double ? this.notify({value: this.options.to as number, current: true, extra: true}, 'data were sent from View') : ''
   }
 
   private initWrapper = (initElement: HTMLElement): void => {
     this.wrapper = new Wrapper(initElement)
+    this.wrapper.subscribe(this)
     this.initElement.append(this.wrapper.returnAsHTML())
     this.wrapper.setInitialSettings(this.options.vertical)
   }
 
   private initLine = (initElement: HTMLElement) : void => {
     this.line = new Line(initElement)
+    this.line.subscribe(this)
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML())
     this.line.setInitialSettings(this.options.vertical)
 
     this.line.setEventListener(this.options.vertical)
-    this.line.setMediator(this)
   }
 
   private initThumb = (initElement: HTMLElement) : void => {
     this.thumb = new Thumb(initElement) 
-    
+    this.thumb.subscribe(this)
     this.thumb.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical)
     this.thumb.setInitialSettings(this.line.returnSize(), this.options.vertical)
-    this.thumb.setMediator(this)
 
     if (this.options.double){
       this.thumb.initExtra(initElement)
@@ -82,14 +79,12 @@ class View implements IView {
   }
 
   private initTip = (initElement: HTMLElement): void => {
-    
     this.tip = new Tip(initElement)
-    
+    this.tip.subscribe(this)
     this.tip.setInitialSettings(this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical, this.options.min)
     
     const extra = false
     this.tip.setEventListener(this.line.returnSize(), this.line.returnSide(), this.options.vertical, extra)
-    this.tip.setMediator(this)
 
     if (this.options.double){
       
@@ -103,12 +98,13 @@ class View implements IView {
   
   private initScale = (initElement: HTMLElement, scaleElements: { [key: string]: string }): void => {
     this.scale = new Scale(initElement, this)
-    this.scale.setMediator(this)
+    this.scale.subscribe(this)
     this.scale.initScale(scaleElements, this.line.returnSize(), this.options.vertical)
   }
 
   private initProgress = (initElement: HTMLElement): void => {
     this.progress = new Progress(initElement)
+    this.progress.subscribe(this)
     this.progress.setInitialSettings(this.line.returnSize(), this.options.vertical)
   }
 
@@ -126,7 +122,7 @@ class View implements IView {
 
   private initInput = (): void => {
     this.input = new Input(this.initElement)
-    this.input.setMediator(this)
+    this.input.subscribe(this)
     const extra = true
     if (this.options.double && this.doesInputExist(extra)){
       this.input.initExtra()
@@ -135,6 +131,7 @@ class View implements IView {
 
   private initBoundaryLabels = (initElement: HTMLElement): void => {
     this.boundaryLabels = new BoundaryLabels(initElement)
+    this.boundaryLabels.subscribe(this)
     this.boundaryLabels.setInitialSettings(this.options.min, this.options.max, this.line.returnSize().width, this.thumb.returnSize(), this.options.vertical)
   }
 
@@ -186,19 +183,18 @@ class View implements IView {
     const distFromActionToPrimary = this.countDistance(part)
     const extra = true
     const distFromActionToExtra = this.countDistance(part, extra)
-
     if (distFromActionToPrimary > distFromActionToExtra){
-      this.mediator.notify({ value: part, current: false, extra: true }, 'data were sent from View')
+      this.notify({ value: part, current: false, extra: true }, 'data were sent from View')
     } else {
-      this.mediator.notify({ value: part, current: false, extra: false }, 'data were sent from View')
+      this.notify({ value: part, current: false, extra: false }, 'data were sent from View')
     }
   }
 
-  public notify = (data: {value: number, current: boolean, extra: boolean, nearest: boolean}): void => {
+  public update(data: {value: number, current: boolean, extra: boolean, nearest: boolean}): void {
     if (data.nearest) {
       this.changePositionForTheNearest(data.value)
     } else {
-      this.mediator.notify({ value: data.value, current: data.current, extra: data.extra }, 'data were sent from View')
+      this.notify({ value: data.value, current: data.current, extra: data.extra }, 'data were sent from View')
     }
   }
 }

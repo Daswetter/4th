@@ -1,14 +1,10 @@
-import { IOptions, IModel, Mediator } from '../../types'
+import { IOptions, Publisher } from '../../types'
 
-class Model implements IModel{
-  public mediator!: Mediator
+class Model extends Publisher{
   
   constructor(public options: IOptions){
-    this.options = this.filterOptions(options)    
-  }
-
-  public setMediator(mediator: Mediator): void {
-    this.mediator = mediator;
+    super()
+    this.options = this.filterOptions(options)
   }
 
   private getNumberOfSections = (): number => {
@@ -86,7 +82,7 @@ class Model implements IModel{
   }
 
   private dataWereChanged = (current: number, part: number, extra: boolean): void => {
-    this.mediator.notify({current, part, extra}, 'current and part were sent from Model')
+    this.notify({current, part, extra}, 'current and part were sent from Model')
   }
 
   private filterPart = (part: number): number => {
@@ -178,10 +174,10 @@ class Model implements IModel{
     return (num ^ 0) === num
   } 
 
-  public update = (options: IOptions): void => {
+  public refreshAll = (options: IOptions): void => {
     this.options = this.filterOptions(options)
     const scaleElements = this.countScaleElements()
-    this.mediator.notify({scaleElements}, 'options were sent from Model')
+    this.notify({scaleElements}, 'options were sent from Model')
   }
 }
 

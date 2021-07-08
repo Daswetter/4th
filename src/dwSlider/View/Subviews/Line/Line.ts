@@ -1,4 +1,4 @@
-import { Subview } from "../Subview"
+import { Subview } from "../../../../types"
 
 class Line extends Subview{
   public line!: HTMLElement
@@ -22,11 +22,11 @@ class Line extends Subview{
   }
 
   private subscribeToEvents = (): void => {
-    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: clicked', ({vertical, event}) => this.handleClick(vertical, event))
+    this.subscribeToAnEvent<{vertical: boolean, event: MouseEvent}>('line: clicked', ({vertical, event}) => this.handleClick(vertical, event))
 
-    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: mouseDown', ({vertical, event}) => this.handleMouseDown(vertical, event))
+    this.subscribeToAnEvent<{vertical: boolean, event: MouseEvent}>('line: mouseDown', ({vertical, event}) => this.handleMouseDown(vertical, event))
 
-    this.subscribe<{vertical: boolean, event: MouseEvent}>('line: mouseUp', ({vertical, event}) => this.handleMouseUp(vertical, event))
+    this.subscribeToAnEvent<{vertical: boolean, event: MouseEvent}>('line: mouseUp', ({vertical, event}) => this.handleMouseUp(vertical, event))
   }
   
 
@@ -47,9 +47,9 @@ class Line extends Subview{
   }
 
   public setEventListener = (vertical: boolean): void => {
-    this.line.addEventListener('mousedown', (event) => this.emit('line: mouseDown', {vertical, event}))
-    this.line.addEventListener('mouseup', (event) => this.emit('line: mouseUp', {vertical, event}))
-    this.line.addEventListener('click', (event) => this.emit('line: clicked', {vertical, event}))
+    this.line.addEventListener('mousedown', (event) => this.emitEvent('line: mouseDown', {vertical, event}))
+    this.line.addEventListener('mouseup', (event) => this.emitEvent('line: mouseUp', {vertical, event}))
+    this.line.addEventListener('click', (event) => this.emitEvent('line: clicked', {vertical, event}))
   }
   
   public returnSize = (): {width: number, height: number} => {
@@ -96,7 +96,7 @@ class Line extends Subview{
     const isOnlyLineClicked = event.pageY <= this.line.offsetTop + this.line.offsetHeight && event.pageY >= this.line.offsetTop
     
     if (isOnlyLineClicked) { 
-      this.mediator.notify({value: part, current: false, extra: false, nearest: false})
+      this.notify({value: part, current: false, extra: false, nearest: true})
     }
   }
 
@@ -113,7 +113,7 @@ class Line extends Subview{
     const isOnlyLineClicked = event.pageX <= this.line.offsetLeft + this.line.offsetWidth && event.pageX >= this.line.offsetLeft
 
     if (isOnlyLineClicked){
-      this.mediator.notify({value: part, current: false, extra: false, nearest: false})
+      this.notify({value: part, current: false, extra: false, nearest: true})
     }
   }
 }

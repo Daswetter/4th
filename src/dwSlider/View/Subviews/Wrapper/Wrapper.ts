@@ -1,6 +1,6 @@
-import { Subview } from '../Subview';
+import { Subview } from "../../../../types"
 
-class Wrapper extends Subview{
+class Wrapper extends Subview {
   public wrapper!: HTMLElement
 
   constructor(initElement: HTMLElement){

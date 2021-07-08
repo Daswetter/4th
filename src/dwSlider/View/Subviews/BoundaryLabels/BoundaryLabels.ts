@@ -1,4 +1,4 @@
-import { Subview } from '../Subview'
+import { Subview } from "../../../../types"
 
 class BoundaryLabels extends Subview {
   public min!: HTMLElement

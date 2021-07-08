@@ -1,15 +1,15 @@
 import jQuery from 'jquery'
 
-import { IView, IModel, IOptions } from '../types'
+import { IOptions, IdwSlider, reducedIOptions } from '../types'
 import { View } from './View/View'
 import { Model } from './Model/Model'
 import { Presenter } from './Presenter/Presenter'
 
 (function($){
-  class dwSlider {
+  class dwSlider implements IdwSlider{
     private options!: IOptions
-    private model!: IModel
-    private view!: IView
+    private model!: Model
+    private view!: View
     private presenter!: Presenter
 
     constructor(private initElement: HTMLElement, setOptions: IOptions) {
@@ -76,9 +76,9 @@ import { Presenter } from './Presenter/Presenter'
       this.update()
     }
 
-    public update(updatedOptions?: IOptions): void {
+    public update(updatedOptions?: reducedIOptions): void {
       this.options = $.extend(this.returnCurrentOptions(), updatedOptions)
-      this.presenter.update(this.options)
+      this.presenter.refreshAll(this.options)
     }
     
     public returnCurrentOptions(): IOptions {

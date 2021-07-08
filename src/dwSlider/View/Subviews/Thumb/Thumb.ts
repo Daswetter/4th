@@ -1,5 +1,4 @@
-import { Subview } from '../Subview'
-import { paramsType } from '../../../../types'
+import { paramsType, Subview } from '../../../../types'
 class Thumb extends Subview{
   public primary!: HTMLElement
   public extra!: HTMLElement
@@ -23,11 +22,11 @@ class Thumb extends Subview{
   }
 
   private subscribeToEvents = (): void => {
-    this.subscribe<{element: HTMLElement, params: paramsType, event: MouseEvent}>('thumb: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))   
+    this.subscribeToAnEvent<{element: HTMLElement, params: paramsType, event: MouseEvent}>('thumb: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))   
     
-    this.subscribe<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
+    this.subscribeToAnEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
 
-    this.subscribe<null>('thumb: mouseUp', () => this.handleMouseUp())
+    this.subscribeToAnEvent<null>('thumb: mouseUp', () => this.handleMouseUp())
   }
 
   private getOrientationParams = (vertical: boolean, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}): paramsType => {
@@ -59,7 +58,7 @@ class Thumb extends Subview{
     }
     const params = this.getOrientationParams(vertical, lineSize, lineSide)
     
-    element.addEventListener('mousedown', (event) => this.emit('thumb: mouseDown', {element, params, event}))
+    element.addEventListener('mousedown', (event) => this.emitEvent('thumb: mouseDown', {element, params, event}))
   }
 
   private handleMouseDown = (element: HTMLElement, params: paramsType, event: MouseEvent) : void => { 
@@ -72,9 +71,9 @@ class Thumb extends Subview{
     }
 
     this.mouseMoveEvent = (event: MouseEvent) => 
-    this.emit<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', {element, params, shift, event})
+    this.emitEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('thumb: mouseMove', {element, params, shift, event})
 
-    this.mouseUpEvent = () => this.emit<null>('thumb: mouseUp', null)
+    this.mouseUpEvent = () => this.emitEvent<null>('thumb: mouseUp', null)
 
     document.addEventListener('mousemove', this.mouseMoveEvent)
     document.addEventListener('mouseup', this.mouseUpEvent)
@@ -95,10 +94,10 @@ class Thumb extends Subview{
     }
 
     if (data.element === this.primary){
-      this.mediator.notify({value: part, current: false, extra: false, nearest: false})
+      this.notify({value: part, current: false, extra: false, nearest: false})
     }
     if (data.element === this.extra){
-      this.mediator.notify({value: part, current: false, extra: true, nearest: false})
+      this.notify({value: part, current: false, extra: true, nearest: false})
     }
   }
 

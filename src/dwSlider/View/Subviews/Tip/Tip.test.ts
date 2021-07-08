@@ -1,19 +1,16 @@
+import { Observer } from "../../../../types"
 import { Tip } from "./Tip"
 
 describe('Tip', () => {
   let _: Tip
+  let observer: Observer
   beforeEach(() => {
     const initElement = document.createElement('div')
     _ = new Tip(initElement)
-    _.mediator = {
-      current: 1,
-      currentExtra: 1,
-      setMediator: jest.fn(),
-      initView: jest.fn(),
-      sendDataToSubviews: jest.fn(),
-      clearAllView: jest.fn(),
-      notify: jest.fn()
+    observer = {
+      update: jest.fn()
     }
+    _.subscribe(observer)
   })
   describe('constructor', () => {
     test('should create div', () => {
@@ -175,7 +172,7 @@ describe('Tip', () => {
       _.initExtra(initElement)
       
     })
-    test('should call _.mediator.notify for primary', () => {
+    test('should call _.notify for primary', () => {
       _.setEventListenerForUnited(lineSize, lineSide, vertical)
       Object.defineProperty(_.extra, 'offsetLeft', {
         value: 600
@@ -188,9 +185,9 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
 
-      expect(_.mediator.notify).toBeCalled()
+      expect(observer.update).toBeCalled()
     })
-    test('should call _.mediator.notify for primary', () => {
+    test('should call _.notify for primary', () => {
       _.setEventListenerForUnited(lineSize, lineSide, vertical)
       Object.defineProperty(_.extra, 'offsetLeft', {
         value: 600
@@ -207,9 +204,9 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
 
-      expect(_.mediator.notify).toBeCalled()
+      expect(observer.update).toBeCalled()
     })
-    test('should call _.mediator.notify for primary', () => {
+    test('should call _.notify for primary', () => {
       _.setEventListenerForUnited(lineSize, lineSide, vertical)
       const mouseDown = new MouseEvent('mousedown');
       Object.defineProperty(mouseDown, 'pageX', {
@@ -222,9 +219,9 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
 
-      expect(_.mediator.notify).toBeCalled()
+      expect(observer.update).toBeCalled()
     })
-    test('should call _.mediator.notify for extra (vertical)', () => {
+    test('should call _.notify for extra (vertical)', () => {
       vertical = true
       Object.defineProperty(_.extra, 'offsetTop', {
         value: 600
@@ -243,9 +240,9 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
       
-      expect(_.mediator.notify).toBeCalled()
+      expect(observer.update).toBeCalled()
     })
-    test('should call _.mediator.notify for extra with part = 1', () => {
+    test('should call _.notify for extra with part = 1', () => {
       vertical = true
       Object.defineProperty(_.extra, 'offsetTop', {
         value: -60000
@@ -267,9 +264,9 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
       
-      expect(_.mediator.notify).toBeCalled()
+      expect(observer.update).toBeCalled()
     })
-    test('should call _.mediator.notify for extra with part = 0', () => {
+    test('should call _.notify for extra with part = 0', () => {
       vertical = true
       Object.defineProperty(_.primary, 'offsetTop', {
         value: 60000
@@ -294,9 +291,9 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
       
-      expect(_.mediator.notify).toBeCalled()
+      expect(observer.update).toBeCalled()
     })
-    test('should call _.mediator.notify for primary', () => {
+    test('should call _.notify for primary', () => {
       vertical = true
       _.setEventListener(lineSize, lineSide, vertical, false)
       const mouseDown = new MouseEvent('mousedown');
@@ -307,7 +304,7 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
       
-      expect(_.mediator.notify).toBeCalled()
+      expect(observer.update).toBeCalled()
     })
   })
 

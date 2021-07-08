@@ -1,5 +1,4 @@
-import { Subview } from "../Subview"
-import { paramsType } from '../../../../types'
+import { paramsType, Subview } from '../../../../types'
 
 class Tip extends Subview {
   public primary!: HTMLElement
@@ -22,13 +21,13 @@ class Tip extends Subview {
 
   private subscribeToEvents = (): void => {
     
-    this.subscribe<{element: HTMLElement, params: paramsType, event: MouseEvent}>('tip: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))  
+    this.subscribeToAnEvent<{element: HTMLElement, params: paramsType, event: MouseEvent}>('tip: mouseDown', ({element, params, event}) => this.handleMouseDown(element, params, event))  
     
-    this.subscribe<{event: MouseEvent, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical: boolean}>('unitedTip: mouseDown', ({event, lineSize, lineSide, vertical}) => this.handleMouseDownForUnited(event, lineSize, lineSide, vertical))   
+    this.subscribeToAnEvent<{event: MouseEvent, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical: boolean}>('unitedTip: mouseDown', ({event, lineSize, lineSide, vertical}) => this.handleMouseDownForUnited(event, lineSize, lineSide, vertical))   
     
-    this.subscribe<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('tip: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
+    this.subscribeToAnEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('tip: mouseMove', ({element, params, shift, event}) => this.handleMouseMove({element, params, shift, event}))
 
-    this.subscribe<null>('tip: mouseUp', () => this.handleMouseUp())
+    this.subscribeToAnEvent<null>('tip: mouseUp', () => this.handleMouseUp())
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
@@ -75,11 +74,11 @@ class Tip extends Subview {
       element = this.extra
     }
     const params = this.getOrientationParams(vertical, lineSize, lineSide)
-    element.addEventListener('mousedown', (event) => this.emit('tip: mouseDown', {element, params, event}))
+    element.addEventListener('mousedown', (event) => this.emitEvent('tip: mouseDown', {element, params, event}))
   }
 
   public setEventListenerForUnited = (lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical: boolean): void => {
-    this.united.addEventListener('mousedown', (event) => this.emit('unitedTip: mouseDown', {event, lineSize, lineSide, vertical}))
+    this.united.addEventListener('mousedown', (event) => this.emitEvent('unitedTip: mouseDown', {event, lineSize, lineSide, vertical}))
   }
 
   private handleMouseDownForUnited = (event: MouseEvent, lineSize: {width: number, height: number}, lineSide: {left: number, bottom: number}, vertical: boolean): void => {
@@ -112,9 +111,9 @@ class Tip extends Subview {
     }
 
     this.mouseMove = (event: MouseEvent) => 
-    this.emit<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('tip: mouseMove', {element, params, shift, event})
+    this.emitEvent<{element: HTMLElement, params: paramsType, shift: number, event: MouseEvent}>('tip: mouseMove', {element, params, shift, event})
 
-    this.mouseUp = () => this.emit<null>('tip: mouseUp', null)
+    this.mouseUp = () => this.emitEvent<null>('tip: mouseUp', null)
 
     document.addEventListener('mousemove', this.mouseMove)
     document.addEventListener('mouseup', this.mouseUp)
@@ -134,9 +133,9 @@ class Tip extends Subview {
     }
     
     if (data.element === this.primary){
-      this.mediator.notify({value: part, current: false, extra: false, nearest: false})
+      this.notify({value: part, current: false, extra: false, nearest: false})
     } else {
-      this.mediator.notify({value: part, current: false, extra: true, nearest: false})
+      this.notify({value: part, current: false, extra: true, nearest: false})
     }
   }
 

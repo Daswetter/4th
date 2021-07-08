@@ -1,6 +1,4 @@
-import { Subview } from "../Subview"
-
-
+import { Subview } from "../../../../types"
 class Input extends Subview{
   public primary!: HTMLInputElement
   public extra!: HTMLInputElement
@@ -21,16 +19,16 @@ class Input extends Subview{
   }
 
   private setEventListener = (element: HTMLInputElement): void => {
-    this.subscribe<HTMLInputElement>('input: changed', element => this.handleChange(element));
-    element.addEventListener('change', () => this.emit<HTMLInputElement>('input: changed', element))
+    this.subscribeToAnEvent<HTMLInputElement>('input: changed', element => this.handleChange(element));
+    element.addEventListener('change', () => this.emitEvent<HTMLInputElement>('input: changed', element))
   }
 
   private handleChange = (element: HTMLInputElement): void => {
     const value = Number(element.value)
     if (element === this.primary){
-      this.mediator.notify({value: value, current: true, extra: false, nearest: false})
+      this.notify({value: value, current: true, extra: false, nearest: false})
     } else {
-      this.mediator.notify({value: value, current: true, extra: true, nearest: false})
+      this.notify({value: value, current: true, extra: true, nearest: false})
     }
   }
 

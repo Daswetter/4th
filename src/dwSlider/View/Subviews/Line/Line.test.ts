@@ -2,18 +2,16 @@ import { Line } from './Line'
 
 describe('Line', () => {
   let _: Line
+  const observer = {
+    update: jest.fn()
+  }
   beforeEach(() => {
     const initElement = document.createElement('div')
     _ = new Line(initElement)
-    _.mediator = {
-      current: 1,
-      currentExtra: 1,
-      setMediator: jest.fn(),
-      initView: jest.fn(),
-      sendDataToSubviews: jest.fn(),
-      clearAllView: jest.fn(),
-      notify: jest.fn()
-    }
+    _.subscribe(observer)
+  })
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('constructor', () => {
@@ -76,10 +74,10 @@ describe('Line', () => {
           value: 60
         })
         _.line.dispatchEvent(click);
-        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 0.25});
+        expect(observer.update).toBeCalledWith({"current": false, "extra": false, "nearest": true, "value": 0.25});
       });
   
-      test('should set click to line and call _.mediator.notify with 0', () => {
+      test('should set click to line and call observer.update with 0', () => {
         const click = new MouseEvent('click', {
           clientX: -250,
         });
@@ -87,10 +85,10 @@ describe('Line', () => {
           value: 0
         })
         _.line.dispatchEvent(click);
-        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 0});
+        expect(observer.update).toBeCalledWith({"current": false, "extra": false, "nearest": true, "value": 0});
       });
   
-      test('should set click to horizontal line and call _.mediator.notify with 1', () => {
+      test('should set click to horizontal line and call observer.update with 1', () => {
         const click = new MouseEvent('click', {
           clientX: 1000,
         });
@@ -98,10 +96,10 @@ describe('Line', () => {
           value: 0
         })
         _.line.dispatchEvent(click);
-        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 1});
+        expect(observer.update).toBeCalledWith({"current": false, "extra": false, "nearest": true, "value": 1});
       });
 
-      test('should not call _.mediator.notify if scale were clicked', () => {
+      test('should not call observer.update if scale were clicked', () => {
         Object.defineProperty(_.line, 'offsetTop', {
           value: 800
         })
@@ -113,7 +111,7 @@ describe('Line', () => {
           value: 60
         })
         _.line.dispatchEvent(click);
-        expect(_.mediator.notify).not.toHaveBeenCalled()
+        expect(observer.update).not.toHaveBeenCalled()
       });
     })
 
@@ -155,7 +153,7 @@ describe('Line', () => {
           value: 0
         })
         _.line.dispatchEvent(click);
-        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 0});
+        expect(observer.update).toBeCalledWith({"current": false, "extra": false, "nearest": true, "value": 0});
       });
 
       test('should set click to line and call subscriber with 1', () => {
@@ -166,7 +164,7 @@ describe('Line', () => {
           value: 0
         })
         _.line.dispatchEvent(click);
-        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 1});
+        expect(observer.update).toBeCalledWith({"current": false, "extra": false, "nearest": true, "value": 1});
       });
 
       test('should set click to line and call subscriber with 0.2', () => {
@@ -178,10 +176,10 @@ describe('Line', () => {
           value: 0
         })
         _.line.dispatchEvent(click);
-        expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 0.2});
+        expect(observer.update).toBeCalledWith({"current": false, "extra": false, "nearest": true, "value": 0.2});
       });
 
-      test('should not call _.mediator.notify if scale were clicked', () => {
+      test('should not call observer.update if scale were clicked', () => {
         const click = new MouseEvent('click', {
           clientX: 1000,
           clientY: 900,
@@ -190,11 +188,11 @@ describe('Line', () => {
           value: 60
         })
         _.line.dispatchEvent(click);
-        expect(_.mediator.notify).not.toHaveBeenCalled()
+        expect(observer.update).not.toHaveBeenCalled()
       });
     })
 
-    test('should not call _.mediator.notify if onMouseDown value is not equal to onMouseUp', () => {
+    test('should not call observer.update if onMouseDown value is not equal to onMouseUp', () => {
       
       const vertical = true
       _.setEventListener(vertical)
@@ -217,7 +215,7 @@ describe('Line', () => {
         value: 0
       })
       _.line.dispatchEvent(click);
-      expect(_.mediator.notify).not.toBeCalled();
+      expect(observer.update).not.toBeCalled();
     })
   
       

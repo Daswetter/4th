@@ -1,19 +1,19 @@
+import { Observer } from "../../../../types"
 import { Thumb } from "./Thumb"
 
 describe('Thumb', () =>{
   let _: Thumb
+  let observer: Observer
   beforeEach(() => {
     const initElement = document.createElement('div')
     _ = new Thumb(initElement)
-    _.mediator = {
-      current: 1,
-      currentExtra: 1,
-      setMediator: jest.fn(),
-      initView: jest.fn(),
-      sendDataToSubviews: jest.fn(),
-      clearAllView: jest.fn(),
-      notify: jest.fn()
+    observer = {
+      update: jest.fn()
     }
+    _.subscribe(observer)
+  })
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('constructor', () => {
@@ -71,7 +71,7 @@ describe('Thumb', () =>{
       _.primary.dispatchEvent(mouseDown);
       document.dispatchEvent(mouseMove);
 
-      expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 1})
+      expect(observer.update).toBeCalledWith({"current": false, "extra": false, "nearest": false, "value": 1})
     })
 
     test('should set mouse down and mouse move for vertical and extra', () => {
@@ -108,14 +108,14 @@ describe('Thumb', () =>{
       _.extra.dispatchEvent(mouseDown);
       document.dispatchEvent(mouseMove);
 
-      expect(_.mediator.notify).toBeCalled()
-      expect(_.mediator.notify).toBeCalledWith({"current": false, "extra": true, "nearest": false, "value": 0})
+      expect(observer.update).toBeCalled()
+      expect(observer.update).toBeCalledWith({"current": false, "extra": true, "nearest": false, "value": 0})
 
       const mouseUp = new MouseEvent('mouseup')
 
       document.dispatchEvent(mouseUp)
       document.dispatchEvent(mouseMove);
-      expect(_.mediator.notify).toBeCalledTimes(1)
+      expect(observer.update).toBeCalledTimes(1)
     })
 
     describe('update', () => {
@@ -255,7 +255,4 @@ describe('Thumb', () =>{
       })
     })
   })
-
-
-  
 })

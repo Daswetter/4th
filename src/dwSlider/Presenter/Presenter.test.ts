@@ -1,4 +1,4 @@
-import { IModel, IView, IOptions } from '../../types';
+import { IOptions } from '../../types';
 import { Line } from './../View/Subviews/Line/Line'
 import { Model } from '../Model/Model';
 import { View } from '../View/View';
@@ -6,8 +6,8 @@ import { Presenter } from './Presenter';
 
 describe('Presenter', () => {
   let _: Presenter
-  let view: IView
-  let model: IModel
+  let view: View
+  let model: Model
   let options: IOptions
 
   beforeEach(() => {
@@ -37,25 +37,10 @@ describe('Presenter', () => {
     _ = new Presenter(view, model)
   })
 
-  describe('constructor', () => {
-
-    test('should call bindChangedPrimaryPart', () => {
-      view.setMediator = jest.fn()
-      _ = new Presenter(view, model)
-      expect(view.setMediator).toHaveBeenCalled()
-    })
-
-    test('should call bindChangedPrimaryValues', () => {
-      model.setMediator = jest.fn()
-      _ = new Presenter(view, model)
-      expect(model.setMediator).toHaveBeenCalledWith(_)
-    })
-  })
-
   describe('update', () => {
     test('should call model"s and view"s methods', () => {
-      const modelUpdate = jest.spyOn(model, 'update')
-      _.update(options)
+      const modelUpdate = jest.spyOn(model, 'refreshAll')
+      _.refreshAll(options)
       expect(modelUpdate).toHaveBeenCalledWith(options)
     })
   })
@@ -74,7 +59,7 @@ describe('Presenter', () => {
   describe('notify', () => {
     test('should call setCurrent', () => {
       const modelUpdate = jest.spyOn(model, 'setCurrent')
-      _.notify({value: 1, current: false, extra: false}, 'data were sent from View')
+      _.update({data: {value: 1, current: false, extra: false}, event: 'data were sent from View'})
       expect(modelUpdate).toBeCalledWith(1, false)
     })
   })

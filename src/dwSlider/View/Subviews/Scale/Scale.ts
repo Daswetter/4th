@@ -1,14 +1,13 @@
-import { IView } from '../../../../types';
-import { Subview } from '../Subview';
+import { Subview, Observer } from '../../../../types';
 
 class Scale extends Subview{
   public scale!: HTMLElement 
   public scaleElements:{ [key: string]: HTMLElement } = {}
 
-  constructor(public initElement: HTMLElement, public mediator: IView){
+  constructor(public initElement: HTMLElement, public observer: Observer){
     super()
     this.initPrimary(initElement)
-    this.mediator = mediator
+    this.observer = observer
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
@@ -19,7 +18,7 @@ class Scale extends Subview{
     this.createScaleElements(scaleValues)
     this.printScaleValues(scaleValues)
     this.setPosition(lineSize, vertical)
-    this.subscribe<number>('scale: clicked', part => this.mediator.notify({value: part, current: false, extra: false, nearest: true}));
+    this.subscribeToAnEvent<number>('scale: clicked', part => this.notify({value: part, current: false, extra: false, nearest: true}));
     this.setScaleListener()
   }
   
@@ -52,7 +51,7 @@ class Scale extends Subview{
 
   private setScaleListener = (): void => {
     for (const part in this.scaleElements){
-      this.scaleElements[part].addEventListener('click', () => this.emit<number>('scale: clicked', Number(part)))
+      this.scaleElements[part].addEventListener('click', () => this.emitEvent<number>('scale: clicked', Number(part)))
     }
   }
 }

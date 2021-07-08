@@ -1,3 +1,4 @@
+import { Observer } from '../../../../types'
 import { Input } from './Input'
 
 describe('Input', () => {
@@ -9,31 +10,31 @@ describe('Input', () => {
   const inputTo = document.createElement('div')
   inputTo.classList.add('js-dwSlider__input_to')
   initElement.append(inputTo)
+  let observer: Observer
   beforeEach(() => {
     _ = new Input(initElement)
-    _.mediator = {
-      current: 1,
-      currentExtra: 1,
-      setMediator: jest.fn(),
-      initView: jest.fn(),
-      sendDataToSubviews: jest.fn(),
-      clearAllView: jest.fn(),
-      notify: jest.fn()
+    observer = {
+      update: jest.fn()
     }
+    _.subscribe(observer)
   })
   describe('constructor', () => {
     test('should set event listener', () => {
       const change = new MouseEvent('change')
       inputFrom.dispatchEvent(change)
-      expect(_.mediator.notify).toHaveBeenCalled()
+      expect(observer.update).toHaveBeenCalled()
     })
   })
   describe('initExtra', () => {
     test('should set change listener', () => {
       _.initExtra()
+      observer = {
+        update: jest.fn()
+      }
+      _.subscribe(observer)
       const change = new MouseEvent('change')
       inputTo.dispatchEvent(change)
-      expect(_.mediator.notify).toHaveBeenCalled()
+      expect(observer.update).toHaveBeenCalled()
     })
   })
   describe('update', () => {

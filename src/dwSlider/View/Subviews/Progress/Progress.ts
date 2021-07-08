@@ -1,4 +1,4 @@
-import { Subview } from "../Subview"
+import { Subview } from "../../../../types"
 
 class Progress extends Subview{
   public progress!: HTMLElement 

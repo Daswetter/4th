@@ -1,11 +1,11 @@
-import { IOptions } from '../../types'
+import { IOptions, Observer } from '../../types'
 import { View } from './View'
 
 describe('View', () => {
   let _: View
   let options: IOptions
   const initElement: HTMLElement = document.createElement('div')
-
+  let observer: Observer
   beforeEach(() => {
     options = {
       min: -1800,
@@ -21,9 +21,10 @@ describe('View', () => {
       double: true,
     }
     _ = new View(initElement, options)
-    _.mediator = {
-      notify: jest.fn()
+    observer = {
+      update: jest.fn()
     }
+    _.subscribe(observer)
   })
   afterEach(() => {
     jest.clearAllMocks()
@@ -158,30 +159,20 @@ describe('View', () => {
     })
   })
 
-  describe('notify', () => {
+  describe('update', () => {
     test('should call notify mediator for extra', () => {
-      _.notify({value: 1, current: true, extra: true, nearest: true})
-      expect(_.mediator.notify).toHaveBeenCalled()
+      _.update({value: 1, current: true, extra: true, nearest: true})
+      expect(observer.update).toHaveBeenCalled()
     })
     test('should call notify mediator for primary', () => {
       _.part = 0
       _.partExtra = 0.1
-      _.notify({value: 1, current: false, extra: false, nearest: true})
-      expect(_.mediator.notify).toHaveBeenCalled()
+      _.update({value: 1, current: false, extra: false, nearest: true})
+      expect(observer.update).toHaveBeenCalled()
     })
     test('should call notify in mediator', () => {
-      _.notify({value: 1, current: true, extra: true, nearest: false})
-      expect(_.mediator.notify).toHaveBeenCalledTimes(1)
-    })
-  })
-
-  describe('setMediator', () => {
-    test('should add mediator', () => {
-      const testMediator = {
-        notify: jest.fn()
-      }
-      _.setMediator(testMediator)
-      expect(_.mediator).toEqual(testMediator)
+      _.update({value: 1, current: true, extra: true, nearest: false})
+      expect(observer.update).toHaveBeenCalledTimes(1)
     })
   })
 })

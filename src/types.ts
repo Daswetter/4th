@@ -1,34 +1,63 @@
 interface IdwSlider {
-  update(options: reducedIOptions): void,
+  update(updatedOptions?: reducedIOptions): void,
   returnCurrentOptions(): IOptions
   returnCurrentState(): Array<number>
 }
 
-interface Mediator {
-  notify(data: any, event: string): void,
-}
-interface IView {
-  current: number
-  currentExtra: number
+abstract class Subview {
+  private observers: Observer[] = [];
+  protected events: IEvent<any> = {}
   
-  setMediator(mediator: Mediator): void
-  initView(scaleElements: { [key: string]: string }): void
+  protected init = (initElement: HTMLElement, element: HTMLElement, styleName: string): HTMLElement => {
+    element = document.createElement('div')
+    element.classList.add(`dwSlider${styleName}`)
+    initElement.append(element)
+    return element
+  }
 
-  sendDataToSubviews(current: number, part: number, extra: boolean): void
+  protected emitEvent<T>(eventName: string, data: T): void{
+    const event = this.events[eventName];
+    if (event) {
+      event.forEach(fn => {
+        fn.call(null, data);
+      });
+    }
+  }
 
-  clearAllView(): void,
-  notify(data: {value: number, current: boolean, extra: boolean, nearest: boolean}): void
+  protected subscribeToAnEvent<T>(eventName: keyof IEvent<T>, fn: (data: T) => void) {
+    if(!this.events[eventName]) {
+      this.events[eventName] = [];
+    }
+    this.events[eventName].push(fn);
+  }
+
+  public subscribe(observer: Observer): void {
+    this.observers.push(observer);
+  };
+
+  public notify(data: {value: number, current: boolean, extra: boolean, nearest: boolean}): void {
+    for (const observer of this.observers) {
+      observer.update(data);
+    }
+  }
 }
 
-interface IModel {
-  mediator: Mediator
-  options: IOptions
-  setMediator(mediator: Mediator): void
-  setCurrent(part: number, extra?: boolean): void
-  setPart(current: number, extra?: boolean): void
+abstract class Publisher {
+  private observers: Observer[] = [];
 
-  countScaleElements(): { [key: string]: string }
-  update (options: IOptions): void
+  public subscribe(observer: Observer): void {
+    this.observers.push(observer);
+  };
+
+  public notify(data: any, event: string): void {
+    for (const observer of this.observers) {
+      observer.update({data, event});
+    }
+  }
+}
+
+interface Observer {
+  update(arg0: any): void;
 }
 
 interface IOptions {
@@ -72,4 +101,4 @@ type paramsType = {
 }
 
 
-export { Mediator, reducedIOptions, IOptions, IdwSlider, IModel, IView, IEvent, paramsType }
+export { IdwSlider, reducedIOptions, IOptions, IEvent, paramsType, Observer, Publisher, Subview }
