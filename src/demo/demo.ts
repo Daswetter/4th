@@ -1,10 +1,10 @@
-import $ from 'jquery'
-import ConfigPanel from './config-panel/ConfigPanel'
-import '../dwSlider/dwSlider.ts'
-import './demo.scss'
+import $ from 'jquery';
+import ConfigPanel from './config-panel/ConfigPanel';
+import '../dwSlider/dwSlider';
+import './demo.scss';
 
-$('.js-dwSlider1').dwSlider()
-new ConfigPanel('.js-dwSlider1')
+$('.js-dwSlider1').dwSlider();
+new ConfigPanel('.js-dwSlider1');
 
 $('.js-dwSlider2').dwSlider({
   min: -18.1,
@@ -18,11 +18,11 @@ $('.js-dwSlider2').dwSlider({
   double: true,
   vertical: true,
   scaleSize: 4,
-})
-new ConfigPanel('.js-dwSlider2')
+});
+new ConfigPanel('.js-dwSlider2');
 
-$('.js-dwSlider3').dwSlider()
-new ConfigPanel('.js-dwSlider3')
+$('.js-dwSlider3').dwSlider();
+new ConfigPanel('.js-dwSlider3');
 
 $('.js-dwSlider4').dwSlider({
   min: 10,
@@ -35,6 +35,5 @@ $('.js-dwSlider4').dwSlider({
   scale: true,
   scaleSize: -1,
   double: true,
-})
-new ConfigPanel('.js-dwSlider4')
-
+});
+new ConfigPanel('.js-dwSlider4');
