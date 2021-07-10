@@ -1,16 +1,21 @@
-import jQuery from 'jquery'
+/* eslint-disable no-param-reassign */
+/* eslint-disable func-names */
+import jQuery from 'jquery';
 
-import { IOptions, IdwSlider, reducedIOptions } from '../types'
-import { View } from './View/View'
-import { Model } from './Model/Model'
-import { Presenter } from './Presenter/Presenter'
+import { IOptions, IdwSlider, ReducedIOptions } from '../types';
+import View from './View/View';
+import Model from './Model/Model';
+import Presenter from './Presenter/Presenter';
 
-(function($){
-  class dwSlider implements IdwSlider{
-    private options!: IOptions
-    private model!: Model
-    private view!: View
-    private presenter!: Presenter
+((function ($) {
+  class DwSlider implements IdwSlider {
+    private options!: IOptions;
+
+    private model!: Model;
+
+    private view!: View;
+
+    private presenter!: Presenter;
 
     constructor(private initElement: HTMLElement, setOptions: IOptions) {
       const optionsFromData = {
@@ -25,8 +30,7 @@ import { Presenter } from './Presenter/Presenter'
         scale: this.toBoolean(initElement.dataset.scale),
         scaleSize: this.toNumber(initElement.dataset.scaleSize),
         progress: this.toBoolean(initElement.dataset.progress),
-      }
-      
+      };
       const options = $.extend({}, {
         min: 0,
         max: 100,
@@ -39,64 +43,61 @@ import { Presenter } from './Presenter/Presenter'
         scale: true,
         scaleSize: 5,
         progress: true,
-      }, optionsFromData, setOptions)
-      this.initElement = initElement
-      this.init(initElement, options)
+      }, optionsFromData, setOptions);
+      this.initElement = initElement;
+      this.init(initElement, options);
     }
 
     private init(initElement: HTMLElement, options: IOptions): void {
-      this.initElement = initElement
-      this.model = new Model(options)
-      this.view = new View(initElement, options)
-      this.presenter = new Presenter(this.view, this.model)
-      this.options = this.returnCurrentOptions()
+      this.initElement = initElement;
+      this.model = new Model(options);
+      this.view = new View(initElement, options);
+      this.presenter = new Presenter(this.view, this.model);
+      this.options = this.returnCurrentOptions();
 
-      window.addEventListener('resize', this.handleWindowResizing)
+      window.addEventListener('resize', this.handleWindowResizing);
     }
 
     private toNumber = (option: string | undefined): number | undefined => {
       if (option) {
-        return Number(option)
-      } else {
-        return undefined
+        return Number(option);
       }
-    }
+      return undefined;
+    };
 
     private toBoolean = (option: string | undefined): boolean | undefined => {
       if (option === 'true') {
-        return true
-      } else if (option === 'false') {
-        return false
-      } else {
-        return undefined
+        return true;
       }
-    }
+      if (option === 'false') {
+        return false;
+      }
+      return undefined;
+    };
 
     private handleWindowResizing = (): void => {
-      this.update()
+      this.update();
+    };
+
+    public update(updatedOptions?: ReducedIOptions): void {
+      this.options = $.extend(this.returnCurrentOptions(), updatedOptions);
+      this.presenter.refreshAll(this.options);
     }
 
-    public update(updatedOptions?: reducedIOptions): void {
-      this.options = $.extend(this.returnCurrentOptions(), updatedOptions)
-      this.presenter.refreshAll(this.options)
-    }
-    
     public returnCurrentOptions(): IOptions {
-      return this.presenter.returnOptions()
+      return this.presenter.returnOptions();
     }
 
     public returnCurrentState(): Array<number> {
-      return this.presenter.returnCurrentValues()
+      return this.presenter.returnCurrentValues();
     }
   }
 
-
-  $.fn.dwSlider = function(options: IOptions): JQuery<HTMLElement> {
+  $.fn.dwSlider = function (options: IOptions): JQuery<HTMLElement> {
     return this.each(function () {
       if (!$.data(this, 'dwSlider')) {
-        $.data(this, 'dwSlider', new dwSlider(this, options));
+        $.data(this, 'dwSlider', new DwSlider(this, options));
       }
     });
-  }
-
-})(jQuery)
+  };
+})(jQuery));

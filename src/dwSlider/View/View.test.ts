@@ -1,11 +1,11 @@
-import { IOptions, Observer } from '../../types'
-import { View } from './View'
+import { IOptions, Observer } from '../../types';
+import View from './View';
 
 describe('View', () => {
-  let _: View
-  let options: IOptions
-  const initElement: HTMLElement = document.createElement('div')
-  let observer: Observer
+  let view: View;
+  let options: IOptions;
+  const initElement: HTMLElement = document.createElement('div');
+  let observer: Observer;
   beforeEach(() => {
     options = {
       min: -1800,
@@ -19,160 +19,166 @@ describe('View', () => {
       scaleSize: 5,
       vertical: true,
       double: true,
-    }
-    _ = new View(initElement, options)
+    };
+    view = new View(initElement, options);
     observer = {
-      update: jest.fn()
-    }
-    _.subscribe(observer)
-  })
+      update: jest.fn(),
+    };
+    view.subscribe(observer);
+  });
   afterEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   describe('initView', () => {
     test('should not fail if primary input do not exist', () => {
       const scaleElements = {
-        '0': '0',
-        '0.25': '0.25',
-        '0.5': '0.5',
-        '0.75': '0.75',
-        '1': '1',
-      }
-      _.initView(scaleElements)
-      expect(_.input).not.toBeTruthy()
-    })
-  })
+        0: '0',
+        0.25: '0.25',
+        0.5: '0.5',
+        0.75: '0.75',
+        1: '1',
+      };
+      view.initView(scaleElements);
+      expect(view.input).not.toBeTruthy();
+    });
+  });
 
   describe('initView', () => {
-    let scaleElements: { [key: string]: string }
+    let scaleElements: { [key: string]: string };
     beforeEach(() => {
       scaleElements = {
-        '0': '0',
-        '0.25': '0.25',
-        '0.5': '0.5',
-        '0.75': '0.75',
-        '1': '1',
-      }
-      _.initView(scaleElements)
-    })
+        0: '0',
+        0.25: '0.25',
+        0.5: '0.5',
+        0.75: '0.75',
+        1: '1',
+      };
+      view.initView(scaleElements);
+    });
     afterEach(() => {
-      _.initElement.innerHTML = ''
-    })
+      view.initElement.innerHTML = '';
+    });
     test('should create wrapper', () => {
-      expect(_.wrapper).toBeTruthy()
-    })
+      expect(view.wrapper).toBeTruthy();
+    });
     test('should create line', () => {
-      expect(_.line).toBeTruthy()
-    })
+      expect(view.line).toBeTruthy();
+    });
     test('should create thumb', () => {
-      expect(_.thumb).toBeTruthy()
-    })
+      expect(view.thumb).toBeTruthy();
+    });
     test('should not create tip', () => {
-      expect(_.tip).not.toBeTruthy()
-    })
+      expect(view.tip).not.toBeTruthy();
+    });
     test('should create scale', () => {
-      expect(_.scale).toBeTruthy()
-    })
+      expect(view.scale).toBeTruthy();
+    });
     test('should create progress', () => {
-      expect(_.progress).toBeTruthy()
-    })
+      expect(view.progress).toBeTruthy();
+    });
     test('should create tip', () => {
-      options.tip = true
-      options.scale = false
-      _.initView(scaleElements)
-      expect(_.tip).toBeTruthy()
-    })
+      options.tip = true;
+      options.scale = false;
+      view.initView(scaleElements);
+      expect(view.tip).toBeTruthy();
+    });
 
     test('should find input', () => {
-      options.double = false
-      const input = document.createElement('input')
-      input.classList.add('js-dwSlider__input_from')
-      _.initElement.append(input)
-      _.initView(scaleElements)
-      expect(_.input).toBeTruthy()
-    })
+      options.double = false;
+      const input = document.createElement('input');
+      input.classList.add('js-dwSlider__input_from');
+      view.initElement.append(input);
+      view.initView(scaleElements);
+      expect(view.input).toBeTruthy();
+    });
     test('should find extra input', () => {
-      const input = document.createElement('input')
-      input.classList.add('js-dwSlider__input_from')
-      input.classList.add('js-dwSlider__input_to')
-      _.initElement.append(input)
-      _.initView(scaleElements)
-      expect(_.input).toBeTruthy()
-    })
+      const input = document.createElement('input');
+      input.classList.add('js-dwSlider__input_from');
+      input.classList.add('js-dwSlider__input_to');
+      view.initElement.append(input);
+      view.initView(scaleElements);
+      expect(view.input).toBeTruthy();
+    });
 
     test('should not call initExtraElement for single', () => {
-      options.double = false
-      options.tip = true
-      _.initView(scaleElements)
-      expect(_.tip.extra).not.toBeTruthy()
-    })
-  })
-  
+      options.double = false;
+      options.tip = true;
+      view.initView(scaleElements);
+      expect(view.tip.extra).not.toBeTruthy();
+    });
+  });
+
   describe('clearAllView', () => {
-    let scaleElements: { [key: string]: string }
+    let scaleElements: { [key: string]: string };
     beforeEach(() => {
       scaleElements = {
-        '0': '0',
-        '0.25': '0.25',
-        '0.5': '0.5',
-        '0.75': '0.75',
-        '1': '1',
-      }
-    })
+        0: '0',
+        0.25: '0.25',
+        0.5: '0.5',
+        0.75: '0.75',
+        1: '1',
+      };
+    });
     test('all view should be destroyed', () => {
-      _.initView(scaleElements)
-      _.clearAllView()
-      expect(document.querySelector('.dwSlider')).not.toBeTruthy()
-    })
-  })
+      view.initView(scaleElements);
+      view.clearAllView();
+      expect(document.querySelector('.dwSlider')).not.toBeTruthy();
+    });
+  });
 
   describe('sendDataToSubviews', () => {
     afterEach(() => {
-      _.initElement.innerHTML = ''
-    })
+      view.initElement.innerHTML = '';
+    });
     test('should send data to progress', () => {
-      _.initView({'0': '0', '1': '1'})
-      const spyOnProgress = jest.spyOn(_.progress, 'update')
-      _.sendDataToSubviews(1, 1)
-      expect(spyOnProgress).toHaveBeenCalled()
-    })
+      view.initView({ 0: '0', 1: '1' });
+      const spyOnProgress = jest.spyOn(view.progress, 'update');
+      view.sendDataToSubviews(1, 1);
+      expect(spyOnProgress).toHaveBeenCalled();
+    });
     test('should send data to tip', () => {
-      const input = document.createElement('input')
-      input.classList.add('js-dwSlider__input_from')
-      input.classList.add('js-dwSlider__input_to')
-      _.initElement.append(input)
-      options.tip = true
-      _.initView({'0': '0', '1': '1'})
-      const spyOnTip = jest.spyOn(_.tip, 'update')
-      _.sendDataToSubviews(1, 1, true)
-      expect(spyOnTip).toHaveBeenCalled()
-    })
+      const input = document.createElement('input');
+      input.classList.add('js-dwSliderviewviewinputviewfrom');
+      input.classList.add('js-dwSliderviewviewinputviewto');
+      view.initElement.append(input);
+      options.tip = true;
+      view.initView({ 0: '0', 1: '1' });
+      const spyOnTip = jest.spyOn(view.tip, 'update');
+      view.sendDataToSubviews(1, 1, true);
+      expect(spyOnTip).toHaveBeenCalled();
+    });
     test('should send data to tip', () => {
-      options.progress = false
-      options.tip = true
-      options.double = false
-      _.initView({'0': '0', '1': '1'})
-      const spyOnTip = jest.spyOn(_.tip, 'update')
-      _.sendDataToSubviews(1, 1)
-      expect(spyOnTip).toHaveBeenCalled()
-    })
-  })
+      options.progress = false;
+      options.tip = true;
+      options.double = false;
+      view.initView({ 0: '0', 1: '1' });
+      const spyOnTip = jest.spyOn(view.tip, 'update');
+      view.sendDataToSubviews(1, 1);
+      expect(spyOnTip).toHaveBeenCalled();
+    });
+  });
 
   describe('update', () => {
     test('should call notify mediator for extra', () => {
-      _.update({value: 1, current: true, extra: true, nearest: true})
-      expect(observer.update).toHaveBeenCalled()
-    })
+      view.update({
+        value: 1, current: true, extra: true, nearest: true,
+      });
+      expect(observer.update).toHaveBeenCalled();
+    });
     test('should call notify mediator for primary', () => {
-      _.part = 0
-      _.partExtra = 0.1
-      _.update({value: 1, current: false, extra: false, nearest: true})
-      expect(observer.update).toHaveBeenCalled()
-    })
+      view.part = 0;
+      view.partExtra = 0.1;
+      view.update({
+        value: 1, current: false, extra: false, nearest: true,
+      });
+      expect(observer.update).toHaveBeenCalled();
+    });
     test('should call notify in mediator', () => {
-      _.update({value: 1, current: true, extra: true, nearest: false})
-      expect(observer.update).toHaveBeenCalledTimes(1)
-    })
-  })
-})
+      view.update({
+        value: 1, current: true, extra: true, nearest: false,
+      });
+      expect(observer.update).toHaveBeenCalledTimes(1);
+    });
+  });
+});
