@@ -1,28 +1,26 @@
-import { Subview } from "../../../../types"
+import { Subview } from '../../../../types';
 
 class Wrapper extends Subview {
-  public wrapper!: HTMLElement
+  public wrapper!: HTMLElement;
 
-  constructor(initElement: HTMLElement){
-    super()
-    this.initPrimary(initElement)
+  constructor(initElement: HTMLElement) {
+    super();
+    this.initPrimary(initElement);
   }
-  
+
   private initPrimary = (initElement: HTMLElement): void => {
-    this.wrapper = this.init(initElement, this.wrapper, '')
-  }
+    this.wrapper = this.init(initElement, this.wrapper, '');
+  };
 
-  public returnAsHTML = (): HTMLElement => {
-    return this.wrapper
-  }
+  public returnAsHTML = (): HTMLElement => this.wrapper;
 
   public setInitialSettings = (vertical: boolean): void => {
     if (vertical) {
-      this.wrapper.classList.add('dwSlider_vertical')
+      this.wrapper.classList.add('dwSlider_vertical');
     } else {
-      this.wrapper.classList.add('dwSlider_horizontal')
+      this.wrapper.classList.add('dwSlider_horizontal');
     }
-  }
+  };
 }
 
-export { Wrapper }
+export default Wrapper;

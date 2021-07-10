@@ -1,10 +1,10 @@
-import { View } from "../../View"
-import { Scale } from "./Scale"
+import View from '../../View';
+import Scale from './Scale';
 
 describe('Scale', () => {
-  let _: Scale
+  let scale: Scale;
   beforeEach(() => {
-    const initElement = document.createElement('div')
+    const initElement = document.createElement('div');
     const options = {
       min: 0,
       max: 100,
@@ -17,58 +17,33 @@ describe('Scale', () => {
       scale: true,
       scaleSize: 5,
       progress: true,
-    }
-    const view = new View(initElement, options)
-    _ = new Scale(initElement, view)
-  })
+    };
+    const view = new View(initElement, options);
+    scale = new Scale(initElement, view);
+  });
 
   describe('constructor', () => {
     test('should create div', () => {
-      expect(_.scale.nodeName).toBe('DIV')
-    })
+      expect(scale.scale.nodeName).toBe('DIV');
+    });
     test('should add correct class', () => {
-      expect(_.scale.className).toBe('dwSlider__scale')
-    })
-  })
-
-  describe('setPosition', () => {
-    test('should set correct top and left to vertical', () => {
-      _.scaleElements[1] = document.createElement('div')
-      const lineSize = {
-        width: 0.2,
-        height: 0.1
-      }
-      
-      Object.defineProperty(_.scaleElements[1], 'offsetHeight', {
-        value: 5
-      })
-      _.setPosition(lineSize, true)
-      expect(_.scaleElements[1].style.top).toBe('-2.5px')
-    })
-    test('should set correct top and left to horizontal', () => {
-      _.scaleElements[1] = document.createElement('div')
-      const lineSize = {
-        width: 0.2,
-        height: 0.1
-      }
-      _.setPosition(lineSize, false)
-      expect(_.scaleElements[1].style.top).toBe('0.2px')
-    })
-  })
+      expect(scale.scale.className).toBe('dwSlider__scale');
+    });
+  });
 
   describe('initScale', () => {
     test('should call mediator.notify', () => {
       const observer = {
-        update: jest.fn()
-      }
-      _.subscribe(observer)
-      const scaleElement1 = document.createElement('div')
-      const scaleElement2 = document.createElement('div')
-      _.scaleElements = {'0': scaleElement1, '1': scaleElement2}
-      _.initScale({'0': '0', '1': '1'}, {width: 1, height: 5}, true)
-      const click = new MouseEvent('click')
-      _.scaleElements[0].dispatchEvent(click)
-      expect(observer.update).toBeCalled()
-    })
-  })
-})
+        update: jest.fn(),
+      };
+      scale.subscribe(observer);
+      const scaleElement1 = document.createElement('div');
+      const scaleElement2 = document.createElement('div');
+      scale.scaleElements = { 0: scaleElement1, 1: scaleElement2 };
+      scale.initScale({ 0: '0', 1: '1' }, { width: 1, height: 5 }, true);
+      const click = new MouseEvent('click');
+      scale.scaleElements[0].dispatchEvent(click);
+      expect(observer.update).toBeCalled();
+    });
+  });
+});

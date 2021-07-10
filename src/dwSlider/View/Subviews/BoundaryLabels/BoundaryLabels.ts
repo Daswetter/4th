@@ -1,126 +1,155 @@
-import { Subview } from "../../../../types"
+import { Subview } from '../../../../types';
 
 class BoundaryLabels extends Subview {
-  public min!: HTMLElement
-  public max!: HTMLElement
+  public min!: HTMLElement;
 
-  constructor(public initElement: HTMLElement){
-    super()
-    this.initElements(initElement)
+  public max!: HTMLElement;
+
+  constructor(public initElement: HTMLElement) {
+    super();
+    this.initElements(initElement);
   }
 
   private initElements = (initElement: HTMLElement): void => {
-    this.min = this.init(initElement, this.min, '__boundary-labels_min')
-    this.max = this.init(initElement, this.min, '__boundary-labels_max')
-  }
+    this.min = this.init(initElement, this.min, '__boundary-labels_min');
+    this.max = this.init(initElement, this.min, '__boundary-labels_max');
+  };
 
   private printInnerText = (element: HTMLElement, text: number): void => {
-    element.innerText = String(text)
-  }
+    const label = element;
+    label.innerText = String(text);
+  };
 
-  private setPositionToHorizontal = (element: HTMLElement, thumbHeight: number): void => {
-    element.style.top = - element.offsetHeight - thumbHeight / 2 + 'px'
-    const side = - element.offsetWidth / 2 + 'px'
+  private setPositionToHorizontal = (label: HTMLElement, thumbHeight: number): void => {
+    const element = label;
+    element.style.top = `${-element.offsetHeight - thumbHeight / 2}px`;
+    const side = `${-element.offsetWidth / 2}px`;
 
-    if (element === this.min){
-      element.style.left = side
+    if (element === this.min) {
+      element.style.left = side;
     } else {
-      element.style.right = side
+      element.style.right = side;
     }
-  }
+  };
 
-  private setPositionToVertical = (element: HTMLElement, lineWidth: number, thumbWidth: number): void => {
-    element.style.right = lineWidth + thumbWidth / 3 + 'px'
-    const side = - element.offsetHeight / 2 + 'px'
+  private setPositionToVertical = (
+    label: HTMLElement, lineWidth: number, thumbWidth: number,
+  ): void => {
+    const element = label;
+    element.style.right = `${lineWidth + thumbWidth / 3}px`;
+    const side = `${-element.offsetHeight / 2}px`;
 
-    if (element === this.min){
-      element.style.bottom = side
+    if (element === this.min) {
+      element.style.bottom = side;
     } else {
-      element.style.top = side
+      element.style.top = side;
     }
-  }
+  };
 
-  public setInitialSettings = (min: number, max: number, lineWidth: number, thumbSize: { width: number, height: number}, vertical = false): void => {
-    this.printInnerText(this.min, min)
-    this.printInnerText(this.max, max)
+  public setInitialSettings = (
+    min: number,
+    max: number,
+    lineWidth: number,
+    thumbSize: { width: number, height: number },
+    vertical = false,
+  ): void => {
+    this.printInnerText(this.min, min);
+    this.printInnerText(this.max, max);
 
     if (vertical) {
-      this.setPositionToVertical(this.min, lineWidth, thumbSize.width)
-      this.setPositionToVertical(this.max, lineWidth, thumbSize.width)
+      this.setPositionToVertical(this.min, lineWidth, thumbSize.width);
+      this.setPositionToVertical(this.max, lineWidth, thumbSize.width);
     } else {
-      this.setPositionToHorizontal(this.min, thumbSize.height)
-      this.setPositionToHorizontal(this.max, thumbSize.height)
+      this.setPositionToHorizontal(this.min, thumbSize.height);
+      this.setPositionToHorizontal(this.max, thumbSize.height);
     }
-    
-  }
+  };
 
-  private switchOpacity = (element: HTMLElement, condition: boolean, optionalCondition?: boolean): void => {
-    let opacity: string 
+  private switchOpacity = (
+    label: HTMLElement, condition: boolean, optionalCondition?: boolean,
+  ): void => {
+    let opacity: string;
     if (condition || optionalCondition) {
-      opacity = '0'
+      opacity = '0';
     } else {
-      opacity = '1'
+      opacity = '1';
     }
-    element.style.opacity = opacity
-  }
+    const element = label;
+    element.style.opacity = opacity;
+  };
 
-  private isPrimaryTouchingMin = (tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
+  private isPrimaryTouchingMin = (
+    tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean,
+  ): boolean => {
     if (vertical) {
-      return tipParams.top + tipParams.height >= this.min.offsetTop
+      return tipParams.top + tipParams.height >= this.min.offsetTop;
     }
-    return tipParams.left <= (this.min.offsetLeft + this.min.offsetWidth)
-  }
+    return tipParams.left <= (this.min.offsetLeft + this.min.offsetWidth);
+  };
 
-  private isPrimaryTouchingMax = (tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
+  private isPrimaryTouchingMax = (
+    tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean,
+  ): boolean => {
     if (vertical) {
-      return tipParams.top <= (this.max.offsetTop + this.max.offsetHeight)
+      return tipParams.top <= (this.max.offsetTop + this.max.offsetHeight);
     }
-    return tipParams.left + tipParams.width >= this.max.offsetLeft
-  }
-  
-  private isExtraTouchingMin = (tipExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
+    return tipParams.left + tipParams.width >= this.max.offsetLeft;
+  };
+
+  private isExtraTouchingMin = (
+    tipExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean,
+  ): boolean => {
     if (vertical) {
-      return tipExtraParams.top + tipExtraParams.height >= this.min.offsetTop
+      return tipExtraParams.top + tipExtraParams.height >= this.min.offsetTop;
     }
-    return tipExtraParams.left <= (this.min.offsetLeft + this.min.offsetWidth)
-  }
+    return tipExtraParams.left <= (this.min.offsetLeft + this.min.offsetWidth);
+  };
 
-  private isExtraTouchingMax = (tipExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean): boolean => {
+  private isExtraTouchingMax = (
+    tipExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean,
+  ): boolean => {
     if (vertical) {
-      return tipExtraParams.top <= (this.max.offsetTop + this.max.offsetHeight)
+      return tipExtraParams.top <= (this.max.offsetTop + this.max.offsetHeight);
     }
-    return tipExtraParams.left + tipExtraParams.width >= this.max.offsetLeft
-  }
+    return tipExtraParams.left + tipExtraParams.width >= this.max.offsetLeft;
+  };
 
+  private setOpacityToDouble = (
+    tipParams: { width: number, height: number, left: number, top: number },
+    tipExtraParams: { width: number, height: number, left: number, top: number },
+    vertical: boolean,
+  ): void => {
+    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, vertical);
+    const isExtraTouchingMin = this.isExtraTouchingMin(tipExtraParams, vertical);
+    this.switchOpacity(this.min, isPrimaryTouchingMin, isExtraTouchingMin);
 
+    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(tipParams, vertical);
+    const isExtraTouchingMax = this.isExtraTouchingMax(tipExtraParams, vertical);
+    this.switchOpacity(this.max, isPrimaryTouchingMax, isExtraTouchingMax);
+  };
 
-  private setOpacityToDouble = (tipParams: { width: number, height: number, left: number, top: number }, tipExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean): void => {
-    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, vertical)
-    const isExtraTouchingMin = this.isExtraTouchingMin(tipExtraParams, vertical)
-    this.switchOpacity(this.min, isPrimaryTouchingMin, isExtraTouchingMin)
+  private setOpacityToSingle = (
+    tipParams: { width: number, height: number, left: number, top: number },
+    vertical: boolean,
+  ): void => {
+    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, vertical);
+    this.switchOpacity(this.min, isPrimaryTouchingMin);
 
-    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(tipParams, vertical)
-    const isExtraTouchingMax = this.isExtraTouchingMax(tipExtraParams, vertical)
-    this.switchOpacity(this.max, isPrimaryTouchingMax, isExtraTouchingMax)
-  }
+    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(tipParams, vertical);
+    this.switchOpacity(this.max, isPrimaryTouchingMax);
+  };
 
-
-  private setOpacityToSingle = (tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean): void => {
-    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, vertical)
-    this.switchOpacity(this.min, isPrimaryTouchingMin)
-
-    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(tipParams, vertical)
-    this.switchOpacity(this.max, isPrimaryTouchingMax)
-  }
-  
-  public update = (tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean, tipExtraParams?: { width: number, height: number, left: number, top: number }): void => {
-    
+  public update = (
+    tipParams: { width: number, height: number, left: number, top: number },
+    vertical: boolean,
+    tipExtraParams?: { width: number, height: number, left: number, top: number },
+  ): void => {
     if (tipExtraParams) {
-      this.setOpacityToDouble(tipParams, tipExtraParams, vertical)
+      this.setOpacityToDouble(tipParams, tipExtraParams, vertical);
     } else {
-      this.setOpacityToSingle(tipParams, vertical)
+      this.setOpacityToSingle(tipParams, vertical);
     }
-  }
+  };
 }
 
-export { BoundaryLabels }
+export default BoundaryLabels;

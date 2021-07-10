@@ -1,35 +1,35 @@
-import { Wrapper } from "./Wrapper"
+import Wrapper from './Wrapper';
 
 describe('Wrapper', () => {
-  let _: Wrapper
+  let wrapper: Wrapper;
   beforeEach(() => {
-    const initElement = document.createElement('div')
-    _ = new Wrapper(initElement)
-  })
-  
+    const initElement = document.createElement('div');
+    wrapper = new Wrapper(initElement);
+  });
+
   describe('constructor', () => {
     test('should create div', () => {
-      expect(_.wrapper.nodeName).toBe('DIV')
-    })
+      expect(wrapper.wrapper.nodeName).toBe('DIV');
+    });
     test('should set class', () => {
-      expect(_.wrapper.className).toBe('dwSlider')
-    })
-  })
+      expect(wrapper.wrapper.className).toBe('dwSlider');
+    });
+  });
 
   describe('returnAsHTML', () => {
     test('should return wrapper as HTMLElement', () => {
-      expect(_.returnAsHTML()).toEqual(_.wrapper)
-    })
-  })
-  
+      expect(wrapper.returnAsHTML()).toEqual(wrapper.wrapper);
+    });
+  });
+
   describe('setInitialSettings', () => {
     test('should add class for vertical', () => {
-      _.setInitialSettings(true)
-      expect(_.wrapper.className).toContain('dwSlider_vertical')
-    })
+      wrapper.setInitialSettings(true);
+      expect(wrapper.wrapper.className).toContain('dwSlider_vertical');
+    });
     test('should add class for horizontal', () => {
-      _.setInitialSettings(false)
-      expect(_.wrapper.className).toContain('dwSlider_horizontal')
-    })
-  })
-})
+      wrapper.setInitialSettings(false);
+      expect(wrapper.wrapper.className).toContain('dwSlider_horizontal');
+    });
+  });
+});
