@@ -1,16 +1,12 @@
-import { Observer } from '../types';
-
 abstract class Publisher {
-  private observers: Observer[] = [];
+  public updatableMethod!: (arg0: { data: any, event: string }) => void;
 
-  public subscribe(observer: Observer): void {
-    this.observers.push(observer);
+  public subscribe(updatableMethod: (arg0: { data: any, event: string }) => void): void {
+    this.updatableMethod = updatableMethod;
   }
 
   public notify(data: any, event: string): void {
-    for (const observer of this.observers) {
-      observer.update({ data, event });
-    }
+    this.updatableMethod({ data, event });
   }
 }
 

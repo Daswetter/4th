@@ -1,11 +1,11 @@
-import { IOptions, Observer } from '../../types';
+import { IOptions } from '../../types';
 import View from './View';
 
 describe('View', () => {
   let view: View;
   let options: IOptions;
   const initElement: HTMLElement = document.createElement('div');
-  let observer: Observer;
+  let update: jest.Mock;
   beforeEach(() => {
     options = {
       min: -1800,
@@ -21,10 +21,8 @@ describe('View', () => {
       double: true,
     };
     view = new View(initElement, options);
-    observer = {
-      update: jest.fn(),
-    };
-    view.subscribe(observer);
+    update = jest.fn();
+    view.subscribe(update);
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -164,7 +162,7 @@ describe('View', () => {
       view.update({
         value: 1, current: true, extra: true, nearest: true,
       });
-      expect(observer.update).toHaveBeenCalled();
+      expect(update).toHaveBeenCalled();
     });
     test('should call notify mediator for primary', () => {
       view.part = 0;
@@ -172,13 +170,13 @@ describe('View', () => {
       view.update({
         value: 1, current: false, extra: false, nearest: true,
       });
-      expect(observer.update).toHaveBeenCalled();
+      expect(update).toHaveBeenCalled();
     });
     test('should call notify in mediator', () => {
       view.update({
         value: 1, current: true, extra: true, nearest: false,
       });
-      expect(observer.update).toHaveBeenCalledTimes(1);
+      expect(update).toHaveBeenCalledTimes(1);
     });
   });
 });

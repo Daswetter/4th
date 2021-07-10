@@ -1,16 +1,13 @@
-import { Observer } from '../../../../types';
 import Tip from './Tip';
 
 describe('Tip', () => {
   let tip: Tip;
-  let observer: Observer;
+  let update: jest.Mock;
   beforeEach(() => {
     const initElement = document.createElement('div');
     tip = new Tip(initElement);
-    observer = {
-      update: jest.fn(),
-    };
-    tip.subscribe(observer);
+    update = jest.fn();
+    tip.subscribe(update);
   });
   describe('constructor', () => {
     test('should create div', () => {
@@ -183,7 +180,7 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
 
-      expect(observer.update).toBeCalled();
+      expect(update).toBeCalled();
     });
     test('should call tip.notify for primary', () => {
       tip.setEventListenerForUnited(lineSize, lineSide, vertical);
@@ -202,7 +199,7 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
 
-      expect(observer.update).toBeCalled();
+      expect(update).toBeCalled();
     });
     test('should call tip.notify for primary', () => {
       tip.setEventListenerForUnited(lineSize, lineSide, vertical);
@@ -217,7 +214,7 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
 
-      expect(observer.update).toBeCalled();
+      expect(update).toBeCalled();
     });
     test('should call tip.notify for extra (vertical)', () => {
       vertical = true;
@@ -238,7 +235,7 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
 
-      expect(observer.update).toBeCalled();
+      expect(update).toBeCalled();
     });
     test('should call tip.notify for extra with part = 1', () => {
       vertical = true;
@@ -262,7 +259,7 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
 
-      expect(observer.update).toBeCalled();
+      expect(update).toBeCalled();
     });
     test('should call tip.notify for extra with part = 0', () => {
       vertical = true;
@@ -289,7 +286,7 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
 
-      expect(observer.update).toBeCalled();
+      expect(update).toBeCalled();
     });
     test('should call tip.notify for primary', () => {
       vertical = true;
@@ -302,7 +299,7 @@ describe('Tip', () => {
       const mouseUp = new MouseEvent('mouseup');
       document.dispatchEvent(mouseUp);
 
-      expect(observer.update).toBeCalled();
+      expect(update).toBeCalled();
     });
   });
 

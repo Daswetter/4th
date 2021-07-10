@@ -1,16 +1,13 @@
-import { Observer } from '../../../../types';
 import Thumb from './Thumb';
 
 describe('Thumb', () => {
   let thumb: Thumb;
-  let observer: Observer;
+  let update: jest.Mock;
   beforeEach(() => {
     const initElement = document.createElement('div');
     thumb = new Thumb(initElement);
-    observer = {
-      update: jest.fn(),
-    };
-    thumb.subscribe(observer);
+    update = jest.fn();
+    thumb.subscribe(update);
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -69,7 +66,7 @@ describe('Thumb', () => {
       thumb.primary.dispatchEvent(mouseDown);
       document.dispatchEvent(mouseMove);
 
-      expect(observer.update).toBeCalledWith({
+      expect(update).toBeCalledWith({
         current: false, extra: false, nearest: false, value: 1,
       });
     });
@@ -107,8 +104,8 @@ describe('Thumb', () => {
       thumb.extra.dispatchEvent(mouseDown);
       document.dispatchEvent(mouseMove);
 
-      expect(observer.update).toBeCalled();
-      expect(observer.update).toBeCalledWith({
+      expect(update).toBeCalled();
+      expect(update).toBeCalledWith({
         current: false, extra: true, nearest: false, value: 0,
       });
 
@@ -116,7 +113,7 @@ describe('Thumb', () => {
 
       document.dispatchEvent(mouseUp);
       document.dispatchEvent(mouseMove);
-      expect(observer.update).toBeCalledTimes(1);
+      expect(update).toBeCalledTimes(1);
     });
 
     describe('update', () => {

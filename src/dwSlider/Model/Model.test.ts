@@ -1,10 +1,10 @@
-import { IOptions, Observer } from '../../types';
+import { IOptions } from '../../types';
 import Model from './Model';
 
 describe('Model', () => {
   let model: Model;
   let options: IOptions;
-  let observer: Observer;
+  let update: jest.Mock;
   beforeEach(() => {
     options = {
       min: -1800,
@@ -20,10 +20,8 @@ describe('Model', () => {
       double: true,
     };
     model = new Model(options);
-    observer = {
-      update: jest.fn(),
-    };
-    model.subscribe(observer);
+    update = jest.fn();
+    model.subscribe(update);
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -32,7 +30,7 @@ describe('Model', () => {
   describe('setCurrent', () => {
     test('call mock', () => {
       model.setCurrent(0.1);
-      expect(observer.update).toHaveBeenCalled();
+      expect(update).toHaveBeenCalled();
     });
     test('call mock', () => {
       options = {
@@ -49,12 +47,9 @@ describe('Model', () => {
         double: true,
       };
       model = new Model(options);
-      observer = {
-        update: jest.fn(),
-      };
-      model.subscribe(observer);
+      model.subscribe(update);
       model.setCurrent(0.1);
-      expect(observer.update).toHaveBeenCalled();
+      expect(update).toHaveBeenCalled();
     });
     test('should work for part size scale', () => {
       options = {
@@ -71,12 +66,9 @@ describe('Model', () => {
         double: true,
       };
       model = new Model(options);
-      observer = {
-        update: jest.fn(),
-      };
-      model.subscribe(observer);
+      model.subscribe(update);
       model.setCurrent(120);
-      expect(observer.update).toHaveBeenCalledTimes(1);
+      expect(update).toHaveBeenCalledTimes(1);
     });
     test('should work for part size scale', () => {
       options = {
@@ -93,19 +85,16 @@ describe('Model', () => {
         double: true,
       };
       model = new Model(options);
-      observer = {
-        update: jest.fn(),
-      };
-      model.subscribe(observer);
+      model.subscribe(update);
       model.setCurrent(1);
-      expect(observer.update).toHaveBeenCalledTimes(1);
+      expect(update).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('setPart', () => {
     test('should call mock', () => {
       model.setPart(21);
-      expect(observer.update).toHaveBeenCalled();
+      expect(update).toHaveBeenCalled();
     });
     test('should call mock 1 time', () => {
       options = {
@@ -122,20 +111,17 @@ describe('Model', () => {
         double: true,
       };
       model = new Model(options);
-      observer = {
-        update: jest.fn(),
-      };
-      model.subscribe(observer);
+      model.subscribe(update);
       model.setPart(120);
-      expect(observer.update).toHaveBeenCalledTimes(1);
+      expect(update).toHaveBeenCalledTimes(1);
     });
     test('should filter big part correctly ', () => {
       model.setPart(1200, false);
-      expect(observer.update).toHaveBeenCalledWith({ data: { current: 200, part: 1, extra: false }, event: 'current and part were sent from Model' });
+      expect(update).toHaveBeenCalledWith({ data: { current: 200, part: 1, extra: false }, event: 'current and part were sent from Model' });
     });
     test('should filter small part correctly', () => {
       model.setPart(-10000, false);
-      expect(observer.update).toHaveBeenCalledWith({ data: { current: -1800, part: 0, extra: false }, event: 'current and part were sent from Model' });
+      expect(update).toHaveBeenCalledWith({ data: { current: -1800, part: 0, extra: false }, event: 'current and part were sent from Model' });
     });
   });
 
@@ -168,7 +154,7 @@ describe('Model', () => {
   describe('refreshAll', () => {
     test('should call callback', () => {
       model.refreshAll(options);
-      expect(observer.update).toHaveBeenCalled();
+      expect(update).toHaveBeenCalled();
     });
     test('should filter options', () => {
       options.step = 0;
@@ -176,7 +162,7 @@ describe('Model', () => {
       options.max = -10;
       options.scaleSize = 1;
       model.refreshAll(options);
-      expect(observer.update).toHaveBeenCalled();
+      expect(update).toHaveBeenCalled();
     });
     test('should filter options', () => {
       options.step = -200;
@@ -184,7 +170,7 @@ describe('Model', () => {
       options.max = -1;
       options.scaleSize = 21;
       model.refreshAll(options);
-      expect(observer.update).toHaveBeenCalled();
+      expect(update).toHaveBeenCalled();
     });
   });
 });

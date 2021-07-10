@@ -1,4 +1,3 @@
-import { Observer } from '../../../../types';
 import Subview from '../Subview';
 
 class Scale extends Subview {
@@ -12,10 +11,9 @@ class Scale extends Subview {
 
   private vertical!: boolean;
 
-  constructor(public initElement: HTMLElement, public observer: Observer) {
+  constructor(public initElement: HTMLElement) {
     super();
     this.initPrimary(initElement);
-    this.observer = observer;
   }
 
   private initPrimary = (initElement: HTMLElement): void => {

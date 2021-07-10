@@ -4,10 +4,6 @@ interface IdwSlider {
   returnCurrentState(): Array<number>
 }
 
-interface Observer {
-  update(arg0: any): void;
-}
-
 interface IOptions {
   min: number,
   max: number,
@@ -49,5 +45,5 @@ type Params = {
 };
 
 export {
-  IdwSlider, ReducedIOptions, IOptions, IEvent, Params, Observer,
+  IdwSlider, ReducedIOptions, IOptions, IEvent, Params,
 };

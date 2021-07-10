@@ -1,7 +1,9 @@
-import { Observer, IEvent } from '../../../types';
+import { IEvent } from '../../../types';
 
 abstract class Subview {
-  private observers: Observer[] = [];
+  public updatableMethod!: (
+    data: { value: number, current: boolean, extra: boolean, nearest: boolean }
+  ) => void;
 
   protected events: IEvent<any> = {};
 
@@ -33,14 +35,14 @@ abstract class Subview {
     this.events[eventName].push(fn);
   }
 
-  public subscribe(observer: Observer): void {
-    this.observers.push(observer);
+  public subscribe(updatableMethod: (
+    data: { value: number, current: boolean, extra: boolean, nearest: boolean }
+  ) => void): void {
+    this.updatableMethod = updatableMethod;
   }
 
   public notify(data: { value: number, current: boolean, extra: boolean, nearest: boolean }): void {
-    for (const observer of this.observers) {
-      observer.update(data);
-    }
+    this.updatableMethod(data);
   }
 }
 

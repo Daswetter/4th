@@ -1,4 +1,4 @@
-import { IOptions, Observer } from '../../types';
+import { IOptions } from '../../types';
 import Wrapper from './Subviews/Wrapper/Wrapper';
 import Line from './Subviews/Line/Line';
 import Thumb from './Subviews/Thumb/Thumb';
@@ -9,7 +9,7 @@ import Input from './Subviews/Input/Input';
 import BoundaryLabels from './Subviews/BoundaryLabels/BoundaryLabels';
 import Publisher from '../Publisher';
 
-class View extends Publisher implements Observer {
+class View extends Publisher {
   public wrapper!: Wrapper;
 
   public line!: Line;
@@ -67,14 +67,14 @@ class View extends Publisher implements Observer {
 
   private initWrapper = (initElement: HTMLElement): void => {
     this.wrapper = new Wrapper(initElement);
-    this.wrapper.subscribe(this);
+    this.wrapper.subscribe(this.update);
     this.initElement.append(this.wrapper.returnAsHTML());
     this.wrapper.setInitialSettings(this.options.vertical);
   };
 
   private initLine = (initElement: HTMLElement) : void => {
     this.line = new Line(initElement);
-    this.line.subscribe(this);
+    this.line.subscribe(this.update);
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML());
     this.line.setInitialSettings(this.options.vertical);
     this.line.setEventListener(this.options.vertical);
@@ -82,7 +82,7 @@ class View extends Publisher implements Observer {
 
   private initThumb = (initElement: HTMLElement) : void => {
     this.thumb = new Thumb(initElement);
-    this.thumb.subscribe(this);
+    this.thumb.subscribe(this.update);
     this.thumb.setEventListener(
       this.line.returnSize(),
       this.line.returnSide(),
@@ -105,7 +105,7 @@ class View extends Publisher implements Observer {
 
   private initTip = (initElement: HTMLElement): void => {
     this.tip = new Tip(initElement);
-    this.tip.subscribe(this);
+    this.tip.subscribe(this.update);
     this.tip.setInitialSettings(
       this.line.returnSize().width,
       this.thumb.returnSize(),
@@ -149,14 +149,14 @@ class View extends Publisher implements Observer {
     initElement: HTMLElement,
     scaleElements: { [key: string]: string },
   ): void => {
-    this.scale = new Scale(initElement, this);
-    this.scale.subscribe(this);
+    this.scale = new Scale(initElement);
+    this.scale.subscribe(this.update);
     this.scale.initScale(scaleElements, this.line.returnSize(), this.options.vertical);
   };
 
   private initProgress = (initElement: HTMLElement): void => {
     this.progress = new Progress(initElement);
-    this.progress.subscribe(this);
+    this.progress.subscribe(this.update);
     this.progress.setInitialSettings(this.line.returnSize(), this.options.vertical);
   };
 
@@ -174,7 +174,7 @@ class View extends Publisher implements Observer {
 
   private initInput = (): void => {
     this.input = new Input(this.initElement);
-    this.input.subscribe(this);
+    this.input.subscribe(this.update);
     const extra = true;
     if (this.options.double && this.doesInputExist(extra)) {
       this.input.initExtra();
@@ -183,7 +183,7 @@ class View extends Publisher implements Observer {
 
   private initBoundaryLabels = (initElement: HTMLElement): void => {
     this.boundaryLabels = new BoundaryLabels(initElement);
-    this.boundaryLabels.subscribe(this);
+    this.boundaryLabels.subscribe(this.update);
     this.boundaryLabels.setInitialSettings(
       this.options.min,
       this.options.max,

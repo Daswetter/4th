@@ -1,4 +1,3 @@
-import { Observer } from '../../../../types';
 import Input from './Input';
 
 describe('Input', () => {
@@ -10,31 +9,26 @@ describe('Input', () => {
   const inputTo = document.createElement('div');
   inputTo.classList.add('js-dwSlider__input_to');
   initElement.append(inputTo);
-  let observer: Observer;
+  let update: jest.Mock;
   beforeEach(() => {
     input = new Input(initElement);
-    observer = {
-      update: jest.fn(),
-    };
-    input.subscribe(observer);
+    update = jest.fn();
+    input.subscribe(update);
   });
   describe('constructor', () => {
     test('should set event listener', () => {
       const change = new MouseEvent('change');
       inputFrom.dispatchEvent(change);
-      expect(observer.update).toHaveBeenCalled();
+      expect(update).toHaveBeenCalled();
     });
   });
   describe('initExtra', () => {
     test('should set change listener', () => {
       input.initExtra();
-      observer = {
-        update: jest.fn(),
-      };
-      input.subscribe(observer);
+      input.subscribe(update);
       const change = new MouseEvent('change');
       inputTo.dispatchEvent(change);
-      expect(observer.update).toHaveBeenCalled();
+      expect(update).toHaveBeenCalled();
     });
   });
   describe('update', () => {

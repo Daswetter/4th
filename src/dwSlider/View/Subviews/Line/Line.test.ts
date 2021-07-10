@@ -2,13 +2,12 @@ import Line from './Line';
 
 describe('Line', () => {
   let line: Line;
-  const observer = {
-    update: jest.fn(),
-  };
+  let update: jest.Mock;
   beforeEach(() => {
     const initElement = document.createElement('div');
     line = new Line(initElement);
-    line.subscribe(observer);
+    update = jest.fn();
+    line.subscribe(update);
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -74,12 +73,12 @@ describe('Line', () => {
           value: 60,
         });
         line.line.dispatchEvent(click);
-        expect(observer.update).toBeCalledWith({
+        expect(update).toBeCalledWith({
           current: false, extra: false, nearest: true, value: 0.25,
         });
       });
 
-      test('should set click to line and call observer.update with 0', () => {
+      test('should set click to line and call update with 0', () => {
         const click = new MouseEvent('click', {
           clientX: -250,
         });
@@ -87,12 +86,12 @@ describe('Line', () => {
           value: 0,
         });
         line.line.dispatchEvent(click);
-        expect(observer.update).toBeCalledWith({
+        expect(update).toBeCalledWith({
           current: false, extra: false, nearest: true, value: 0,
         });
       });
 
-      test('should set click to horizontal line and call observer.update with 1', () => {
+      test('should set click to horizontal line and call update with 1', () => {
         const click = new MouseEvent('click', {
           clientX: 1000,
         });
@@ -100,12 +99,12 @@ describe('Line', () => {
           value: 0,
         });
         line.line.dispatchEvent(click);
-        expect(observer.update).toBeCalledWith({
+        expect(update).toBeCalledWith({
           current: false, extra: false, nearest: true, value: 1,
         });
       });
 
-      test('should not call observer.update if scale were clicked', () => {
+      test('should not call update if scale were clicked', () => {
         Object.defineProperty(line.line, 'offsetTop', {
           value: 800,
         });
@@ -117,7 +116,7 @@ describe('Line', () => {
           value: 60,
         });
         line.line.dispatchEvent(click);
-        expect(observer.update).not.toHaveBeenCalled();
+        expect(update).not.toHaveBeenCalled();
       });
     });
 
@@ -158,7 +157,7 @@ describe('Line', () => {
           value: 0,
         });
         line.line.dispatchEvent(click);
-        expect(observer.update).toBeCalledWith({
+        expect(update).toBeCalledWith({
           current: false, extra: false, nearest: true, value: 0,
         });
       });
@@ -171,7 +170,7 @@ describe('Line', () => {
           value: 0,
         });
         line.line.dispatchEvent(click);
-        expect(observer.update).toBeCalledWith({
+        expect(update).toBeCalledWith({
           current: false, extra: false, nearest: true, value: 1,
         });
       });
@@ -185,12 +184,12 @@ describe('Line', () => {
           value: 0,
         });
         line.line.dispatchEvent(click);
-        expect(observer.update).toBeCalledWith({
+        expect(update).toBeCalledWith({
           current: false, extra: false, nearest: true, value: 0.2,
         });
       });
 
-      test('should not call observer.update if scale were clicked', () => {
+      test('should not call update if scale were clicked', () => {
         const click = new MouseEvent('click', {
           clientX: 1000,
           clientY: 900,
@@ -199,11 +198,11 @@ describe('Line', () => {
           value: 60,
         });
         line.line.dispatchEvent(click);
-        expect(observer.update).not.toHaveBeenCalled();
+        expect(update).not.toHaveBeenCalled();
       });
     });
 
-    test('should not call observer.update if onMouseDown value is not equal to onMouseUp', () => {
+    test('should not call update if onMouseDown value is not equal to onMouseUp', () => {
       const vertical = true;
       line.setEventListener(vertical);
 
@@ -225,7 +224,7 @@ describe('Line', () => {
         value: 0,
       });
       line.line.dispatchEvent(click);
-      expect(observer.update).not.toBeCalled();
+      expect(update).not.toBeCalled();
     });
   });
 

@@ -1,11 +1,11 @@
-import { IOptions, Observer } from '../../types';
+import { IOptions } from '../../types';
 import View from '../View/View';
 import Model from '../Model/Model';
 
-class Presenter implements Observer {
+class Presenter {
   constructor(public view: View, public model: Model) {
-    this.view.subscribe(this);
-    this.model.subscribe(this);
+    this.view.subscribe(this.update);
+    this.model.subscribe(this.update);
 
     this.view.initView(this.model.countScaleElements());
   }
