@@ -1,4 +1,5 @@
-import { Subview, Observer } from '../../../../types';
+import { Observer } from '../../../../types';
+import Subview from '../Subview';
 
 class Scale extends Subview {
   public scale!: HTMLElement;

@@ -1,4 +1,5 @@
-import { Params, Subview } from '../../../../types';
+import { Params } from '../../../../types';
+import Subview from '../Subview';
 
 class Tip extends Subview {
   public primary!: HTMLElement;

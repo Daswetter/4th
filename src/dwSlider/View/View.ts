@@ -1,4 +1,4 @@
-import { IOptions, Publisher, Observer } from '../../types';
+import { IOptions, Observer } from '../../types';
 import Wrapper from './Subviews/Wrapper/Wrapper';
 import Line from './Subviews/Line/Line';
 import Thumb from './Subviews/Thumb/Thumb';
@@ -7,6 +7,7 @@ import Scale from './Subviews/Scale/Scale';
 import Tip from './Subviews/Tip/Tip';
 import Input from './Subviews/Input/Input';
 import BoundaryLabels from './Subviews/BoundaryLabels/BoundaryLabels';
+import Publisher from '../Publisher';
 
 class View extends Publisher implements Observer {
   public wrapper!: Wrapper;

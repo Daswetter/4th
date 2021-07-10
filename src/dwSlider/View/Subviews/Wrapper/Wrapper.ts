@@ -1,4 +1,4 @@
-import { Subview } from '../../../../types';
+import Subview from '../Subview';
 
 class Wrapper extends Subview {
   public wrapper!: HTMLElement;

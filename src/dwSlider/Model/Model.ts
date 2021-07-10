@@ -1,4 +1,5 @@
-import { IOptions, Publisher } from '../../types';
+import { IOptions } from '../../types';
+import Publisher from '../Publisher';
 
 class Model extends Publisher {
   constructor(public options: IOptions) {
