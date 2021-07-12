@@ -1,10 +1,9 @@
 import { IEvent } from '../../../types';
+import Publisher from '../../Publisher';
 
-abstract class Subview {
-  public updatableMethod!: (
-    data: { value: number, current: boolean, extra: boolean, nearest: boolean }
-  ) => void;
-
+abstract class Subview extends Publisher<{
+  value: number, current: boolean, extra: boolean, nearest: boolean
+}> {
   protected events: IEvent<any> = {};
 
   protected init = (
@@ -33,16 +32,6 @@ abstract class Subview {
       this.events[eventName] = [];
     }
     this.events[eventName].push(fn);
-  }
-
-  public subscribe(updatableMethod: (
-    data: { value: number, current: boolean, extra: boolean, nearest: boolean }
-  ) => void): void {
-    this.updatableMethod = updatableMethod;
-  }
-
-  public notify(data: { value: number, current: boolean, extra: boolean, nearest: boolean }): void {
-    this.updatableMethod(data);
   }
 }
 

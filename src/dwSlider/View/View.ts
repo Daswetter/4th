@@ -9,7 +9,7 @@ import Input from './Subviews/Input/Input';
 import BoundaryLabels from './Subviews/BoundaryLabels/BoundaryLabels';
 import Publisher from '../Publisher';
 
-class View extends Publisher {
+class View extends Publisher<{ value: number, current: boolean, extra: boolean }> {
   public wrapper!: Wrapper;
 
   public line!: Line;
@@ -58,10 +58,9 @@ class View extends Publisher {
     if (this.options.scale) {
       this.initScale(this.line.returnAsHTML(), scaleElements);
     }
-
-    this.notify({ value: this.options.from, current: true, extra: false }, 'data were sent from View');
+    this.notify({ value: this.options.from, current: true, extra: false });
     if (this.options.double) {
-      this.notify({ value: this.options.to as number, current: true, extra: true }, 'data were sent from View');
+      this.notify({ value: this.options.to as number, current: true, extra: true });
     }
   };
 
@@ -256,19 +255,21 @@ class View extends Publisher {
     const extra = true;
     const distFromActionToExtra = this.countDistance(part, extra);
     if (distFromActionToPrimary > distFromActionToExtra) {
-      this.notify({ value: part, current: false, extra: true }, 'data were sent from View');
+      this.notify({ value: part, current: false, extra: true });
     } else {
-      this.notify({ value: part, current: false, extra: false }, 'data were sent from View');
+      this.notify({ value: part, current: false, extra: false });
     }
   };
 
-  public update(data: { value: number, current: boolean, extra: boolean, nearest: boolean }): void {
+  public update = (
+    data: { value: number, current: boolean, extra: boolean, nearest: boolean },
+  ): void => {
     if (data.nearest) {
       this.changePositionForTheNearest(data.value);
     } else {
-      this.notify({ value: data.value, current: data.current, extra: data.extra }, 'data were sent from View');
+      this.notify({ value: data.value, current: data.current, extra: data.extra });
     }
-  }
+  };
 }
 
 export default View;

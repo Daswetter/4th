@@ -117,11 +117,11 @@ describe('Model', () => {
     });
     test('should filter big part correctly ', () => {
       model.setPart(1200, false);
-      expect(update).toHaveBeenCalledWith({ data: { current: 200, part: 1, extra: false }, event: 'current and part were sent from Model' });
+      expect(update).toHaveBeenCalledWith({ current: 200, part: 1, extra: false });
     });
     test('should filter small part correctly', () => {
       model.setPart(-10000, false);
-      expect(update).toHaveBeenCalledWith({ data: { current: -1800, part: 0, extra: false }, event: 'current and part were sent from Model' });
+      expect(update).toHaveBeenCalledWith({ current: -1800, part: 0, extra: false });
     });
   });
 

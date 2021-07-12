@@ -1,7 +1,13 @@
 import { IOptions } from '../../types';
 import Publisher from '../Publisher';
 
-class Model extends Publisher {
+class Model extends Publisher<{
+  current?: number,
+  part?: number,
+  extra?: boolean,
+  scaleElements?: { [key: string]: string },
+  eventName: string,
+}> {
   constructor(public options: IOptions) {
     super();
     this.options = this.filterOptions(options);
@@ -80,7 +86,9 @@ class Model extends Publisher {
   }
 
   private dataWereChanged = (current: number, part: number, extra: boolean): void => {
-    this.notify({ current, part, extra }, 'current and part were sent from Model');
+    this.notify({
+      current, part, extra, eventName: 'data',
+    });
   };
 
   private filterPart = (part: number): number => {
@@ -165,7 +173,7 @@ class Model extends Publisher {
   public refreshAll = (options: IOptions): void => {
     this.options = this.filterOptions(options);
     const scaleElements = this.countScaleElements();
-    this.notify({ scaleElements }, 'options were sent from Model');
+    this.notify({ scaleElements, eventName: 'scale' });
   };
 }
 

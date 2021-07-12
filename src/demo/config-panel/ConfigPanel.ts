@@ -153,14 +153,11 @@ class ConfigPanel {
     }
   }
 
-  protected subscribeToAnEvent<T>(eventName: string, fn: (data: T) => void) {
+  protected subscribeToAnEvent<T>(eventName: string, fn: (data: T) => void): void {
     if (!this.events[eventName]) {
       this.events[eventName] = [];
     }
     this.events[eventName].push(fn);
-    return () => {
-      this.events[eventName] = this.events[eventName].filter((eventFn) => fn !== eventFn);
-    };
   }
 }
 

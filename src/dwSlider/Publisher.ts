@@ -1,12 +1,12 @@
-abstract class Publisher {
-  public updatableMethod!: (arg0: { data: any, event: string }) => void;
+abstract class Publisher<Type> {
+  public updatableMethod!: (data: Type) => void;
 
-  public subscribe(updatableMethod: (arg0: { data: any, event: string }) => void): void {
+  public subscribe(updatableMethod: (data: Type) => void): void {
     this.updatableMethod = updatableMethod;
   }
 
-  public notify(data: any, event: string): void {
-    this.updatableMethod({ data, event });
+  public notify(data: Type): void {
+    this.updatableMethod(data);
   }
 }
 

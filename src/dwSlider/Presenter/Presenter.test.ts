@@ -58,7 +58,7 @@ describe('Presenter', () => {
   describe('notify', () => {
     test('should call setCurrent', () => {
       const modelUpdate = jest.spyOn(model, 'setCurrent');
-      presenter.update({ data: { value: 1, current: false, extra: false }, event: 'data were sent from View' });
+      presenter.handleDataFromView({ value: 1, current: false, extra: false });
       expect(modelUpdate).toBeCalledWith(1, false);
     });
   });

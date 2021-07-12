@@ -4,28 +4,35 @@ import Model from '../Model/Model';
 
 class Presenter {
   constructor(public view: View, public model: Model) {
-    this.view.subscribe(this.update);
-    this.model.subscribe(this.update);
+    this.view.subscribe(this.handleDataFromView);
+    this.model.subscribe(this.handleDataFromModel);
 
     this.view.initView(this.model.countScaleElements());
   }
 
-  public update = (arg0: { data: any, event: string }): void => {
-    if (arg0.event === 'current and part were sent from Model') {
-      this.view.sendDataToSubviews(arg0.data.current, arg0.data.part, arg0.data.extra);
+  public handleDataFromView = (data: { value: number, current: boolean, extra: boolean }): void => {
+    if (data.current) {
+      this.model.setPart(data.value, data.extra);
+    } else {
+      this.model.setCurrent(data.value, data.extra);
     }
+  };
 
-    if (arg0.event === 'options were sent from Model') {
+  public handleDataFromModel = (data: {
+    current?: number,
+    part?: number,
+    extra?: boolean,
+    scaleElements?: { [key: string]: string },
+    eventName: string,
+  }): void => {
+    if (data.eventName === 'data') {
+      this.view.sendDataToSubviews(
+        data.current as number, data.part as number, data.extra as boolean,
+      );
+    }
+    if (data.eventName === 'scale') {
       this.view.clearAllView();
-      this.view.initView(arg0.data.scaleElements);
-    }
-
-    if (arg0.event === 'data were sent from View') {
-      if (arg0.data.current) {
-        this.model.setPart(arg0.data.value, arg0.data.extra);
-      } else {
-        this.model.setCurrent(arg0.data.value, arg0.data.extra);
-      }
+      this.view.initView(data.scaleElements as { [key: string]: string; });
     }
   };
 
