@@ -13,7 +13,7 @@ describe('Scale', () => {
       expect(scale.scale.nodeName).toBe('DIV');
     });
     test('should add correct class', () => {
-      expect(scale.scale.className).toBe('dwSlider__scale');
+      expect(scale.scale.className).toBe('DwSlider__scale');
     });
   });
 

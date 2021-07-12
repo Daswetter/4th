@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import { IOptions, IdwSlider } from '../../types';
+import { IOptions, IDwSlider } from '../../types';
 import './components/toggle/toggle';
 import './components/input/input';
 import './config-panel.scss';
@@ -8,7 +8,7 @@ import './config-panel.scss';
 class ConfigPanel {
   private initElement!: HTMLElement;
 
-  private dwSlider!: IdwSlider;
+  private DwSlider!: IDwSlider;
 
   private inputs!: { [key: string]: HTMLInputElement };
 
@@ -23,7 +23,7 @@ class ConfigPanel {
 
   private defineInitElement = (initElementName: string): void => {
     this.initElement = document.querySelector(initElementName) as HTMLElement;
-    this.dwSlider = $(initElementName).data('dwSlider');
+    this.DwSlider = $(initElementName).data('DwSlider');
   };
 
   private init = (): void => {
@@ -51,8 +51,8 @@ class ConfigPanel {
 
     this.subscribeToAnEvent<{ optionKey: keyof IOptions }>('checkbox: changed', ({ optionKey }) => this.handleCheckboxChange({ optionKey }));
 
-    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.dwSlider.returnCurrentOptions().double, this.dwSlider.returnCurrentOptions().to as number));
-    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.scaleSize, this.dwSlider.returnCurrentOptions().scale, this.dwSlider.returnCurrentOptions().scaleSize));
+    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.DwSlider.returnCurrentOptions().double, this.DwSlider.returnCurrentOptions().to as number));
+    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.scaleSize, this.DwSlider.returnCurrentOptions().scale, this.DwSlider.returnCurrentOptions().scaleSize));
   };
 
   private setEventListener = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
@@ -87,18 +87,18 @@ class ConfigPanel {
 
   private displayInputValue = (element: HTMLInputElement, optionKey: keyof IOptions) => {
     const modifiedElement = element;
-    modifiedElement.value = String(this.dwSlider.returnCurrentOptions()[optionKey]);
+    modifiedElement.value = String(this.DwSlider.returnCurrentOptions()[optionKey]);
   };
 
   private displayCheckboxState = (element: HTMLInputElement, optionKey: keyof IOptions) => {
     const modifiedElement = element;
-    modifiedElement.checked = this.dwSlider.returnCurrentOptions()[optionKey] as boolean;
+    modifiedElement.checked = this.DwSlider.returnCurrentOptions()[optionKey] as boolean;
   };
 
   private handleInputChange = (
     params: { element: HTMLInputElement, optionKey: keyof IOptions },
   ): void => {
-    this.dwSlider.update({
+    this.DwSlider.update({
       [params.optionKey]: Number(params.element.value),
     });
     this.updateCurrentState();
@@ -114,13 +114,13 @@ class ConfigPanel {
 
     this.isDisable(
       this.inputs.to,
-      this.dwSlider.returnCurrentOptions().double,
-      this.dwSlider.returnCurrentOptions().to as number,
+      this.DwSlider.returnCurrentOptions().double,
+      this.DwSlider.returnCurrentOptions().to as number,
     );
     this.isDisable(
       this.inputs.scaleSize,
-      this.dwSlider.returnCurrentOptions().scale,
-      this.dwSlider.returnCurrentOptions().scaleSize,
+      this.DwSlider.returnCurrentOptions().scale,
+      this.DwSlider.returnCurrentOptions().scaleSize,
     );
   };
 
@@ -132,14 +132,14 @@ class ConfigPanel {
   };
 
   private handleCheckboxChange = (params: { optionKey: keyof IOptions }): void => {
-    const isCurrentStateTrue = this.dwSlider.returnCurrentOptions()[params.optionKey];
+    const isCurrentStateTrue = this.DwSlider.returnCurrentOptions()[params.optionKey];
     let newState: boolean;
     if (isCurrentStateTrue) {
       newState = false;
     } else {
       newState = true;
     }
-    this.dwSlider.update({
+    this.DwSlider.update({
       [params.optionKey]: newState,
     });
   };

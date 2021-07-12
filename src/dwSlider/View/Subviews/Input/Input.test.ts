@@ -4,10 +4,10 @@ describe('Input', () => {
   let input: Input;
   const initElement = document.createElement('div');
   const inputFrom = document.createElement('input');
-  inputFrom.classList.add('js-dwSlider__input_from');
+  inputFrom.classList.add('js-DwSlider__input_from');
   initElement.append(inputFrom);
   const inputTo = document.createElement('div');
-  inputTo.classList.add('js-dwSlider__input_to');
+  inputTo.classList.add('js-DwSlider__input_to');
   initElement.append(inputTo);
   let update: jest.Mock;
   beforeEach(() => {

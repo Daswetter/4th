@@ -1,6 +1,6 @@
-import ReducedIOptions from './dwSlider/ReducedIOptions';
+import ReducedIOptions from './DwSlider/ReducedIOptions';
 
-interface IdwSlider {
+interface IDwSlider {
   update(updatedOptions?: ReducedIOptions): void,
   returnCurrentOptions(): IOptions
   returnCurrentState(): Array<number>
@@ -29,5 +29,5 @@ type Params = {
 };
 
 export {
-  IdwSlider, IOptions, Params,
+  IDwSlider, IOptions, Params,
 };

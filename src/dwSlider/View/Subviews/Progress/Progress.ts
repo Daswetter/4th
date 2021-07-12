@@ -20,10 +20,10 @@ class Progress extends Subview {
     lineSize: { width: number, height: number }, vertical = false,
   ): void => {
     this.progress.style.top = `${(lineSize.height - this.progress.offsetHeight) / 2}px`;
-    this.progress.classList.add('dwSlider__progress_horizontal');
+    this.progress.classList.add('DwSlider__progress_horizontal');
 
     if (vertical) {
-      this.progress.classList.add('dwSlider__progress_vertical');
+      this.progress.classList.add('DwSlider__progress_vertical');
       this.progress.style.top = '';
       this.progress.style.left = `${(lineSize.width - this.progress.offsetWidth) / 2}px`;
     }

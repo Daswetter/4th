@@ -14,7 +14,7 @@ abstract class Subview extends Publisher<{
   ): HTMLElement => {
     let modifiedElement = element;
     modifiedElement = document.createElement('div');
-    modifiedElement.classList.add(`dwSlider${styleName}`);
+    modifiedElement.classList.add(`DwSlider${styleName}`);
     initElement.append(modifiedElement);
     return modifiedElement;
   };

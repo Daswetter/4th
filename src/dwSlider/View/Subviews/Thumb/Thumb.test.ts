@@ -18,7 +18,7 @@ describe('Thumb', () => {
       expect(thumb.primary.nodeName).toBe('DIV');
     });
     test('should add correct class', () => {
-      expect(thumb.primary.className).toBe('dwSlider__thumb');
+      expect(thumb.primary.className).toBe('DwSlider__thumb');
     });
   });
 
@@ -31,7 +31,7 @@ describe('Thumb', () => {
       expect(thumb.extra.nodeName).toBe('DIV');
     });
     test('should add correct class', () => {
-      expect(thumb.extra.classList).toContain('dwSlider__thumb');
+      expect(thumb.extra.classList).toContain('DwSlider__thumb');
     });
   });
 

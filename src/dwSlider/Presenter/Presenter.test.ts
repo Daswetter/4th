@@ -26,11 +26,11 @@ describe('Presenter', () => {
     };
     const inputFrom = document.createElement('input');
     initElement.append(inputFrom);
-    inputFrom.classList.add('dwSliderpresenterpresenterinputpresenterfrom');
+    inputFrom.classList.add('DwSliderpresenterpresenterinputpresenterfrom');
 
     const inputTo = document.createElement('input');
     initElement.append(inputTo);
-    inputTo.classList.add('dwSliderpresenterpresenterinputpresenterto');
+    inputTo.classList.add('DwSliderpresenterpresenterinputpresenterto');
     view = new View(initElement, options);
     model = new Model(options);
     presenter = new Presenter(view, model);

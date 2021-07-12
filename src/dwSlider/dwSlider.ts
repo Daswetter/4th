@@ -2,14 +2,14 @@
 /* eslint-disable func-names */
 import jQuery from 'jquery';
 
-import { IOptions, IdwSlider } from '../types';
-import View from './View/View';
+import { IOptions, IDwSlider } from '../types';
 import Model from './Model/Model';
 import Presenter from './Presenter/Presenter';
 import ReducedIOptions from './ReducedIOptions';
+import View from './View/View';
 
 ((function ($) {
-  class DwSlider implements IdwSlider {
+  class DwSlider implements IDwSlider {
     private options!: IOptions;
 
     private model!: Model;
@@ -94,10 +94,10 @@ import ReducedIOptions from './ReducedIOptions';
     }
   }
 
-  $.fn.dwSlider = function (options: IOptions): JQuery<HTMLElement> {
+  $.fn.DwSlider = function (options: IOptions): JQuery<HTMLElement> {
     return this.each(function () {
-      if (!$.data(this, 'dwSlider')) {
-        $.data(this, 'dwSlider', new DwSlider(this, options));
+      if (!$.data(this, 'DwSlider')) {
+        $.data(this, 'DwSlider', new DwSlider(this, options));
       }
     });
   };

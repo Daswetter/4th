@@ -1,3 +1,3 @@
 import './demo/demo';
 import './favicons/favicons';
-import './dwSlider/View/view.scss';
+import './DwSlider/View/view.scss';

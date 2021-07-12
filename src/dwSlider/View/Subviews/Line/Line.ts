@@ -16,7 +16,7 @@ class Line extends Subview {
 
   private initPrimary = (initElement: HTMLElement): void => {
     this.line = this.init(initElement, this.line, '__line');
-    this.line.classList.add('dwSlider__line_horizontal');
+    this.line.classList.add('DwSlider__line_horizontal');
   };
 
   public returnAsHTML = (): HTMLElement => this.line;
@@ -63,9 +63,9 @@ class Line extends Subview {
 
   public setInitialSettings = (vertical: boolean): void => {
     if (vertical) {
-      this.line.classList.add('dwSlider__line_vertical');
+      this.line.classList.add('DwSlider__line_vertical');
     } else {
-      this.line.classList.add('dwSlider__line_horizontal');
+      this.line.classList.add('DwSlider__line_horizontal');
     }
   };
 
