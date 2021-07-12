@@ -1,9 +1,9 @@
-# dwSlider
+# DwSlider
 ## Fourth task
 
-dwSlider - слайдер (бегунок), который позволяет перетягиванием задавать какое-либо числовое значение
+DwSlider - слайдер (бегунок), который позволяет перетягиванием задавать какое-либо числовое значение
 
-![how to use dwSlider](https://i.imgur.com/nYnrDDj.gif)
+![how to use DwSlider](https://i.imgur.com/nYnrDDj.gif)
 
 ## Демо-страница
 
@@ -25,12 +25,12 @@ dwSlider - слайдер (бегунок), который позволяет п
 
 Инициализировать плагин с параметрами по умолчанию можно на пустом `div` элементе  
 `<div class = "js-slider"></div>`  
-`$(".js-slider").dwSlider()`
+`$(".js-slider").DwSlider()`
 
 ### Пример слайдера с параметрами
 
 ```typescript
-$(".js-slider").dwSlider({  
+$(".js-slider").DwSlider({  
   min: 0,  
   max: 10,  
   from: 2,  
@@ -73,12 +73,12 @@ progress | data-progress | true | boolean | Прогресс бар
 
 ### Диаграмма
 
-![diagram](https://github.com/Daswetter/4th/blob/ts-branch/dwSlider.svg "Здесь диаграмма")
+![diagram](https://github.com/Daswetter/4th/blob/ts-branch/DwSlider.svg "Здесь диаграмма")
 
 ## Публичные методы
 
 ```typescript
-$(".js-slider").dwSlider({
+$(".js-slider").DwSlider({
   max: 100,
   min: 10,
   from: 10,
@@ -86,7 +86,7 @@ $(".js-slider").dwSlider({
 })
 ```
 
-`let slider = $(".js-slider").data("dwSlider")`
+`let slider = $(".js-slider").data("DwSlider")`
 
 В приложении три публичных метода:
 
