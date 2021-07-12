@@ -18,7 +18,7 @@ describe('Line', () => {
       expect(line.line.nodeName).toEqual('DIV');
     });
     test('should set correct class', () => {
-      expect(line.line.classList).toContain('DwSlider__line');
+      expect(line.line.classList).toContain('dw-slider__line');
     });
   });
 
@@ -266,7 +266,7 @@ describe('Line', () => {
       const vertical = true;
       line.setInitialSettings(vertical);
 
-      expect(line.line.className).toContain('DwSlider__line_vertical');
+      expect(line.line.className).toContain('dw-slider__line_vertical');
     });
   });
 
@@ -275,7 +275,7 @@ describe('Line', () => {
       const vertical = false;
       line.setInitialSettings(vertical);
 
-      expect(line.line.className).toContain('DwSlider__line_horizontal');
+      expect(line.line.className).toContain('dw-slider__line_horizontal');
     });
   });
 });

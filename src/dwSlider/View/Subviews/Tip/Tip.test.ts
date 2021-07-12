@@ -14,7 +14,7 @@ describe('Tip', () => {
       expect(tip.primary.nodeName).toBe('DIV');
     });
     test('should create correct class', () => {
-      expect(tip.primary.className).toBe('DwSlider__tip');
+      expect(tip.primary.className).toBe('dw-slider__tip');
     });
   });
 
@@ -27,7 +27,7 @@ describe('Tip', () => {
       expect(tip.extra.nodeName).toBe('DIV');
     });
     test('should create correct class', () => {
-      expect(tip.extra.className).toBe('DwSlider__tip');
+      expect(tip.extra.className).toBe('dw-slider__tip');
     });
   });
 

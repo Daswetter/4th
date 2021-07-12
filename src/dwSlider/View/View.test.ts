@@ -85,15 +85,15 @@ describe('View', () => {
     test('should find input', () => {
       options.double = false;
       const input = document.createElement('input');
-      input.classList.add('js-DwSlider__input_from');
+      input.classList.add('js-dw-slider__input_from');
       view.initElement.append(input);
       view.initView(scaleElements);
       expect(view.input).toBeTruthy();
     });
     test('should find extra input', () => {
       const input = document.createElement('input');
-      input.classList.add('js-DwSlider__input_from');
-      input.classList.add('js-DwSlider__input_to');
+      input.classList.add('js-dw-slider__input_from');
+      input.classList.add('js-dw-slider__input_to');
       view.initElement.append(input);
       view.initView(scaleElements);
       expect(view.input).toBeTruthy();
@@ -121,7 +121,7 @@ describe('View', () => {
     test('all view should be destroyed', () => {
       view.initView(scaleElements);
       view.clearAllView();
-      expect(document.querySelector('.DwSlider')).not.toBeTruthy();
+      expect(document.querySelector('.dw-slider')).not.toBeTruthy();
     });
   });
 
@@ -137,8 +137,8 @@ describe('View', () => {
     });
     test('should send data to tip', () => {
       const input = document.createElement('input');
-      input.classList.add('js-DwSliderviewviewinputviewfrom');
-      input.classList.add('js-DwSliderviewviewinputviewto');
+      input.classList.add('js-dw-slider__input_from');
+      input.classList.add('js-dw-slider__input_to');
       view.initElement.append(input);
       options.tip = true;
       view.initView({ 0: '0', 1: '1' });
@@ -157,10 +157,10 @@ describe('View', () => {
     });
     test('should send data to input', () => {
       const inputFrom = document.createElement('input');
-      inputFrom.classList.add('js-DwSlider__input_from');
+      inputFrom.classList.add('js-dw-slider__input_from');
       initElement.append(inputFrom);
       const inputTo = document.createElement('div');
-      inputTo.classList.add('js-DwSlider__input_to');
+      inputTo.classList.add('js-dw-slider__input_to');
       initElement.append(inputTo);
       options.progress = false;
       options.tip = true;

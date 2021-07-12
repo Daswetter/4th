@@ -44,7 +44,7 @@ class Scale extends Subview {
   private createScaleElement = (part: string): void => {
     const element = document.createElement('div');
     this.scale.append(element);
-    element.classList.add('DwSlider__scale-number');
+    element.classList.add('dw-slider__scale-number');
     this.scaleElements = { ...this.scaleElements, [part]: element };
   };
 

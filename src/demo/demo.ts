@@ -3,10 +3,10 @@ import ConfigPanel from './config-panel/ConfigPanel';
 import '../DwSlider/DwSlider';
 import './demo.scss';
 
-$('.js-DwSlider1').DwSlider();
-new ConfigPanel('.js-DwSlider1');
+$('.js-dw-slider1').DwSlider();
+new ConfigPanel('.js-dw-slider1');
 
-$('.js-DwSlider2').DwSlider({
+$('.js-dw-slider2').DwSlider({
   min: -18.1,
   max: 0.9,
   from: -16,
@@ -19,12 +19,12 @@ $('.js-DwSlider2').DwSlider({
   vertical: true,
   scaleSize: 4,
 });
-new ConfigPanel('.js-DwSlider2');
+new ConfigPanel('.js-dw-slider2');
 
-$('.js-DwSlider3').DwSlider();
-new ConfigPanel('.js-DwSlider3');
+$('.js-dw-slider3').DwSlider();
+new ConfigPanel('.js-dw-slider3');
 
-$('.js-DwSlider4').DwSlider({
+$('.js-dw-slider4').DwSlider({
   min: 10,
   max: 20,
   from: 12.2,
@@ -36,4 +36,4 @@ $('.js-DwSlider4').DwSlider({
   scaleSize: -1,
   double: true,
 });
-new ConfigPanel('.js-DwSlider4');
+new ConfigPanel('.js-dw-slider4');

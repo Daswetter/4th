@@ -244,7 +244,7 @@ class Tip extends Subview {
 
   private initUnited = (): HTMLElement => {
     const element = document.createElement('div');
-    element.classList.add('DwSlider__tip');
+    element.classList.add('dw-slider__tip');
     this.primary.after(element);
     element.style.zIndex = '3';
     element.style.display = 'none';

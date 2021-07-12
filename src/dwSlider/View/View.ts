@@ -160,9 +160,9 @@ class View extends Publisher<{ value: number, current: boolean, extra: boolean }
   };
 
   private doesInputExist = (extra = false): boolean => {
-    let inputClass = '.js-DwSlider__input_from';
+    let inputClass = '.js-dw-slider__input_from';
     if (extra) {
-      inputClass = '.js-DwSlider__input_to';
+      inputClass = '.js-dw-slider__input_to';
     }
     const input: HTMLInputElement | null = this.initElement.querySelector(inputClass);
     if (input) {
