@@ -117,11 +117,15 @@ describe('Model', () => {
     });
     test('should filter big part correctly ', () => {
       model.setPart(1200, false);
-      expect(update).toHaveBeenCalledWith({ current: 200, part: 1, extra: false });
+      expect(update).toHaveBeenCalledWith({
+        current: 200, part: 1, extra: false, eventName: 'data',
+      });
     });
     test('should filter small part correctly', () => {
       model.setPart(-10000, false);
-      expect(update).toHaveBeenCalledWith({ current: -1800, part: 0, extra: false });
+      expect(update).toHaveBeenCalledWith({
+        current: -1800, part: 0, extra: false, eventName: 'data',
+      });
     });
   });
 

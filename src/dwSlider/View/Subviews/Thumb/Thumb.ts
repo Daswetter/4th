@@ -105,7 +105,7 @@ class Thumb extends Subview {
   ): void => {
     const eventCoordinate = data.event[data.params.pageName] as number;
     const { lineSide } = { lineSide: data.params.lineSide };
-    const halfThumb = data.element[data.params.sizeName] as number;
+    const halfThumb = data.element[data.params.sizeName] as number / 2;
     let part = (eventCoordinate - lineSide - data.shift + halfThumb) / data.params.lineSize;
 
     if (data.params.pageName === 'pageY') {

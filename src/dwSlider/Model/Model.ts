@@ -155,19 +155,19 @@ class Model extends Publisher<{
   };
 
   private roundValueTo = (value: number, roundTo: number): number => {
+    const newValue = value;
     const dividedRoundTo = roundTo.toString().split('.');
-
     let decimal: number;
     if (dividedRoundTo[0] === '0') {
       if (!dividedRoundTo[1]) {
         decimal = -dividedRoundTo[0].length + 1;
       } else {
-        decimal = dividedRoundTo[1].length - 1;
+        decimal = dividedRoundTo[1].length;
       }
     } else {
       decimal = dividedRoundTo[0].length - 1;
     }
-    return (Math.round(value * (10 ** decimal)) / 10 ** decimal);
+    return (Math.round(newValue * (10 ** decimal)) / (10 ** decimal));
   };
 
   public refreshAll = (options: IOptions): void => {
