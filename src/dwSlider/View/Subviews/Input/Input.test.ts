@@ -36,5 +36,9 @@ describe('Input', () => {
       input.update(1, false);
       expect(input.primary.value).toBe('1');
     });
+    test('should print value', () => {
+      input.update(0.5, true);
+      expect(input.extra.value).toBe('0.5');
+    });
   });
 });

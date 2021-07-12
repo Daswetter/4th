@@ -155,6 +155,21 @@ describe('View', () => {
       view.sendDataToSubviews(1, 1);
       expect(spyOnTip).toHaveBeenCalled();
     });
+    test('should send data to input', () => {
+      const inputFrom = document.createElement('input');
+      inputFrom.classList.add('js-dwSlider__input_from');
+      initElement.append(inputFrom);
+      const inputTo = document.createElement('div');
+      inputTo.classList.add('js-dwSlider__input_to');
+      initElement.append(inputTo);
+      options.progress = false;
+      options.tip = true;
+      options.double = false;
+      view.initView({ 0: '0', 1: '1' });
+      const spyOnInput = jest.spyOn(view.input, 'update');
+      view.sendDataToSubviews(1, 1);
+      expect(spyOnInput).toHaveBeenCalled();
+    });
   });
 
   describe('update', () => {
