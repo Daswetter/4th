@@ -1,10 +1,11 @@
-import { IEvent } from '../../../types';
 import Publisher from '../../Publisher';
 
 abstract class Subview extends Publisher<{
   value: number, current: boolean, extra: boolean, nearest: boolean
 }> {
-  protected events: IEvent<any> = {};
+  protected events: {
+    [eventName: string]: Array<(arg0: any) => void>
+  } = {};
 
   protected init = (
     initElement: HTMLElement,
@@ -18,7 +19,7 @@ abstract class Subview extends Publisher<{
     return modifiedElement;
   };
 
-  protected emitEvent<T>(eventName: string, data: T): void {
+  protected emitEvent<EventType>(eventName: string, data: EventType): void {
     const event = this.events[eventName];
     if (event) {
       event.forEach((fn) => {
@@ -27,7 +28,10 @@ abstract class Subview extends Publisher<{
     }
   }
 
-  protected subscribeToAnEvent<T>(eventName: keyof IEvent<T>, fn: (data: T) => void): void {
+  protected subscribeToAnEvent<EventType>(
+    eventName: keyof { [eventName: string]: Array<(arg0: EventType) => void> },
+    fn: (data: EventType) => void,
+  ): void {
     if (!this.events[eventName]) {
       this.events[eventName] = [];
     }

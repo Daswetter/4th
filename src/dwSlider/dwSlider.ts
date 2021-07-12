@@ -2,10 +2,11 @@
 /* eslint-disable func-names */
 import jQuery from 'jquery';
 
-import { IOptions, IdwSlider, ReducedIOptions } from '../types';
+import { IOptions, IdwSlider } from '../types';
 import View from './View/View';
 import Model from './Model/Model';
 import Presenter from './Presenter/Presenter';
+import ReducedIOptions from './ReducedIOptions';
 
 ((function ($) {
   class DwSlider implements IdwSlider {

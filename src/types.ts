@@ -1,3 +1,5 @@
+import ReducedIOptions from './dwSlider/ReducedIOptions';
+
 interface IdwSlider {
   update(updatedOptions?: ReducedIOptions): void,
   returnCurrentOptions(): IOptions
@@ -18,24 +20,6 @@ interface IOptions {
   progress: boolean,
 }
 
-interface ReducedIOptions {
-  min?: number,
-  max?: number,
-  from?: number,
-  to?: number,
-  step?: number,
-  vertical?: boolean,
-  double?: boolean,
-  tip?: boolean,
-  scale?: boolean,
-  progress?: boolean,
-  input?: boolean
-}
-
-interface IEvent<T> {
-  [eventName: string]: Array<(arg0: T) => void>
-}
-
 type Params = {
   pageName: keyof MouseEvent,
   sideName: keyof HTMLElement,
@@ -45,5 +29,5 @@ type Params = {
 };
 
 export {
-  IdwSlider, ReducedIOptions, IOptions, IEvent, Params,
+  IdwSlider, IOptions, Params,
 };
