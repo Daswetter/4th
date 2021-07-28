@@ -1,13 +1,14 @@
 import Subview from '../Subview';
+import { Size } from '../Subview.types';
 
 class Scale extends Subview {
   public scale!: HTMLElement;
 
-  public scaleElements:{ [key: string]: HTMLElement } = {};
+  public scaleElements: Record<string, HTMLElement> = {};
 
-  private scaleValues!: { [key: string]: string };
+  private scaleValues!: Record<string, string>;
 
-  private lineSize!: { width: number; height: number };
+  private lineSize!: Size;
 
   private vertical!: boolean;
 
@@ -21,8 +22,8 @@ class Scale extends Subview {
   };
 
   public initScale = (
-    scaleValues: { [key: string]: string },
-    lineSize: { width: number; height: number },
+    scaleValues: Record<string, string>,
+    lineSize: Size,
     vertical: boolean,
   ): void => {
     this.scaleValues = scaleValues;
@@ -37,7 +38,7 @@ class Scale extends Subview {
     this.setScaleListener();
   };
 
-  private createScale = (scaleValues: { [key: string]: string }): void => {
+  private createScale = (scaleValues: Record<string, string>): void => {
     Object.keys(scaleValues).forEach((key) => this.createScaleElement(key));
   };
 
@@ -48,7 +49,7 @@ class Scale extends Subview {
     this.scaleElements = { ...this.scaleElements, [part]: element };
   };
 
-  private printScaleValues = (scaleValues: { [key: string]: string }): void => {
+  private printScaleValues = (scaleValues: Record<string, string>): void => {
     Object.keys(scaleValues).forEach((key) => this.printScaleElement(key));
   };
 

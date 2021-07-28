@@ -1,11 +1,8 @@
 import Publisher from '../../Publisher';
+import { SubviewData } from '../View.types';
 
-abstract class Subview extends Publisher<{
-  value: number, current: boolean, extra: boolean, nearest: boolean
-}> {
-  protected events: {
-    [eventName: string]: Array<(arg0: any) => void>
-  } = {};
+abstract class Subview extends Publisher<SubviewData> {
+  protected events: Record<string, Array<(arg0: any) => void>> = {};
 
   protected init = (
     initElement: HTMLElement,
@@ -29,7 +26,7 @@ abstract class Subview extends Publisher<{
   }
 
   protected subscribeToAnEvent<EventType>(
-    eventName: keyof { [eventName: string]: Array<(arg0: EventType) => void> },
+    eventName: keyof Record<string, Array<(arg0: any) => void>>,
     fn: (data: EventType) => void,
   ): void {
     if (!this.events[eventName]) {

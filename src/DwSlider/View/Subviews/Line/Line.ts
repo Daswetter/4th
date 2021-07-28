@@ -1,4 +1,6 @@
 import Subview from '../Subview';
+import { Side, Size } from '../Subview.types';
+import { LineEvent } from './Line.types';
 
 class Line extends Subview {
   public line!: HTMLElement;
@@ -22,11 +24,11 @@ class Line extends Subview {
   public returnAsHTML = (): HTMLElement => this.line;
 
   private subscribeToEvents = (): void => {
-    this.subscribeToAnEvent<{ vertical: boolean, event: MouseEvent }>('line: clicked', ({ vertical, event }) => this.handleClick(vertical, event));
+    this.subscribeToAnEvent<LineEvent>('line: clicked', ({ vertical, event }) => this.handleClick(vertical, event));
 
-    this.subscribeToAnEvent<{ vertical: boolean, event: MouseEvent }>('line: mouseDown', ({ vertical, event }) => this.handleMouseDown(vertical, event));
+    this.subscribeToAnEvent<LineEvent>('line: mouseDown', ({ vertical, event }) => this.handleMouseDown(vertical, event));
 
-    this.subscribeToAnEvent<{ vertical: boolean, event: MouseEvent }>('line: mouseUp', ({ vertical, event }) => this.handleMouseUp(vertical, event));
+    this.subscribeToAnEvent<LineEvent>('line: mouseUp', ({ vertical, event }) => this.handleMouseUp(vertical, event));
   };
 
   private handleMouseDown = (vertical: boolean, event: MouseEvent): void => {
@@ -51,12 +53,12 @@ class Line extends Subview {
     this.line.addEventListener('click', (event) => this.emitEvent('line: clicked', { vertical, event }));
   };
 
-  public returnSize = (): { width: number, height: number } => ({
+  public returnSize = (): Size => ({
     width: this.line.offsetWidth,
     height: this.line.offsetHeight,
   });
 
-  public returnSide = (): { left: number, bottom: number } => ({
+  public returnSide = (): Side => ({
     left: this.line.offsetLeft,
     bottom: this.line.offsetTop + this.line.offsetHeight,
   });

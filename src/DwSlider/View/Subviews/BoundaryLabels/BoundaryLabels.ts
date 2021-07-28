@@ -1,4 +1,5 @@
 import Subview from '../Subview';
+import { PositionParams, Size } from '../Subview.types';
 
 class BoundaryLabels extends Subview {
   public min!: HTMLElement;
@@ -50,7 +51,7 @@ class BoundaryLabels extends Subview {
     min: number,
     max: number,
     lineWidth: number,
-    thumbSize: { width: number, height: number },
+    thumbSize: Size,
     vertical = false,
   ): void => {
     this.printInnerText(this.min, min);
@@ -79,7 +80,7 @@ class BoundaryLabels extends Subview {
   };
 
   private isPrimaryTouchingMin = (
-    tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean,
+    tipParams: PositionParams, vertical: boolean,
   ): boolean => {
     if (vertical) {
       return tipParams.top + tipParams.height >= this.min.offsetTop;
@@ -87,27 +88,21 @@ class BoundaryLabels extends Subview {
     return tipParams.left <= (this.min.offsetLeft + this.min.offsetWidth);
   };
 
-  private isPrimaryTouchingMax = (
-    tipParams: { width: number, height: number, left: number, top: number }, vertical: boolean,
-  ): boolean => {
+  private isPrimaryTouchingMax = (tipParams: PositionParams, vertical: boolean): boolean => {
     if (vertical) {
       return tipParams.top <= (this.max.offsetTop + this.max.offsetHeight);
     }
     return tipParams.left + tipParams.width >= this.max.offsetLeft;
   };
 
-  private isExtraTouchingMin = (
-    tipExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean,
-  ): boolean => {
+  private isExtraTouchingMin = (tipExtraParams: PositionParams, vertical: boolean): boolean => {
     if (vertical) {
       return tipExtraParams.top + tipExtraParams.height >= this.min.offsetTop;
     }
     return tipExtraParams.left <= (this.min.offsetLeft + this.min.offsetWidth);
   };
 
-  private isExtraTouchingMax = (
-    tipExtraParams: { width: number, height: number, left: number, top: number }, vertical: boolean,
-  ): boolean => {
+  private isExtraTouchingMax = (tipExtraParams: PositionParams, vertical: boolean): boolean => {
     if (vertical) {
       return tipExtraParams.top <= (this.max.offsetTop + this.max.offsetHeight);
     }
@@ -115,8 +110,8 @@ class BoundaryLabels extends Subview {
   };
 
   private setOpacityToDouble = (
-    tipParams: { width: number, height: number, left: number, top: number },
-    tipExtraParams: { width: number, height: number, left: number, top: number },
+    tipParams: PositionParams,
+    tipExtraParams: PositionParams,
     vertical: boolean,
   ): void => {
     const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, vertical);
@@ -129,7 +124,7 @@ class BoundaryLabels extends Subview {
   };
 
   private setOpacityToSingle = (
-    tipParams: { width: number, height: number, left: number, top: number },
+    tipParams: PositionParams,
     vertical: boolean,
   ): void => {
     const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, vertical);
@@ -140,9 +135,9 @@ class BoundaryLabels extends Subview {
   };
 
   public update = (
-    tipParams: { width: number, height: number, left: number, top: number },
+    tipParams: PositionParams,
     vertical: boolean,
-    tipExtraParams?: { width: number, height: number, left: number, top: number },
+    tipExtraParams?: PositionParams,
   ): void => {
     if (tipExtraParams) {
       this.setOpacityToDouble(tipParams, tipExtraParams, vertical);

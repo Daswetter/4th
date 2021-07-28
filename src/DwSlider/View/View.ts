@@ -1,4 +1,4 @@
-import { IOptions } from '../../types';
+import { IOptions, ViewData } from '../../types';
 import Wrapper from './Subviews/Wrapper/Wrapper';
 import Line from './Subviews/Line/Line';
 import Thumb from './Subviews/Thumb/Thumb';
@@ -8,8 +8,9 @@ import Tip from './Subviews/Tip/Tip';
 import Input from './Subviews/Input/Input';
 import BoundaryLabels from './Subviews/BoundaryLabels/BoundaryLabels';
 import Publisher from '../Publisher';
+import { SubviewData } from './View.types';
 
-class View extends Publisher<{ value: number, current: boolean, extra: boolean }> {
+class View extends Publisher<ViewData> {
   public wrapper!: Wrapper;
 
   public line!: Line;
@@ -40,7 +41,7 @@ class View extends Publisher<{ value: number, current: boolean, extra: boolean }
     this.initElement = initElement;
   }
 
-  public initView = (scaleElements: { [key: string]: string }, options = this.options): void => {
+  public initView = (scaleElements: Record<string, string>, options = this.options): void => {
     this.options = options;
     this.initWrapper(this.initElement);
     this.initLine(this.wrapper.returnAsHTML());
@@ -146,7 +147,7 @@ class View extends Publisher<{ value: number, current: boolean, extra: boolean }
 
   private initScale = (
     initElement: HTMLElement,
-    scaleElements: { [key: string]: string },
+    scaleElements: Record<string, string>,
   ): void => {
     this.scale = new Scale(initElement);
     this.scale.subscribe(this.update);
@@ -261,9 +262,7 @@ class View extends Publisher<{ value: number, current: boolean, extra: boolean }
     }
   };
 
-  public update = (
-    data: { value: number, current: boolean, extra: boolean, nearest: boolean },
-  ): void => {
+  public update = (data: SubviewData): void => {
     if (data.nearest) {
       this.changePositionForTheNearest(data.value);
     } else {

@@ -1,5 +1,9 @@
 import { Params } from '../../../../types';
 import Subview from '../Subview';
+import {
+  MouseDownEvent, MouseMoveEvent, PositionParams, Side, Size,
+} from '../Subview.types';
+import { UnitedTipDownEvent } from './Tip.types';
 
 class Tip extends Subview {
   public primary!: HTMLElement;
@@ -25,13 +29,13 @@ class Tip extends Subview {
   }
 
   private subscribeToEvents = (): void => {
-    this.subscribeToAnEvent<{ element: HTMLElement, params: Params, event: MouseEvent }>('tip: mouseDown', ({ element, params, event }) => this.handleMouseDown(element, params, event));
+    this.subscribeToAnEvent<MouseDownEvent>('tip: mouseDown', ({ element, params, event }) => this.handleMouseDown(element, params, event));
 
-    this.subscribeToAnEvent<{ event: MouseEvent, lineSize: { width: number, height: number }, lineSide: { left: number, bottom: number }, vertical: boolean }>('unitedTip: mouseDown', ({
+    this.subscribeToAnEvent<UnitedTipDownEvent>('unitedTip: mouseDown', ({
       event, lineSize, lineSide, vertical,
     }) => this.handleMouseDownForUnited(event, lineSize, lineSide, vertical));
 
-    this.subscribeToAnEvent<{ element: HTMLElement, params: Params, shift: number, event: MouseEvent }>('tip: mouseMove', ({
+    this.subscribeToAnEvent<MouseMoveEvent>('tip: mouseMove', ({
       element, params, shift, event,
     }) => this.handleMouseMove({
       element, params, shift, event,
@@ -67,7 +71,7 @@ class Tip extends Subview {
 
   public setInitialSettings = (
     lineWidth: number,
-    thumbSize: { width: number, height: number },
+    thumbSize: Size,
     vertical: boolean,
     value: number,
     extra = false,
@@ -88,8 +92,8 @@ class Tip extends Subview {
   };
 
   public setEventListener = (
-    lineSize: { width: number, height: number },
-    lineSide: { left: number, bottom: number },
+    lineSize: Size,
+    lineSide: Side,
     vertical: boolean,
     extra: boolean,
   ): void => {
@@ -103,8 +107,8 @@ class Tip extends Subview {
   };
 
   public setEventListenerForUnited = (
-    lineSize: { width: number, height: number },
-    lineSide: { left: number, bottom: number },
+    lineSize: Size,
+    lineSide: Side,
     vertical: boolean,
   ): void => {
     this.united.addEventListener('mousedown', (event) => this.emitEvent('unitedTip: mouseDown', {
@@ -114,8 +118,8 @@ class Tip extends Subview {
 
   private handleMouseDownForUnited = (
     event: MouseEvent,
-    lineSize: { width: number, height: number },
-    lineSide: { left: number, bottom: number },
+    lineSize: Size,
+    lineSide: Side,
     vertical: boolean,
   ): void => {
     const params = this.getOrientationParams(vertical, lineSize, lineSide);
@@ -161,7 +165,7 @@ class Tip extends Subview {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    this.mouseMove = (event: MouseEvent) => this.emitEvent<{ element: HTMLElement, params: Params, shift: number, event: MouseEvent }>('tip: mouseMove', {
+    this.mouseMove = (event: MouseEvent) => this.emitEvent<MouseMoveEvent>('tip: mouseMove', {
       element, params, shift, event,
     });
 
@@ -171,9 +175,7 @@ class Tip extends Subview {
     document.addEventListener('mouseup', this.mouseUp);
   };
 
-  private handleMouseMove = (
-    data: { element: HTMLElement, params: Params, shift: number, event: MouseEvent },
-  ): void => {
+  private handleMouseMove = (data: MouseMoveEvent): void => {
     const eventCoodinate = data.event[data.params.pageName] as number;
     const tipSize = (data.element[data.params.sizeName] as number);
     const { lineSide } = { lineSide: data.params.lineSide };
@@ -206,8 +208,8 @@ class Tip extends Subview {
 
   private getOrientationParams = (
     vertical: boolean,
-    lineSize: { width: number, height: number },
-    lineSide: { left: number, bottom: number },
+    lineSize: Size,
+    lineSide: Side,
   ): Params => {
     let params: Params = {
       pageName: 'pageX',
@@ -231,7 +233,7 @@ class Tip extends Subview {
   private setPosition = (
     tip: HTMLElement,
     part: number,
-    lineSize: { width: number, height: number },
+    lineSize: Size,
     vertical: boolean,
   ): void => {
     const element = tip;
@@ -322,8 +324,8 @@ class Tip extends Subview {
   public update = (
     part: number,
     current: number,
-    lineSize: { width: number, height: number },
-    thumbSize: { width: number, height: number },
+    lineSize: Size,
+    thumbSize: Size,
     vertical: boolean,
     double: boolean,
     extra: boolean,
@@ -345,18 +347,14 @@ class Tip extends Subview {
     }
   };
 
-  public returnPrimaryParameters = (): {
-    width: number, height: number, left: number, top: number
-  } => ({
+  public returnPrimaryParameters = (): PositionParams => ({
     width: this.primary.offsetWidth,
     height: this.primary.offsetHeight,
     left: this.primary.offsetLeft,
     top: this.primary.offsetTop,
   });
 
-  public returnExtraParameters = (): {
-    width: number, height: number, left: number, top: number
-  } => ({
+  public returnExtraParameters = (): PositionParams => ({
     width: this.extra.offsetWidth,
     height: this.extra.offsetHeight,
     left: this.extra.offsetLeft,

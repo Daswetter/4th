@@ -1,4 +1,5 @@
 import Subview from '../Subview';
+import { Size } from '../Subview.types';
 
 class Progress extends Subview {
   public progress!: HTMLElement;
@@ -17,7 +18,7 @@ class Progress extends Subview {
   };
 
   public setInitialSettings = (
-    lineSize: { width: number, height: number }, vertical = false,
+    lineSize: Size, vertical = false,
   ): void => {
     this.progress.style.top = `${(lineSize.height - this.progress.offsetHeight) / 2}px`;
     this.progress.classList.add('dw-slider__progress_horizontal');
@@ -30,7 +31,7 @@ class Progress extends Subview {
   };
 
   public update = (
-    part: number, lineSize: { width: number, height: number }, vertical: boolean, extra: boolean,
+    part: number, lineSize: Size, vertical: boolean, extra: boolean,
   ) :void => {
     if (!extra && !vertical) {
       this.part = part;

@@ -1,4 +1,4 @@
-import { IOptions } from '../../types';
+import { IOptions, ModelData, ViewData } from '../../types';
 import View from '../View/View';
 import Model from '../Model/Model';
 
@@ -10,7 +10,7 @@ class Presenter {
     this.view.initView(this.model.countScaleElements());
   }
 
-  public handleDataFromView = (data: { value: number, current: boolean, extra: boolean }): void => {
+  public handleDataFromView = (data: ViewData): void => {
     if (data.current) {
       this.model.setPart(data.value, data.extra);
     } else {
@@ -18,13 +18,7 @@ class Presenter {
     }
   };
 
-  public handleDataFromModel = (data: {
-    current?: number,
-    part?: number,
-    extra?: boolean,
-    scaleElements?: { [key: string]: string },
-    eventName: string,
-  }): void => {
+  public handleDataFromModel = (data: ModelData): void => {
     if (data.eventName === 'data') {
       this.view.sendDataToSubviews(
         data.current as number, data.part as number, data.extra as boolean,
@@ -32,7 +26,7 @@ class Presenter {
     }
     if (data.eventName === 'scale') {
       this.view.clearAllView();
-      this.view.initView(data.scaleElements as { [key: string]: string; });
+      this.view.initView(data.scaleElements as Record<string, string>);
     }
   };
 

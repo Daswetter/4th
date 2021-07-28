@@ -28,6 +28,20 @@ type Params = {
   lineSide: number,
 };
 
+type ViewData = {
+  value: number,
+  current: boolean,
+  extra: boolean
+};
+
+type ModelData = {
+  current?: number,
+  part?: number,
+  extra?: boolean,
+  scaleElements?: Record<string, string>,
+  eventName: string,
+};
+
 export {
-  IDwSlider, IOptions, Params,
+  IDwSlider, IOptions, Params, ViewData, ModelData,
 };

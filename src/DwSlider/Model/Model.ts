@@ -1,13 +1,7 @@
-import { IOptions } from '../../types';
+import { IOptions, ModelData } from '../../types';
 import Publisher from '../Publisher';
 
-class Model extends Publisher<{
-  current?: number,
-  part?: number,
-  extra?: boolean,
-  scaleElements?: { [key: string]: string },
-  eventName: string,
-}> {
+class Model extends Publisher<ModelData> {
   constructor(public options: IOptions) {
     super();
     this.options = this.filterOptions(options);
@@ -113,9 +107,9 @@ class Model extends Publisher<{
     this.dataWereChanged(newCurrent, newPart, extra);
   }
 
-  private createFullSizeScale = (): { [key: string]: string } => {
+  private createFullSizeScale = (): Record<string, string> => {
     const numberOfScaleSections = this.options.scaleSize as number - 1;
-    let scaleElements: { [key: string]: string } = {};
+    let scaleElements: Record<string, string> = {};
 
     for (let i = 0; i <= numberOfScaleSections; i += 1) {
       const scaleStep = 1 / numberOfScaleSections;
@@ -128,9 +122,9 @@ class Model extends Publisher<{
     return scaleElements;
   };
 
-  private createPartSizeScale = (): { [key: string]: string } => {
+  private createPartSizeScale = (): Record<string, string> => {
     const numberOfScaleSections = this.options.scaleSize as number - 1;
-    let scaleElements: { [key: string]: string } = {};
+    let scaleElements: Record<string, string> = {};
 
     for (let i = 0; i <= numberOfScaleSections; i += 1) {
       const newMax = this.getNumberOfSections() * this.options.step + this.options.min;
@@ -147,7 +141,7 @@ class Model extends Publisher<{
     return scaleElements;
   };
 
-  public countScaleElements = (): { [key: string]: string } => {
+  public countScaleElements = (): Record<string, string> => {
     if (this.isScaleFullSize()) {
       return this.createFullSizeScale();
     }

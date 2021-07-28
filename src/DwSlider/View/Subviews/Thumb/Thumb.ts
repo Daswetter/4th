@@ -1,5 +1,8 @@
 import { Params } from '../../../../types';
 import Subview from '../Subview';
+import {
+  MouseDownEvent, MouseMoveEvent, Side, Size,
+} from '../Subview.types';
 
 class Thumb extends Subview {
   public primary!: HTMLElement;
@@ -26,9 +29,9 @@ class Thumb extends Subview {
   };
 
   private subscribeToEvents = (): void => {
-    this.subscribeToAnEvent<{ element: HTMLElement, params: Params, event: MouseEvent }>('thumb: mouseDown', ({ element, params, event }) => this.handleMouseDown(element, params, event));
+    this.subscribeToAnEvent<MouseDownEvent>('thumb: mouseDown', ({ element, params, event }) => this.handleMouseDown(element, params, event));
 
-    this.subscribeToAnEvent<{ element: HTMLElement, params: Params, shift: number, event: MouseEvent }>('thumb: mouseMove', ({
+    this.subscribeToAnEvent<MouseMoveEvent>('thumb: mouseMove', ({
       element, params, shift, event,
     }) => this.handleMouseMove({
       element, params, shift, event,
@@ -39,8 +42,8 @@ class Thumb extends Subview {
 
   private getOrientationParams = (
     vertical: boolean,
-    lineSize: { width: number, height: number },
-    lineSide: { left: number, bottom: number },
+    lineSize: Size,
+    lineSide: Side,
   ): Params => {
     let params: Params = {
       pageName: 'pageX',
@@ -62,8 +65,8 @@ class Thumb extends Subview {
   };
 
   public setEventListener = (
-    lineSize: { width: number, height: number },
-    lineSide: { left: number, bottom: number },
+    lineSize: Size,
+    lineSide: Side,
     vertical = false,
     extra = false,
   ): void => {
@@ -90,7 +93,7 @@ class Thumb extends Subview {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    this.mouseMoveEvent = (event: MouseEvent) => this.emitEvent<{ element: HTMLElement, params: Params, shift: number, event: MouseEvent }>('thumb: mouseMove', {
+    this.mouseMoveEvent = (event: MouseEvent) => this.emitEvent<MouseMoveEvent>('thumb: mouseMove', {
       element, params, shift, event,
     });
 
@@ -100,9 +103,7 @@ class Thumb extends Subview {
     document.addEventListener('mouseup', this.mouseUpEvent);
   };
 
-  private handleMouseMove = (
-    data: { element: HTMLElement, params: Params, shift: number, event: MouseEvent },
-  ): void => {
+  private handleMouseMove = (data: MouseMoveEvent): void => {
     const eventCoordinate = data.event[data.params.pageName] as number;
     const { lineSide } = { lineSide: data.params.lineSide };
     const halfThumb = data.element[data.params.sizeName] as number / 2;
@@ -147,7 +148,7 @@ class Thumb extends Subview {
   };
 
   public update = (
-    part: number, lineSize: { width: number, height: number }, vertical: boolean, extra: boolean,
+    part: number, lineSize: Size, vertical: boolean, extra: boolean,
   ): void => {
     let element = this.primary;
 
@@ -180,9 +181,7 @@ class Thumb extends Subview {
     return initParameter;
   };
 
-  public setInitialSettings = (
-    lineSize: { width: number, height: number }, vertical = false, extra = false,
-  ): void => {
+  public setInitialSettings = (lineSize: Size, vertical = false, extra = false): void => {
     let lineSizeParam = lineSize.height;
     let element = this.primary;
     let thumbSizeName = 'offsetHeight' as keyof HTMLElement;
@@ -205,7 +204,7 @@ class Thumb extends Subview {
     }
   };
 
-  public returnSize = (): { width: number, height: number } => ({
+  public returnSize = (): Size => ({
     width: this.primary.offsetWidth,
     height: this.primary.offsetHeight,
   });
