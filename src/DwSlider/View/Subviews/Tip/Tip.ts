@@ -1,7 +1,6 @@
-import { Params } from '../../../../types';
 import Subview from '../Subview';
 import {
-  MouseDownEvent, MouseMoveEvent, PositionParams, Side, Size,
+  MouseDownData, MouseMoveData, PositionParams, Side, Size,
 } from '../Subview.types';
 import { UnitedTipDownEvent } from './Tip.types';
 
@@ -29,16 +28,20 @@ class Tip extends Subview {
   }
 
   private subscribeToEvents = (): void => {
-    this.subscribeToAnEvent<MouseDownEvent>('tip: mouseDown', ({ element, params, event }) => this.handleMouseDown(element, params, event));
+    this.subscribeToAnEvent<MouseDownData>('tip: mouseDown', ({
+      element, vertical, lineSize, lineSide, event,
+    }) => this.handleMouseDown({
+      element, vertical, lineSize, lineSide, event,
+    }));
 
     this.subscribeToAnEvent<UnitedTipDownEvent>('unitedTip: mouseDown', ({
       event, lineSize, lineSide, vertical,
     }) => this.handleMouseDownForUnited(event, lineSize, lineSide, vertical));
 
-    this.subscribeToAnEvent<MouseMoveEvent>('tip: mouseMove', ({
-      element, params, shift, event,
+    this.subscribeToAnEvent<MouseMoveData>('tip: mouseMove', ({
+      element, vertical, lineSize, lineSide, shift, event,
     }) => this.handleMouseMove({
-      element, params, shift, event,
+      element, vertical, lineSize, lineSide, shift, event,
     }));
 
     this.subscribeToAnEvent<null>('tip: mouseUp', () => this.handleMouseUp());
@@ -102,15 +105,12 @@ class Tip extends Subview {
     if (extra) {
       element = this.extra;
     }
-    const params = this.getOrientationParams(vertical, lineSize, lineSide);
-    element.addEventListener('mousedown', (event) => this.emitEvent('tip: mouseDown', { element, params, event }));
+    element.addEventListener('mousedown', (event) => this.emitEvent('tip: mouseDown', {
+      element, vertical, lineSize, lineSide, event,
+    }));
   };
 
-  public setEventListenerForUnited = (
-    lineSize: Size,
-    lineSide: Side,
-    vertical: boolean,
-  ): void => {
+  public setEventListenerForUnited = (lineSize: Size, lineSide: Side, vertical: boolean): void => {
     this.united.addEventListener('mousedown', (event) => this.emitEvent('unitedTip: mouseDown', {
       event, lineSize, lineSide, vertical,
     }));
@@ -122,7 +122,6 @@ class Tip extends Subview {
     lineSide: Side,
     vertical: boolean,
   ): void => {
-    const params = this.getOrientationParams(vertical, lineSize, lineSide);
     let element = this.primary;
     let isExtra;
     let unitedMiddle;
@@ -149,24 +148,24 @@ class Tip extends Subview {
       element = this.extra;
     }
 
-    this.handleMouseDown(element, params, event);
+    this.handleMouseDown({
+      element, vertical, lineSize, lineSide, event,
+    });
   };
 
-  private handleMouseDown = (
-    element: HTMLElement, params: Params, event: MouseEvent,
-  ) : void => {
-    event.preventDefault();
+  private handleMouseDown = (data: MouseDownData) : void => {
+    data.event.preventDefault();
 
-    const eventCoodinate = (event[params.pageName] as number);
-    let shift = eventCoodinate - (element[params.sideName] as number) - params.lineSide;
+    const shift = this.countShift(data);
+    const params = {
+      element: data.element,
+      vertical: data.vertical,
+      lineSide: data.lineSide,
+      lineSize: data.lineSize,
 
-    if (params.pageName === 'pageY') {
-      shift += params.lineSize;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    this.mouseMove = (event: MouseEvent) => this.emitEvent<MouseMoveEvent>('tip: mouseMove', {
-      element, params, shift, event,
+    };
+    this.mouseMove = (event: MouseEvent) => this.emitEvent<MouseMoveData>('tip: mouseMove', {
+      ...params, shift, event,
     });
 
     this.mouseUp = () => this.emitEvent<null>('tip: mouseUp', null);
@@ -175,15 +174,9 @@ class Tip extends Subview {
     document.addEventListener('mouseup', this.mouseUp);
   };
 
-  private handleMouseMove = (data: MouseMoveEvent): void => {
-    const eventCoodinate = data.event[data.params.pageName] as number;
-    const tipSize = (data.element[data.params.sizeName] as number);
-    const { lineSide } = { lineSide: data.params.lineSide };
-    let part = (eventCoodinate - lineSide - data.shift + tipSize / 2) / data.params.lineSize;
+  private handleMouseMove = (data: MouseMoveData): void => {
+    let part = this.countPart(data);
 
-    if (data.params.pageName === 'pageY') {
-      part = -part;
-    }
     if (part < 0) {
       part = 0;
     } else if (part > 1) {
@@ -206,28 +199,26 @@ class Tip extends Subview {
     document.removeEventListener('mouseup', this.mouseUp);
   };
 
-  private getOrientationParams = (
-    vertical: boolean,
-    lineSize: Size,
-    lineSide: Side,
-  ): Params => {
-    let params: Params = {
-      pageName: 'pageX',
-      sideName: 'offsetLeft',
-      sizeName: 'offsetWidth',
-      lineSize: lineSize.width,
-      lineSide: lineSide.left,
-    };
-    if (vertical) {
-      params = {
-        pageName: 'pageY',
-        sideName: 'offsetTop',
-        sizeName: 'offsetHeight',
-        lineSize: lineSize.height,
-        lineSide: lineSide.bottom,
-      };
+  private countShift = (data: MouseDownData): number => {
+    if (data.vertical) {
+      return (
+        data.event.pageY - data.element.offsetTop - data.lineSide.bottom + data.lineSize.height
+      );
     }
-    return params;
+    return data.event.pageX - data.element.offsetLeft - data.lineSide.left;
+  };
+
+  private countPart = (data: MouseMoveData): number => {
+    let part: number;
+    if (data.vertical) {
+      const halfTipSize = data.element.offsetHeight / 2;
+      const usingSpot = -(data.event.pageY - data.lineSide.bottom - data.shift + halfTipSize);
+      part = usingSpot / data.lineSize.height;
+      return part;
+    }
+    const halfTipSize = data.element.offsetWidth / 2;
+    part = (data.event.pageX - data.lineSide.left - data.shift + halfTipSize) / data.lineSize.width;
+    return part;
   };
 
   private setPosition = (

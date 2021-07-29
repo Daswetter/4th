@@ -8,16 +8,22 @@ class Input extends Subview {
   constructor(public initElement: HTMLElement) {
     super();
     this.initPrimary(initElement);
-    this.setEventListener(this.primary);
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
-    this.primary = initElement.querySelector('.js-dw-slider__input_from') as HTMLInputElement;
-    this.extra = initElement.querySelector('.js-dw-slider__input_to') as HTMLInputElement;
+    const input: HTMLInputElement | null = initElement.querySelector('.js-dw-slider__input_from');
+    if (input) {
+      this.primary = input;
+      this.setEventListener(this.primary);
+    }
   };
 
-  public initExtra = (): void => {
-    this.setEventListener(this.extra);
+  public initExtra = (initElement: HTMLElement): void => {
+    const input: HTMLInputElement | null = initElement.querySelector('.js-dw-slider__input_to');
+    if (input) {
+      this.extra = input;
+      this.setEventListener(this.extra);
+    }
   };
 
   private setEventListener = (input: HTMLInputElement): void => {

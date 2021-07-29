@@ -10,7 +10,7 @@ interface IOptions {
   min: number,
   max: number,
   from: number,
-  to?: number,
+  to: number,
   step: number,
   vertical: boolean,
   double: boolean,
@@ -34,14 +34,20 @@ type ViewData = {
   extra: boolean
 };
 
-type ModelData = {
-  current?: number,
-  part?: number,
-  extra?: boolean,
-  scaleElements?: Record<string, string>,
-  eventName: string,
+type DataUpdate = {
+  current: number,
+  part: number,
+  extra: boolean,
+  eventName: 'data'
 };
 
+type ScaleUpdate = {
+  scaleElements: Record<string, string>
+  eventName: 'scale'
+};
+
+type ModelUpdate = DataUpdate | ScaleUpdate;
+
 export {
-  IDwSlider, IOptions, Params, ViewData, ModelData,
+  IDwSlider, IOptions, Params, ViewData, ModelUpdate,
 };

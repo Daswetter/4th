@@ -1,4 +1,4 @@
-import { IOptions, ModelData, ViewData } from '../../types';
+import { IOptions, ModelUpdate, ViewData } from '../../types';
 import View from '../View/View';
 import Model from '../Model/Model';
 
@@ -18,15 +18,13 @@ class Presenter {
     }
   };
 
-  public handleDataFromModel = (data: ModelData): void => {
+  public handleDataFromModel = (data: ModelUpdate): void => {
     if (data.eventName === 'data') {
-      this.view.sendDataToSubviews(
-        data.current as number, data.part as number, data.extra as boolean,
-      );
+      this.view.sendDataToSubviews(data.current, data.part, data.extra);
     }
     if (data.eventName === 'scale') {
       this.view.clearAllView();
-      this.view.initView(data.scaleElements as Record<string, string>);
+      this.view.initView(data.scaleElements);
     }
   };
 

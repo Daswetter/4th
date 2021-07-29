@@ -2,11 +2,13 @@ import { IOptions } from '../../types';
 
 type ChangeEvent = {
   element: HTMLInputElement,
-  optionKey: keyof IOptions,
+  optionKey: string,
 };
 
 type ReducedChangeEvent = {
   optionKey: keyof IOptions,
 };
 
-export { ChangeEvent, ReducedChangeEvent };
+export {
+  ChangeEvent, ReducedChangeEvent,
+};

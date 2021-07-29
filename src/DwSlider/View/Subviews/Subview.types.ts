@@ -17,19 +17,23 @@ type PositionParams = {
   top: number
 };
 
-type MouseDownEvent = {
+type MouseDownData = {
   element: HTMLElement,
-  params: Params,
+  vertical: boolean,
+  lineSize: Size,
+  lineSide: Side,
   event: MouseEvent
 };
 
-type MouseMoveEvent = {
+type MouseMoveData = {
   element: HTMLElement,
-  params: Params,
+  vertical: boolean,
+  lineSize: Size,
+  lineSide: Side,
   shift: number,
   event: MouseEvent
 };
 
 export {
-  Size, Side, PositionParams, MouseDownEvent, MouseMoveEvent,
+  Size, Side, PositionParams, MouseDownData, MouseMoveData,
 };

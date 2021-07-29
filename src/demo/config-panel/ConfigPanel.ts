@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import { IOptions, IDwSlider } from '../../types';
+import { IDwSlider, IOptions } from '../../types';
 import './components/toggle/toggle';
 import './components/input/input';
 import './config-panel.scss';
@@ -23,7 +23,10 @@ class ConfigPanel {
   }
 
   private defineInitElement = (initElementName: string): void => {
-    this.initElement = document.querySelector(initElementName) as HTMLElement;
+    const initElement: HTMLElement | null = document.querySelector(initElementName);
+    if (initElement) {
+      this.initElement = initElement;
+    }
     this.DwSlider = $(initElementName).data('DwSlider');
   };
 
@@ -32,7 +35,7 @@ class ConfigPanel {
 
     inputTitles.forEach(
       (title) => {
-        this.inputs = { ...this.inputs, [title]: this.initInput(title as keyof IOptions) };
+        this.inputs = { ...this.inputs, [title]: this.initInput(title) };
       },
     );
 
@@ -41,7 +44,7 @@ class ConfigPanel {
     checkboxTitles.forEach(
       (title) => {
         this.checkboxes = {
-          ...this.inputs, [title]: this.initCheckbox(title as keyof IOptions),
+          ...this.inputs, [title]: this.initCheckbox(title),
         };
       },
     );
@@ -52,16 +55,16 @@ class ConfigPanel {
 
     this.subscribeToAnEvent<ReducedChangeEvent>('checkbox: changed', ({ optionKey }) => this.handleCheckboxChange({ optionKey }));
 
-    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.DwSlider.returnCurrentOptions().double, this.DwSlider.returnCurrentOptions().to as number));
+    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.DwSlider.returnCurrentOptions().double, this.DwSlider.returnCurrentOptions().to));
     this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.scaleSize, this.DwSlider.returnCurrentOptions().scale, this.DwSlider.returnCurrentOptions().scaleSize));
   };
 
-  private setEventListener = (element: HTMLInputElement, optionKey: keyof IOptions): void => {
+  private setEventListener = (element: HTMLInputElement, optionKey: string): void => {
     element.addEventListener('change', () => this.emitEvent<ChangeEvent>('input: changed', { element, optionKey }));
   };
 
   private setEventListenerOnCheckbox = (
-    element: HTMLInputElement, optionKey: keyof IOptions,
+    element: HTMLInputElement, optionKey: string,
   ): void => {
     element.addEventListener('change', () => this.emitEvent<ChangeEvent>('checkbox: changed', { element, optionKey }));
   };
@@ -79,21 +82,30 @@ class ConfigPanel {
     }
   };
 
-  private initInput = (optionKey: keyof IOptions): HTMLInputElement => {
-    const element = this.initElement.querySelector(`.js-input__field_type_${optionKey}`) as HTMLInputElement;
-    this.displayInputValue(element, optionKey);
-    this.setEventListener(element, optionKey);
-    return element;
+  private initInput = (optionKey: string): HTMLInputElement => {
+    const element: HTMLInputElement | null = this.initElement.querySelector(`.js-input__field_type_${optionKey}`);
+    if (element) {
+      this.displayInputValue(element, optionKey);
+      this.setEventListener(element, optionKey);
+      return element;
+    }
+    throw new Error(`${optionKey} is not found`);
   };
 
-  private displayInputValue = (element: HTMLInputElement, optionKey: keyof IOptions) => {
+  private displayInputValue = (element: HTMLInputElement, optionKey: string) => {
     const modifiedElement = element;
-    modifiedElement.value = String(this.DwSlider.returnCurrentOptions()[optionKey]);
+    const currentOptions = this.DwSlider.returnCurrentOptions();
+    if (optionKey in currentOptions) {
+      modifiedElement.value = String(currentOptions[optionKey as keyof IOptions]);
+    }
   };
 
-  private displayCheckboxState = (element: HTMLInputElement, optionKey: keyof IOptions) => {
+  private displayCheckboxState = (element: HTMLInputElement, optionKey: string) => {
     const modifiedElement = element;
-    modifiedElement.checked = this.DwSlider.returnCurrentOptions()[optionKey] as boolean;
+    const currentOptions = this.DwSlider.returnCurrentOptions();
+    if (optionKey in currentOptions) {
+      modifiedElement.checked = Boolean(currentOptions[optionKey as keyof IOptions]);
+    }
   };
 
   private handleInputChange = (params: ChangeEvent): void => {
@@ -105,29 +117,33 @@ class ConfigPanel {
 
   private updateCurrentState = (): void => {
     Object.keys(this.inputs).forEach(
-      (key) => this.displayInputValue(this.inputs[key], key as keyof IOptions),
+      (key) => this.displayInputValue(this.inputs[key], key),
     );
     Object.keys(this.checkboxes).forEach(
-      (key) => this.displayCheckboxState(this.checkboxes[key], key as keyof IOptions),
+      (key) => this.displayCheckboxState(this.checkboxes[key], key),
     );
 
+    const currentOptions = this.DwSlider.returnCurrentOptions();
     this.isDisable(
       this.inputs.to,
-      this.DwSlider.returnCurrentOptions().double,
-      this.DwSlider.returnCurrentOptions().to as number,
+      currentOptions.double,
+      currentOptions.to,
     );
     this.isDisable(
       this.inputs.scaleSize,
-      this.DwSlider.returnCurrentOptions().scale,
-      this.DwSlider.returnCurrentOptions().scaleSize,
+      currentOptions.scale,
+      currentOptions.scaleSize,
     );
   };
 
-  private initCheckbox = (optionKey: keyof IOptions): HTMLInputElement => {
-    const element = this.initElement.querySelector(`.js-toggle__input_type_${optionKey}`) as HTMLInputElement;
-    this.setEventListenerOnCheckbox(element, optionKey);
-    this.displayCheckboxState(element, optionKey);
-    return element;
+  private initCheckbox = (optionKey: string): HTMLInputElement => {
+    const element: HTMLInputElement | null = this.initElement.querySelector(`.js-toggle__input_type_${optionKey}`);
+    if (element) {
+      this.setEventListenerOnCheckbox(element, optionKey);
+      this.displayCheckboxState(element, optionKey);
+      return element;
+    }
+    throw new Error(`${optionKey} is not found`);
   };
 
   private handleCheckboxChange = (params: ReducedChangeEvent): void => {

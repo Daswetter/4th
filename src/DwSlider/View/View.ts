@@ -61,7 +61,7 @@ class View extends Publisher<ViewData> {
     }
     this.notify({ value: this.options.from, current: true, extra: false });
     if (this.options.double) {
-      this.notify({ value: this.options.to as number, current: true, extra: true });
+      this.notify({ value: this.options.to, current: true, extra: true });
     }
   };
 
@@ -177,7 +177,7 @@ class View extends Publisher<ViewData> {
     this.input.subscribe(this.update);
     const extra = true;
     if (this.options.double && this.doesInputExist(extra)) {
-      this.input.initExtra();
+      this.input.initExtra(this.initElement);
     }
   };
 

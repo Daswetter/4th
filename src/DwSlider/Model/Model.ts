@@ -1,7 +1,7 @@
-import { IOptions, ModelData } from '../../types';
+import { IOptions, ModelUpdate } from '../../types';
 import Publisher from '../Publisher';
 
-class Model extends Publisher<ModelData> {
+class Model extends Publisher<ModelUpdate> {
   constructor(public options: IOptions) {
     super();
     this.options = this.filterOptions(options);
@@ -65,9 +65,9 @@ class Model extends Publisher<ModelData> {
       filteredOptions.max = options.min + newStep;
     }
 
-    if (options.scaleSize as number > 20) {
+    if (options.scaleSize > 20) {
       filteredOptions.scaleSize = 20;
-    } else if (options.scaleSize as number < 2) {
+    } else if (options.scaleSize < 2) {
       filteredOptions.scaleSize = 2;
     }
     filteredOptions.step = newStep;
@@ -108,7 +108,7 @@ class Model extends Publisher<ModelData> {
   }
 
   private createFullSizeScale = (): Record<string, string> => {
-    const numberOfScaleSections = this.options.scaleSize as number - 1;
+    const numberOfScaleSections = this.options.scaleSize - 1;
     let scaleElements: Record<string, string> = {};
 
     for (let i = 0; i <= numberOfScaleSections; i += 1) {
@@ -123,7 +123,7 @@ class Model extends Publisher<ModelData> {
   };
 
   private createPartSizeScale = (): Record<string, string> => {
-    const numberOfScaleSections = this.options.scaleSize as number - 1;
+    const numberOfScaleSections = this.options.scaleSize - 1;
     let scaleElements: Record<string, string> = {};
 
     for (let i = 0; i <= numberOfScaleSections; i += 1) {
