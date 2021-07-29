@@ -24,7 +24,7 @@ class Presenter {
     }
     if (data.eventName === 'scale') {
       this.view.clearAllView();
-      this.view.initView(data.scaleElements);
+      this.view.initView(data.scaleElements, data.options);
     }
   };
 

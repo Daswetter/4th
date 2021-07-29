@@ -48,27 +48,24 @@ class Tip extends Subview {
   };
 
   private initPrimary = (initElement: HTMLElement): void => {
-    this.primary = this.init(initElement, this.primary, '__tip');
+    this.primary = this.init(initElement, '__tip');
   };
 
   public initExtra = (initElement: HTMLElement): void => {
-    this.extra = this.init(initElement, this.extra, '__tip');
+    this.extra = this.init(initElement, '__tip');
   };
 
-  private printInnerText = (tip: HTMLElement, current: number | string): void => {
-    const element = tip;
+  private printInnerText = (element: HTMLElement, current: number | string): void => {
     element.innerText = String(current);
   };
 
   private setRightToVertical = (
-    tip: HTMLElement, lineWidth: number, thumbWidth: number,
+    element: HTMLElement, lineWidth: number, thumbWidth: number,
   ): void => {
-    const element = tip;
     element.style.right = `${lineWidth + thumbWidth / 3}px`;
   };
 
-  private setTopToHorizontal = (tip: HTMLElement, thumbHeight: number): void => {
-    const element = tip;
+  private setTopToHorizontal = (element: HTMLElement, thumbHeight: number): void => {
     element.style.top = `${-element.offsetHeight - thumbHeight / 2}px`;
   };
 
@@ -222,12 +219,11 @@ class Tip extends Subview {
   };
 
   private setPosition = (
-    tip: HTMLElement,
+    element: HTMLElement,
     part: number,
     lineSize: Size,
     vertical: boolean,
   ): void => {
-    const element = tip;
     if (vertical) {
       element.style.top = `${lineSize.height - part * lineSize.height - element.offsetHeight / 2}px`;
     } else {

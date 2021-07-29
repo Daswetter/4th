@@ -26,8 +26,7 @@ class Input extends Subview {
     }
   };
 
-  private setEventListener = (input: HTMLInputElement): void => {
-    const element = input;
+  private setEventListener = (element: HTMLInputElement): void => {
     this.subscribeToAnEvent<HTMLInputElement>('input: changed', (component) => this.handleChange(component));
     element.addEventListener('change', () => this.emitEvent<HTMLInputElement>('input: changed', element));
   };
@@ -46,8 +45,7 @@ class Input extends Subview {
   };
 
   private printValue = (element: HTMLInputElement, current: number): void => {
-    const input = element;
-    input.value = String(current);
+    element.value = String(current);
   };
 
   public update = (current: number, extra: boolean): void => {

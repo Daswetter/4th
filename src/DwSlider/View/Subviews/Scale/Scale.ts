@@ -18,7 +18,7 @@ class Scale extends Subview {
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
-    this.scale = this.init(initElement, this.scale, '__scale');
+    this.scale = this.init(initElement, '__scale');
   };
 
   public initScale = (

@@ -17,7 +17,7 @@ class Line extends Subview {
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
-    this.line = this.init(initElement, this.line, '__line');
+    this.line = this.init(initElement, '__line');
     this.line.classList.add('dw-slider__line_horizontal');
   };
 

@@ -14,7 +14,7 @@ class Progress extends Subview {
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
-    this.progress = this.init(initElement, this.progress, '__progress');
+    this.progress = this.init(initElement, '__progress');
   };
 
   public setInitialSettings = (

@@ -12,17 +12,15 @@ class BoundaryLabels extends Subview {
   }
 
   private initElements = (initElement: HTMLElement): void => {
-    this.min = this.init(initElement, this.min, '__boundary-labels_min');
-    this.max = this.init(initElement, this.min, '__boundary-labels_max');
+    this.min = this.init(initElement, '__boundary-labels_min');
+    this.max = this.init(initElement, '__boundary-labels_max');
   };
 
   private printInnerText = (element: HTMLElement, text: number): void => {
-    const label = element;
-    label.innerText = String(text);
+    element.innerText = String(text);
   };
 
-  private setPositionToHorizontal = (label: HTMLElement, thumbHeight: number): void => {
-    const element = label;
+  private setPositionToHorizontal = (element: HTMLElement, thumbHeight: number): void => {
     element.style.top = `${-element.offsetHeight - thumbHeight / 2}px`;
     const side = `${-element.offsetWidth / 2}px`;
 
@@ -34,9 +32,8 @@ class BoundaryLabels extends Subview {
   };
 
   private setPositionToVertical = (
-    label: HTMLElement, lineWidth: number, thumbWidth: number,
+    element: HTMLElement, lineWidth: number, thumbWidth: number,
   ): void => {
-    const element = label;
     element.style.right = `${lineWidth + thumbWidth / 3}px`;
     const side = `${-element.offsetHeight / 2}px`;
 
@@ -67,7 +64,7 @@ class BoundaryLabels extends Subview {
   };
 
   private switchOpacity = (
-    label: HTMLElement, condition: boolean, optionalCondition?: boolean,
+    element: HTMLElement, condition: boolean, optionalCondition?: boolean,
   ): void => {
     let opacity: string;
     if (condition || optionalCondition) {
@@ -75,7 +72,6 @@ class BoundaryLabels extends Subview {
     } else {
       opacity = '1';
     }
-    const element = label;
     element.style.opacity = opacity;
   };
 

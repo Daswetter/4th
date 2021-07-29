@@ -9,7 +9,7 @@ class Wrapper extends Subview {
   }
 
   private initPrimary = (initElement: HTMLElement): void => {
-    this.wrapper = this.init(initElement, this.wrapper, '');
+    this.wrapper = this.init(initElement, '');
   };
 
   public returnAsHTML = (): HTMLElement => this.wrapper;

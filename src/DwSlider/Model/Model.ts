@@ -51,31 +51,53 @@ class Model extends Publisher<ModelUpdate> {
   };
 
   private filterOptions = (options: IOptions): IOptions => {
-    const filteredOptions = options;
-    let { newStep } = { newStep: options.step };
-    if (Math.abs(newStep) > Math.abs(options.max - options.min)) {
-      newStep = Math.abs(options.max - options.min);
+    let { step } = { step: options.step };
+    let { max } = { max: options.max };
+    let { from } = { from: options.from };
+    let { to } = { to: options.to };
+    let { scaleSize } = { scaleSize: options.scaleSize };
+
+    if (Math.abs(step) > Math.abs(options.max - options.min)) {
+      step = Math.abs(options.max - options.min);
     }
     if (options.step < 0) {
-      newStep = Math.abs(newStep);
-    } else if (newStep === 0) {
-      newStep = 1;
+      step = Math.abs(step);
+    } else if (step === 0) {
+      step = 1;
     }
     if (options.max < options.min || options.max === options.min) {
-      filteredOptions.max = options.min + newStep;
+      max = options.min + step;
     }
 
     if (options.scaleSize > 20) {
-      filteredOptions.scaleSize = 20;
+      scaleSize = 20;
     } else if (options.scaleSize < 2) {
-      filteredOptions.scaleSize = 2;
+      scaleSize = 2;
     }
-    filteredOptions.step = newStep;
-    return filteredOptions;
+
+    if (options.from < options.min) {
+      from = options.min;
+    } else if (options.from > options.max) {
+      from = options.max;
+    }
+
+    if (options.to < options.min) {
+      to = options.min;
+    } else if (options.to > options.max) {
+      to = options.max;
+    }
+    return {
+      ...options, max, step, scaleSize, from, to,
+    };
   };
 
   public setCurrent(part: number, extra = false): void {
     const [current, newPart] = this.countCurrent(part);
+    if (extra) {
+      this.options.to = current;
+    } else {
+      this.options.from = current;
+    }
     this.dataWereChanged(current, newPart, extra);
   }
 
@@ -149,7 +171,6 @@ class Model extends Publisher<ModelUpdate> {
   };
 
   private roundValueTo = (value: number, roundTo: number): number => {
-    const newValue = value;
     const dividedRoundTo = roundTo.toString().split('.');
     let decimal: number;
     if (dividedRoundTo[0] === '0') {
@@ -161,13 +182,13 @@ class Model extends Publisher<ModelUpdate> {
     } else {
       decimal = dividedRoundTo[0].length - 1;
     }
-    return (Math.round(newValue * (10 ** decimal)) / (10 ** decimal));
+    return (Math.round(value * (10 ** decimal)) / (10 ** decimal));
   };
 
   public refreshAll = (options: IOptions): void => {
     this.options = this.filterOptions(options);
     const scaleElements = this.countScaleElements();
-    this.notify({ scaleElements, eventName: 'scale' });
+    this.notify({ scaleElements, options: this.options, eventName: 'scale' });
   };
 }
 

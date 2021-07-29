@@ -3,9 +3,9 @@
 import jQuery from 'jquery';
 
 import { IOptions, IDwSlider } from '../types';
+import ReducedIOptions from './DwSlider.types';
 import Model from './Model/Model';
 import Presenter from './Presenter/Presenter';
-import ReducedIOptions from './ReducedIOptions';
 import View from './View/View';
 
 ((function ($) {

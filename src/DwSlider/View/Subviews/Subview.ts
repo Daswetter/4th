@@ -6,14 +6,12 @@ abstract class Subview extends Publisher<SubviewData> {
 
   protected init = (
     initElement: HTMLElement,
-    element: HTMLElement,
     styleName: string,
   ): HTMLElement => {
-    let modifiedElement = element;
-    modifiedElement = document.createElement('div');
-    modifiedElement.classList.add(`dw-slider${styleName}`);
-    initElement.append(modifiedElement);
-    return modifiedElement;
+    const element = document.createElement('div');
+    element.classList.add(`dw-slider${styleName}`);
+    initElement.append(element);
+    return element;
   };
 
   protected emitEvent<EventType>(eventName: string, data: EventType): void {

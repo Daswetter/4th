@@ -135,6 +135,7 @@ describe('Model', () => {
       options.max = 100;
       options.step = 1;
       options.scaleSize = 2;
+      model = new Model(options);
       expect(model.countScaleElements()).toEqual({ 0: '0', 1: '100' });
     });
     test('should round correctly', () => {
@@ -142,6 +143,7 @@ describe('Model', () => {
       options.max = 50;
       options.step = 1;
       options.scaleSize = 5;
+      model = new Model(options);
       expect(model.countScaleElements()).toEqual({
         0: '0', 0.26: '13', 0.5: '25', 0.76: '38', 1: '50',
       });
@@ -151,6 +153,7 @@ describe('Model', () => {
       options.max = 5;
       options.step = 2;
       options.scaleSize = 2;
+      model = new Model(options);
       expect(model.countScaleElements()).toEqual({ 0: '0', 0.8: '4' });
     });
   });

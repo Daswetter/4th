@@ -72,13 +72,12 @@ class ConfigPanel {
   private isDisable = (
     element: HTMLInputElement, condition: boolean, relatedValue: number,
   ): void => {
-    const modifiedElement = element;
     if (condition) {
-      modifiedElement.disabled = false;
-      modifiedElement.value = String(relatedValue);
+      element.disabled = false;
+      element.value = String(relatedValue);
     } else {
-      modifiedElement.disabled = true;
-      modifiedElement.value = '';
+      element.disabled = true;
+      element.value = '';
     }
   };
 
@@ -93,18 +92,16 @@ class ConfigPanel {
   };
 
   private displayInputValue = (element: HTMLInputElement, optionKey: string) => {
-    const modifiedElement = element;
     const currentOptions = this.DwSlider.returnCurrentOptions();
     if (optionKey in currentOptions) {
-      modifiedElement.value = String(currentOptions[optionKey as keyof IOptions]);
+      element.value = String(currentOptions[optionKey as keyof IOptions]);
     }
   };
 
   private displayCheckboxState = (element: HTMLInputElement, optionKey: string) => {
-    const modifiedElement = element;
     const currentOptions = this.DwSlider.returnCurrentOptions();
     if (optionKey in currentOptions) {
-      modifiedElement.checked = Boolean(currentOptions[optionKey as keyof IOptions]);
+      element.checked = Boolean(currentOptions[optionKey as keyof IOptions]);
     }
   };
 

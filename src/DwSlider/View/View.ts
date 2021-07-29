@@ -210,11 +210,7 @@ class View extends Publisher<ViewData> {
 
     this.thumb.update(part, this.line.returnSize(), this.options.vertical, extra);
 
-    const doesExtraInputExist = extra && this.doesInputExist(extra);
-    const doesPrimaryInputExist = !extra && this.doesInputExist();
-
-    const anyOfInputsExist = doesExtraInputExist || doesPrimaryInputExist;
-    if (anyOfInputsExist) {
+    if (this.doesInputExist(extra)) {
       this.input.update(current, extra);
     }
     if (this.options.progress) {

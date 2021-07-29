@@ -1,4 +1,4 @@
-import ReducedIOptions from './DwSlider/ReducedIOptions';
+import ReducedIOptions from './DwSlider/DwSlider.types';
 
 interface IDwSlider {
   update(updatedOptions?: ReducedIOptions): void,
@@ -42,7 +42,8 @@ type DataUpdate = {
 };
 
 type ScaleUpdate = {
-  scaleElements: Record<string, string>
+  scaleElements: Record<string, string>,
+  options: IOptions,
   eventName: 'scale'
 };
 
