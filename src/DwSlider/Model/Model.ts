@@ -51,44 +51,37 @@ class Model extends Publisher<ModelUpdate> {
   };
 
   private filterOptions = (options: IOptions): IOptions => {
-    let { step } = { step: options.step };
-    let { max } = { max: options.max };
-    let { from } = { from: options.from };
-    let { to } = { to: options.to };
-    let { scaleSize } = { scaleSize: options.scaleSize };
-
-    if (Math.abs(step) > Math.abs(options.max - options.min)) {
-      step = Math.abs(options.max - options.min);
+    if (Math.abs(options.step) > Math.abs(options.max - options.min)) {
+      options.step = Math.abs(options.max - options.min);
     }
     if (options.step < 0) {
-      step = Math.abs(step);
-    } else if (step === 0) {
-      step = 1;
+      options.step = Math.abs(options.step);
+    } else if (options.step === 0) {
+      options.step = 1;
     }
     if (options.max < options.min || options.max === options.min) {
-      max = options.min + step;
+      options.max = options.min + options.step;
     }
 
     if (options.scaleSize > 20) {
-      scaleSize = 20;
+      options.scaleSize = 20;
     } else if (options.scaleSize < 2) {
-      scaleSize = 2;
+      options.scaleSize = 2;
     }
 
     if (options.from < options.min) {
-      from = options.min;
+      options.from = options.min;
     } else if (options.from > options.max) {
-      from = options.max;
+      options.from = options.max;
     }
 
     if (options.to < options.min) {
-      to = options.min;
+      options.to = options.min;
     } else if (options.to > options.max) {
-      to = options.max;
+      options.to = options.max;
     }
-    return {
-      ...options, max, step, scaleSize, from, to,
-    };
+
+    return options;
   };
 
   public setCurrent(part: number, extra = false): void {
