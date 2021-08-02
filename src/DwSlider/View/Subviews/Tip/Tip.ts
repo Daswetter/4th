@@ -287,7 +287,7 @@ class Tip extends Subview {
   ): void => {
     if (vertical) {
       this.united.style.right = `${lineWidth + thumbWidth / 3}px`;
-      this.united.style.width = `${Math.min(this.primary.offsetWidth, this.extra.offsetWidth)}px`;
+      this.united.style.width = `${Math.max(this.primary.offsetWidth, this.extra.offsetWidth)}px`;
       this.united.style.top = `${Math.min(this.primary.offsetTop, this.extra.offsetTop)}px`;
     } else {
       this.united.style.top = `${this.primary.offsetTop}px`;
