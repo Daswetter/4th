@@ -81,15 +81,20 @@ class Line extends Subview {
     }
   };
 
+  private filterPart = (part: number, distFromBeginToClick: number, size: number): number => {
+    if (distFromBeginToClick < 0) {
+      return 0;
+    }
+    if (distFromBeginToClick > size) {
+      return 1;
+    }
+    return part;
+  };
+
   private onClickHorizontal = (event: MouseEvent) : void => {
     const distFromBeginToClick = event.clientX - this.line.getBoundingClientRect().left;
-    let part = distFromBeginToClick / this.line.offsetWidth;
-
-    if (distFromBeginToClick < 0) {
-      part = 0;
-    } else if (distFromBeginToClick > this.line.offsetWidth) {
-      part = 1;
-    }
+    const part = distFromBeginToClick / this.line.offsetWidth;
+    const filteredPart = this.filterPart(part, distFromBeginToClick, this.line.offsetWidth);
 
     const belowLineTop = event.pageY <= this.line.offsetTop + this.line.offsetHeight;
     const aboveLineBottom = event.pageY >= this.line.offsetTop;
@@ -97,20 +102,15 @@ class Line extends Subview {
 
     if (isOnlyLineClicked) {
       this.notify({
-        value: part, current: false, extra: false, nearest: true,
+        value: filteredPart, current: false, extra: false, nearest: true,
       });
     }
   };
 
   private onClickVertical = (event: MouseEvent) : void => {
     const distFromBeginToClick = -event.clientY + this.line.getBoundingClientRect().bottom;
-    let part = distFromBeginToClick / this.line.offsetHeight;
-
-    if (distFromBeginToClick < 0) {
-      part = 0;
-    } else if (distFromBeginToClick > this.line.offsetHeight) {
-      part = 1;
-    }
+    const part = distFromBeginToClick / this.line.offsetHeight;
+    const filteredPart = this.filterPart(part, distFromBeginToClick, this.line.offsetHeight);
 
     const toTheLeftOfTheLineRight = event.pageX <= this.line.offsetLeft + this.line.offsetWidth;
     const toTheRightOfTheLineLeft = event.pageX >= this.line.offsetLeft;
@@ -118,7 +118,7 @@ class Line extends Subview {
 
     if (isOnlyLineClicked) {
       this.notify({
-        value: part, current: false, extra: false, nearest: true,
+        value: filteredPart, current: false, extra: false, nearest: true,
       });
     }
   };

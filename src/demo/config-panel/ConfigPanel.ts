@@ -145,12 +145,7 @@ class ConfigPanel {
 
   private handleCheckboxChange = (params: ReducedChangeEvent): void => {
     const isCurrentStateTrue = this.DwSlider.returnCurrentOptions()[params.optionKey];
-    let newState: boolean;
-    if (isCurrentStateTrue) {
-      newState = false;
-    } else {
-      newState = true;
-    }
+    const newState = !isCurrentStateTrue;
     this.DwSlider.update({
       [params.optionKey]: newState,
     });

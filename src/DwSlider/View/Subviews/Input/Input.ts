@@ -48,12 +48,15 @@ class Input extends Subview {
     element.value = String(current);
   };
 
-  public update = (current: number, extra: boolean): void => {
-    let targetElement = this.primary;
+  private setTargetElement = (extra: boolean): HTMLInputElement => {
     if (extra) {
-      targetElement = this.extra;
+      return this.extra;
     }
-    this.printValue(targetElement, current);
+    return this.primary;
+  };
+
+  public update = (current: number, extra: boolean): void => {
+    this.printValue(this.setTargetElement(extra), current);
   };
 }
 

@@ -30,49 +30,52 @@ class Progress extends Subview {
     }
   };
 
+  private setLineSize = (vertical: boolean, lineSize: Size): number => {
+    if (vertical) {
+      return lineSize.height;
+    }
+    return lineSize.width;
+  };
+
+  private setGeneralSide = (vertical: boolean): string => {
+    if (vertical) {
+      return 'bottom';
+    }
+    return 'left';
+  };
+
+  private setSecondSide = (vertical: boolean): string => {
+    if (vertical) {
+      return 'top';
+    }
+    return 'right';
+  };
+
   public update = (
     part: number, lineSize: Size, vertical: boolean, extra: boolean,
   ) :void => {
-    if (!extra && !vertical) {
+    if (extra) {
+      this.partExtra = part;
+    } else {
       this.part = part;
     }
-
-    if (extra && !vertical) {
-      this.partExtra = part;
-    }
-
-    let lineOneSize = lineSize.width;
-    let generalSide = 'left';
-    let secondSide = 'right';
-
-    if (!extra && vertical) {
-      this.part = part;
-      lineOneSize = lineSize.height;
-      generalSide = 'bottom';
-      secondSide = 'top';
-    }
-
-    if (extra && vertical) {
-      this.partExtra = part;
-      lineOneSize = lineSize.height;
-      generalSide = 'bottom';
-      secondSide = 'top';
-    }
-
+    const lineOneSize = this.setLineSize(vertical, lineSize);
+    const generalSide = this.setGeneralSide(vertical);
+    const secondSide = this.setSecondSide(vertical);
     this.setProgress(lineOneSize, generalSide, secondSide);
+  };
+
+  private setPart = (): Array<number> => {
+    if (this.part >= this.partExtra) {
+      return [this.partExtra, this.part];
+    }
+    return [this.part, this.partExtra];
   };
 
   private setProgress = (
     lineSide: number, generalSideName: string, secondSideName: string,
   ): void => {
-    let partForGeneral = this.part;
-    let partForSecond = this.partExtra;
-
-    if (this.part >= this.partExtra) {
-      partForGeneral = this.partExtra;
-      partForSecond = this.part;
-    }
-
+    const [partForGeneral, partForSecond] = this.setPart();
     const generalSide = partForGeneral * lineSide;
     const secondSide = lineSide - partForSecond * lineSide;
 

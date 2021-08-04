@@ -112,30 +112,27 @@ class View extends Publisher<ViewData> {
       this.options.vertical,
       this.options.min,
     );
-
-    let extra = false;
     this.tip.setEventListener(
       this.line.returnSize(),
       this.line.returnSide(),
       this.options.vertical,
-      extra,
+      false,
     );
 
     if (this.options.double) {
       this.tip.initExtra(initElement);
-      extra = true;
       this.tip.setInitialSettings(
         this.line.returnSize().width,
         this.thumb.returnSize(),
         this.options.vertical,
         this.options.max,
-        extra,
+        true,
       );
       this.tip.setEventListener(
         this.line.returnSize(),
         this.line.returnSide(),
         this.options.vertical,
-        extra,
+        true,
       );
       this.tip.setEventListenerForUnited(
         this.line.returnSize(),
@@ -161,15 +158,9 @@ class View extends Publisher<ViewData> {
   };
 
   private doesInputExist = (extra = false): boolean => {
-    let inputClass = '.js-dw-slider__input_from';
-    if (extra) {
-      inputClass = '.js-dw-slider__input_to';
-    }
+    const inputClass = extra ? '.js-dw-slider__input_to' : '.js-dw-slider__input_from';
     const input: HTMLInputElement | null = this.initElement.querySelector(inputClass);
-    if (input) {
-      return true;
-    }
-    return false;
+    return !!input;
   };
 
   private initInput = (): void => {
@@ -239,12 +230,10 @@ class View extends Publisher<ViewData> {
   };
 
   private countDistance = (part: number, extra = false): number => {
-    let currentPart = this.part;
     if (extra) {
-      currentPart = this.partExtra;
+      return Math.abs(this.partExtra - part);
     }
-    const dist = Math.abs(currentPart - part);
-    return dist;
+    return Math.abs(this.part - part);
   };
 
   private changePositionForTheNearest = (part: number): void => {

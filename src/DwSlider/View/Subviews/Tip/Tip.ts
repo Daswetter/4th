@@ -69,6 +69,13 @@ class Tip extends Subview {
     element.style.top = `${-element.offsetHeight - thumbHeight / 2}px`;
   };
 
+  private setElement = (extra: boolean): HTMLElement => {
+    if (extra) {
+      return this.extra;
+    }
+    return this.primary;
+  };
+
   public setInitialSettings = (
     lineWidth: number,
     thumbSize: Size,
@@ -76,13 +83,7 @@ class Tip extends Subview {
     value: number,
     extra = false,
   ): void => {
-    let element: HTMLElement;
-
-    if (extra) {
-      element = this.extra;
-    } else {
-      element = this.primary;
-    }
+    const element = this.setElement(extra);
     this.printInnerText(element, value);
     if (vertical) {
       this.setRightToVertical(element, lineWidth, thumbSize.width);
@@ -97,11 +98,7 @@ class Tip extends Subview {
     vertical: boolean,
     extra: boolean,
   ): void => {
-    let element = this.primary;
-
-    if (extra) {
-      element = this.extra;
-    }
+    const element = this.setElement(extra);
     element.addEventListener('mousedown', (event) => this.emitEvent('tip: mouseDown', {
       element, vertical, lineSize, lineSide, event,
     }));
@@ -113,38 +110,40 @@ class Tip extends Subview {
     }));
   };
 
-  private handleMouseDownForUnited = (
+  private wasExtraMoved = (
     event: MouseEvent,
     lineSize: Size,
     lineSide: Side,
     vertical: boolean,
-  ): void => {
-    let element = this.primary;
-    let isExtra;
-    let unitedMiddle;
+  ): boolean => {
     if (vertical) {
       const halfUnited = this.united.offsetHeight / 2;
-      unitedMiddle = this.united.offsetTop + lineSide.bottom - lineSize.height + halfUnited;
+      const unitedMiddle = this.united.offsetTop + lineSide.bottom - lineSize.height + halfUnited;
       const primaryIsHigher = this.primary.offsetTop < this.extra.offsetTop;
       const eventIsCloserToExtraBelowTheMiddle = event.pageY > unitedMiddle && primaryIsHigher;
 
       const extraIsHigher = this.primary.offsetTop >= this.extra.offsetTop;
       const eventIsCloserToExtraAboveTheMiddle = event.pageY <= unitedMiddle && extraIsHigher;
 
-      isExtra = eventIsCloserToExtraBelowTheMiddle || eventIsCloserToExtraAboveTheMiddle;
-    } else {
-      unitedMiddle = this.united.offsetLeft + lineSide.left + this.united.offsetWidth / 2;
-      const extraIsMoreToTheRight = this.primary.offsetLeft < this.extra.offsetLeft;
-      const eventIsCloserToExtraOnTheRight = event.pageX > unitedMiddle && extraIsMoreToTheRight;
-
-      const primaryIsMoreToTheRight = this.primary.offsetLeft >= this.extra.offsetLeft;
-      const eventIsCloserToExtraOnTheLeft = event.pageX <= unitedMiddle && primaryIsMoreToTheRight;
-      isExtra = eventIsCloserToExtraOnTheRight || eventIsCloserToExtraOnTheLeft;
+      return eventIsCloserToExtraBelowTheMiddle || eventIsCloserToExtraAboveTheMiddle;
     }
-    if (isExtra) {
-      element = this.extra;
-    }
+    const unitedMiddle = this.united.offsetLeft + lineSide.left + this.united.offsetWidth / 2;
+    const extraIsMoreToTheRight = this.primary.offsetLeft < this.extra.offsetLeft;
+    const eventIsCloserToExtraOnTheRight = event.pageX > unitedMiddle && extraIsMoreToTheRight;
 
+    const primaryIsMoreToTheRight = this.primary.offsetLeft >= this.extra.offsetLeft;
+    const eventIsCloserToExtraOnTheLeft = event.pageX <= unitedMiddle && primaryIsMoreToTheRight;
+    return eventIsCloserToExtraOnTheRight || eventIsCloserToExtraOnTheLeft;
+  };
+
+  private handleMouseDownForUnited = (
+    event: MouseEvent,
+    lineSize: Size,
+    lineSide: Side,
+    vertical: boolean,
+  ): void => {
+    const isExtra = this.wasExtraMoved(event, lineSize, lineSide, vertical);
+    const element = this.setElement(isExtra);
     this.handleMouseDown({
       element, vertical, lineSize, lineSide, event,
     });
@@ -171,22 +170,27 @@ class Tip extends Subview {
     document.addEventListener('mouseup', this.mouseUp);
   };
 
-  private handleMouseMove = (data: MouseMoveData): void => {
-    let part = this.countPart(data);
-
+  private filterPart = (part: number): number => {
     if (part < 0) {
-      part = 0;
-    } else if (part > 1) {
-      part = 1;
+      return 0;
     }
+    if (part > 1) {
+      return 1;
+    }
+    return part;
+  };
+
+  private handleMouseMove = (data: MouseMoveData): void => {
+    const part = this.countPart(data);
+    const filteredPart = this.filterPart(part);
 
     if (data.element === this.primary) {
       this.notify({
-        value: part, current: false, extra: false, nearest: false,
+        value: filteredPart, current: false, extra: false, nearest: false,
       });
     } else {
       this.notify({
-        value: part, current: false, extra: true, nearest: false,
+        value: filteredPart, current: false, extra: true, nearest: false,
       });
     }
   };
@@ -206,16 +210,13 @@ class Tip extends Subview {
   };
 
   private countPart = (data: MouseMoveData): number => {
-    let part: number;
     if (data.vertical) {
       const halfTipSize = data.element.offsetHeight / 2;
       const usingSpot = -(data.event.pageY - data.lineSide.bottom - data.shift + halfTipSize);
-      part = usingSpot / data.lineSize.height;
-      return part;
+      return usingSpot / data.lineSize.height;
     }
     const halfTipSize = data.element.offsetWidth / 2;
-    part = (data.event.pageX - data.lineSide.left - data.shift + halfTipSize) / data.lineSize.width;
-    return part;
+    return (data.event.pageX - data.lineSide.left - data.shift + halfTipSize) / data.lineSize.width;
   };
 
   private setPosition = (
@@ -269,16 +270,20 @@ class Tip extends Subview {
     }
   };
 
-  private switchElements = (vertical: boolean) => {
-    const extraRight = this.extra.offsetLeft + this.extra.offsetWidth;
-    const primaryRight = this.primary.offsetLeft + this.primary.offsetWidth;
-    let isTogether = this.primary.offsetLeft <= extraRight && primaryRight >= this.extra.offsetLeft;
-
+  private doTipsTouchEachOther = (vertical: boolean): boolean => {
     if (vertical) {
       const extraBottom = this.extra.offsetTop + this.extra.offsetHeight;
       const primaryBottom = this.primary.offsetTop + this.primary.offsetHeight;
-      isTogether = this.primary.offsetTop <= extraBottom && primaryBottom >= this.extra.offsetTop;
+      return this.primary.offsetTop <= extraBottom && primaryBottom >= this.extra.offsetTop;
     }
+
+    const extraRight = this.extra.offsetLeft + this.extra.offsetWidth;
+    const primaryRight = this.primary.offsetLeft + this.primary.offsetWidth;
+    return this.primary.offsetLeft <= extraRight && primaryRight >= this.extra.offsetLeft;
+  };
+
+  private switchElements = (vertical: boolean) => {
+    const isTogether = this.doTipsTouchEachOther(vertical);
     this.switchOpacity(isTogether);
   };
 
@@ -296,16 +301,24 @@ class Tip extends Subview {
     }
   };
 
-  private switchOpacity = (unitedIsOn: boolean): void => {
-    let displayProperty = 'none';
-    let opacity = '1';
+  private setDisplayProperty = (unitedIsOn: boolean): string => {
     if (unitedIsOn) {
-      displayProperty = 'block';
-      opacity = '0';
+      return 'block';
     }
-    this.united.style.display = displayProperty;
-    this.primary.style.opacity = opacity;
-    this.extra.style.opacity = opacity;
+    return 'none';
+  };
+
+  private setOpacity = (unitedIsOn: boolean): string => {
+    if (unitedIsOn) {
+      return '0';
+    }
+    return '1';
+  };
+
+  private switchOpacity = (unitedIsOn: boolean): void => {
+    this.united.style.display = this.setDisplayProperty(unitedIsOn);
+    this.primary.style.opacity = this.setOpacity(unitedIsOn);
+    this.extra.style.opacity = this.setOpacity(unitedIsOn);
   };
 
   public update = (
@@ -317,15 +330,12 @@ class Tip extends Subview {
     double: boolean,
     extra: boolean,
   ): void => {
-    let element = this.primary;
-
     if (extra) {
-      element = this.extra;
       this.currentExtra = current;
     } else {
       this.current = current;
     }
-
+    const element = this.setElement(extra);
     this.printInnerText(element, current);
     this.setPosition(element, part, lineSize, vertical);
 

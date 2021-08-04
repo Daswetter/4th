@@ -43,18 +43,20 @@ class Thumb extends Subview {
     this.subscribeToAnEvent<null>('thumb: mouseUp', () => this.handleMouseUp());
   };
 
+  private setElement = (extra: boolean): HTMLElement => {
+    if (extra) {
+      return this.extra;
+    }
+    return this.primary;
+  };
+
   public setEventListener = (
     lineSize: Size,
     lineSide: Side,
     vertical = false,
     extra = false,
   ): void => {
-    let element = this.primary;
-
-    if (extra) {
-      element = this.extra;
-    }
-
+    const element = this.setElement(extra);
     element.addEventListener('mousedown', (event) => this.emitEvent('thumb: mouseDown', {
       element, vertical, lineSize, lineSide, event,
     }));
@@ -81,22 +83,28 @@ class Thumb extends Subview {
     document.addEventListener('mouseup', this.mouseUpEvent);
   };
 
-  private handleMouseMove = (data: MouseMoveData): void => {
-    let part = this.countPart(data);
+  private filterPart = (part: number): number => {
     if (part < 0) {
-      part = 0;
-    } else if (part > 1) {
-      part = 1;
+      return 0;
     }
+    if (part > 1) {
+      return 1;
+    }
+    return part;
+  };
+
+  private handleMouseMove = (data: MouseMoveData): void => {
+    const part = this.countPart(data);
+    const filteredPart = this.filterPart(part);
 
     if (data.element === this.primary) {
       this.notify({
-        value: part, current: false, extra: false, nearest: false,
+        value: filteredPart, current: false, extra: false, nearest: false,
       });
     }
     if (data.element === this.extra) {
       this.notify({
-        value: part, current: false, extra: true, nearest: false,
+        value: filteredPart, current: false, extra: true, nearest: false,
       });
     }
   };
@@ -116,17 +124,14 @@ class Thumb extends Subview {
   };
 
   private countPart = (data: MouseMoveData): number => {
-    let part: number;
     if (data.vertical) {
       const halfThumbSize = data.element.offsetHeight / 2;
       const movingSpot = -(data.event.pageY - data.lineSide.bottom - data.shift + halfThumbSize);
-      part = movingSpot / data.lineSize.height;
-      return part;
+      return movingSpot / data.lineSize.height;
     }
     const halfThumbSize = data.element.offsetWidth / 2;
     const usingSpot = data.event.pageX - data.lineSide.left - data.shift + halfThumbSize;
-    part = usingSpot / data.lineSize.width;
-    return part;
+    return usingSpot / data.lineSize.width;
   };
 
   private changeElementPosition = (
@@ -144,31 +149,21 @@ class Thumb extends Subview {
   public update = (
     part: number, lineSize: Size, vertical: boolean, extra: boolean,
   ): void => {
-    let element = this.primary;
-
-    if (extra) {
-      element = this.extra;
-    }
-
+    const element = this.setElement(extra);
     this.changeElementPosition(part, lineSize, vertical, element);
   };
 
   private countInitialParameter = (
     element: HTMLElement, lineSize: Size, vertical: boolean,
   ): string => {
-    let initParameter = `${(lineSize.height - element.offsetHeight) / 2}px`;
     if (vertical) {
-      initParameter = `${(lineSize.width - element.offsetWidth) / 2}px`;
+      return `${(lineSize.width - element.offsetWidth) / 2}px`;
     }
-    return initParameter;
+    return `${(lineSize.height - element.offsetHeight) / 2}px`;
   };
 
   public setInitialSettings = (lineSize: Size, vertical = false, extra = false): void => {
-    let element = this.primary;
-    if (extra) {
-      element = this.extra;
-    }
-
+    const element = this.setElement(extra);
     if (vertical) {
       element.style.top = '';
       element.style.left = this.countInitialParameter(element, lineSize, vertical);

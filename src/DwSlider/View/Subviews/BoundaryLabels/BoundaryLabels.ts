@@ -63,16 +63,17 @@ class BoundaryLabels extends Subview {
     }
   };
 
+  private setOpacity = (condition: boolean, optionalCondition?: boolean): string => {
+    if (condition || optionalCondition) {
+      return '0';
+    }
+    return '1';
+  };
+
   private switchOpacity = (
     element: HTMLElement, condition: boolean, optionalCondition?: boolean,
   ): void => {
-    let opacity: string;
-    if (condition || optionalCondition) {
-      opacity = '0';
-    } else {
-      opacity = '1';
-    }
-    element.style.opacity = opacity;
+    element.style.opacity = this.setOpacity(condition, optionalCondition);
   };
 
   private isPrimaryTouchingMin = (
