@@ -7,19 +7,17 @@ class Model extends Publisher<ModelUpdate> {
     this.options = this.filterOptions(options);
   }
 
-  private getNumberOfSections = (): number => {
+  private countScaleMax = (): number => {
     const differenceBetweenMaxAndMin = Math.abs(this.options.max - this.options.min);
-    return Math.floor(differenceBetweenMaxAndMin / this.options.step);
+    return Math.floor(differenceBetweenMaxAndMin / this.options.step) * this.options.step;
   };
 
   private findRest = (current: number, part: number, rest: number, stepAsPart: number):number[] => {
     const restAtTheEnd = 1 - stepAsPart * Math.trunc(1 / stepAsPart);
-    let newCurrent = current;
     if (rest > restAtTheEnd / 2) {
-      newCurrent = this.options.max;
-      return [newCurrent, 1];
+      return [this.options.max, 1];
     }
-    return [newCurrent, part];
+    return [this.roundTo(current, this.options.step), part];
   };
 
   private isScaleFullSize = (): boolean => {
@@ -27,27 +25,33 @@ class Model extends Publisher<ModelUpdate> {
     return Number.isInteger(differenceBetweenMaxAndMin / this.options.step);
   };
 
+  private setClosestPart = (rest: number, stepAsPart: number, part: number): number => {
+    if (rest < stepAsPart / 2) {
+      return part - rest;
+    }
+    return part + (stepAsPart - rest);
+  };
+
+  private roundValue = (current: number): number => {
+    if (this.countNumberAccuracy(this.options.min) < this.countNumberAccuracy(this.options.step)) {
+      return this.roundTo(current, this.options.min);
+    }
+    return this.roundTo(current, this.options.step);
+  };
+
   private countCurrent = (part: number): Array<number> => {
-    const stepAsPart = this.options.step / Math.abs(this.options.max - this.options.min);
+    const differenceBetweenMaxAndMin = Math.abs(this.options.max - this.options.min);
+    const stepAsPart = this.options.step / differenceBetweenMaxAndMin;
     const rest = part - stepAsPart * Math.trunc(part / stepAsPart);
 
-    let newPart: number;
-    if (rest < stepAsPart / 2) {
-      newPart = part - rest;
-    } else {
-      newPart = part + (stepAsPart - rest);
-    }
+    const newPart = this.setClosestPart(rest, stepAsPart, part);
+    const isCurrentGreaterThanScale = differenceBetweenMaxAndMin * part > this.countScaleMax();
 
-    const differenceBetweenMaxAndMin = Math.abs(this.options.max - this.options.min);
-    const scaleMax = this.getNumberOfSections() * this.options.step;
-    const isCurrentGreaterThanScale = differenceBetweenMaxAndMin * part > scaleMax;
-
-    let current = Math.abs(this.options.max - this.options.min) * newPart + this.options.min;
+    const current = differenceBetweenMaxAndMin * newPart + this.options.min;
     if (!this.isScaleFullSize() && isCurrentGreaterThanScale) {
-      [current, newPart] = this.findRest(current, newPart, rest, stepAsPart);
+      return this.findRest(current, newPart, rest, stepAsPart);
     }
-    current = this.roundValueTo(current, this.options.step);
-    return [current, newPart];
+    return [this.roundValue(current), newPart];
   };
 
   private filterOptions = (options: IOptions): IOptions => {
@@ -116,9 +120,8 @@ class Model extends Publisher<ModelUpdate> {
   };
 
   private countPart = (current: number): number => {
-    let part = (current - this.options.min) / (this.options.max - this.options.min);
-    part = this.filterPart(part);
-    return part;
+    const part = (current - this.options.min) / (this.options.max - this.options.min);
+    return this.filterPart(part);
   };
 
   public setPart(current: number, extra = false): void {
@@ -127,59 +130,43 @@ class Model extends Publisher<ModelUpdate> {
     this.dataWereChanged(newCurrent, newPart, extra);
   }
 
-  private createFullSizeScale = (): Record<string, string> => {
-    const numberOfScaleSections = this.options.scaleSize - 1;
-    let scaleElements: Record<string, string> = {};
-
-    for (let i = 0; i <= numberOfScaleSections; i += 1) {
-      const scaleStep = 1 / numberOfScaleSections;
-      const scaleValue = (this.options.max - this.options.min) * scaleStep * i + this.options.min;
-      const roundScaleValues = this.roundValueTo(scaleValue, this.options.step);
-      const partForRound = this.countPart(roundScaleValues);
-      scaleElements = { ...scaleElements, [String(partForRound)]: String(roundScaleValues) };
-    }
-
-    return scaleElements;
-  };
-
-  private createPartSizeScale = (): Record<string, string> => {
-    const numberOfScaleSections = this.options.scaleSize - 1;
-    let scaleElements: Record<string, string> = {};
-
-    for (let i = 0; i <= numberOfScaleSections; i += 1) {
-      const newMax = this.getNumberOfSections() * this.options.step + this.options.min;
-      const scaleStep = 1 / numberOfScaleSections;
-
-      let scaleValue: number;
-      scaleValue = (newMax - this.options.min) * scaleStep * i + this.options.min;
-      scaleValue = this.roundValueTo(scaleValue, this.options.step);
-
-      const newPart = this.countPart(scaleValue);
-      scaleElements = { ...scaleElements, [newPart]: String(scaleValue) };
-    }
-
-    return scaleElements;
-  };
-
   public countScaleElements = (): Record<string, string> => {
-    if (this.isScaleFullSize()) {
-      return this.createFullSizeScale();
+    let scaleElements: Record<string, string> = {};
+    const scaleStep = 1 / (this.options.scaleSize - 1);
+
+    for (let i = 0; i < this.options.scaleSize; i += 1) {
+      const scaleValue = this.countScaleMax() * scaleStep * i + this.options.min;
+      const roundScaleValue = this.roundValue(scaleValue);
+      const newPart = this.countPart(roundScaleValue);
+      scaleElements = { ...scaleElements, [newPart]: String(roundScaleValue) };
     }
-    return this.createPartSizeScale();
+    return scaleElements;
   };
 
-  private roundValueTo = (value: number, roundTo: number): number => {
-    const dividedRoundTo = roundTo.toString().split('.');
-    let decimal: number;
-    if (dividedRoundTo[0] === '0') {
-      if (!dividedRoundTo[1]) {
-        decimal = -dividedRoundTo[0].length + 1;
-      } else {
-        decimal = dividedRoundTo[1].length;
-      }
-    } else {
-      decimal = dividedRoundTo[0].length - 1;
+  private countNumberAccuracy = (value: number): number => {
+    const dividedValue = value.toString().split('.');
+    if (dividedValue[0].length === 1 && !dividedValue[1]) {
+      return 0;
     }
+    if (dividedValue[0] === '0' || dividedValue[1]) {
+      return -dividedValue[1].length;
+    }
+    return dividedValue[0].length;
+  };
+
+  private countNumberOrder = (roundTo: number): number => {
+    const order = this.countNumberAccuracy(roundTo);
+    if (order < 0) {
+      return Math.abs(order);
+    }
+    if (order === 0) {
+      return order;
+    }
+    return order - 1;
+  };
+
+  private roundTo = (value: number, roundTo: number): number => {
+    const decimal = this.countNumberOrder(roundTo);
     return (Math.round(value * (10 ** decimal)) / (10 ** decimal));
   };
 

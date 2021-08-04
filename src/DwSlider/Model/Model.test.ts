@@ -75,7 +75,7 @@ describe('Model', () => {
         min: 0,
         max: 130,
         from: 118,
-        to: 120,
+        to: -10,
         step: 33,
         progress: true,
         tip: true,
@@ -88,6 +88,40 @@ describe('Model', () => {
       model.subscribe(update);
       model.setCurrent(1);
       expect(update).toHaveBeenCalledTimes(1);
+    });
+    test('should work for part size scale with step 1 and max 2.5', () => {
+      options.min = 0;
+      options.max = 2.5;
+      options.step = 1;
+      model = new Model(options);
+      model.subscribe(update);
+      const extra = true;
+      model.setCurrent(1, extra);
+      expect(update).toHaveBeenCalledWith({
+        current: 2.5, eventName: 'data', extra: true, part: 1,
+      });
+    });
+    test('should work for part size scale with step 0.1 and max 0.09', () => {
+      options.min = -1.81;
+      options.max = 0.09;
+      options.step = 0.1;
+      model = new Model(options);
+      model.subscribe(update);
+      model.setCurrent(0);
+      expect(update).toHaveBeenCalledWith({
+        current: -1.81, eventName: 'data', extra: false, part: 0,
+      });
+    });
+    test('should work for part size scale with step 14 and max 105', () => {
+      options.min = 10;
+      options.max = 105;
+      options.step = 14;
+      model = new Model(options);
+      model.subscribe(update);
+      model.setCurrent(0.94);
+      expect(update).toHaveBeenCalledWith({
+        current: 94, eventName: 'data', extra: false, part: 0.8842105263157893,
+      });
     });
   });
 
@@ -155,6 +189,22 @@ describe('Model', () => {
       options.scaleSize = 2;
       model = new Model(options);
       expect(model.countScaleElements()).toEqual({ 0: '0', 0.8: '4' });
+    });
+    test('should set correct part size scale with step 1 and min = -18.1', () => {
+      options.min = -18.1;
+      options.max = 0.9;
+      options.step = 1;
+      options.scaleSize = 2;
+      model = new Model(options);
+      expect(model.countScaleElements()).toEqual({ 0: '-18.1', 1: '0.9' });
+    });
+    test('should set correct part size scale with step 1 and min = -18.11', () => {
+      options.min = -18.11;
+      options.max = 0.89;
+      options.step = 1;
+      options.scaleSize = 2;
+      model = new Model(options);
+      expect(model.countScaleElements()).toEqual({ 0: '-18.11', 1: '0.89' });
     });
   });
 
