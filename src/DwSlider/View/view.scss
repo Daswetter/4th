@@ -1,40 +1,47 @@
 html {
-  overflow-x: scroll; 
-  overflow-y: scroll; 
+  overflow-x: scroll;
+  overflow-y: scroll;
 }
+
 .dw-slider {
   display: flex;
-  -webkit-user-select: none; 
+  -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
-  &_horizontal{
+
+  &_horizontal {
     flex-direction: column;
     width: 60%;
     margin: 3.125rem;
   }
-  &_vertical{
+
+  &_vertical {
     flex-direction: row;
     justify-content: center;
-    width: auto; 
+    width: auto;
     margin: 0.625rem 6.25rem;
   }
-  &__line{
+
+  &__line {
     position: relative;
     cursor: pointer;
     width: 100%;
     height: 0.625rem;
     border-radius: 0.3125rem;
     background: #8fd9a8;
-    &_horizontal { 
+
+    &_horizontal {
       height: 0.625rem;
       width: 100%;
     }
-    &_vertical { 
+
+    &_vertical {
       width: 0.625rem;
       height: 9.375rem;
     }
   }
-  &__thumb{
+
+  &__thumb {
     position: absolute;
     z-index: 2;
     width: 1.25rem;
@@ -42,24 +49,29 @@ html {
     background: #28b5b5;
     border-radius: 50%;
   }
-  &__progress{
+
+  &__progress {
     position: absolute;
     z-index: 1;
     height: 0.625rem;
     background: #4b778d;
     border-radius: 0.3125rem;
-    &_horizontal{
+
+    &_horizontal {
       height: 0.625rem;
     }
-    &_vertical{
+
+    &_vertical {
       width: 0.625rem;
       height: auto;
-    }    
+    }
   }
+
   &__scale {
     margin: 0.625rem 0;
   }
-  &__scale-number{
+
+  &__scale-number {
     position: absolute;
     font-family: Roboto, sans-serif;
     cursor: pointer;
@@ -67,7 +79,8 @@ html {
     max-width: 1.875rem;
     text-align: center;
   }
-  &__tip{
+
+  &__tip {
     position: absolute;
     font-family: Roboto, sans-serif;
     min-width: 1.25rem;
@@ -76,11 +89,11 @@ html {
     text-align: center;
     padding: 0.0625rem 0.1875rem;
   }
+
   &__boundary-labels_min,
-  &__boundary-labels_max{
+  &__boundary-labels_max {
     position: absolute;
     display: block;
     font-family: Roboto, sans-serif;
   }
 }
-

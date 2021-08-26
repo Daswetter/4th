@@ -1,9 +1,9 @@
-.input{
+.input {
   display: flex;
   position: relative;
   margin: 0.3125rem;
-  
-  &__title{
+
+  &__title {
     width: 100%;
     min-width: 70px;
     max-width: 120px;
@@ -11,8 +11,9 @@
     color: rgb(245, 247, 222);
     font-family: Roboto, sans-serif;
     padding: 0.3125rem;
-  }  
-  &__field{
+  }
+
+  &__field {
     -webkit-appearance: none;
     border: 0.125rem solid rgb(102, 93, 93);
     width: 100%;
@@ -20,9 +21,9 @@
     max-width: 6.25rem;
     font-family: Roboto, sans-serif;
     padding: 0.3125rem;
-    &:disabled{
+
+    &:disabled {
       background: rgb(196, 193, 193);
     }
-  } 
+  }
 }
-

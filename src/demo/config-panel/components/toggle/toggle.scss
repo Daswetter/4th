@@ -13,6 +13,7 @@
     -webkit-appearance: none;
     border: 0.125rem solid rgb(102, 93, 93);
     cursor: pointer;
+
     &::before {
       display: block;
       content: '';
@@ -20,17 +21,19 @@
       height: 1.125rem;
       background: rgb(102, 93, 93);
     }
+
     &:checked {
       border: 0.125rem solid #8fd9a8;
-      &::before{
+
+      &::before {
         margin-left: 1.125rem;
         background: #8fd9a8;
       }
     }
   }
-  
-  &__title{
+
+  &__title {
     margin: 0.3125rem 0;
     font-family: Roboto, sans-serif;
-  }  
+  }
 }

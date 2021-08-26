@@ -1,5 +1,5 @@
 
-.dw-slider1{
+.dw-slider1 {
   display: flex;
   justify-content: start;
   align-items: start;
@@ -11,10 +11,10 @@
   }
 }
 
-
 .dw-slider2 {
   display: flex;
   justify-content: start;
+
   @media screen and (max-width: 500px) {
     flex-direction: column;
     align-items: center;
@@ -25,19 +25,20 @@
   display: flex;
   justify-content: start;
   margin: 3.125rem 0;
-  @media screen and (max-width: 500px) {
-    flex-direction: column;
-    align-items: center;
-  }
-} 
 
-.dw-slider4 {
-  display: flex;
-  justify-content: start;
-  margin: 3.125rem 0;
   @media screen and (max-width: 500px) {
     flex-direction: column;
     align-items: center;
   }
 }
 
+.dw-slider4 {
+  display: flex;
+  justify-content: start;
+  margin: 3.125rem 0;
+
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
