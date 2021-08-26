@@ -8,8 +8,6 @@ mixin config-panel
         +input({title: item})
       +input({title: "from", className: "js-dw-slider__input_from"})
       +input({title: "to", className: "js-dw-slider__input_to"})
-      
-    
     .config-panel__toggles
       each item in ["vertical", "double", "scale", "progress", "tip"]
         +toggle({title: item})
