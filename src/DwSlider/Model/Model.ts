@@ -9,7 +9,8 @@ class Model extends Publisher<ModelUpdate> {
 
   private countScaleMax = (): number => {
     const differenceBetweenMaxAndMin = Math.abs(this.options.max - this.options.min);
-    return Math.floor(differenceBetweenMaxAndMin / this.options.step) * this.options.step;
+    const roundDifference = this.roundTo(differenceBetweenMaxAndMin / this.options.step, 0.00001);
+    return Math.floor(roundDifference) * this.options.step;
   };
 
   private findRest = (current: number, part: number, rest: number, stepAsPart: number):number[] => {
@@ -130,15 +131,29 @@ class Model extends Publisher<ModelUpdate> {
     this.dataWereChanged(newCurrent, newPart, extra);
   }
 
+  private filterScaleSize = () => {
+    const numberOfScaleSections = this.options.scaleSize - 1;
+    const numberOfSliderSections = (this.options.max - this.options.min) / this.options.step;
+    if (numberOfScaleSections > numberOfSliderSections) {
+      this.options.scaleSize = Math.round(numberOfSliderSections + 1);
+    } else if (numberOfScaleSections % numberOfSliderSections !== 0) {
+      for (let j = 1; j < numberOfScaleSections; j += 1) {
+        if ((numberOfScaleSections + j) % numberOfSliderSections === 0) {
+          this.options.scaleSize = numberOfScaleSections + j + 1;
+        }
+      }
+    }
+  };
+
   public countScaleElements = (): Record<string, string> => {
+    this.filterScaleSize();
     let scaleElements: Record<string, string> = {};
     const scaleStep = 1 / (this.options.scaleSize - 1);
 
     for (let i = 0; i < this.options.scaleSize; i += 1) {
       const scaleValue = this.countScaleMax() * scaleStep * i + this.options.min;
-      const roundScaleValue = this.roundValue(scaleValue);
-      const newPart = this.countPart(roundScaleValue);
-      scaleElements = { ...scaleElements, [newPart]: String(roundScaleValue) };
+      const [current, part] = this.countCurrent(this.countPart(scaleValue));
+      scaleElements = { ...scaleElements, [part]: current };
     }
     return scaleElements;
   };

@@ -206,6 +206,14 @@ describe('Model', () => {
       model = new Model(options);
       expect(model.countScaleElements()).toEqual({ 0: '-18.11', 1: '0.89' });
     });
+    test('should set correct full size scale', () => {
+      options.min = 0;
+      options.max = 0.6;
+      options.step = 0.1;
+      options.scaleSize = 2;
+      model = new Model(options);
+      expect(model.countScaleElements()).toEqual({ 0: '0', 1: '0.6' });
+    });
   });
 
   describe('refreshAll', () => {
