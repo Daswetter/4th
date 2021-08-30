@@ -243,13 +243,14 @@ class Tip extends Subview {
 
   private joinTips = (lineWidth: number, thumbWidth: number, vertical: boolean): void => {
     this.defineContent(vertical);
-
     this.setPositionToUnited(lineWidth, thumbWidth, vertical);
 
     if (!vertical) {
-      const lineEdge = this.united.offsetLeft + this.united.offsetWidth >= lineWidth;
-
-      if (lineEdge) {
+      const unitedRight = this.united.offsetLeft + this.united.offsetWidth;
+      const lineEdge = unitedRight >= lineWidth;
+      const primaryRight = this.primary.offsetLeft + this.primary.offsetWidth;
+      const extraRight = this.extra.offsetLeft + this.extra.offsetWidth;
+      if (lineEdge || Math.max(primaryRight, extraRight) >= lineWidth) {
         this.united.style.left = '';
         this.united.style.right = `${-this.primary.offsetWidth / 2}px`;
       } else {
@@ -266,7 +267,7 @@ class Tip extends Subview {
       this.united.style.textAlign = 'center';
       this.printInnerText(this.united, `${Math.max(this.current, this.currentExtra)} — ${Math.min(this.current, this.currentExtra)}`);
     } else {
-      this.printInnerText(this.united, `${Math.min(this.current, this.currentExtra)} — ${Math.max(this.current, this.currentExtra)}`);
+      this.printInnerText(this.united, `${Math.min(this.current, this.currentExtra)}\xa0—\xa0${Math.max(this.current, this.currentExtra)}`);
     }
   };
 
