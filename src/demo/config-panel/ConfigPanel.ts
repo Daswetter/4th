@@ -4,7 +4,7 @@ import { IDwSlider, IOptions } from '../../types';
 import './components/toggle/toggle';
 import './components/input/input';
 import './config-panel.scss';
-import { ReducedChangeEvent, ChangeEvent } from './ConfigPanel.types';
+import { OptionKey, ChangeEvent } from './ConfigPanel.types';
 
 class ConfigPanel {
   private initElement!: HTMLElement;
@@ -69,7 +69,7 @@ class ConfigPanel {
 
     this.subscribeToAnEvent<ChangeEvent>('input: changed', ({ element, optionKey }) => this.handleInputChange({ element, optionKey }));
 
-    this.subscribeToAnEvent<ReducedChangeEvent>('checkbox: changed', ({ optionKey }) => this.handleCheckboxChange({ optionKey }));
+    this.subscribeToAnEvent<OptionKey>('checkbox: changed', ({ optionKey }) => this.handleCheckboxChange({ optionKey }));
 
     this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.DwSlider.returnCurrentOptions().double, this.DwSlider.returnCurrentOptions().to));
     this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.scaleSize, this.DwSlider.returnCurrentOptions().scale, this.DwSlider.returnCurrentOptions().scaleSize));
@@ -159,7 +159,7 @@ class ConfigPanel {
     throw new Error(`${optionKey} is not found`);
   };
 
-  private handleCheckboxChange = (params: ReducedChangeEvent): void => {
+  private handleCheckboxChange = (params: OptionKey): void => {
     const isCurrentStateTrue = this.DwSlider.returnCurrentOptions()[params.optionKey];
     const newState = !isCurrentStateTrue;
     this.DwSlider.update({

@@ -5,10 +5,10 @@ type ChangeEvent = {
   optionKey: string,
 };
 
-type ReducedChangeEvent = {
+type OptionKey = {
   optionKey: keyof IOptions,
 };
 
 export {
-  ChangeEvent, ReducedChangeEvent,
+  ChangeEvent, OptionKey,
 };
