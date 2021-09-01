@@ -48,7 +48,6 @@ class Scale extends Subview {
     this.scale.append(element);
     element.classList.add('dw-slider__scale-number');
     this.scaleElements = { ...this.scaleElements, [part]: element };
-    element.style.background = 'khaki';
   };
 
   private printScaleValues = (scaleValues: Record<string, string>): void => {
