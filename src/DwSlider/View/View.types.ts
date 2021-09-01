@@ -5,7 +5,4 @@ type SubviewData = {
   nearest: boolean
 };
 
-export {
-  // eslint-disable-next-line import/prefer-default-export
-  SubviewData,
-};
+export default SubviewData;

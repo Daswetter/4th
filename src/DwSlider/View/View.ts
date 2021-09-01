@@ -8,7 +8,7 @@ import Tip from './Subviews/Tip/Tip';
 import Input from './Subviews/Input/Input';
 import BoundaryLabels from './Subviews/BoundaryLabels/BoundaryLabels';
 import Publisher from '../Publisher';
-import { SubviewData } from './View.types';
+import SubviewData from './View.types';
 
 class View extends Publisher<ViewData> {
   public wrapper!: Wrapper;
@@ -40,6 +40,59 @@ class View extends Publisher<ViewData> {
     this.options = options;
     this.initElement = initElement;
   }
+
+  public update = (data: SubviewData): void => {
+    if (data.nearest) {
+      this.changePositionForTheNearest(data.value);
+    } else {
+      this.notify({ value: data.value, current: data.current, extra: data.extra });
+    }
+  };
+
+  public clearAllView = (): void => {
+    this.wrapper.returnAsHTML().remove();
+  };
+
+  public sendDataToSubviews = (current: number, part: number, extra = false): void => {
+    if (extra) {
+      this.partExtra = part;
+      this.currentExtra = current;
+      this.options.to = current;
+    } else {
+      this.part = part;
+      this.current = current;
+      this.options.from = current;
+    }
+
+    this.thumb.update(part, this.line.returnSize(), this.options.vertical, extra);
+
+    if (this.doesInputExist(extra)) {
+      this.input.update(current, extra);
+    }
+    if (this.options.progress) {
+      this.progress.update(part, this.line.returnSize(), this.options.vertical, extra);
+    }
+    if (this.options.tip) {
+      this.tip.update(
+        part,
+        current,
+        this.line.returnSize(),
+        this.thumb.returnSize(),
+        this.options.vertical,
+        this.options.double, extra,
+      );
+
+      if (this.options.double) {
+        this.boundaryLabels.update(
+          this.tip.returnPrimaryParameters(),
+          this.options.vertical,
+          this.tip.returnExtraParameters(),
+        );
+      } else {
+        this.boundaryLabels.update(this.tip.returnPrimaryParameters(), this.options.vertical);
+      }
+    }
+  };
 
   public initView = (scaleElements: Record<string, string>, options = this.options): void => {
     this.options = options;
@@ -184,51 +237,6 @@ class View extends Publisher<ViewData> {
     );
   };
 
-  public clearAllView = (): void => {
-    this.wrapper.returnAsHTML().remove();
-  };
-
-  public sendDataToSubviews = (current: number, part: number, extra = false): void => {
-    if (extra) {
-      this.partExtra = part;
-      this.currentExtra = current;
-      this.options.to = current;
-    } else {
-      this.part = part;
-      this.current = current;
-      this.options.from = current;
-    }
-
-    this.thumb.update(part, this.line.returnSize(), this.options.vertical, extra);
-
-    if (this.doesInputExist(extra)) {
-      this.input.update(current, extra);
-    }
-    if (this.options.progress) {
-      this.progress.update(part, this.line.returnSize(), this.options.vertical, extra);
-    }
-    if (this.options.tip) {
-      this.tip.update(
-        part,
-        current,
-        this.line.returnSize(),
-        this.thumb.returnSize(),
-        this.options.vertical,
-        this.options.double, extra,
-      );
-
-      if (this.options.double) {
-        this.boundaryLabels.update(
-          this.tip.returnPrimaryParameters(),
-          this.options.vertical,
-          this.tip.returnExtraParameters(),
-        );
-      } else {
-        this.boundaryLabels.update(this.tip.returnPrimaryParameters(), this.options.vertical);
-      }
-    }
-  };
-
   private countDistance = (part: number, extra = false): number => {
     if (extra) {
       return Math.abs(this.partExtra - part);
@@ -244,14 +252,6 @@ class View extends Publisher<ViewData> {
       this.notify({ value: part, current: false, extra: true });
     } else {
       this.notify({ value: part, current: false, extra: false });
-    }
-  };
-
-  public update = (data: SubviewData): void => {
-    if (data.nearest) {
-      this.changePositionForTheNearest(data.value);
-    } else {
-      this.notify({ value: data.value, current: data.current, extra: data.extra });
     }
   };
 }

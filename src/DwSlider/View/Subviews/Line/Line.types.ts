@@ -3,5 +3,4 @@ type LineEvent = {
   event: MouseEvent
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { LineEvent };
+export default LineEvent;

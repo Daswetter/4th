@@ -7,6 +7,41 @@ class Model extends Publisher<ModelUpdate> {
     this.options = this.filterOptions(options);
   }
 
+  public setCurrent(part: number, extra = false): void {
+    const [current, newPart] = this.countCurrent(part);
+    if (extra) {
+      this.options.to = current;
+    } else {
+      this.options.from = current;
+    }
+    this.dataWereChanged(current, newPart, extra);
+  }
+
+  public setPart(current: number, extra = false): void {
+    const part = this.countPart(current);
+    const [newCurrent, newPart] = this.countCurrent(part);
+    this.dataWereChanged(newCurrent, newPart, extra);
+  }
+
+  public countScaleElements = (): Record<string, string> => {
+    this.filterScaleSize();
+    let scaleElements: Record<string, string> = {};
+    const scaleStep = 1 / (this.options.scaleSize - 1);
+
+    for (let i = 0; i < this.options.scaleSize; i += 1) {
+      const scaleValue = this.countScaleMax() * scaleStep * i + this.options.min;
+      const [current, part] = this.countCurrent(this.countPart(scaleValue));
+      scaleElements = { ...scaleElements, [part]: current };
+    }
+    return scaleElements;
+  };
+
+  public refreshAll = (options: IOptions): void => {
+    this.options = this.filterOptions(options);
+    const scaleElements = this.countScaleElements();
+    this.notify({ scaleElements, options: this.options, eventName: 'scale' });
+  };
+
   private countScaleMax = (): number => {
     const differenceBetweenMaxAndMin = Math.abs(this.options.max - this.options.min);
     const roundDifference = this.roundTo(differenceBetweenMaxAndMin / this.options.step, 0.00001);
@@ -94,16 +129,6 @@ class Model extends Publisher<ModelUpdate> {
     };
   };
 
-  public setCurrent(part: number, extra = false): void {
-    const [current, newPart] = this.countCurrent(part);
-    if (extra) {
-      this.options.to = current;
-    } else {
-      this.options.from = current;
-    }
-    this.dataWereChanged(current, newPart, extra);
-  }
-
   private dataWereChanged = (current: number, part: number, extra: boolean): void => {
     this.notify({
       current, part, extra, eventName: 'data',
@@ -125,12 +150,6 @@ class Model extends Publisher<ModelUpdate> {
     return this.filterPart(part);
   };
 
-  public setPart(current: number, extra = false): void {
-    const part = this.countPart(current);
-    const [newCurrent, newPart] = this.countCurrent(part);
-    this.dataWereChanged(newCurrent, newPart, extra);
-  }
-
   private filterScaleSize = () => {
     const numberOfScaleSections = this.options.scaleSize - 1;
     const numberOfSliderSections = (this.options.max - this.options.min) / this.options.step;
@@ -143,19 +162,6 @@ class Model extends Publisher<ModelUpdate> {
         }
       }
     }
-  };
-
-  public countScaleElements = (): Record<string, string> => {
-    this.filterScaleSize();
-    let scaleElements: Record<string, string> = {};
-    const scaleStep = 1 / (this.options.scaleSize - 1);
-
-    for (let i = 0; i < this.options.scaleSize; i += 1) {
-      const scaleValue = this.countScaleMax() * scaleStep * i + this.options.min;
-      const [current, part] = this.countCurrent(this.countPart(scaleValue));
-      scaleElements = { ...scaleElements, [part]: current };
-    }
-    return scaleElements;
   };
 
   private countNumberAccuracy = (value: number): number => {
@@ -183,12 +189,6 @@ class Model extends Publisher<ModelUpdate> {
   private roundTo = (value: number, roundTo: number): number => {
     const decimal = this.countNumberOrder(roundTo);
     return (Math.round(value * (10 ** decimal)) / (10 ** decimal));
-  };
-
-  public refreshAll = (options: IOptions): void => {
-    this.options = this.filterOptions(options);
-    const scaleElements = this.countScaleElements();
-    this.notify({ scaleElements, options: this.options, eventName: 'scale' });
   };
 }
 

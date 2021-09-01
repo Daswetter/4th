@@ -10,19 +10,23 @@ class Input extends Subview {
     this.initPrimary(initElement);
   }
 
-  private initPrimary = (initElement: HTMLElement): void => {
-    const input: HTMLInputElement | null = initElement.querySelector('.js-dw-slider__input_from');
-    if (input) {
-      this.primary = input;
-      this.setEventListener(this.primary);
-    }
-  };
-
   public initExtra = (initElement: HTMLElement): void => {
     const input: HTMLInputElement | null = initElement.querySelector('.js-dw-slider__input_to');
     if (input) {
       this.extra = input;
       this.setEventListener(this.extra);
+    }
+  };
+
+  public update = (current: number, extra: boolean): void => {
+    this.printValue(this.setTargetElement(extra), current);
+  };
+
+  private initPrimary = (initElement: HTMLElement): void => {
+    const input: HTMLInputElement | null = initElement.querySelector('.js-dw-slider__input_from');
+    if (input) {
+      this.primary = input;
+      this.setEventListener(this.primary);
     }
   };
 
@@ -53,10 +57,6 @@ class Input extends Subview {
       return this.extra;
     }
     return this.primary;
-  };
-
-  public update = (current: number, extra: boolean): void => {
-    this.printValue(this.setTargetElement(extra), current);
   };
 }
 

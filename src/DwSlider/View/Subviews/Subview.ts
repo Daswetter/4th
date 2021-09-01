@@ -1,5 +1,5 @@
 import Publisher from '../../Publisher';
-import { SubviewData } from '../View.types';
+import SubviewData from '../View.types';
 
 abstract class Subview extends Publisher<SubviewData> {
   protected events: Record<string, Array<(arg0: any) => void>> = {};

@@ -18,7 +18,7 @@ import View from './View/View';
 
     private presenter!: Presenter;
 
-    constructor(private initElement: HTMLElement, setOptions: IOptions) {
+    constructor(public setOptions: IOptions, private initElement: HTMLElement) {
       const optionsFromData = {
         min: this.toNumber(initElement.dataset.min),
         max: this.toNumber(initElement.dataset.max),
@@ -47,6 +47,19 @@ import View from './View/View';
       }, optionsFromData, setOptions);
       this.initElement = initElement;
       this.init(initElement, options);
+    }
+
+    public update(updatedOptions?: ReducedIOptions): void {
+      this.options = $.extend(this.returnCurrentOptions(), updatedOptions);
+      this.presenter.refreshAll(this.options);
+    }
+
+    public returnCurrentOptions(): IOptions {
+      return this.presenter.returnOptions();
+    }
+
+    public returnCurrentState(): Array<number> {
+      return this.presenter.returnCurrentValues();
     }
 
     private init(initElement: HTMLElement, options: IOptions): void {
@@ -79,25 +92,12 @@ import View from './View/View';
     private handleWindowResizing = (): void => {
       this.update();
     };
-
-    public update(updatedOptions?: ReducedIOptions): void {
-      this.options = $.extend(this.returnCurrentOptions(), updatedOptions);
-      this.presenter.refreshAll(this.options);
-    }
-
-    public returnCurrentOptions(): IOptions {
-      return this.presenter.returnOptions();
-    }
-
-    public returnCurrentState(): Array<number> {
-      return this.presenter.returnCurrentValues();
-    }
   }
 
   $.fn.DwSlider = function (options: IOptions): JQuery<HTMLElement> {
     return this.each(function () {
       if (!$.data(this, 'DwSlider')) {
-        $.data(this, 'DwSlider', new DwSlider(this, options));
+        $.data(this, 'DwSlider', new DwSlider(options, this));
       }
     });
   };

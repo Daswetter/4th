@@ -11,6 +11,37 @@ class BoundaryLabels extends Subview {
     this.initElements(initElement);
   }
 
+  public setInitialSettings = (
+    min: number,
+    max: number,
+    lineWidth: number,
+    thumbSize: Size,
+    vertical = false,
+  ): void => {
+    this.printInnerText(this.min, min);
+    this.printInnerText(this.max, max);
+
+    if (vertical) {
+      this.setPositionToVertical(this.min, lineWidth, thumbSize.width);
+      this.setPositionToVertical(this.max, lineWidth, thumbSize.width);
+    } else {
+      this.setPositionToHorizontal(this.min, thumbSize.height);
+      this.setPositionToHorizontal(this.max, thumbSize.height);
+    }
+  };
+
+  public update = (
+    tipParams: PositionParams,
+    vertical: boolean,
+    tipExtraParams?: PositionParams,
+  ): void => {
+    if (tipExtraParams) {
+      this.setOpacityToDouble(tipParams, tipExtraParams, vertical);
+    } else {
+      this.setOpacityToSingle(tipParams, vertical);
+    }
+  };
+
   private initElements = (initElement: HTMLElement): void => {
     this.min = this.init(initElement, '__boundary-labels_min');
     this.max = this.init(initElement, '__boundary-labels_max');
@@ -41,25 +72,6 @@ class BoundaryLabels extends Subview {
       element.style.bottom = side;
     } else {
       element.style.top = side;
-    }
-  };
-
-  public setInitialSettings = (
-    min: number,
-    max: number,
-    lineWidth: number,
-    thumbSize: Size,
-    vertical = false,
-  ): void => {
-    this.printInnerText(this.min, min);
-    this.printInnerText(this.max, max);
-
-    if (vertical) {
-      this.setPositionToVertical(this.min, lineWidth, thumbSize.width);
-      this.setPositionToVertical(this.max, lineWidth, thumbSize.width);
-    } else {
-      this.setPositionToHorizontal(this.min, thumbSize.height);
-      this.setPositionToHorizontal(this.max, thumbSize.height);
     }
   };
 
@@ -129,18 +141,6 @@ class BoundaryLabels extends Subview {
 
     const isPrimaryTouchingMax = this.isPrimaryTouchingMax(tipParams, vertical);
     this.switchOpacity(this.max, isPrimaryTouchingMax);
-  };
-
-  public update = (
-    tipParams: PositionParams,
-    vertical: boolean,
-    tipExtraParams?: PositionParams,
-  ): void => {
-    if (tipExtraParams) {
-      this.setOpacityToDouble(tipParams, tipExtraParams, vertical);
-    } else {
-      this.setOpacityToSingle(tipParams, vertical);
-    }
   };
 }
 

@@ -1,5 +1,3 @@
-import { Params } from '../../../types';
-
 type Size = {
   width: number,
   height: number,

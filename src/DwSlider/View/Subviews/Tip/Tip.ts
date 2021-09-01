@@ -2,7 +2,7 @@ import Subview from '../Subview';
 import {
   MouseDownData, MouseMoveData, PositionParams, Side, Size,
 } from '../Subview.types';
-import { UnitedTipDownEvent } from './Tip.types';
+import UnitedTipDownEvent from './Tip.types';
 
 class Tip extends Subview {
   public primary!: HTMLElement;
@@ -27,53 +27,8 @@ class Tip extends Subview {
     this.subscribeToEvents();
   }
 
-  private subscribeToEvents = (): void => {
-    this.subscribeToAnEvent<MouseDownData>('tip: mouseDown', ({
-      element, vertical, lineSize, lineSide, event,
-    }) => this.handleMouseDown({
-      element, vertical, lineSize, lineSide, event,
-    }));
-
-    this.subscribeToAnEvent<UnitedTipDownEvent>('unitedTip: mouseDown', ({
-      event, lineSize, lineSide, vertical,
-    }) => this.handleMouseDownForUnited(event, lineSize, lineSide, vertical));
-
-    this.subscribeToAnEvent<MouseMoveData>('tip: mouseMove', ({
-      element, vertical, lineSize, lineSide, shift, event,
-    }) => this.handleMouseMove({
-      element, vertical, lineSize, lineSide, shift, event,
-    }));
-
-    this.subscribeToAnEvent<null>('tip: mouseUp', () => this.handleMouseUp());
-  };
-
-  private initPrimary = (initElement: HTMLElement): void => {
-    this.primary = this.init(initElement, '__tip');
-  };
-
   public initExtra = (initElement: HTMLElement): void => {
     this.extra = this.init(initElement, '__tip');
-  };
-
-  private printInnerText = (element: HTMLElement, current: number | string): void => {
-    element.innerText = String(current);
-  };
-
-  private setRightToVertical = (
-    element: HTMLElement, lineWidth: number, thumbWidth: number,
-  ): void => {
-    element.style.right = `${lineWidth + thumbWidth / 3}px`;
-  };
-
-  private setTopToHorizontal = (element: HTMLElement, thumbHeight: number): void => {
-    element.style.top = `${-element.offsetHeight - thumbHeight / 2}px`;
-  };
-
-  private setElement = (extra: boolean): HTMLElement => {
-    if (extra) {
-      return this.extra;
-    }
-    return this.primary;
   };
 
   public setInitialSettings = (
@@ -108,6 +63,88 @@ class Tip extends Subview {
     this.united.addEventListener('mousedown', (event) => this.emitEvent('unitedTip: mouseDown', {
       event, lineSize, lineSide, vertical,
     }));
+  };
+
+  public update = (
+    part: number,
+    current: number,
+    lineSize: Size,
+    thumbSize: Size,
+    vertical: boolean,
+    double: boolean,
+    extra: boolean,
+  ): void => {
+    if (extra) {
+      this.currentExtra = current;
+    } else {
+      this.current = current;
+    }
+    const element = this.setElement(extra);
+    this.printInnerText(element, current);
+    this.setPosition(element, part, lineSize, vertical);
+
+    if (double) {
+      this.joinTips(lineSize.width, thumbSize.width, vertical);
+    }
+  };
+
+  public returnPrimaryParameters = (): PositionParams => ({
+    width: this.primary.offsetWidth,
+    height: this.primary.offsetHeight,
+    left: this.primary.offsetLeft,
+    top: this.primary.offsetTop,
+  });
+
+  public returnExtraParameters = (): PositionParams => ({
+    width: this.extra.offsetWidth,
+    height: this.extra.offsetHeight,
+    left: this.extra.offsetLeft,
+    top: this.extra.offsetTop,
+  });
+
+  private subscribeToEvents = (): void => {
+    this.subscribeToAnEvent<MouseDownData>('tip: mouseDown', ({
+      element, vertical, lineSize, lineSide, event,
+    }) => this.handleMouseDown({
+      element, vertical, lineSize, lineSide, event,
+    }));
+
+    this.subscribeToAnEvent<UnitedTipDownEvent>('unitedTip: mouseDown', ({
+      event, lineSize, lineSide, vertical,
+    }) => this.handleMouseDownForUnited(event, lineSize, lineSide, vertical));
+
+    this.subscribeToAnEvent<MouseMoveData>('tip: mouseMove', ({
+      element, vertical, lineSize, lineSide, shift, event,
+    }) => this.handleMouseMove({
+      element, vertical, lineSize, lineSide, shift, event,
+    }));
+
+    this.subscribeToAnEvent<null>('tip: mouseUp', () => this.handleMouseUp());
+  };
+
+  private initPrimary = (initElement: HTMLElement): void => {
+    this.primary = this.init(initElement, '__tip');
+  };
+
+  private printInnerText = (element: HTMLElement, current: number | string): void => {
+    element.innerText = String(current);
+  };
+
+  private setRightToVertical = (
+    element: HTMLElement, lineWidth: number, thumbWidth: number,
+  ): void => {
+    element.style.right = `${lineWidth + thumbWidth / 3}px`;
+  };
+
+  private setTopToHorizontal = (element: HTMLElement, thumbHeight: number): void => {
+    element.style.top = `${-element.offsetHeight - thumbHeight / 2}px`;
+  };
+
+  private setElement = (extra: boolean): HTMLElement => {
+    if (extra) {
+      return this.extra;
+    }
+    return this.primary;
   };
 
   private wasExtraMoved = (
@@ -321,43 +358,6 @@ class Tip extends Subview {
     this.primary.style.opacity = this.setOpacity(unitedIsOn);
     this.extra.style.opacity = this.setOpacity(unitedIsOn);
   };
-
-  public update = (
-    part: number,
-    current: number,
-    lineSize: Size,
-    thumbSize: Size,
-    vertical: boolean,
-    double: boolean,
-    extra: boolean,
-  ): void => {
-    if (extra) {
-      this.currentExtra = current;
-    } else {
-      this.current = current;
-    }
-    const element = this.setElement(extra);
-    this.printInnerText(element, current);
-    this.setPosition(element, part, lineSize, vertical);
-
-    if (double) {
-      this.joinTips(lineSize.width, thumbSize.width, vertical);
-    }
-  };
-
-  public returnPrimaryParameters = (): PositionParams => ({
-    width: this.primary.offsetWidth,
-    height: this.primary.offsetHeight,
-    left: this.primary.offsetLeft,
-    top: this.primary.offsetTop,
-  });
-
-  public returnExtraParameters = (): PositionParams => ({
-    width: this.extra.offsetWidth,
-    height: this.extra.offsetHeight,
-    left: this.extra.offsetLeft,
-    top: this.extra.offsetTop,
-  });
 }
 
 export default Tip;

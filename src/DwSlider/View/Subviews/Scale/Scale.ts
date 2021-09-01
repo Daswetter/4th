@@ -17,10 +17,6 @@ class Scale extends Subview {
     this.initPrimary(initElement);
   }
 
-  private initPrimary = (initElement: HTMLElement): void => {
-    this.scale = this.init(initElement, '__scale');
-  };
-
   public initScale = (
     scaleValues: Record<string, string>,
     lineSize: Size,
@@ -37,6 +33,10 @@ class Scale extends Subview {
       value: part, current: false, extra: false, nearest: true,
     }));
     this.setScaleListener();
+  };
+
+  private initPrimary = (initElement: HTMLElement): void => {
+    this.scale = this.init(initElement, '__scale');
   };
 
   private createScale = (scaleValues: Record<string, string>): void => {

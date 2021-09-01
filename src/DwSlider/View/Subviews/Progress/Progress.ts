@@ -13,10 +13,6 @@ class Progress extends Subview {
     this.initPrimary(initElement);
   }
 
-  private initPrimary = (initElement: HTMLElement): void => {
-    this.progress = this.init(initElement, '__progress');
-  };
-
   public setInitialSettings = (
     lineSize: Size, vertical = false,
   ): void => {
@@ -28,6 +24,24 @@ class Progress extends Subview {
       this.progress.style.top = '';
       this.progress.style.left = `${(lineSize.width - this.progress.offsetWidth) / 2}px`;
     }
+  };
+
+  public update = (
+    part: number, lineSize: Size, vertical: boolean, extra: boolean,
+  ) :void => {
+    if (extra) {
+      this.partExtra = part;
+    } else {
+      this.part = part;
+    }
+    const lineOneSize = this.setLineSize(vertical, lineSize);
+    const generalSide = this.setGeneralSide(vertical);
+    const secondSide = this.setSecondSide(vertical);
+    this.setProgress(lineOneSize, generalSide, secondSide);
+  };
+
+  private initPrimary = (initElement: HTMLElement): void => {
+    this.progress = this.init(initElement, '__progress');
   };
 
   private setLineSize = (vertical: boolean, lineSize: Size): number => {
@@ -49,20 +63,6 @@ class Progress extends Subview {
       return 'top';
     }
     return 'right';
-  };
-
-  public update = (
-    part: number, lineSize: Size, vertical: boolean, extra: boolean,
-  ) :void => {
-    if (extra) {
-      this.partExtra = part;
-    } else {
-      this.part = part;
-    }
-    const lineOneSize = this.setLineSize(vertical, lineSize);
-    const generalSide = this.setGeneralSide(vertical);
-    const secondSide = this.setSecondSide(vertical);
-    this.setProgress(lineOneSize, generalSide, secondSide);
   };
 
   private setPart = (): Array<number> => {

@@ -7,5 +7,4 @@ type UnitedTipDownEvent = {
   vertical: boolean
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { UnitedTipDownEvent };
+export default UnitedTipDownEvent;

@@ -19,12 +19,46 @@ class Thumb extends Subview {
     this.subscribeToEvents();
   }
 
-  private initPrimary = (initElement: HTMLElement): void => {
-    this.primary = this.init(initElement, '__thumb');
-  };
-
   public initExtra = (initElement: HTMLElement): void => {
     this.extra = this.init(initElement, '__thumb');
+  };
+
+  public setEventListener = (
+    lineSize: Size,
+    lineSide: Side,
+    vertical = false,
+    extra = false,
+  ): void => {
+    const element = this.setElement(extra);
+    element.addEventListener('mousedown', (event) => this.emitEvent('thumb: mouseDown', {
+      element, vertical, lineSize, lineSide, event,
+    }));
+  };
+
+  public update = (
+    part: number, lineSize: Size, vertical: boolean, extra: boolean,
+  ): void => {
+    const element = this.setElement(extra);
+    this.changeElementPosition(part, lineSize, vertical, element);
+  };
+
+  public setInitialSettings = (lineSize: Size, vertical = false, extra = false): void => {
+    const element = this.setElement(extra);
+    if (vertical) {
+      element.style.top = '';
+      element.style.left = this.countInitialParameter(element, lineSize, vertical);
+    } else {
+      element.style.top = this.countInitialParameter(element, lineSize, vertical);
+    }
+  };
+
+  public returnSize = (): Size => ({
+    width: this.primary.offsetWidth,
+    height: this.primary.offsetHeight,
+  });
+
+  private initPrimary = (initElement: HTMLElement): void => {
+    this.primary = this.init(initElement, '__thumb');
   };
 
   private subscribeToEvents = (): void => {
@@ -48,18 +82,6 @@ class Thumb extends Subview {
       return this.extra;
     }
     return this.primary;
-  };
-
-  public setEventListener = (
-    lineSize: Size,
-    lineSide: Side,
-    vertical = false,
-    extra = false,
-  ): void => {
-    const element = this.setElement(extra);
-    element.addEventListener('mousedown', (event) => this.emitEvent('thumb: mouseDown', {
-      element, vertical, lineSize, lineSide, event,
-    }));
   };
 
   private handleMouseDown = (data: MouseDownData) : void => {
@@ -146,13 +168,6 @@ class Thumb extends Subview {
     }
   };
 
-  public update = (
-    part: number, lineSize: Size, vertical: boolean, extra: boolean,
-  ): void => {
-    const element = this.setElement(extra);
-    this.changeElementPosition(part, lineSize, vertical, element);
-  };
-
   private countInitialParameter = (
     element: HTMLElement, lineSize: Size, vertical: boolean,
   ): string => {
@@ -161,21 +176,6 @@ class Thumb extends Subview {
     }
     return `${(lineSize.height - element.offsetHeight) / 2}px`;
   };
-
-  public setInitialSettings = (lineSize: Size, vertical = false, extra = false): void => {
-    const element = this.setElement(extra);
-    if (vertical) {
-      element.style.top = '';
-      element.style.left = this.countInitialParameter(element, lineSize, vertical);
-    } else {
-      element.style.top = this.countInitialParameter(element, lineSize, vertical);
-    }
-  };
-
-  public returnSize = (): Size => ({
-    width: this.primary.offsetWidth,
-    height: this.primary.offsetHeight,
-  });
 }
 
 export default Thumb;

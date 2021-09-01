@@ -22,6 +22,22 @@ class ConfigPanel {
     this.init();
   }
 
+  protected emitEvent<T>(eventName: string, data: T): void {
+    const event = this.events[eventName];
+    if (event) {
+      event.forEach((fn) => {
+        fn.call(null, data);
+      });
+    }
+  }
+
+  protected subscribeToAnEvent<T>(eventName: string, fn: (data: T) => void): void {
+    if (!this.events[eventName]) {
+      this.events[eventName] = [];
+    }
+    this.events[eventName].push(fn);
+  }
+
   private defineInitElement = (initElementName: string): void => {
     const initElement: HTMLElement | null = document.querySelector(initElementName);
     if (initElement) {
@@ -150,22 +166,6 @@ class ConfigPanel {
       [params.optionKey]: newState,
     });
   };
-
-  protected emitEvent<T>(eventName: string, data: T): void {
-    const event = this.events[eventName];
-    if (event) {
-      event.forEach((fn) => {
-        fn.call(null, data);
-      });
-    }
-  }
-
-  protected subscribeToAnEvent<T>(eventName: string, fn: (data: T) => void): void {
-    if (!this.events[eventName]) {
-      this.events[eventName] = [];
-    }
-    this.events[eventName].push(fn);
-  }
 }
 
 export default ConfigPanel;

@@ -8,10 +8,6 @@ class Wrapper extends Subview {
     this.initPrimary(initElement);
   }
 
-  private initPrimary = (initElement: HTMLElement): void => {
-    this.wrapper = this.init(initElement, '');
-  };
-
   public returnAsHTML = (): HTMLElement => this.wrapper;
 
   public setInitialSettings = (vertical: boolean): void => {
@@ -20,6 +16,10 @@ class Wrapper extends Subview {
     } else {
       this.wrapper.classList.add('dw-slider_horizontal');
     }
+  };
+
+  private initPrimary = (initElement: HTMLElement): void => {
+    this.wrapper = this.init(initElement, '');
   };
 }
 

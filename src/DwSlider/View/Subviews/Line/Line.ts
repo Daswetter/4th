@@ -1,6 +1,6 @@
 import Subview from '../Subview';
 import { Side, Size } from '../Subview.types';
-import { LineEvent } from './Line.types';
+import LineEvent from './Line.types';
 
 class Line extends Subview {
   public line!: HTMLElement;
@@ -16,36 +16,7 @@ class Line extends Subview {
     this.subscribeToEvents();
   }
 
-  private initPrimary = (initElement: HTMLElement): void => {
-    this.line = this.init(initElement, '__line');
-    this.line.classList.add('dw-slider__line_horizontal');
-  };
-
   public returnAsHTML = (): HTMLElement => this.line;
-
-  private subscribeToEvents = (): void => {
-    this.subscribeToAnEvent<LineEvent>('line: clicked', ({ vertical, event }) => this.handleClick(vertical, event));
-
-    this.subscribeToAnEvent<LineEvent>('line: mouseDown', ({ vertical, event }) => this.handleMouseDown(vertical, event));
-
-    this.subscribeToAnEvent<LineEvent>('line: mouseUp', ({ vertical, event }) => this.handleMouseUp(vertical, event));
-  };
-
-  private handleMouseDown = (vertical: boolean, event: MouseEvent): void => {
-    if (vertical) {
-      this.mouseDownValue = event.clientY;
-    } else {
-      this.mouseDownValue = event.clientX;
-    }
-  };
-
-  private handleMouseUp = (vertical: boolean, event: MouseEvent): void => {
-    if (vertical) {
-      this.mouseUpValue = event.clientY;
-    } else {
-      this.mouseUpValue = event.clientX;
-    }
-  };
 
   public setEventListener = (vertical: boolean): void => {
     this.line.addEventListener('mousedown', (event) => this.emitEvent('line: mouseDown', { vertical, event }));
@@ -68,6 +39,35 @@ class Line extends Subview {
       this.line.classList.add('dw-slider__line_vertical');
     } else {
       this.line.classList.add('dw-slider__line_horizontal');
+    }
+  };
+
+  private initPrimary = (initElement: HTMLElement): void => {
+    this.line = this.init(initElement, '__line');
+    this.line.classList.add('dw-slider__line_horizontal');
+  };
+
+  private subscribeToEvents = (): void => {
+    this.subscribeToAnEvent<LineEvent>('line: clicked', ({ vertical, event }) => this.handleClick(vertical, event));
+
+    this.subscribeToAnEvent<LineEvent>('line: mouseDown', ({ vertical, event }) => this.handleMouseDown(vertical, event));
+
+    this.subscribeToAnEvent<LineEvent>('line: mouseUp', ({ vertical, event }) => this.handleMouseUp(vertical, event));
+  };
+
+  private handleMouseDown = (vertical: boolean, event: MouseEvent): void => {
+    if (vertical) {
+      this.mouseDownValue = event.clientY;
+    } else {
+      this.mouseDownValue = event.clientX;
+    }
+  };
+
+  private handleMouseUp = (vertical: boolean, event: MouseEvent): void => {
+    if (vertical) {
+      this.mouseUpValue = event.clientY;
+    } else {
+      this.mouseUpValue = event.clientX;
     }
   };
 
