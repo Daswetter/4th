@@ -32,6 +32,7 @@ class Scale extends Subview {
     this.createScale(scaleValues);
     this.printScaleValues(scaleValues);
     this.setPosition();
+    this.hideScaleElements();
     this.subscribeToAnEvent<number>('scale: clicked', (part) => this.notify({
       value: part, current: false, extra: false, nearest: true,
     }));
@@ -47,6 +48,7 @@ class Scale extends Subview {
     this.scale.append(element);
     element.classList.add('dw-slider__scale-number');
     this.scaleElements = { ...this.scaleElements, [part]: element };
+    element.style.background = 'khaki';
   };
 
   private printScaleValues = (scaleValues: Record<string, string>): void => {
@@ -59,6 +61,40 @@ class Scale extends Subview {
 
   private setPosition = (): void => {
     Object.keys(this.scaleElements).forEach((key) => this.setPositionToAnElement(key));
+  };
+
+  private elementsTouch = (part: number, index: number, orderedKeys: number[]): boolean => {
+    const currentElement = this.scaleElements[part];
+    const prevElement = this.scaleElements[orderedKeys[index - 1]];
+    if (this.vertical) {
+      return currentElement.offsetTop + currentElement.offsetHeight >= prevElement.offsetTop;
+    }
+    return currentElement.offsetLeft <= prevElement.offsetLeft + prevElement.offsetWidth;
+  };
+
+  private hideAdjacentElements = (orderedKeys: number[]): number[] => {
+    const reducedKeys = orderedKeys.slice();
+    orderedKeys.forEach((part, index) => {
+      if (index !== 0 && this.elementsTouch(part, index, orderedKeys)) {
+        for (let i = 1; i < orderedKeys.length; i += 2) {
+          this.scaleElements[orderedKeys[i]].style.display = 'none';
+          delete reducedKeys[i];
+        }
+      }
+    });
+    return reducedKeys.filter((el) => el != null);
+  };
+
+  private hideScaleElements = () : void => {
+    const keys = Object.keys(this.scaleElements);
+    const numberKeys: Array<number> = [];
+    keys.forEach((part) => numberKeys.push(Number(part)));
+    let orderedKeys = numberKeys.sort((a, b) => a - b);
+    let i = 0;
+    while (i < 5) {
+      orderedKeys = this.hideAdjacentElements(orderedKeys);
+      i += 1;
+    }
   };
 
   private setPositionToAnElement = (part: string): void => {
