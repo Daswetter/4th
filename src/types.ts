@@ -1,7 +1,5 @@
-import ReducedIOptions from './DwSlider/DwSlider.types';
-
 interface IDwSlider {
-  update(updatedOptions?: ReducedIOptions): void,
+  update(updatedOptions?: Partial<IOptions>): void,
   returnCurrentOptions(): IOptions
   returnCurrentState(): Array<number>
 }

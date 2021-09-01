@@ -3,7 +3,6 @@
 import jQuery from 'jquery';
 
 import { IOptions, IDwSlider } from '../types';
-import ReducedIOptions from './DwSlider.types';
 import Model from './Model/Model';
 import Presenter from './Presenter/Presenter';
 import View from './View/View';
@@ -49,7 +48,7 @@ import View from './View/View';
       this.init(initElement, options);
     }
 
-    public update(updatedOptions?: ReducedIOptions): void {
+    public update(updatedOptions?: Partial<IOptions>): void {
       this.options = $.extend(this.returnCurrentOptions(), updatedOptions);
       this.presenter.refreshAll(this.options);
     }
