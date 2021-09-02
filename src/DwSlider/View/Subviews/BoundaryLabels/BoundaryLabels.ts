@@ -36,9 +36,9 @@ class BoundaryLabels extends Subview {
     tipExtraParams?: PositionParams,
   ): void => {
     if (tipExtraParams) {
-      this.getOpacityToDouble(tipParams, tipExtraParams, isVertical);
+      this.setOpacityToDouble(tipParams, tipExtraParams, isVertical);
     } else {
-      this.getOpacityToSingle(tipParams, isVertical);
+      this.setOpacityToSingle(tipParams, isVertical);
     }
   };
 
@@ -118,7 +118,7 @@ class BoundaryLabels extends Subview {
     return tipExtraParams.left + tipExtraParams.width >= this.max.offsetLeft;
   };
 
-  private getOpacityToDouble = (
+  private setOpacityToDouble = (
     tipParams: PositionParams,
     tipExtraParams: PositionParams,
     isVertical: boolean,
@@ -132,7 +132,7 @@ class BoundaryLabels extends Subview {
     this.switchOpacity(this.max, isPrimaryTouchingMax, isExtraTouchingMax);
   };
 
-  private getOpacityToSingle = (
+  private setOpacityToSingle = (
     tipParams: PositionParams,
     isVertical: boolean,
   ): void => {
