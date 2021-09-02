@@ -49,16 +49,16 @@ import View from './View/View';
     }
 
     public update(updatedOptions?: Partial<IOptions>): void {
-      this.options = $.extend(this.returnCurrentOptions(), updatedOptions);
+      this.options = $.extend(this.getCurrentOptions(), updatedOptions);
       this.presenter.refreshAll(this.options);
     }
 
-    public returnCurrentOptions(): IOptions {
-      return this.presenter.returnOptions();
+    public getCurrentOptions(): IOptions {
+      return this.presenter.getOptions();
     }
 
-    public returnCurrentState(): Array<number> {
-      return this.presenter.returnCurrentValues();
+    public getCurrentState(): Array<number> {
+      return this.presenter.getCurrentValues();
     }
 
     private init(initElement: HTMLElement, options: IOptions): void {
@@ -66,7 +66,7 @@ import View from './View/View';
       this.model = new Model(options);
       this.view = new View(initElement, options);
       this.presenter = new Presenter(this.view, this.model);
-      this.options = this.returnCurrentOptions();
+      this.options = this.getCurrentOptions();
 
       window.addEventListener('resize', this.handleWindowResizing);
     }

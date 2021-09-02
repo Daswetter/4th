@@ -19,7 +19,7 @@ class Input extends Subview {
   };
 
   public update = (current: number, isExtra: boolean): void => {
-    this.printValue(this.setTargetElement(isExtra), current);
+    this.printValue(this.getElement(isExtra), current);
   };
 
   private initPrimary = (initElement: HTMLElement): void => {
@@ -52,7 +52,7 @@ class Input extends Subview {
     element.value = String(current);
   };
 
-  private setTargetElement = (isExtra: boolean): HTMLInputElement => {
+  private getElement = (isExtra: boolean): HTMLInputElement => {
     if (isExtra) {
       return this.extra;
     }

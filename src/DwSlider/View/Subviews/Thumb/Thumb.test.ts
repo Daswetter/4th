@@ -238,7 +238,7 @@ describe('Thumb', () => {
     });
   });
 
-  describe('returnSize', () => {
+  describe('getSize', () => {
     test('should return an object with primary size', () => {
       Object.defineProperty(thumb.primary, 'offsetWidth', {
         value: 150,
@@ -246,7 +246,7 @@ describe('Thumb', () => {
       Object.defineProperty(thumb.primary, 'offsetHeight', {
         value: 50,
       });
-      expect(thumb.returnSize()).toEqual({
+      expect(thumb.getSize()).toEqual({
         width: 150,
         height: 50,
       });

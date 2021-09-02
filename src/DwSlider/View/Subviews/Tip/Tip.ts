@@ -38,7 +38,7 @@ class Tip extends Subview {
     value: number,
     isExtra = false,
   ): void => {
-    const element = this.setElement(isExtra);
+    const element = this.getElement(isExtra);
     this.printInnerText(element, value);
     if (isVertical) {
       this.setRightToVertical(element, lineWidth, thumbSize.width);
@@ -53,7 +53,7 @@ class Tip extends Subview {
     isVertical: boolean,
     isExtra: boolean,
   ): void => {
-    const element = this.setElement(isExtra);
+    const element = this.getElement(isExtra);
     element.addEventListener('mousedown', (event) => this.emitEvent('tip: mouseDown', {
       element, isVertical, lineSize, lineSide, event,
     }));
@@ -81,7 +81,7 @@ class Tip extends Subview {
     } else {
       this.current = current;
     }
-    const element = this.setElement(isExtra);
+    const element = this.getElement(isExtra);
     this.printInnerText(element, current);
     this.setPosition(element, part, lineSize, isVertical);
 
@@ -90,14 +90,14 @@ class Tip extends Subview {
     }
   };
 
-  public returnPrimaryParameters = (): PositionParams => ({
+  public getPrimaryParameters = (): PositionParams => ({
     width: this.primary.offsetWidth,
     height: this.primary.offsetHeight,
     left: this.primary.offsetLeft,
     top: this.primary.offsetTop,
   });
 
-  public returnExtraParameters = (): PositionParams => ({
+  public getExtraParameters = (): PositionParams => ({
     width: this.extra.offsetWidth,
     height: this.extra.offsetHeight,
     left: this.extra.offsetLeft,
@@ -142,7 +142,7 @@ class Tip extends Subview {
     element.style.top = `${-element.offsetHeight - thumbHeight / 2}px`;
   };
 
-  private setElement = (isExtra: boolean): HTMLElement => {
+  private getElement = (isExtra: boolean): HTMLElement => {
     if (isExtra) {
       return this.extra;
     }
@@ -182,7 +182,7 @@ class Tip extends Subview {
     isVertical: boolean,
   ): void => {
     const isExtra = this.wasExtraMoved(event, lineSize, lineSide, isVertical);
-    const element = this.setElement(isExtra);
+    const element = this.getElement(isExtra);
     this.handleMouseDown({
       element, isVertical, lineSize, lineSide, event,
     });

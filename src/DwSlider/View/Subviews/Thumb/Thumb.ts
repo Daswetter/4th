@@ -52,7 +52,7 @@ class Thumb extends Subview {
     }
   };
 
-  public returnSize = (): Size => ({
+  public getSize = (): Size => ({
     width: this.primary.offsetWidth,
     height: this.primary.offsetHeight,
   });

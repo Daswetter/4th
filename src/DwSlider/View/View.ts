@@ -50,7 +50,7 @@ class View extends Publisher<ViewData> {
   };
 
   public clearAllView = (): void => {
-    this.wrapper.returnAsHTML().remove();
+    this.wrapper.getWrapper().remove();
   };
 
   public sendDataToSubviews = (current: number, part: number, isExtra = false): void => {
@@ -64,32 +64,32 @@ class View extends Publisher<ViewData> {
       this.options.from = current;
     }
 
-    this.thumb.update(part, this.line.returnSize(), this.options.isVertical, isExtra);
+    this.thumb.update(part, this.line.getSize(), this.options.isVertical, isExtra);
 
     if (this.isInputExisting(isExtra)) {
       this.input.update(current, isExtra);
     }
     if (this.options.hasProgress) {
-      this.progress.update(part, this.line.returnSize(), this.options.isVertical, isExtra);
+      this.progress.update(part, this.line.getSize(), this.options.isVertical, isExtra);
     }
     if (this.options.hasTip) {
       this.tip.update(
         part,
         current,
-        this.line.returnSize(),
-        this.thumb.returnSize(),
+        this.line.getSize(),
+        this.thumb.getSize(),
         this.options.isVertical,
         this.options.isDouble, isExtra,
       );
 
       if (this.options.isDouble) {
         this.boundaryLabels.update(
-          this.tip.returnPrimaryParameters(),
+          this.tip.getPrimaryParameters(),
           this.options.isVertical,
-          this.tip.returnExtraParameters(),
+          this.tip.getExtraParameters(),
         );
       } else {
-        this.boundaryLabels.update(this.tip.returnPrimaryParameters(), this.options.isVertical);
+        this.boundaryLabels.update(this.tip.getPrimaryParameters(), this.options.isVertical);
       }
     }
   };
@@ -97,20 +97,20 @@ class View extends Publisher<ViewData> {
   public initView = (scaleElements: Record<string, string>, options = this.options): void => {
     this.options = options;
     this.initWrapper(this.initElement);
-    this.initLine(this.wrapper.returnAsHTML());
-    this.initThumb(this.line.returnAsHTML());
-    this.initBoundaryLabels(this.line.returnAsHTML());
+    this.initLine(this.wrapper.getWrapper());
+    this.initThumb(this.line.getLine());
+    this.initBoundaryLabels(this.line.getLine());
     if (this.isInputExisting()) {
       this.initInput();
     }
     if (this.options.hasTip) {
-      this.initTip(this.line.returnAsHTML());
+      this.initTip(this.line.getLine());
     }
     if (this.options.hasProgress) {
-      this.initProgress(this.line.returnAsHTML());
+      this.initProgress(this.line.getLine());
     }
     if (this.options.hasScale) {
-      this.initScale(this.line.returnAsHTML(), scaleElements);
+      this.initScale(this.line.getLine(), scaleElements);
     }
     this.notify({ value: this.options.from, isCurrent: true, isExtra: false });
     if (this.options.isDouble) {
@@ -121,14 +121,14 @@ class View extends Publisher<ViewData> {
   private initWrapper = (initElement: HTMLElement): void => {
     this.wrapper = new Wrapper(initElement);
     this.wrapper.subscribe(this.update);
-    this.initElement.append(this.wrapper.returnAsHTML());
+    this.initElement.append(this.wrapper.getWrapper());
     this.wrapper.setInitialSettings(this.options.isVertical);
   };
 
   private initLine = (initElement: HTMLElement) : void => {
     this.line = new Line(initElement);
     this.line.subscribe(this.update);
-    this.wrapper.returnAsHTML().append(this.line.returnAsHTML());
+    this.wrapper.getWrapper().append(this.line.getLine());
     this.line.setInitialSettings(this.options.isVertical);
     this.line.setEventListener(this.options.isVertical);
   };
@@ -137,22 +137,22 @@ class View extends Publisher<ViewData> {
     this.thumb = new Thumb(initElement);
     this.thumb.subscribe(this.update);
     this.thumb.setEventListener(
-      this.line.returnSize(),
-      this.line.returnSide(),
+      this.line.getSize(),
+      this.line.getSide(),
       this.options.isVertical,
     );
-    this.thumb.setInitialSettings(this.line.returnSize(), this.options.isVertical);
+    this.thumb.setInitialSettings(this.line.getSize(), this.options.isVertical);
 
     if (this.options.isDouble) {
       this.thumb.initExtra(initElement);
       const isExtra = true;
       this.thumb.setEventListener(
-        this.line.returnSize(),
-        this.line.returnSide(),
+        this.line.getSize(),
+        this.line.getSide(),
         this.options.isVertical,
         isExtra,
       );
-      this.thumb.setInitialSettings(this.line.returnSize(), this.options.isVertical, isExtra);
+      this.thumb.setInitialSettings(this.line.getSize(), this.options.isVertical, isExtra);
     }
   };
 
@@ -160,14 +160,14 @@ class View extends Publisher<ViewData> {
     this.tip = new Tip(initElement);
     this.tip.subscribe(this.update);
     this.tip.setInitialSettings(
-      this.line.returnSize().width,
-      this.thumb.returnSize(),
+      this.line.getSize().width,
+      this.thumb.getSize(),
       this.options.isVertical,
       this.options.min,
     );
     this.tip.setEventListener(
-      this.line.returnSize(),
-      this.line.returnSide(),
+      this.line.getSize(),
+      this.line.getSide(),
       this.options.isVertical,
       false,
     );
@@ -175,21 +175,21 @@ class View extends Publisher<ViewData> {
     if (this.options.isDouble) {
       this.tip.initExtra(initElement);
       this.tip.setInitialSettings(
-        this.line.returnSize().width,
-        this.thumb.returnSize(),
+        this.line.getSize().width,
+        this.thumb.getSize(),
         this.options.isVertical,
         this.options.max,
         true,
       );
       this.tip.setEventListener(
-        this.line.returnSize(),
-        this.line.returnSide(),
+        this.line.getSize(),
+        this.line.getSide(),
         this.options.isVertical,
         true,
       );
       this.tip.setEventListenerForUnited(
-        this.line.returnSize(),
-        this.line.returnSide(),
+        this.line.getSize(),
+        this.line.getSide(),
         this.options.isVertical,
       );
     }
@@ -201,13 +201,13 @@ class View extends Publisher<ViewData> {
   ): void => {
     this.scale = new Scale(initElement);
     this.scale.subscribe(this.update);
-    this.scale.initScale(scaleElements, this.line.returnSize(), this.options.isVertical);
+    this.scale.initScale(scaleElements, this.line.getSize(), this.options.isVertical);
   };
 
   private initProgress = (initElement: HTMLElement): void => {
     this.progress = new Progress(initElement);
     this.progress.subscribe(this.update);
-    this.progress.setInitialSettings(this.line.returnSize(), this.options.isVertical);
+    this.progress.setInitialSettings(this.line.getSize(), this.options.isVertical);
   };
 
   private isInputExisting = (isExtra = false): boolean => {
@@ -231,8 +231,8 @@ class View extends Publisher<ViewData> {
     this.boundaryLabels.setInitialSettings(
       this.options.min,
       this.options.max,
-      this.line.returnSize().width,
-      this.thumb.returnSize(),
+      this.line.getSize().width,
+      this.thumb.getSize(),
       this.options.isVertical,
     );
   };

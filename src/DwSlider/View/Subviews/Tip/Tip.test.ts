@@ -303,7 +303,7 @@ describe('Tip', () => {
     });
   });
 
-  describe('returnPrimaryParameters', () => {
+  describe('getPrimaryParameters', () => {
     test('should return correct object', () => {
       Object.defineProperty(tip.primary, 'offsetWidth', {
         value: 10,
@@ -317,7 +317,7 @@ describe('Tip', () => {
       Object.defineProperty(tip.primary, 'offsetTop', {
         value: 40,
       });
-      expect(tip.returnPrimaryParameters()).toEqual({
+      expect(tip.getPrimaryParameters()).toEqual({
         width: 10,
         height: 20,
         left: 30,
@@ -326,7 +326,7 @@ describe('Tip', () => {
     });
   });
 
-  describe('returnExtraParameters', () => {
+  describe('getExtraParameters', () => {
     test('should return correct object', () => {
       const initElement = document.createElement('div');
       tip.initExtra(initElement);
@@ -342,7 +342,7 @@ describe('Tip', () => {
       Object.defineProperty(tip.extra, 'offsetTop', {
         value: 40,
       });
-      expect(tip.returnExtraParameters()).toEqual({
+      expect(tip.getExtraParameters()).toEqual({
         width: 10,
         height: 20,
         left: 30,

@@ -61,7 +61,7 @@ class Model extends Publisher<ModelUpdate> {
     return Number.isInteger(differenceBetweenMaxAndMin / this.options.step);
   };
 
-  private setClosestPart = (rest: number, stepAsPart: number, part: number): number => {
+  private countClosestPart = (rest: number, stepAsPart: number, part: number): number => {
     if (rest < stepAsPart / 2) {
       return part - rest;
     }
@@ -80,7 +80,7 @@ class Model extends Publisher<ModelUpdate> {
     const stepAsPart = this.options.step / differenceBetweenMaxAndMin;
     const rest = part - stepAsPart * Math.trunc(part / stepAsPart);
 
-    const newPart = this.setClosestPart(rest, stepAsPart, part);
+    const newPart = this.countClosestPart(rest, stepAsPart, part);
     const isCurrentGreaterThanScale = differenceBetweenMaxAndMin * part > this.countScaleMax();
 
     const current = differenceBetweenMaxAndMin * newPart + this.options.min;

@@ -16,7 +16,7 @@ class Line extends Subview {
     this.subscribeToEvents();
   }
 
-  public returnAsHTML = (): HTMLElement => this.line;
+  public getLine = (): HTMLElement => this.line;
 
   public setEventListener = (isVertical: boolean): void => {
     this.line.addEventListener('mousedown', (event) => this.emitEvent('line: mouseDown', { isVertical, event }));
@@ -24,12 +24,12 @@ class Line extends Subview {
     this.line.addEventListener('click', (event) => this.emitEvent('line: clicked', { isVertical, event }));
   };
 
-  public returnSize = (): Size => ({
+  public getSize = (): Size => ({
     width: this.line.offsetWidth,
     height: this.line.offsetHeight,
   });
 
-  public returnSide = (): Side => ({
+  public getSide = (): Side => ({
     left: this.line.offsetLeft,
     bottom: this.line.offsetTop + this.line.offsetHeight,
   });

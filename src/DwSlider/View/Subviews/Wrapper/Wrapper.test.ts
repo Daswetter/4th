@@ -16,9 +16,9 @@ describe('Wrapper', () => {
     });
   });
 
-  describe('returnAsHTML', () => {
+  describe('getWrapper', () => {
     test('should return wrapper as HTMLElement', () => {
-      expect(wrapper.returnAsHTML()).toEqual(wrapper.wrapper);
+      expect(wrapper.getWrapper()).toEqual(wrapper.wrapper);
     });
   });
 

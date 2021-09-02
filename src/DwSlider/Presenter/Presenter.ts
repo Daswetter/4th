@@ -32,9 +32,9 @@ class Presenter {
     this.model.refreshAll(options);
   };
 
-  public returnCurrentValues = (): Array<number> => [this.view.current, this.view.currentExtra];
+  public getCurrentValues = (): Array<number> => [this.view.current, this.view.currentExtra];
 
-  public returnOptions = (): IOptions => this.model.options;
+  public getOptions = (): IOptions => this.model.options;
 }
 
 export default Presenter;

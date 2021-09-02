@@ -44,14 +44,14 @@ describe('Presenter', () => {
     });
   });
 
-  describe('returnCurrentValues', () => {
+  describe('getCurrentValues', () => {
     test('should return array with current from view', () => {
-      expect(presenter.returnCurrentValues()).toHaveLength(2);
+      expect(presenter.getCurrentValues()).toHaveLength(2);
     });
   });
-  describe('returnOptions', () => {
+  describe('getOptions', () => {
     test('should return array with current from view', () => {
-      expect(presenter.returnOptions()).toEqual(options);
+      expect(presenter.getOptions()).toEqual(options);
     });
   });
 

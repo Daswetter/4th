@@ -22,9 +22,9 @@ describe('Line', () => {
     });
   });
 
-  describe('returnAsHTML', () => {
+  describe('getLine', () => {
     test('should return line as HTMLElement', () => {
-      expect(line.returnAsHTML()).toEqual(line.line);
+      expect(line.getLine()).toEqual(line.line);
     });
   });
 
@@ -228,7 +228,7 @@ describe('Line', () => {
     });
   });
 
-  describe('returnSize', () => {
+  describe('getSize', () => {
     test('should return line.offsetWidth and line.offsetHeight', () => {
       Object.defineProperty(line.line, 'offsetWidth', {
         value: 50,
@@ -236,14 +236,14 @@ describe('Line', () => {
       Object.defineProperty(line.line, 'offsetHeight', {
         value: 5,
       });
-      expect(line.returnSize()).toEqual({
+      expect(line.getSize()).toEqual({
         width: 50,
         height: 5,
       });
     });
   });
 
-  describe('returnSide', () => {
+  describe('getSide', () => {
     test('should return line"s left and line"s bottom', () => {
       Object.defineProperty(line.line, 'offsetLeft', {
         value: 50,
@@ -254,7 +254,7 @@ describe('Line', () => {
       Object.defineProperty(line.line, 'offsetTop', {
         value: 5,
       });
-      expect(line.returnSide()).toEqual({
+      expect(line.getSide()).toEqual({
         left: 50,
         bottom: 105,
       });

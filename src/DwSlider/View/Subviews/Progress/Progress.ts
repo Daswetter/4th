@@ -34,9 +34,9 @@ class Progress extends Subview {
     } else {
       this.part = part;
     }
-    const lineOneSize = this.setLineSize(isVertical, lineSize);
-    const generalSide = this.setGeneralSide(isVertical);
-    const secondSide = this.setSecondSide(isVertical);
+    const lineOneSize = this.getLineSize(isVertical, lineSize);
+    const generalSide = this.getGeneralSide(isVertical);
+    const secondSide = this.getSecondSide(isVertical);
     this.setProgress(lineOneSize, generalSide, secondSide);
   };
 
@@ -44,28 +44,28 @@ class Progress extends Subview {
     this.progress = this.init(initElement, '__progress');
   };
 
-  private setLineSize = (isVertical: boolean, lineSize: Size): number => {
+  private getLineSize = (isVertical: boolean, lineSize: Size): number => {
     if (isVertical) {
       return lineSize.height;
     }
     return lineSize.width;
   };
 
-  private setGeneralSide = (isVertical: boolean): string => {
+  private getGeneralSide = (isVertical: boolean): string => {
     if (isVertical) {
       return 'bottom';
     }
     return 'left';
   };
 
-  private setSecondSide = (isVertical: boolean): string => {
+  private getSecondSide = (isVertical: boolean): string => {
     if (isVertical) {
       return 'top';
     }
     return 'right';
   };
 
-  private setPart = (): Array<number> => {
+  private getParts = (): Array<number> => {
     if (this.part >= this.partExtra) {
       return [this.partExtra, this.part];
     }
@@ -75,7 +75,7 @@ class Progress extends Subview {
   private setProgress = (
     lineSide: number, generalSideName: string, secondSideName: string,
   ): void => {
-    const [partForGeneral, partForSecond] = this.setPart();
+    const [partForGeneral, partForSecond] = this.getParts();
     const generalSide = partForGeneral * lineSide;
     const secondSide = lineSide - partForSecond * lineSide;
 

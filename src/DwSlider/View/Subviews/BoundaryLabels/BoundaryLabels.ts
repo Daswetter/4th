@@ -36,9 +36,9 @@ class BoundaryLabels extends Subview {
     tipExtraParams?: PositionParams,
   ): void => {
     if (tipExtraParams) {
-      this.setOpacityToDouble(tipParams, tipExtraParams, isVertical);
+      this.getOpacityToDouble(tipParams, tipExtraParams, isVertical);
     } else {
-      this.setOpacityToSingle(tipParams, isVertical);
+      this.getOpacityToSingle(tipParams, isVertical);
     }
   };
 
@@ -75,7 +75,7 @@ class BoundaryLabels extends Subview {
     }
   };
 
-  private setOpacity = (condition: boolean, optionalCondition?: boolean): string => {
+  private getOpacity = (condition: boolean, optionalCondition?: boolean): string => {
     if (condition || optionalCondition) {
       return '0';
     }
@@ -85,7 +85,7 @@ class BoundaryLabels extends Subview {
   private switchOpacity = (
     element: HTMLElement, condition: boolean, optionalCondition?: boolean,
   ): void => {
-    element.style.opacity = this.setOpacity(condition, optionalCondition);
+    element.style.opacity = this.getOpacity(condition, optionalCondition);
   };
 
   private isPrimaryTouchingMin = (
@@ -118,7 +118,7 @@ class BoundaryLabels extends Subview {
     return tipExtraParams.left + tipExtraParams.width >= this.max.offsetLeft;
   };
 
-  private setOpacityToDouble = (
+  private getOpacityToDouble = (
     tipParams: PositionParams,
     tipExtraParams: PositionParams,
     isVertical: boolean,
@@ -132,7 +132,7 @@ class BoundaryLabels extends Subview {
     this.switchOpacity(this.max, isPrimaryTouchingMax, isExtraTouchingMax);
   };
 
-  private setOpacityToSingle = (
+  private getOpacityToSingle = (
     tipParams: PositionParams,
     isVertical: boolean,
   ): void => {

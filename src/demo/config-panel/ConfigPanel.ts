@@ -71,8 +71,8 @@ class ConfigPanel {
 
     this.subscribeToAnEvent<OptionKey>('checkbox: changed', ({ optionKey }) => this.handleCheckboxChange({ optionKey }));
 
-    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.DwSlider.returnCurrentOptions().isDouble, this.DwSlider.returnCurrentOptions().to));
-    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.scaleSize, this.DwSlider.returnCurrentOptions().hasScale, this.DwSlider.returnCurrentOptions().scaleSize));
+    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.DwSlider.getCurrentValues().isDouble, this.DwSlider.getCurrentValues().to));
+    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.scaleSize, this.DwSlider.getCurrentValues().hasScale, this.DwSlider.getCurrentValues().scaleSize));
   };
 
   private setEventListener = (element: HTMLInputElement, optionKey: string): void => {
@@ -108,14 +108,14 @@ class ConfigPanel {
   };
 
   private displayInputValue = (element: HTMLInputElement, optionKey: string) => {
-    const currentOptions = this.DwSlider.returnCurrentOptions();
+    const currentOptions = this.DwSlider.getCurrentValues();
     if (optionKey in currentOptions) {
       element.value = String(currentOptions[optionKey as keyof IOptions]);
     }
   };
 
   private displayCheckboxState = (element: HTMLInputElement, optionKey: string) => {
-    const currentOptions = this.DwSlider.returnCurrentOptions();
+    const currentOptions = this.DwSlider.getCurrentValues();
     if (optionKey in currentOptions) {
       element.checked = Boolean(currentOptions[optionKey as keyof IOptions]);
     }
@@ -136,7 +136,7 @@ class ConfigPanel {
       (key) => this.displayCheckboxState(this.checkboxes[key], key),
     );
 
-    const currentOptions = this.DwSlider.returnCurrentOptions();
+    const currentOptions = this.DwSlider.getCurrentValues();
     this.isDisable(
       this.inputs.to,
       currentOptions.isDouble,
@@ -160,7 +160,7 @@ class ConfigPanel {
   };
 
   private handleCheckboxChange = (params: OptionKey): void => {
-    const isCurrentStateTrue = this.DwSlider.returnCurrentOptions()[params.optionKey];
+    const isCurrentStateTrue = this.DwSlider.getCurrentValues()[params.optionKey];
     const newState = !isCurrentStateTrue;
     this.DwSlider.update({
       [params.optionKey]: newState,

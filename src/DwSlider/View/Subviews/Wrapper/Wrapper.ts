@@ -8,7 +8,7 @@ class Wrapper extends Subview {
     this.initPrimary(initElement);
   }
 
-  public returnAsHTML = (): HTMLElement => this.wrapper;
+  public getWrapper = (): HTMLElement => this.wrapper;
 
   public setInitialSettings = (isVertical: boolean): void => {
     if (isVertical) {

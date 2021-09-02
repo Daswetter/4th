@@ -1,7 +1,7 @@
 interface IDwSlider {
   update(updatedOptions?: Partial<IOptions>): void,
-  returnCurrentOptions(): IOptions
-  returnCurrentState(): Array<number>
+  getCurrentOptions(): IOptions
+  getCurrentState(): Array<number>
 }
 
 interface IOptions {
