@@ -34,13 +34,13 @@ class Tip extends Subview {
   public setInitialSettings = (
     lineWidth: number,
     thumbSize: Size,
-    vertical: boolean,
+    isVertical: boolean,
     value: number,
-    extra = false,
+    isExtra = false,
   ): void => {
-    const element = this.setElement(extra);
+    const element = this.setElement(isExtra);
     this.printInnerText(element, value);
-    if (vertical) {
+    if (isVertical) {
       this.setRightToVertical(element, lineWidth, thumbSize.width);
     } else {
       this.setTopToHorizontal(element, thumbSize.height);
@@ -50,18 +50,20 @@ class Tip extends Subview {
   public setEventListener = (
     lineSize: Size,
     lineSide: Side,
-    vertical: boolean,
-    extra: boolean,
+    isVertical: boolean,
+    isExtra: boolean,
   ): void => {
-    const element = this.setElement(extra);
+    const element = this.setElement(isExtra);
     element.addEventListener('mousedown', (event) => this.emitEvent('tip: mouseDown', {
-      element, vertical, lineSize, lineSide, event,
+      element, isVertical, lineSize, lineSide, event,
     }));
   };
 
-  public setEventListenerForUnited = (lineSize: Size, lineSide: Side, vertical: boolean): void => {
+  public setEventListenerForUnited = (
+    lineSize: Size, lineSide: Side, isVertical: boolean,
+  ): void => {
     this.united.addEventListener('mousedown', (event) => this.emitEvent('unitedTip: mouseDown', {
-      event, lineSize, lineSide, vertical,
+      event, lineSize, lineSide, isVertical,
     }));
   };
 
@@ -70,21 +72,21 @@ class Tip extends Subview {
     current: number,
     lineSize: Size,
     thumbSize: Size,
-    vertical: boolean,
-    double: boolean,
-    extra: boolean,
+    isVertical: boolean,
+    isDouble: boolean,
+    isExtra: boolean,
   ): void => {
-    if (extra) {
+    if (isExtra) {
       this.currentExtra = current;
     } else {
       this.current = current;
     }
-    const element = this.setElement(extra);
+    const element = this.setElement(isExtra);
     this.printInnerText(element, current);
-    this.setPosition(element, part, lineSize, vertical);
+    this.setPosition(element, part, lineSize, isVertical);
 
-    if (double) {
-      this.joinTips(lineSize.width, thumbSize.width, vertical);
+    if (isDouble) {
+      this.joinTips(lineSize.width, thumbSize.width, isVertical);
     }
   };
 
@@ -104,19 +106,19 @@ class Tip extends Subview {
 
   private subscribeToEvents = (): void => {
     this.subscribeToAnEvent<MouseDownData>('tip: mouseDown', ({
-      element, vertical, lineSize, lineSide, event,
+      element, isVertical, lineSize, lineSide, event,
     }) => this.handleMouseDown({
-      element, vertical, lineSize, lineSide, event,
+      element, isVertical, lineSize, lineSide, event,
     }));
 
     this.subscribeToAnEvent<UnitedTipDownEvent>('unitedTip: mouseDown', ({
-      event, lineSize, lineSide, vertical,
-    }) => this.handleMouseDownForUnited(event, lineSize, lineSide, vertical));
+      event, lineSize, lineSide, isVertical,
+    }) => this.handleMouseDownForUnited(event, lineSize, lineSide, isVertical));
 
     this.subscribeToAnEvent<MouseMoveData>('tip: mouseMove', ({
-      element, vertical, lineSize, lineSide, shift, event,
+      element, isVertical, lineSize, lineSide, shift, event,
     }) => this.handleMouseMove({
-      element, vertical, lineSize, lineSide, shift, event,
+      element, isVertical, lineSize, lineSide, shift, event,
     }));
 
     this.subscribeToAnEvent<null>('tip: mouseUp', () => this.handleMouseUp());
@@ -140,8 +142,8 @@ class Tip extends Subview {
     element.style.top = `${-element.offsetHeight - thumbHeight / 2}px`;
   };
 
-  private setElement = (extra: boolean): HTMLElement => {
-    if (extra) {
+  private setElement = (isExtra: boolean): HTMLElement => {
+    if (isExtra) {
       return this.extra;
     }
     return this.primary;
@@ -151,9 +153,9 @@ class Tip extends Subview {
     event: MouseEvent,
     lineSize: Size,
     lineSide: Side,
-    vertical: boolean,
+    isVertical: boolean,
   ): boolean => {
-    if (vertical) {
+    if (isVertical) {
       const halfUnited = this.united.offsetHeight / 2;
       const unitedMiddle = this.united.offsetTop + lineSide.bottom - lineSize.height + halfUnited;
       const primaryIsHigher = this.primary.offsetTop < this.extra.offsetTop;
@@ -177,12 +179,12 @@ class Tip extends Subview {
     event: MouseEvent,
     lineSize: Size,
     lineSide: Side,
-    vertical: boolean,
+    isVertical: boolean,
   ): void => {
-    const isExtra = this.wasExtraMoved(event, lineSize, lineSide, vertical);
+    const isExtra = this.wasExtraMoved(event, lineSize, lineSide, isVertical);
     const element = this.setElement(isExtra);
     this.handleMouseDown({
-      element, vertical, lineSize, lineSide, event,
+      element, isVertical, lineSize, lineSide, event,
     });
   };
 
@@ -192,7 +194,7 @@ class Tip extends Subview {
     const shift = this.countShift(data);
     const params = {
       element: data.element,
-      vertical: data.vertical,
+      isVertical: data.isVertical,
       lineSide: data.lineSide,
       lineSize: data.lineSize,
 
@@ -223,11 +225,11 @@ class Tip extends Subview {
 
     if (data.element === this.primary) {
       this.notify({
-        value: filteredPart, current: false, extra: false, nearest: false,
+        value: filteredPart, isCurrent: false, isExtra: false, isNearest: false,
       });
     } else {
       this.notify({
-        value: filteredPart, current: false, extra: true, nearest: false,
+        value: filteredPart, isCurrent: false, isExtra: true, isNearest: false,
       });
     }
   };
@@ -238,7 +240,7 @@ class Tip extends Subview {
   };
 
   private countShift = (data: MouseDownData): number => {
-    if (data.vertical) {
+    if (data.isVertical) {
       return (
         data.event.pageY - data.element.offsetTop - data.lineSide.bottom + data.lineSize.height
       );
@@ -247,7 +249,7 @@ class Tip extends Subview {
   };
 
   private countPart = (data: MouseMoveData): number => {
-    if (data.vertical) {
+    if (data.isVertical) {
       const halfTipSize = data.element.offsetHeight / 2;
       const usingSpot = -(data.event.pageY - data.lineSide.bottom - data.shift + halfTipSize);
       return usingSpot / data.lineSize.height;
@@ -260,9 +262,9 @@ class Tip extends Subview {
     element: HTMLElement,
     part: number,
     lineSize: Size,
-    vertical: boolean,
+    isVertical: boolean,
   ): void => {
-    if (vertical) {
+    if (isVertical) {
       element.style.top = `${lineSize.height - part * lineSize.height - element.offsetHeight / 2}px`;
     } else {
       element.style.left = `${Math.round(part * lineSize.width - element.offsetWidth / 2)}px`;
@@ -278,11 +280,11 @@ class Tip extends Subview {
     return element;
   };
 
-  private joinTips = (lineWidth: number, thumbWidth: number, vertical: boolean): void => {
-    this.defineContent(vertical);
-    this.setPositionToUnited(lineWidth, thumbWidth, vertical);
+  private joinTips = (lineWidth: number, thumbWidth: number, isVertical: boolean): void => {
+    this.defineContent(isVertical);
+    this.setPositionToUnited(lineWidth, thumbWidth, isVertical);
 
-    if (!vertical) {
+    if (!isVertical) {
       const unitedRight = this.united.offsetLeft + this.united.offsetWidth;
       const lineEdge = unitedRight >= lineWidth;
       const primaryRight = this.primary.offsetLeft + this.primary.offsetWidth;
@@ -291,16 +293,16 @@ class Tip extends Subview {
         this.united.style.left = '';
         this.united.style.right = `${-this.primary.offsetWidth / 2}px`;
       } else {
-        this.setPositionToUnited(lineWidth, thumbWidth, vertical);
+        this.setPositionToUnited(lineWidth, thumbWidth, isVertical);
       }
     }
-    this.switchElements(vertical);
+    this.switchElements(isVertical);
   };
 
-  private defineContent = (vertical: boolean): void => {
+  private defineContent = (isVertical: boolean): void => {
     if (this.current === this.currentExtra) {
       this.printInnerText(this.united, this.current);
-    } else if (vertical) {
+    } else if (isVertical) {
       this.united.style.textAlign = 'center';
       this.printInnerText(this.united, `${Math.max(this.current, this.currentExtra)} — ${Math.min(this.current, this.currentExtra)}`);
     } else {
@@ -308,8 +310,8 @@ class Tip extends Subview {
     }
   };
 
-  private doTipsTouchEachOther = (vertical: boolean): boolean => {
-    if (vertical) {
+  private areTipsTouching = (isVertical: boolean): boolean => {
+    if (isVertical) {
       const extraBottom = this.extra.offsetTop + this.extra.offsetHeight;
       const primaryBottom = this.primary.offsetTop + this.primary.offsetHeight;
       return this.primary.offsetTop <= extraBottom && primaryBottom >= this.extra.offsetTop;
@@ -320,15 +322,15 @@ class Tip extends Subview {
     return this.primary.offsetLeft <= extraRight && primaryRight >= this.extra.offsetLeft;
   };
 
-  private switchElements = (vertical: boolean) => {
-    const isTogether = this.doTipsTouchEachOther(vertical);
+  private switchElements = (isVertical: boolean) => {
+    const isTogether = this.areTipsTouching(isVertical);
     this.switchOpacity(isTogether);
   };
 
   private setPositionToUnited = (
-    lineWidth: number, thumbWidth: number, vertical: boolean,
+    lineWidth: number, thumbWidth: number, isVertical: boolean,
   ): void => {
-    if (vertical) {
+    if (isVertical) {
       this.united.style.right = `${lineWidth + thumbWidth / 3}px`;
       this.united.style.width = `${Math.max(this.primary.offsetWidth, this.extra.offsetWidth)}px`;
       this.united.style.top = `${Math.min(this.primary.offsetTop, this.extra.offsetTop)}px`;
@@ -346,17 +348,17 @@ class Tip extends Subview {
     return 'none';
   };
 
-  private setOpacity = (unitedIsOn: boolean): string => {
-    if (unitedIsOn) {
+  private setOpacity = (isUnitedActive: boolean): string => {
+    if (isUnitedActive) {
       return '0';
     }
     return '1';
   };
 
-  private switchOpacity = (unitedIsOn: boolean): void => {
-    this.united.style.display = this.setDisplayProperty(unitedIsOn);
-    this.primary.style.opacity = this.setOpacity(unitedIsOn);
-    this.extra.style.opacity = this.setOpacity(unitedIsOn);
+  private switchOpacity = (isUnitedActive: boolean): void => {
+    this.united.style.display = this.setDisplayProperty(isUnitedActive);
+    this.primary.style.opacity = this.setOpacity(isUnitedActive);
+    this.extra.style.opacity = this.setOpacity(isUnitedActive);
   };
 }
 

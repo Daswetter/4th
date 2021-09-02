@@ -67,12 +67,12 @@ describe('Thumb', () => {
       document.dispatchEvent(mouseMove);
 
       expect(update).toBeCalledWith({
-        current: false, extra: false, nearest: false, value: 1,
+        isCurrent: false, isExtra: false, isNearest: false, value: 1,
       });
     });
 
     test('should set mouse down and mouse move for vertical and extra', () => {
-      const vertical = true;
+      const isVertical = true;
       const initElement = document.createElement('div');
       thumb.initExtra(initElement);
       const lineSize = {
@@ -83,7 +83,7 @@ describe('Thumb', () => {
         left: 60,
         bottom: 100,
       };
-      thumb.setEventListener(lineSize, lineSide, vertical, true);
+      thumb.setEventListener(lineSize, lineSide, isVertical, true);
 
       const mouseDown = new MouseEvent('mousedown');
       Object.defineProperty(mouseDown, 'pageY', {
@@ -106,7 +106,7 @@ describe('Thumb', () => {
 
       expect(update).toBeCalled();
       expect(update).toBeCalledWith({
-        current: false, extra: true, nearest: false, value: 0,
+        isCurrent: false, isExtra: true, isNearest: false, value: 0,
       });
 
       const mouseUp = new MouseEvent('mouseup');
@@ -118,8 +118,8 @@ describe('Thumb', () => {
 
     describe('update', () => {
       test('should set correct style.left to primary and horizontal', () => {
-        const vertical = false;
-        const extra = false;
+        const isVertical = false;
+        const isExtra = false;
         const lineSize = {
           width: 50,
           height: 10,
@@ -127,13 +127,13 @@ describe('Thumb', () => {
         Object.defineProperty(thumb.primary, 'offsetWidth', {
           value: '10',
         });
-        thumb.update(0.6, lineSize, vertical, extra);
+        thumb.update(0.6, lineSize, isVertical, isExtra);
         expect(thumb.primary.style.left).toBe('25px');
       });
 
       test('should set correct style.left to extra and horizontal', () => {
-        const vertical = false;
-        const extra = true;
+        const isVertical = false;
+        const isExtra = true;
         const initElement = document.createElement('div');
         thumb.initExtra(initElement);
         const lineSize = {
@@ -143,13 +143,13 @@ describe('Thumb', () => {
         Object.defineProperty(thumb.extra, 'offsetWidth', {
           value: '15',
         });
-        thumb.update(0.8, lineSize, vertical, extra);
+        thumb.update(0.8, lineSize, isVertical, isExtra);
         expect(thumb.extra.style.left).toBe('232.5px');
       });
 
-      test('should set correct style.left to primary and vertical', () => {
-        const vertical = true;
-        const extra = false;
+      test('should set correct style.left to primary and isVertical', () => {
+        const isVertical = true;
+        const isExtra = false;
         const lineSize = {
           width: 5,
           height: 100,
@@ -157,13 +157,13 @@ describe('Thumb', () => {
         Object.defineProperty(thumb.primary, 'offsetHeight', {
           value: '10',
         });
-        thumb.update(1, lineSize, vertical, extra);
+        thumb.update(1, lineSize, isVertical, isExtra);
         expect(thumb.primary.style.bottom).toBe('95px');
       });
 
       test('should set correct style.left to extra and vertical', () => {
-        const vertical = true;
-        const extra = true;
+        const isVertical = true;
+        const isExtra = true;
         const initElement = document.createElement('div');
         thumb.initExtra(initElement);
         const lineSize = {
@@ -173,7 +173,7 @@ describe('Thumb', () => {
         Object.defineProperty(thumb.extra, 'offsetHeight', {
           value: '5',
         });
-        thumb.update(0.6, lineSize, vertical, extra);
+        thumb.update(0.6, lineSize, isVertical, isExtra);
         expect(thumb.extra.style.bottom).toBe('597.5px');
       });
     });
@@ -193,7 +193,7 @@ describe('Thumb', () => {
     });
 
     test('should set style top for extra and horizontal mod', () => {
-      const vertical = false;
+      const isVertical = false;
       const initElement = document.createElement('div');
       thumb.initExtra(initElement);
       const lineSize = {
@@ -203,12 +203,12 @@ describe('Thumb', () => {
       Object.defineProperty(thumb.extra, 'offsetHeight', {
         value: 5,
       });
-      thumb.setInitialSettings(lineSize, vertical, true);
+      thumb.setInitialSettings(lineSize, isVertical, true);
       expect(thumb.extra.style.top).toBe('3.5px');
     });
 
     test('should set style top for primary and vertical mod', () => {
-      const vertical = true;
+      const isVertical = true;
       const lineSize = {
         width: 500,
         height: 4,
@@ -216,13 +216,13 @@ describe('Thumb', () => {
       Object.defineProperty(thumb.primary, 'offsetWidth', {
         value: 10,
       });
-      thumb.setInitialSettings(lineSize, vertical);
+      thumb.setInitialSettings(lineSize, isVertical);
       expect(thumb.primary.style.top).toBe('');
       expect(thumb.primary.style.left).toBe('245px');
     });
 
     test('should set style top for extra and vertical mod', () => {
-      const vertical = true;
+      const isVertical = true;
       const initElement = document.createElement('div');
       thumb.initExtra(initElement);
       const lineSize = {
@@ -232,7 +232,7 @@ describe('Thumb', () => {
       Object.defineProperty(thumb.extra, 'offsetWidth', {
         value: 5,
       });
-      thumb.setInitialSettings(lineSize, vertical, true);
+      thumb.setInitialSettings(lineSize, isVertical, true);
       expect(thumb.extra.style.top).toBe('');
       expect(thumb.extra.style.left).toBe('597.5px');
     });

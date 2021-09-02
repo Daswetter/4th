@@ -14,12 +14,12 @@ class Progress extends Subview {
   }
 
   public setInitialSettings = (
-    lineSize: Size, vertical = false,
+    lineSize: Size, isVertical = false,
   ): void => {
     this.progress.style.top = `${(lineSize.height - this.progress.offsetHeight) / 2}px`;
     this.progress.classList.add('dw-slider__progress_horizontal');
 
-    if (vertical) {
+    if (isVertical) {
       this.progress.classList.add('dw-slider__progress_vertical');
       this.progress.style.top = '';
       this.progress.style.left = `${(lineSize.width - this.progress.offsetWidth) / 2}px`;
@@ -27,16 +27,16 @@ class Progress extends Subview {
   };
 
   public update = (
-    part: number, lineSize: Size, vertical: boolean, extra: boolean,
+    part: number, lineSize: Size, isVertical: boolean, isExtra: boolean,
   ) :void => {
-    if (extra) {
+    if (isExtra) {
       this.partExtra = part;
     } else {
       this.part = part;
     }
-    const lineOneSize = this.setLineSize(vertical, lineSize);
-    const generalSide = this.setGeneralSide(vertical);
-    const secondSide = this.setSecondSide(vertical);
+    const lineOneSize = this.setLineSize(isVertical, lineSize);
+    const generalSide = this.setGeneralSide(isVertical);
+    const secondSide = this.setSecondSide(isVertical);
     this.setProgress(lineOneSize, generalSide, secondSide);
   };
 
@@ -44,22 +44,22 @@ class Progress extends Subview {
     this.progress = this.init(initElement, '__progress');
   };
 
-  private setLineSize = (vertical: boolean, lineSize: Size): number => {
-    if (vertical) {
+  private setLineSize = (isVertical: boolean, lineSize: Size): number => {
+    if (isVertical) {
       return lineSize.height;
     }
     return lineSize.width;
   };
 
-  private setGeneralSide = (vertical: boolean): string => {
-    if (vertical) {
+  private setGeneralSide = (isVertical: boolean): string => {
+    if (isVertical) {
       return 'bottom';
     }
     return 'left';
   };
 
-  private setSecondSide = (vertical: boolean): string => {
-    if (vertical) {
+  private setSecondSide = (isVertical: boolean): string => {
+    if (isVertical) {
       return 'top';
     }
     return 'right';

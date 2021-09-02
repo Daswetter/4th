@@ -17,12 +17,12 @@ describe('Presenter', () => {
       from: 0.2,
       to: 0.5,
       step: 0.01,
-      progress: true,
-      tip: true,
-      scale: true,
+      hasProgress: true,
+      hasTip: true,
+      hasScale: true,
       scaleSize: 5,
-      vertical: false,
-      double: true,
+      isVertical: false,
+      isDouble: true,
     };
     const inputFrom = document.createElement('input');
     initElement.append(inputFrom);
@@ -58,7 +58,7 @@ describe('Presenter', () => {
   describe('notify', () => {
     test('should call setCurrent', () => {
       const modelUpdate = jest.spyOn(model, 'setCurrent');
-      presenter.handleDataFromView({ value: 1, current: false, extra: false });
+      presenter.handleDataFromView({ value: 1, isCurrent: false, isExtra: false });
       expect(modelUpdate).toBeCalledWith(1, false);
     });
   });

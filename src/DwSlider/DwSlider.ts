@@ -24,12 +24,12 @@ import View from './View/View';
         from: this.toNumber(initElement.dataset.from),
         to: this.toNumber(initElement.dataset.to),
         step: this.toNumber(initElement.dataset.step),
-        vertical: this.toBoolean(initElement.dataset.vertical),
-        double: this.toBoolean(initElement.dataset.double),
-        tip: this.toBoolean(initElement.dataset.tip),
-        scale: this.toBoolean(initElement.dataset.scale),
+        isVertical: this.toBoolean(initElement.dataset.isVertical),
+        isDouble: this.toBoolean(initElement.dataset.isDouble),
+        hasTip: this.toBoolean(initElement.dataset.hasTip),
+        hasScale: this.toBoolean(initElement.dataset.hasScale),
         scaleSize: this.toNumber(initElement.dataset.scaleSize),
-        progress: this.toBoolean(initElement.dataset.progress),
+        hasProgress: this.toBoolean(initElement.dataset.hasProgress),
       };
       const options = $.extend({}, {
         min: 0,
@@ -37,12 +37,12 @@ import View from './View/View';
         from: 50,
         to: 0,
         step: 1,
-        vertical: false,
-        double: false,
-        tip: true,
-        scale: true,
+        isVertical: false,
+        isDouble: false,
+        hasTip: true,
+        hasScale: true,
         scaleSize: 5,
-        progress: true,
+        hasProgress: true,
       }, optionsFromData, setOptions);
       this.initElement = initElement;
       this.init(initElement, options);

@@ -31,8 +31,8 @@ describe('Line', () => {
   describe('setEventListener', () => {
     describe('horizontal', () => {
       beforeEach(() => {
-        const vertical = false;
-        line.setEventListener(vertical);
+        const isVertical = false;
+        line.setEventListener(isVertical);
         line.line.getBoundingClientRect = jest.fn(() => ({
           x: 0,
           y: 10,
@@ -74,7 +74,7 @@ describe('Line', () => {
         });
         line.line.dispatchEvent(click);
         expect(update).toBeCalledWith({
-          current: false, extra: false, nearest: true, value: 0.25,
+          isCurrent: false, isExtra: false, isNearest: true, value: 0.25,
         });
       });
 
@@ -87,7 +87,7 @@ describe('Line', () => {
         });
         line.line.dispatchEvent(click);
         expect(update).toBeCalledWith({
-          current: false, extra: false, nearest: true, value: 0,
+          isCurrent: false, isExtra: false, isNearest: true, value: 0,
         });
       });
 
@@ -100,7 +100,7 @@ describe('Line', () => {
         });
         line.line.dispatchEvent(click);
         expect(update).toBeCalledWith({
-          current: false, extra: false, nearest: true, value: 1,
+          isCurrent: false, isExtra: false, isNearest: true, value: 1,
         });
       });
 
@@ -122,8 +122,8 @@ describe('Line', () => {
 
     describe('vertical', () => {
       beforeEach(() => {
-        const vertical = true;
-        line.setEventListener(vertical);
+        const isVertical = true;
+        line.setEventListener(isVertical);
 
         line.line.getBoundingClientRect = jest.fn(() => ({
           x: 0,
@@ -158,7 +158,7 @@ describe('Line', () => {
         });
         line.line.dispatchEvent(click);
         expect(update).toBeCalledWith({
-          current: false, extra: false, nearest: true, value: 0,
+          isCurrent: false, isExtra: false, isNearest: true, value: 0,
         });
       });
 
@@ -171,7 +171,7 @@ describe('Line', () => {
         });
         line.line.dispatchEvent(click);
         expect(update).toBeCalledWith({
-          current: false, extra: false, nearest: true, value: 1,
+          isCurrent: false, isExtra: false, isNearest: true, value: 1,
         });
       });
 
@@ -185,7 +185,7 @@ describe('Line', () => {
         });
         line.line.dispatchEvent(click);
         expect(update).toBeCalledWith({
-          current: false, extra: false, nearest: true, value: 0.2,
+          isCurrent: false, isExtra: false, isNearest: true, value: 0.2,
         });
       });
 
@@ -203,8 +203,8 @@ describe('Line', () => {
     });
 
     test('should not call update if onMouseDown value is not equal to onMouseUp', () => {
-      const vertical = true;
-      line.setEventListener(vertical);
+      const isVertical = true;
+      line.setEventListener(isVertical);
 
       const mouseDown = new MouseEvent('mousedown', {
         clientX: 20,
@@ -263,8 +263,8 @@ describe('Line', () => {
 
   describe('setInitialSettings', () => {
     test('should set correct width and height', () => {
-      const vertical = true;
-      line.setInitialSettings(vertical);
+      const isVertical = true;
+      line.setInitialSettings(isVertical);
 
       expect(line.line.className).toContain('dw-slider__line_vertical');
     });
@@ -272,8 +272,8 @@ describe('Line', () => {
 
   describe('setInitialSettings', () => {
     test('should set correct width and height', () => {
-      const vertical = false;
-      line.setInitialSettings(vertical);
+      const isVertical = false;
+      line.setInitialSettings(isVertical);
 
       expect(line.line.className).toContain('dw-slider__line_horizontal');
     });

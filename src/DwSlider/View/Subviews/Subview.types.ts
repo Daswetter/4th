@@ -17,7 +17,7 @@ type PositionParams = {
 
 type MouseDownData = {
   element: HTMLElement,
-  vertical: boolean,
+  isVertical: boolean,
   lineSize: Size,
   lineSide: Side,
   event: MouseEvent
@@ -25,7 +25,7 @@ type MouseDownData = {
 
 type MouseMoveData = {
   element: HTMLElement,
-  vertical: boolean,
+  isVertical: boolean,
   lineSize: Size,
   lineSide: Side,
   shift: number,

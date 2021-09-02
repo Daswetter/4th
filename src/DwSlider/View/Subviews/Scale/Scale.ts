@@ -10,7 +10,7 @@ class Scale extends Subview {
 
   private lineSize!: Size;
 
-  private vertical!: boolean;
+  private isVertical!: boolean;
 
   constructor(public initElement: HTMLElement) {
     super();
@@ -20,17 +20,17 @@ class Scale extends Subview {
   public initScale = (
     scaleValues: Record<string, string>,
     lineSize: Size,
-    vertical: boolean,
+    isVertical: boolean,
   ): void => {
     this.scaleValues = scaleValues;
     this.lineSize = lineSize;
-    this.vertical = vertical;
+    this.isVertical = isVertical;
     this.createScale(scaleValues);
     this.printScaleValues(scaleValues);
     this.setPosition();
     this.hideScaleElements();
     this.subscribeToAnEvent<number>('scale: clicked', (part) => this.notify({
-      value: part, current: false, extra: false, nearest: true,
+      value: part, isCurrent: false, isExtra: false, isNearest: true,
     }));
     this.setScaleListener();
   };
@@ -62,10 +62,10 @@ class Scale extends Subview {
     Object.keys(this.scaleElements).forEach((key) => this.setPositionToAnElement(key));
   };
 
-  private elementsTouch = (part: number, index: number, orderedKeys: number[]): boolean => {
+  private areElementsTouching = (part: number, index: number, orderedKeys: number[]): boolean => {
     const currentElement = this.scaleElements[part];
     const prevElement = this.scaleElements[orderedKeys[index - 1]];
-    if (this.vertical) {
+    if (this.isVertical) {
       return currentElement.offsetTop + currentElement.offsetHeight >= prevElement.offsetTop;
     }
     return currentElement.offsetLeft <= prevElement.offsetLeft + prevElement.offsetWidth;
@@ -74,7 +74,7 @@ class Scale extends Subview {
   private hideAdjacentElements = (orderedKeys: number[]): number[] => {
     const reducedKeys = orderedKeys.slice();
     orderedKeys.forEach((part, index) => {
-      if (index !== 0 && this.elementsTouch(part, index, orderedKeys)) {
+      if (index !== 0 && this.areElementsTouching(part, index, orderedKeys)) {
         for (let i = 1; i < orderedKeys.length; i += 2) {
           this.scaleElements[orderedKeys[i]].style.display = 'none';
           delete reducedKeys[i];
@@ -100,7 +100,7 @@ class Scale extends Subview {
     this.scaleElements[part].style.left = `${Number(part) * this.lineSize.width - this.scaleElements[part].offsetWidth / 2}px`;
     this.scaleElements[part].style.top = `${this.lineSize.height * 2}px`;
 
-    if (this.vertical) {
+    if (this.isVertical) {
       this.scaleElements[part].style.top = `${this.lineSize.height - Number(part) * this.lineSize.height - this.scaleElements[part].offsetHeight / 2}px`;
       this.scaleElements[part].style.left = `${this.lineSize.width * 2}px`;
     }

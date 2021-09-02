@@ -1,8 +1,8 @@
 type SubviewData = {
   value: number,
-  current: boolean,
-  extra: boolean,
-  nearest: boolean
+  isCurrent: boolean,
+  isExtra: boolean,
+  isNearest: boolean
 };
 
 export default SubviewData;

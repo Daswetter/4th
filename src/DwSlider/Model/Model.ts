@@ -7,20 +7,20 @@ class Model extends Publisher<ModelUpdate> {
     this.options = this.filterOptions(options);
   }
 
-  public setCurrent(part: number, extra = false): void {
+  public setCurrent(part: number, isExtra = false): void {
     const [current, newPart] = this.countCurrent(part);
-    if (extra) {
+    if (isExtra) {
       this.options.to = current;
     } else {
       this.options.from = current;
     }
-    this.dataWereChanged(current, newPart, extra);
+    this.dataWereChanged(current, newPart, isExtra);
   }
 
-  public setPart(current: number, extra = false): void {
+  public setPart(current: number, isExtra = false): void {
     const part = this.countPart(current);
     const [newCurrent, newPart] = this.countCurrent(part);
-    this.dataWereChanged(newCurrent, newPart, extra);
+    this.dataWereChanged(newCurrent, newPart, isExtra);
   }
 
   public countScaleElements = (): Record<string, string> => {
@@ -129,9 +129,9 @@ class Model extends Publisher<ModelUpdate> {
     };
   };
 
-  private dataWereChanged = (current: number, part: number, extra: boolean): void => {
+  private dataWereChanged = (current: number, part: number, isExtra: boolean): void => {
     this.notify({
-      current, part, extra, eventName: 'data',
+      current, part, isExtra, eventName: 'data',
     });
   };
 

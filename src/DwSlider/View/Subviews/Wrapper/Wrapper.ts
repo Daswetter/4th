@@ -10,8 +10,8 @@ class Wrapper extends Subview {
 
   public returnAsHTML = (): HTMLElement => this.wrapper;
 
-  public setInitialSettings = (vertical: boolean): void => {
-    if (vertical) {
+  public setInitialSettings = (isVertical: boolean): void => {
+    if (isVertical) {
       this.wrapper.classList.add('dw-slider_vertical');
     } else {
       this.wrapper.classList.add('dw-slider_horizontal');

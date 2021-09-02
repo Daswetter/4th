@@ -16,12 +16,12 @@ class BoundaryLabels extends Subview {
     max: number,
     lineWidth: number,
     thumbSize: Size,
-    vertical = false,
+    isVertical = false,
   ): void => {
     this.printInnerText(this.min, min);
     this.printInnerText(this.max, max);
 
-    if (vertical) {
+    if (isVertical) {
       this.setPositionToVertical(this.min, lineWidth, thumbSize.width);
       this.setPositionToVertical(this.max, lineWidth, thumbSize.width);
     } else {
@@ -32,13 +32,13 @@ class BoundaryLabels extends Subview {
 
   public update = (
     tipParams: PositionParams,
-    vertical: boolean,
+    isVertical: boolean,
     tipExtraParams?: PositionParams,
   ): void => {
     if (tipExtraParams) {
-      this.setOpacityToDouble(tipParams, tipExtraParams, vertical);
+      this.setOpacityToDouble(tipParams, tipExtraParams, isVertical);
     } else {
-      this.setOpacityToSingle(tipParams, vertical);
+      this.setOpacityToSingle(tipParams, isVertical);
     }
   };
 
@@ -89,30 +89,30 @@ class BoundaryLabels extends Subview {
   };
 
   private isPrimaryTouchingMin = (
-    tipParams: PositionParams, vertical: boolean,
+    tipParams: PositionParams, isVertical: boolean,
   ): boolean => {
-    if (vertical) {
+    if (isVertical) {
       return tipParams.top + tipParams.height >= this.min.offsetTop;
     }
     return tipParams.left <= (this.min.offsetLeft + this.min.offsetWidth);
   };
 
-  private isPrimaryTouchingMax = (tipParams: PositionParams, vertical: boolean): boolean => {
-    if (vertical) {
+  private isPrimaryTouchingMax = (tipParams: PositionParams, isVertical: boolean): boolean => {
+    if (isVertical) {
       return tipParams.top <= (this.max.offsetTop + this.max.offsetHeight);
     }
     return tipParams.left + tipParams.width >= this.max.offsetLeft;
   };
 
-  private isExtraTouchingMin = (tipExtraParams: PositionParams, vertical: boolean): boolean => {
-    if (vertical) {
+  private isExtraTouchingMin = (tipExtraParams: PositionParams, isVertical: boolean): boolean => {
+    if (isVertical) {
       return tipExtraParams.top + tipExtraParams.height >= this.min.offsetTop;
     }
     return tipExtraParams.left <= (this.min.offsetLeft + this.min.offsetWidth);
   };
 
-  private isExtraTouchingMax = (tipExtraParams: PositionParams, vertical: boolean): boolean => {
-    if (vertical) {
+  private isExtraTouchingMax = (tipExtraParams: PositionParams, isVertical: boolean): boolean => {
+    if (isVertical) {
       return tipExtraParams.top <= (this.max.offsetTop + this.max.offsetHeight);
     }
     return tipExtraParams.left + tipExtraParams.width >= this.max.offsetLeft;
@@ -121,25 +121,25 @@ class BoundaryLabels extends Subview {
   private setOpacityToDouble = (
     tipParams: PositionParams,
     tipExtraParams: PositionParams,
-    vertical: boolean,
+    isVertical: boolean,
   ): void => {
-    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, vertical);
-    const isExtraTouchingMin = this.isExtraTouchingMin(tipExtraParams, vertical);
+    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, isVertical);
+    const isExtraTouchingMin = this.isExtraTouchingMin(tipExtraParams, isVertical);
     this.switchOpacity(this.min, isPrimaryTouchingMin, isExtraTouchingMin);
 
-    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(tipParams, vertical);
-    const isExtraTouchingMax = this.isExtraTouchingMax(tipExtraParams, vertical);
+    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(tipParams, isVertical);
+    const isExtraTouchingMax = this.isExtraTouchingMax(tipExtraParams, isVertical);
     this.switchOpacity(this.max, isPrimaryTouchingMax, isExtraTouchingMax);
   };
 
   private setOpacityToSingle = (
     tipParams: PositionParams,
-    vertical: boolean,
+    isVertical: boolean,
   ): void => {
-    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, vertical);
+    const isPrimaryTouchingMin = this.isPrimaryTouchingMin(tipParams, isVertical);
     this.switchOpacity(this.min, isPrimaryTouchingMin);
 
-    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(tipParams, vertical);
+    const isPrimaryTouchingMax = this.isPrimaryTouchingMax(tipParams, isVertical);
     this.switchOpacity(this.max, isPrimaryTouchingMax);
   };
 }

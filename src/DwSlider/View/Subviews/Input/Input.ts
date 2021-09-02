@@ -18,8 +18,8 @@ class Input extends Subview {
     }
   };
 
-  public update = (current: number, extra: boolean): void => {
-    this.printValue(this.setTargetElement(extra), current);
+  public update = (current: number, isExtra: boolean): void => {
+    this.printValue(this.setTargetElement(isExtra), current);
   };
 
   private initPrimary = (initElement: HTMLElement): void => {
@@ -39,11 +39,11 @@ class Input extends Subview {
     const value = Number(element.value);
     if (element === this.primary) {
       this.notify({
-        value, current: true, extra: false, nearest: false,
+        value, isCurrent: true, isExtra: false, isNearest: false,
       });
     } else {
       this.notify({
-        value, current: true, extra: true, nearest: false,
+        value, isCurrent: true, isExtra: true, isNearest: false,
       });
     }
   };
@@ -52,8 +52,8 @@ class Input extends Subview {
     element.value = String(current);
   };
 
-  private setTargetElement = (extra: boolean): HTMLInputElement => {
-    if (extra) {
+  private setTargetElement = (isExtra: boolean): HTMLInputElement => {
+    if (isExtra) {
       return this.extra;
     }
     return this.primary;

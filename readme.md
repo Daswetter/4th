@@ -36,12 +36,12 @@ $(".js-slider").DwSlider({
   from: 2,  
   to: 8,  
   step: 1,  
-  progress: true,  
-  tip: true,  
-  scale: true,  
+  hasProgress: true,  
+  hasTip: true,  
+  hasScale: true,  
   scaleSize: 6,  
-  vertical: false,  
-  double: false,  
+  isVertical: false,  
+  isDouble: false,  
 })
 ```
 
@@ -54,12 +54,12 @@ max | data-max | 100 | number | Максимальное значение
 from | data-from | 50 | number | Начальное значение для первого бегунка
 to | data-to | 0 | number | Начальное значение для второго бегунка
 step | data-step | 1 | number | Размер шага, может быть дробным, всегда > 0
-vertical | data-vertical | false | boolean | Вертикальный или горизонтальный вид
-double | data-double | false | boolean | Одиночное значение или интервал
-tip | data-tip | true | boolean | Элемент над бегунком, который показывает значение
-scale | data-scale | true | boolean | Шкала значений
+vertical | data-is-vertical | false | boolean | Вертикальный или горизонтальный вид
+double | data-is-double | false | boolean | Одиночное значение или интервал
+tip | data-has-tip | true | boolean | Элемент над бегунком, который показывает значение
+scale | data-has-scale | true | boolean | Шкала значений
 scaleSize | data-scaleSize | 5 | number | Количество значений в шкале, от 2 до 20
-progress | data-progress | true | boolean | Прогресс бар
+progress | data-has-progress | true | boolean | Прогресс бар
 
 ## Описание архитектуры
 

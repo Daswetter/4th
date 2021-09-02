@@ -42,10 +42,10 @@ class View extends Publisher<ViewData> {
   }
 
   public update = (data: SubviewData): void => {
-    if (data.nearest) {
+    if (data.isNearest) {
       this.changePositionForTheNearest(data.value);
     } else {
-      this.notify({ value: data.value, current: data.current, extra: data.extra });
+      this.notify({ value: data.value, isCurrent: data.isCurrent, isExtra: data.isExtra });
     }
   };
 
@@ -53,8 +53,8 @@ class View extends Publisher<ViewData> {
     this.wrapper.returnAsHTML().remove();
   };
 
-  public sendDataToSubviews = (current: number, part: number, extra = false): void => {
-    if (extra) {
+  public sendDataToSubviews = (current: number, part: number, isExtra = false): void => {
+    if (isExtra) {
       this.partExtra = part;
       this.currentExtra = current;
       this.options.to = current;
@@ -64,32 +64,32 @@ class View extends Publisher<ViewData> {
       this.options.from = current;
     }
 
-    this.thumb.update(part, this.line.returnSize(), this.options.vertical, extra);
+    this.thumb.update(part, this.line.returnSize(), this.options.isVertical, isExtra);
 
-    if (this.doesInputExist(extra)) {
-      this.input.update(current, extra);
+    if (this.isInputExisting(isExtra)) {
+      this.input.update(current, isExtra);
     }
-    if (this.options.progress) {
-      this.progress.update(part, this.line.returnSize(), this.options.vertical, extra);
+    if (this.options.hasProgress) {
+      this.progress.update(part, this.line.returnSize(), this.options.isVertical, isExtra);
     }
-    if (this.options.tip) {
+    if (this.options.hasTip) {
       this.tip.update(
         part,
         current,
         this.line.returnSize(),
         this.thumb.returnSize(),
-        this.options.vertical,
-        this.options.double, extra,
+        this.options.isVertical,
+        this.options.isDouble, isExtra,
       );
 
-      if (this.options.double) {
+      if (this.options.isDouble) {
         this.boundaryLabels.update(
           this.tip.returnPrimaryParameters(),
-          this.options.vertical,
+          this.options.isVertical,
           this.tip.returnExtraParameters(),
         );
       } else {
-        this.boundaryLabels.update(this.tip.returnPrimaryParameters(), this.options.vertical);
+        this.boundaryLabels.update(this.tip.returnPrimaryParameters(), this.options.isVertical);
       }
     }
   };
@@ -100,21 +100,21 @@ class View extends Publisher<ViewData> {
     this.initLine(this.wrapper.returnAsHTML());
     this.initThumb(this.line.returnAsHTML());
     this.initBoundaryLabels(this.line.returnAsHTML());
-    if (this.doesInputExist()) {
+    if (this.isInputExisting()) {
       this.initInput();
     }
-    if (this.options.tip) {
+    if (this.options.hasTip) {
       this.initTip(this.line.returnAsHTML());
     }
-    if (this.options.progress) {
+    if (this.options.hasProgress) {
       this.initProgress(this.line.returnAsHTML());
     }
-    if (this.options.scale) {
+    if (this.options.hasScale) {
       this.initScale(this.line.returnAsHTML(), scaleElements);
     }
-    this.notify({ value: this.options.from, current: true, extra: false });
-    if (this.options.double) {
-      this.notify({ value: this.options.to, current: true, extra: true });
+    this.notify({ value: this.options.from, isCurrent: true, isExtra: false });
+    if (this.options.isDouble) {
+      this.notify({ value: this.options.to, isCurrent: true, isExtra: true });
     }
   };
 
@@ -122,15 +122,15 @@ class View extends Publisher<ViewData> {
     this.wrapper = new Wrapper(initElement);
     this.wrapper.subscribe(this.update);
     this.initElement.append(this.wrapper.returnAsHTML());
-    this.wrapper.setInitialSettings(this.options.vertical);
+    this.wrapper.setInitialSettings(this.options.isVertical);
   };
 
   private initLine = (initElement: HTMLElement) : void => {
     this.line = new Line(initElement);
     this.line.subscribe(this.update);
     this.wrapper.returnAsHTML().append(this.line.returnAsHTML());
-    this.line.setInitialSettings(this.options.vertical);
-    this.line.setEventListener(this.options.vertical);
+    this.line.setInitialSettings(this.options.isVertical);
+    this.line.setEventListener(this.options.isVertical);
   };
 
   private initThumb = (initElement: HTMLElement) : void => {
@@ -139,20 +139,20 @@ class View extends Publisher<ViewData> {
     this.thumb.setEventListener(
       this.line.returnSize(),
       this.line.returnSide(),
-      this.options.vertical,
+      this.options.isVertical,
     );
-    this.thumb.setInitialSettings(this.line.returnSize(), this.options.vertical);
+    this.thumb.setInitialSettings(this.line.returnSize(), this.options.isVertical);
 
-    if (this.options.double) {
+    if (this.options.isDouble) {
       this.thumb.initExtra(initElement);
-      const extra = true;
+      const isExtra = true;
       this.thumb.setEventListener(
         this.line.returnSize(),
         this.line.returnSide(),
-        this.options.vertical,
-        extra,
+        this.options.isVertical,
+        isExtra,
       );
-      this.thumb.setInitialSettings(this.line.returnSize(), this.options.vertical, extra);
+      this.thumb.setInitialSettings(this.line.returnSize(), this.options.isVertical, isExtra);
     }
   };
 
@@ -162,35 +162,35 @@ class View extends Publisher<ViewData> {
     this.tip.setInitialSettings(
       this.line.returnSize().width,
       this.thumb.returnSize(),
-      this.options.vertical,
+      this.options.isVertical,
       this.options.min,
     );
     this.tip.setEventListener(
       this.line.returnSize(),
       this.line.returnSide(),
-      this.options.vertical,
+      this.options.isVertical,
       false,
     );
 
-    if (this.options.double) {
+    if (this.options.isDouble) {
       this.tip.initExtra(initElement);
       this.tip.setInitialSettings(
         this.line.returnSize().width,
         this.thumb.returnSize(),
-        this.options.vertical,
+        this.options.isVertical,
         this.options.max,
         true,
       );
       this.tip.setEventListener(
         this.line.returnSize(),
         this.line.returnSide(),
-        this.options.vertical,
+        this.options.isVertical,
         true,
       );
       this.tip.setEventListenerForUnited(
         this.line.returnSize(),
         this.line.returnSide(),
-        this.options.vertical,
+        this.options.isVertical,
       );
     }
   };
@@ -201,17 +201,17 @@ class View extends Publisher<ViewData> {
   ): void => {
     this.scale = new Scale(initElement);
     this.scale.subscribe(this.update);
-    this.scale.initScale(scaleElements, this.line.returnSize(), this.options.vertical);
+    this.scale.initScale(scaleElements, this.line.returnSize(), this.options.isVertical);
   };
 
   private initProgress = (initElement: HTMLElement): void => {
     this.progress = new Progress(initElement);
     this.progress.subscribe(this.update);
-    this.progress.setInitialSettings(this.line.returnSize(), this.options.vertical);
+    this.progress.setInitialSettings(this.line.returnSize(), this.options.isVertical);
   };
 
-  private doesInputExist = (extra = false): boolean => {
-    const inputClass = extra ? '.js-dw-slider__input_to' : '.js-dw-slider__input_from';
+  private isInputExisting = (isExtra = false): boolean => {
+    const inputClass = isExtra ? '.js-dw-slider__input_to' : '.js-dw-slider__input_from';
     const input: HTMLInputElement | null = this.initElement.querySelector(inputClass);
     return !!input;
   };
@@ -219,8 +219,8 @@ class View extends Publisher<ViewData> {
   private initInput = (): void => {
     this.input = new Input(this.initElement);
     this.input.subscribe(this.update);
-    const extra = true;
-    if (this.options.double && this.doesInputExist(extra)) {
+    const isExtra = true;
+    if (this.options.isDouble && this.isInputExisting(isExtra)) {
       this.input.initExtra(this.initElement);
     }
   };
@@ -233,12 +233,12 @@ class View extends Publisher<ViewData> {
       this.options.max,
       this.line.returnSize().width,
       this.thumb.returnSize(),
-      this.options.vertical,
+      this.options.isVertical,
     );
   };
 
-  private countDistance = (part: number, extra = false): number => {
-    if (extra) {
+  private countDistance = (part: number, isExtra = false): number => {
+    if (isExtra) {
       return Math.abs(this.partExtra - part);
     }
     return Math.abs(this.part - part);
@@ -246,12 +246,12 @@ class View extends Publisher<ViewData> {
 
   private changePositionForTheNearest = (part: number): void => {
     const distFromActionToPrimary = this.countDistance(part);
-    const extra = true;
-    const distFromActionToExtra = this.countDistance(part, extra);
+    const isExtra = true;
+    const distFromActionToExtra = this.countDistance(part, isExtra);
     if (distFromActionToPrimary > distFromActionToExtra) {
-      this.notify({ value: part, current: false, extra: true });
+      this.notify({ value: part, isCurrent: false, isExtra: true });
     } else {
-      this.notify({ value: part, current: false, extra: false });
+      this.notify({ value: part, isCurrent: false, isExtra: false });
     }
   };
 }

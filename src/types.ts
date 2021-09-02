@@ -10,12 +10,12 @@ interface IOptions {
   from: number,
   to: number,
   step: number,
-  vertical: boolean,
-  double: boolean,
-  tip: boolean,
-  scale: boolean,
+  isVertical: boolean,
+  isDouble: boolean,
+  hasTip: boolean,
+  hasScale: boolean,
   scaleSize: number
-  progress: boolean,
+  hasProgress: boolean,
 }
 
 type Params = {
@@ -28,14 +28,14 @@ type Params = {
 
 type ViewData = {
   value: number,
-  current: boolean,
-  extra: boolean
+  isCurrent: boolean,
+  isExtra: boolean
 };
 
 type DataUpdate = {
   current: number,
   part: number,
-  extra: boolean,
+  isExtra: boolean,
   eventName: 'data'
 };
 

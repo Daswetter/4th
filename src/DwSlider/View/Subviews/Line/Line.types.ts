@@ -1,5 +1,5 @@
 type LineEvent = {
-  vertical: boolean,
+  isVertical: boolean,
   event: MouseEvent
 };
 

@@ -4,7 +4,7 @@ type UnitedTipDownEvent = {
   event: MouseEvent,
   lineSize: Size,
   lineSide: Side,
-  vertical: boolean
+  isVertical: boolean
 };
 
 export default UnitedTipDownEvent;

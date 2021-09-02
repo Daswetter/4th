@@ -12,12 +12,12 @@ describe('Model', () => {
       from: 0,
       to: 100,
       step: 100,
-      progress: true,
-      tip: true,
-      scale: true,
+      hasProgress: true,
+      hasTip: true,
+      hasScale: true,
       scaleSize: 5,
-      vertical: true,
-      double: true,
+      isVertical: true,
+      isDouble: true,
     };
     model = new Model(options);
     update = jest.fn();
@@ -39,12 +39,12 @@ describe('Model', () => {
         from: 0.5,
         to: 0.1,
         step: 0.1123,
-        progress: true,
-        tip: true,
-        scale: true,
+        hasProgress: true,
+        hasTip: true,
+        hasScale: true,
         scaleSize: 5,
-        vertical: true,
-        double: true,
+        isVertical: true,
+        isDouble: true,
       };
       model = new Model(options);
       model.subscribe(update);
@@ -58,12 +58,12 @@ describe('Model', () => {
         from: 118,
         to: 120,
         step: 50,
-        progress: true,
-        tip: true,
-        scale: true,
+        hasProgress: true,
+        hasTip: true,
+        hasScale: true,
         scaleSize: 5,
-        vertical: true,
-        double: true,
+        isVertical: true,
+        isDouble: true,
       };
       model = new Model(options);
       model.subscribe(update);
@@ -77,12 +77,12 @@ describe('Model', () => {
         from: 118,
         to: -10,
         step: 33,
-        progress: true,
-        tip: true,
-        scale: true,
+        hasProgress: true,
+        hasTip: true,
+        hasScale: true,
         scaleSize: 5,
-        vertical: true,
-        double: true,
+        isVertical: true,
+        isDouble: true,
       };
       model = new Model(options);
       model.subscribe(update);
@@ -95,10 +95,10 @@ describe('Model', () => {
       options.step = 1;
       model = new Model(options);
       model.subscribe(update);
-      const extra = true;
-      model.setCurrent(1, extra);
+      const isExtra = true;
+      model.setCurrent(1, isExtra);
       expect(update).toHaveBeenCalledWith({
-        current: 2.5, eventName: 'data', extra: true, part: 1,
+        current: 2.5, eventName: 'data', isExtra: true, part: 1,
       });
     });
     test('should work for part size scale with step 0.1 and max 0.09', () => {
@@ -109,7 +109,7 @@ describe('Model', () => {
       model.subscribe(update);
       model.setCurrent(0);
       expect(update).toHaveBeenCalledWith({
-        current: -1.81, eventName: 'data', extra: false, part: 0,
+        current: -1.81, eventName: 'data', isExtra: false, part: 0,
       });
     });
     test('should work for part size scale with step 14 and max 105', () => {
@@ -120,7 +120,7 @@ describe('Model', () => {
       model.subscribe(update);
       model.setCurrent(0.94);
       expect(update).toHaveBeenCalledWith({
-        current: 94, eventName: 'data', extra: false, part: 0.8842105263157893,
+        current: 94, eventName: 'data', isExtra: false, part: 0.8842105263157893,
       });
     });
   });
@@ -137,12 +137,12 @@ describe('Model', () => {
         from: 118,
         to: 120,
         step: 50,
-        progress: true,
-        tip: true,
-        scale: true,
+        hasProgress: true,
+        hasTip: true,
+        hasScale: true,
         scaleSize: 5,
-        vertical: true,
-        double: true,
+        isVertical: true,
+        isDouble: true,
       };
       model = new Model(options);
       model.subscribe(update);
@@ -152,13 +152,13 @@ describe('Model', () => {
     test('should filter big part correctly ', () => {
       model.setPart(1200, false);
       expect(update).toHaveBeenCalledWith({
-        current: 200, part: 1, extra: false, eventName: 'data',
+        current: 200, part: 1, isExtra: false, eventName: 'data',
       });
     });
     test('should filter small part correctly', () => {
       model.setPart(-10000, false);
       expect(update).toHaveBeenCalledWith({
-        current: -1800, part: 0, extra: false, eventName: 'data',
+        current: -1800, part: 0, isExtra: false, eventName: 'data',
       });
     });
   });

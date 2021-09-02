@@ -36,18 +36,18 @@ describe('BoundaryLabels', () => {
       expect(boundaryLabels.min.innerText).toBe(String(min));
     });
     test('should set correct min', () => {
-      const vertical = true;
+      const isVertical = true;
       Object.defineProperty(boundaryLabels.min, 'offsetHeight', {
         value: 50,
       });
-      boundaryLabels.setInitialSettings(min, max, lineWidth, thumbSize, vertical);
+      boundaryLabels.setInitialSettings(min, max, lineWidth, thumbSize, isVertical);
 
       expect(boundaryLabels.min.style.bottom).toBe('-25px');
     });
   });
 
   describe('update', () => {
-    let vertical: boolean;
+    let isVertical: boolean;
     type TipParams = {
       width: number,
       height: number,
@@ -69,26 +69,26 @@ describe('BoundaryLabels', () => {
         left: -10,
         top: 2,
       };
-      vertical = true;
-      boundaryLabels.update(tipParams, vertical, tipExtraParams);
+      isVertical = true;
+      boundaryLabels.update(tipParams, isVertical, tipExtraParams);
     });
     test('should set correct min opacity', () => {
       expect(boundaryLabels.min.style.opacity).toBe('0');
     });
     test('should set correct max opacity', () => {
-      vertical = false;
+      isVertical = false;
       Object.defineProperty(boundaryLabels.max, 'offsetLeft', {
         value: 500,
       });
-      boundaryLabels.update(tipParams, vertical);
+      boundaryLabels.update(tipParams, isVertical);
       expect(boundaryLabels.max.style.opacity).toBe('1');
     });
     test('should set correct min opacity', () => {
-      vertical = false;
+      isVertical = false;
       Object.defineProperty(boundaryLabels.min, 'offsetLeft', {
         value: 500,
       });
-      boundaryLabels.update(tipParams, vertical, tipExtraParams);
+      boundaryLabels.update(tipParams, isVertical, tipExtraParams);
       expect(boundaryLabels.min.style.opacity).toBe('0');
     });
   });

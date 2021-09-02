@@ -65,24 +65,24 @@ describe('Tip', () => {
     });
 
     test('should set position for extra and horizontal mod', () => {
-      const vertical = false;
-      const double = true;
-      const extra = true;
+      const isVertical = false;
+      const isDouble = true;
+      const isExtra = true;
       lineSize = {
         width: 150,
         height: 20,
       };
-      tip.setInitialSettings(lineSize.width, thumbSize, vertical, 500, extra);
-      tip.update(0.5, 500, lineSize, thumbSize, vertical, double, extra);
+      tip.setInitialSettings(lineSize.width, thumbSize, isVertical, 500, isExtra);
+      tip.update(0.5, 500, lineSize, thumbSize, isVertical, isDouble, isExtra);
       expect(tip.extra.innerText).toBe('500');
       expect(tip.extra.style.left).toBe('60px');
       expect(tip.extra.style.top).toBe('-25px');
     });
 
-    test('should set position for primary and vertical mod', () => {
-      const vertical = true;
-      const double = true;
-      const extra = false;
+    test('should set position for primary and isVertical mod', () => {
+      const isVertical = true;
+      const isDouble = true;
+      const isExtra = false;
 
       lineSize = {
         width: 10,
@@ -92,17 +92,17 @@ describe('Tip', () => {
         width: 21,
         height: 20,
       };
-      tip.setInitialSettings(lineSize.width, thumbSize, vertical, 100);
-      tip.update(1, 125, lineSize, thumbSize, vertical, double, extra);
+      tip.setInitialSettings(lineSize.width, thumbSize, isVertical, 100);
+      tip.update(1, 125, lineSize, thumbSize, isVertical, isDouble, isExtra);
       expect(tip.primary.innerText).toBe('125');
       expect(tip.primary.style.right).toBe('17px');
       expect(tip.primary.style.top).toBe('-10px');
     });
 
     test('should set position and innerText to united', () => {
-      const vertical = false;
-      const double = true;
-      const extra = true;
+      const isVertical = false;
+      const isDouble = true;
+      const isExtra = true;
       lineSize = {
         width: 10,
         height: 10,
@@ -111,35 +111,35 @@ describe('Tip', () => {
         width: 10,
         height: 10,
       };
-      tip.update(0.1, 100, lineSize, thumbSize, vertical, double, extra);
-      tip.update(0.1, 100, lineSize, thumbSize, vertical, double, false);
+      tip.update(0.1, 100, lineSize, thumbSize, isVertical, isDouble, isExtra);
+      tip.update(0.1, 100, lineSize, thumbSize, isVertical, isDouble, false);
 
       Object.defineProperty(tip.united, 'offsetLeft', {
         value: 200,
       });
-      tip.update(1, 100, lineSize, thumbSize, vertical, double, extra);
+      tip.update(1, 100, lineSize, thumbSize, isVertical, isDouble, isExtra);
       expect(tip.united.style.left).toBe('');
       expect(tip.united.innerText).toBe('100');
     });
 
     test('should set inner text to primary', () => {
-      const vertical = false;
-      const double = true;
-      const extra = false;
+      const isVertical = false;
+      const isDouble = true;
+      const isExtra = false;
       Object.defineProperty(tip.primary, 'offsetLeft', {
         value: 1000,
       });
 
-      tip.update(1, 10, lineSize, thumbSize, vertical, double, extra);
+      tip.update(1, 10, lineSize, thumbSize, isVertical, isDouble, isExtra);
       expect(tip.primary.innerText).toBe('10');
     });
 
     test('should set inner text to primary if single', () => {
-      const vertical = false;
-      const double = false;
-      const extra = false;
+      const isVertical = false;
+      const isDouble = false;
+      const isExtra = false;
 
-      tip.update(1, 10, lineSize, thumbSize, vertical, double, extra);
+      tip.update(1, 10, lineSize, thumbSize, isVertical, isDouble, isExtra);
       expect(tip.primary.innerText).toBe('10');
     });
   });
@@ -153,7 +153,7 @@ describe('Tip', () => {
       left: number,
       bottom: number
     };
-    let vertical: boolean;
+    let isVertical: boolean;
     beforeEach(() => {
       lineSize = {
         width: 0,
@@ -163,12 +163,12 @@ describe('Tip', () => {
         left: 0,
         bottom: 0,
       };
-      vertical = false;
+      isVertical = false;
       const initElement = document.createElement('div');
       tip.initExtra(initElement);
     });
     test('should call tip.notify for primary', () => {
-      tip.setEventListenerForUnited(lineSize, lineSide, vertical);
+      tip.setEventListenerForUnited(lineSize, lineSide, isVertical);
       Object.defineProperty(tip.extra, 'offsetLeft', {
         value: 600,
       });
@@ -183,7 +183,7 @@ describe('Tip', () => {
       expect(update).toBeCalled();
     });
     test('should call tip.notify for primary', () => {
-      tip.setEventListenerForUnited(lineSize, lineSide, vertical);
+      tip.setEventListenerForUnited(lineSize, lineSide, isVertical);
       Object.defineProperty(tip.extra, 'offsetLeft', {
         value: 600,
       });
@@ -202,7 +202,7 @@ describe('Tip', () => {
       expect(update).toBeCalled();
     });
     test('should call tip.notify for primary', () => {
-      tip.setEventListenerForUnited(lineSize, lineSide, vertical);
+      tip.setEventListenerForUnited(lineSize, lineSide, isVertical);
       const mouseDown = new MouseEvent('mousedown');
       Object.defineProperty(mouseDown, 'pageX', {
         value: 0,
@@ -216,12 +216,12 @@ describe('Tip', () => {
 
       expect(update).toBeCalled();
     });
-    test('should call tip.notify for extra (vertical)', () => {
-      vertical = true;
+    test('should call tip.notify for extra (isVertical)', () => {
+      isVertical = true;
       Object.defineProperty(tip.extra, 'offsetTop', {
         value: 600,
       });
-      tip.setEventListenerForUnited(lineSize, lineSide, vertical);
+      tip.setEventListenerForUnited(lineSize, lineSide, isVertical);
       const mouseDown = new MouseEvent('mousedown', {
         clientX: 500,
       });
@@ -238,11 +238,11 @@ describe('Tip', () => {
       expect(update).toBeCalled();
     });
     test('should call tip.notify for extra with part = 1', () => {
-      vertical = true;
+      isVertical = true;
       Object.defineProperty(tip.extra, 'offsetTop', {
         value: -60000,
       });
-      tip.setEventListenerForUnited(lineSize, lineSide, vertical);
+      tip.setEventListenerForUnited(lineSize, lineSide, isVertical);
       const mouseDown = new MouseEvent('mousedown', {
         clientX: 500,
       });
@@ -262,14 +262,14 @@ describe('Tip', () => {
       expect(update).toBeCalled();
     });
     test('should call tip.notify for extra with part = 0', () => {
-      vertical = true;
+      isVertical = true;
       Object.defineProperty(tip.primary, 'offsetTop', {
         value: 60000,
       });
       Object.defineProperty(tip.united, 'offsetTop', {
         value: 60000,
       });
-      tip.setEventListenerForUnited(lineSize, lineSide, vertical);
+      tip.setEventListenerForUnited(lineSize, lineSide, isVertical);
       const mouseDown = new MouseEvent('mousedown', {
         clientX: 500,
       });
@@ -289,8 +289,8 @@ describe('Tip', () => {
       expect(update).toBeCalled();
     });
     test('should call tip.notify for primary', () => {
-      vertical = true;
-      tip.setEventListener(lineSize, lineSide, vertical, false);
+      isVertical = true;
+      tip.setEventListener(lineSize, lineSide, isVertical, false);
       const mouseDown = new MouseEvent('mousedown');
       tip.primary.dispatchEvent(mouseDown);
 

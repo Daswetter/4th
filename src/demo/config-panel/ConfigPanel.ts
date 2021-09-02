@@ -55,7 +55,7 @@ class ConfigPanel {
       },
     );
 
-    const checkboxTitles = ['vertical', 'double', 'scale', 'progress', 'tip'];
+    const checkboxTitles = ['isVertical', 'isDouble', 'hasScale', 'hasProgress', 'hasTip'];
 
     checkboxTitles.forEach(
       (title) => {
@@ -71,8 +71,8 @@ class ConfigPanel {
 
     this.subscribeToAnEvent<OptionKey>('checkbox: changed', ({ optionKey }) => this.handleCheckboxChange({ optionKey }));
 
-    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.DwSlider.returnCurrentOptions().double, this.DwSlider.returnCurrentOptions().to));
-    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.scaleSize, this.DwSlider.returnCurrentOptions().scale, this.DwSlider.returnCurrentOptions().scaleSize));
+    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.to, this.DwSlider.returnCurrentOptions().isDouble, this.DwSlider.returnCurrentOptions().to));
+    this.subscribeToAnEvent<null>('checkbox: changed', () => this.isDisable(this.inputs.scaleSize, this.DwSlider.returnCurrentOptions().hasScale, this.DwSlider.returnCurrentOptions().scaleSize));
   };
 
   private setEventListener = (element: HTMLInputElement, optionKey: string): void => {
@@ -139,12 +139,12 @@ class ConfigPanel {
     const currentOptions = this.DwSlider.returnCurrentOptions();
     this.isDisable(
       this.inputs.to,
-      currentOptions.double,
+      currentOptions.isDouble,
       currentOptions.to,
     );
     this.isDisable(
       this.inputs.scaleSize,
-      currentOptions.scale,
+      currentOptions.hasScale,
       currentOptions.scaleSize,
     );
   };

@@ -18,10 +18,10 @@ class Line extends Subview {
 
   public returnAsHTML = (): HTMLElement => this.line;
 
-  public setEventListener = (vertical: boolean): void => {
-    this.line.addEventListener('mousedown', (event) => this.emitEvent('line: mouseDown', { vertical, event }));
-    this.line.addEventListener('mouseup', (event) => this.emitEvent('line: mouseUp', { vertical, event }));
-    this.line.addEventListener('click', (event) => this.emitEvent('line: clicked', { vertical, event }));
+  public setEventListener = (isVertical: boolean): void => {
+    this.line.addEventListener('mousedown', (event) => this.emitEvent('line: mouseDown', { isVertical, event }));
+    this.line.addEventListener('mouseup', (event) => this.emitEvent('line: mouseUp', { isVertical, event }));
+    this.line.addEventListener('click', (event) => this.emitEvent('line: clicked', { isVertical, event }));
   };
 
   public returnSize = (): Size => ({
@@ -34,8 +34,8 @@ class Line extends Subview {
     bottom: this.line.offsetTop + this.line.offsetHeight,
   });
 
-  public setInitialSettings = (vertical: boolean): void => {
-    if (vertical) {
+  public setInitialSettings = (isVertical: boolean): void => {
+    if (isVertical) {
       this.line.classList.add('dw-slider__line_vertical');
     } else {
       this.line.classList.add('dw-slider__line_horizontal');
@@ -48,32 +48,32 @@ class Line extends Subview {
   };
 
   private subscribeToEvents = (): void => {
-    this.subscribeToAnEvent<LineEvent>('line: clicked', ({ vertical, event }) => this.handleClick(vertical, event));
+    this.subscribeToAnEvent<LineEvent>('line: clicked', ({ isVertical, event }) => this.handleClick(isVertical, event));
 
-    this.subscribeToAnEvent<LineEvent>('line: mouseDown', ({ vertical, event }) => this.handleMouseDown(vertical, event));
+    this.subscribeToAnEvent<LineEvent>('line: mouseDown', ({ isVertical, event }) => this.handleMouseDown(isVertical, event));
 
-    this.subscribeToAnEvent<LineEvent>('line: mouseUp', ({ vertical, event }) => this.handleMouseUp(vertical, event));
+    this.subscribeToAnEvent<LineEvent>('line: mouseUp', ({ isVertical, event }) => this.handleMouseUp(isVertical, event));
   };
 
-  private handleMouseDown = (vertical: boolean, event: MouseEvent): void => {
-    if (vertical) {
+  private handleMouseDown = (isVertical: boolean, event: MouseEvent): void => {
+    if (isVertical) {
       this.mouseDownValue = event.clientY;
     } else {
       this.mouseDownValue = event.clientX;
     }
   };
 
-  private handleMouseUp = (vertical: boolean, event: MouseEvent): void => {
-    if (vertical) {
+  private handleMouseUp = (isVertical: boolean, event: MouseEvent): void => {
+    if (isVertical) {
       this.mouseUpValue = event.clientY;
     } else {
       this.mouseUpValue = event.clientX;
     }
   };
 
-  private handleClick = (vertical: boolean, event: MouseEvent) : void => {
+  private handleClick = (isVertical: boolean, event: MouseEvent) : void => {
     if (this.mouseDownValue === this.mouseUpValue) {
-      if (vertical) {
+      if (isVertical) {
         this.onClickVertical.call(null, event);
       } else {
         this.onClickHorizontal.call(null, event);
@@ -102,7 +102,7 @@ class Line extends Subview {
 
     if (isOnlyLineClicked) {
       this.notify({
-        value: filteredPart, current: false, extra: false, nearest: true,
+        value: filteredPart, isCurrent: false, isExtra: false, isNearest: true,
       });
     }
   };
@@ -118,7 +118,7 @@ class Line extends Subview {
 
     if (isOnlyLineClicked) {
       this.notify({
-        value: filteredPart, current: false, extra: false, nearest: true,
+        value: filteredPart, isCurrent: false, isExtra: false, isNearest: true,
       });
     }
   };

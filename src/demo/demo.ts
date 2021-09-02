@@ -12,11 +12,11 @@ $('.js-dw-slider2').DwSlider({
   from: -16,
   to: 0,
   step: 0.2,
-  progress: true,
-  tip: true,
-  scale: true,
-  double: true,
-  vertical: true,
+  hasProgress: true,
+  hasTip: true,
+  hasScale: true,
+  isDouble: true,
+  isVertical: true,
   scaleSize: 4,
 });
 new ConfigPanel('.js-dw-slider2');
@@ -30,10 +30,10 @@ $('.js-dw-slider4').DwSlider({
   from: 12.2,
   to: 12.4,
   step: 0.000001,
-  progress: true,
-  tip: true,
-  scale: true,
+  hasProgress: true,
+  hasTip: true,
+  hasScale: true,
   scaleSize: -1,
-  double: true,
+  isDouble: true,
 });
 new ConfigPanel('.js-dw-slider4');

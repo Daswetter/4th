@@ -9,5 +9,5 @@ mixin config-panel
       +input({title: "from", className: "js-dw-slider__input_from"})
       +input({title: "to", className: "js-dw-slider__input_to"})
     .config-panel__toggles
-      each item in ["vertical", "double", "scale", "progress", "tip"]
+      each item in ["isVertical", "isDouble", "hasScale", "hasProgress", "hasTip"]
         +toggle({title: item})
