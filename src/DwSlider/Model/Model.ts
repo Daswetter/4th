@@ -31,7 +31,7 @@ class Model extends Publisher<ModelUpdate> {
     for (let i = 0; i < this.options.scaleSize; i += 1) {
       const scaleValue = this.countScaleMax() * scaleStep * i + this.options.min;
       const [current, part] = this.countCurrent(this.countPart(scaleValue));
-      scaleElements = { ...scaleElements, [part]: current };
+      scaleElements = { ...scaleElements, [part]: String(current) };
     }
     return scaleElements;
   };

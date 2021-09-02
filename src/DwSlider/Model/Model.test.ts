@@ -206,13 +206,23 @@ describe('Model', () => {
       model = new Model(options);
       expect(model.countScaleElements()).toEqual({ 0: '-18.11', 1: '0.89' });
     });
-    test('should set correct full size scale', () => {
+    test('should set correct scale', () => {
       options.min = 0;
-      options.max = 0.6;
-      options.step = 0.1;
-      options.scaleSize = 2;
+      options.max = 2;
+      options.step = 1;
+      options.scaleSize = 8;
       model = new Model(options);
-      expect(model.countScaleElements()).toEqual({ 0: '0', 1: '0.6' });
+      expect(model.countScaleElements()).toEqual({ 0: '0', 0.5: '1', 1: '2' });
+    });
+    test('should set correct scale', () => {
+      options.min = 0;
+      options.max = 5;
+      options.step = 1;
+      options.scaleSize = 4;
+      model = new Model(options);
+      expect(model.countScaleElements()).toEqual({
+        0: '0', 0.2: '1', 0.4: '2', 0.6000000000000001: '3', 0.8: '4', 1: '5',
+      });
     });
   });
 
