@@ -44,7 +44,7 @@ class Model extends Publisher<ModelUpdate> {
 
   private countScaleMax = (): number => {
     const differenceBetweenMaxAndMin = Math.abs(this.options.max - this.options.min);
-    const roundDifference = this.roundTo(differenceBetweenMaxAndMin / this.options.step, 0.00001);
+    const roundDifference = this.roundAs(differenceBetweenMaxAndMin / this.options.step, 0.00001);
     return Math.floor(roundDifference) * this.options.step;
   };
 
@@ -53,7 +53,7 @@ class Model extends Publisher<ModelUpdate> {
     if (rest > restAtTheEnd / 2) {
       return [this.options.max, 1];
     }
-    return [this.roundTo(current, this.options.step), part];
+    return [this.roundAs(current, this.options.step), part];
   };
 
   private isScaleFullSize = (): boolean => {
@@ -68,11 +68,11 @@ class Model extends Publisher<ModelUpdate> {
     return part + (stepAsPart - rest);
   };
 
-  private roundValue = (current: number): number => {
+  private selectArgsForRounding = (current: number): number => {
     if (this.countNumberAccuracy(this.options.min) < this.countNumberAccuracy(this.options.step)) {
-      return this.roundTo(current, this.options.min);
+      return this.roundAs(current, this.options.min);
     }
-    return this.roundTo(current, this.options.step);
+    return this.roundAs(current, this.options.step);
   };
 
   private countCurrent = (part: number): Array<number> => {
@@ -87,7 +87,7 @@ class Model extends Publisher<ModelUpdate> {
     if (!this.isScaleFullSize() && isCurrentGreaterThanScale) {
       return this.findRest(current, newPart, rest, stepAsPart);
     }
-    return [this.roundValue(current), newPart];
+    return [this.selectArgsForRounding(current), newPart];
   };
 
   private filterOptions = (options: IOptions): IOptions => {
@@ -175,8 +175,8 @@ class Model extends Publisher<ModelUpdate> {
     return dividedValue[0].length;
   };
 
-  private countNumberOrder = (roundTo: number): number => {
-    const order = this.countNumberAccuracy(roundTo);
+  private countNumberOrder = (numberWithRequiredOrder: number): number => {
+    const order = this.countNumberAccuracy(numberWithRequiredOrder);
     if (order < 0) {
       return Math.abs(order);
     }
@@ -186,9 +186,9 @@ class Model extends Publisher<ModelUpdate> {
     return order - 1;
   };
 
-  private roundTo = (value: number, roundTo: number): number => {
-    const decimal = this.countNumberOrder(roundTo);
-    return (Math.round(value * (10 ** decimal)) / (10 ** decimal));
+  private roundAs = (value: number, numberWithRequiredOrder: number): number => {
+    const order = this.countNumberOrder(numberWithRequiredOrder);
+    return (Math.round(value * (10 ** order)) / (10 ** order));
   };
 }
 
