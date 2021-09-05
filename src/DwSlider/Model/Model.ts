@@ -154,7 +154,11 @@ class Model extends Publisher<ModelUpdate> {
     const numberOfScaleSections = this.options.scaleSize - 1;
     const numberOfSliderSections = (this.options.max - this.options.min) / this.options.step;
     if (numberOfScaleSections > numberOfSliderSections) {
-      this.options.scaleSize = Math.round(numberOfSliderSections + 1);
+      if (this.isScaleFullSize()) {
+        this.options.scaleSize = Math.round(numberOfSliderSections + 1);
+      } else {
+        this.options.scaleSize = Math.round(numberOfSliderSections);
+      }
     } else if (numberOfScaleSections % numberOfSliderSections !== 0) {
       for (let j = 1; j < numberOfScaleSections; j += 1) {
         if ((numberOfScaleSections + j) % numberOfSliderSections === 0) {
